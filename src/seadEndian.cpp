@@ -1,64 +1,66 @@
 #include <sead.h>
 
-u8 Swap8(u8 val)
+u8 Swap8(u8 x)
 {
-    return val;
+    return x;
 }
 
-u8 Null8(u8 val)
+u8 Null8(u8 x)
 {
-    return val;
+    return x;
 }
 
-u16 Swap16(u16 val)
+u16 Swap16(u16 x)
 {
-    return (val << 8 | val >> 8) & 0xFFFF;
+    return (x << 8 | x >> 8) & 0xFFFF;
 }
 
-u16 Null16(u16 val)
+u16 Null16(u16 x)
 {
-    return val;
+    return x;
 }
 
-u32 Swap32(u32 val)
+u32 Swap32(u32 x)
 {
-    return val << 24 |
-          (val & 0xFF00) << 8 |
-           val >> 24 |
-           val >> 8 & 0xFF00;
+    return x << 24 |
+          (x & 0xFF00) << 8 |
+           x >> 24 |
+           x >> 8 & 0xFF00;
 }
 
-u32 Null32(u32 val)
+u32 Null32(u32 x)
 {
-    return val;
+    return x;
 }
 
-u64 Swap64(u64 val)
+u64 Swap64(u64 x)
 {
     // Couldn't make an implementation that matches the original assembly
     // But this should be much more efficient
-    return val << 56 |
-          (val & 0xFF00) << 40 |
-          (val & 0xFF0000) << 24 |
-          (val & 0xFF000000) << 8 |
-           val >> 56 |
-           val >> 40 & 0xFF00 |
-           val >> 24 & 0xFF0000 |
-           val >> 8 & 0xFF000000;
+    return x << 56 |
+          (x & 0xFF00) << 40 |
+          (x & 0xFF0000) << 24 |
+          (x & 0xFF000000) << 8 |
+           x >> 56 |
+           x >> 40 & 0xFF00 |
+           x >> 24 & 0xFF0000 |
+           x >> 8 & 0xFF000000;
 }
 
-u64 Null64(u64 val)
+u64 Null64(u64 x)
 {
-    return val;
+    return x;
 }
 
 namespace sead { namespace Endian {
 
 #ifdef cafe
-Types cHostEndian = cBig; // Temporary
+#define MARK 0xfeff
 #else
-#error "Unknown platform"
+#define MARK 0
 #endif // cafe
+
+Types cHostEndian = markToEndian(MARK);
 
 ConvFuncTable cConvFuncTable = { &Null8, &Swap8, &Null16, &Swap16, &Null32, &Swap32, &Null64, &Swap64 };
 
