@@ -17,31 +17,77 @@ public:
     {
     }
 
-    // Self-defined inlines for convenience
-
-    void setAsListFor(T* item)
+    class iterator
     {
-        item->mList = this;
+    public:
+        iterator(TListNode<T>* ptr)
+            : mPtr(ptr)
+        {
+        }
+
+        iterator& operator++()
+        {
+            mPtr = static_cast<TListNode<T>*>(mPtr->mNext);
+            return *this;
+        }
+
+        iterator operator++(int)
+        {
+            const iterator it(*this);
+            (void)++*this;
+            return it;
+        }
+
+        iterator& operator--()
+        {
+            mPtr = static_cast<TListNode<T>*>(mPtr->mPrev);
+            return *this;
+        }
+
+        iterator operator--(int)
+        {
+            const TIt it(*this);
+            (void)--*this;
+            return it;
+        }
+
+        friend bool operator==(iterator it1, iterator it2)
+        {
+            return it1.mPtr == it2.mPtr;
+        }
+
+        friend bool operator!=(iterator it1, iterator it2)
+        {
+            return !(it1 == it2);
+        }
+
+        TListNode<T>* mPtr;
+    };
+
+    iterator begin() const
+    {
+        return iterator(static_cast<TListNode<T>*>(mStartEnd.mNext));
     }
 
-    void insertFront(T* item)
+    iterator end() const
     {
-        mStartEnd.insertFront_(item);
+        return iterator(static_cast<TListNode<T>*>(const_cast<ListNode*>(&mStartEnd)));
     }
 
-    TListNode<T>* root() const
+    void pushBack(TListNode<T>* obj)
     {
-        return static_cast<TListNode<T>*>(mStartEnd.mNext);
+        TList<T>* list = obj->mList;
+        if (list != NULL)
+            list->erase(obj);
+
+        obj->mList = this;
+        ListImpl::pushBack(obj);
     }
 
-    static TListNode<T>* next(TListNode<T>* node)
+    void erase(TListNode<T>* obj)
     {
-        return static_cast<TListNode<T>*>(node->mNext);
-    }
-
-    bool isAtEnd(TListNode<T>* node) const
-    {
-        return node == &mStartEnd;
+        obj->mList = NULL;
+        ListImpl::erase(obj);
     }
 };
 
@@ -52,11 +98,11 @@ public:
     TListNode()
         : ListNode()
     {
-        mData = static_cast<T*>(this);
+        mData = static_cast<T>(this);
         mList = NULL;
     }
 
-    T* mData;
+    T mData;
     TList<T>* mList;
 };
 

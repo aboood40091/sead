@@ -29,6 +29,18 @@ public:
         mStartEnd.mPrev = &mStartEnd;
     }
 
+    void pushBack(ListNode* n)
+    {
+        mStartEnd.insertFront_(n);
+        mCount += 1;
+    }
+
+    void erase(ListNode* n)
+    {
+        n->erase_();
+        mCount -= 1;
+    }
+
     ListNode mStartEnd;
     s32 mCount;
 };

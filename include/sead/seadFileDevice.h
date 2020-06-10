@@ -35,7 +35,7 @@ class FileHandle;
 class DirectoryHandle;
 struct DirectoryEntry;
 
-class FileDevice : public TListNode<FileDevice>, public IDisposer
+class FileDevice : public TListNode<FileDevice*>, public IDisposer
 {
     SEAD_RTTI_BASE(FileDevice)
 
@@ -96,7 +96,7 @@ public:
 
 public:
     FileDevice()
-        : TListNode<FileDevice>()
+        : TListNode<FileDevice*>()
         , IDisposer()
         , mDriveName()
         , mPermission(true)
@@ -104,7 +104,7 @@ public:
     }
 
     FileDevice(const SafeString& name)
-        : TListNode<FileDevice>()
+        : TListNode<FileDevice*>()
         , IDisposer()
         , mDriveName()
         , mPermission(true)

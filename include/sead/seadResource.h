@@ -11,7 +11,7 @@
 
 namespace sead {
 
-class Resource : public TListNode<Resource>
+class Resource : public TListNode<Resource*>
 {
     SEAD_RTTI_BASE(Resource)
 
@@ -41,11 +41,11 @@ public:
     BitFlag32 mSettingFlag;
 };
 
-class ResourceFactory : public TListNode<ResourceFactory>, public IDisposer
+class ResourceFactory : public TListNode<ResourceFactory*>, public IDisposer
 {
 public:
     ResourceFactory()
-        : TListNode<ResourceFactory>()
+        : TListNode<ResourceFactory*>()
         , IDisposer()
         , mExt()
     {

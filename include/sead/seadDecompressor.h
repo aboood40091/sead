@@ -9,11 +9,11 @@
 
 namespace sead {
 
-class Decompressor : public TListNode<Decompressor>, public IDisposer
+class Decompressor : public TListNode<Decompressor*>, public IDisposer
 {
 public:
     Decompressor(const SafeString& name)
-        : TListNode<Decompressor>()
+        : TListNode<Decompressor*>()
         , IDisposer()
         , mExt(name)
     {

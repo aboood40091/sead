@@ -3,7 +3,7 @@
 namespace sead {
 
 Resource::Resource()
-    : TListNode<Resource>()
+    : TListNode<Resource*>()
 {
 }
 

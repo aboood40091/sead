@@ -36,7 +36,7 @@ public:
 
     static FileDeviceMgr* sInstance;
 
-    typedef TList<FileDevice> DeviceList;
+    typedef TList<FileDevice*> DeviceList;
 
     DeviceList mDeviceList;
     FileDevice* mDefaultFileDevice;

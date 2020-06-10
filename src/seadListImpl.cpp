@@ -6,8 +6,8 @@ void ListNode::insertFront_(ListNode* node)
 {
     ListNode* prev = mPrev;
     this->mPrev = node;
-    node->mNext = this;
     node->mPrev = prev;
+    node->mNext = this;
     if (prev == NULL)
         return;
 
@@ -16,14 +16,16 @@ void ListNode::insertFront_(ListNode* node)
 
 void ListNode::erase_()
 {
-    if (this->mPrev != NULL)
-        this->mPrev->mNext = this->mNext;
+    ListNode* prev = mPrev;
+    if (prev != NULL)
+        prev->mNext = mNext;
 
-    if (this->mNext != NULL)
-        this->mNext->mPrev = this->mPrev;
+    ListNode* next = mNext;
+    if (next != NULL)
+        next->mPrev = mPrev;
 
-    this->mNext = NULL;
-    this->mPrev = NULL;
+    mNext = NULL;
+    mPrev = NULL;
 }
 
 } // namespace sead
