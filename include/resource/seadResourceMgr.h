@@ -20,7 +20,7 @@ class DirectResourceFactory;
 
 class ResourceMgr
 {
-    SEAD_SINGLETON_DISPOSER(ResourceMgr, sInstance)
+    SEAD_SINGLETON_DISPOSER(ResourceMgr)
 
 public:
     struct CreateArg

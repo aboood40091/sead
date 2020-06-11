@@ -15,7 +15,7 @@ namespace sead {
 
 class FileDeviceMgr
 {
-    SEAD_SINGLETON_DISPOSER(FileDeviceMgr, sInstance)
+    SEAD_SINGLETON_DISPOSER(FileDeviceMgr)
 
 public:
     FileDeviceMgr();

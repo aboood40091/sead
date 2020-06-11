@@ -16,8 +16,8 @@ PrimitiveRenderer::PrimitiveRenderer()
 {
 }
 
-SEAD_CREATE_SINGLETON_INSTANCE(PrimitiveRenderer, PrimitiveRenderer::sInstance)
-SEAD_DELETE_SINGLETON_INSTANCE(PrimitiveRenderer, PrimitiveRenderer::sInstance)
+SEAD_CREATE_SINGLETON_INSTANCE(PrimitiveRenderer)
+SEAD_DELETE_SINGLETON_INSTANCE(PrimitiveRenderer)
 
 void PrimitiveRenderer::doPrepare_(Heap* heap)
 {

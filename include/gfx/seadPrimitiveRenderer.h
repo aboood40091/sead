@@ -41,7 +41,7 @@ public:
 
 class PrimitiveRenderer : public IDisposer
 {
-    SEAD_SINGLETON_DISPOSER(PrimitiveRenderer, sInstance)
+    SEAD_SINGLETON_DISPOSER(PrimitiveRenderer)
 
 public:
     class QuadArg

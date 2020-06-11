@@ -67,8 +67,8 @@ FileDeviceMgr::~FileDeviceMgr()
 #endif // cafe
 }
 
-SEAD_CREATE_SINGLETON_INSTANCE(FileDeviceMgr, FileDeviceMgr::sInstance)
-SEAD_DELETE_SINGLETON_INSTANCE(FileDeviceMgr, FileDeviceMgr::sInstance)
+SEAD_CREATE_SINGLETON_INSTANCE(FileDeviceMgr)
+SEAD_DELETE_SINGLETON_INSTANCE(FileDeviceMgr)
 
 void FileDeviceMgr::traceFilePath(const SafeString& path) const
 {
