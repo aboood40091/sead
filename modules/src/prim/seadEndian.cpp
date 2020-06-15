@@ -54,14 +54,7 @@ u64 Null64(u64 x)
 
 namespace sead { namespace Endian {
 
-#ifdef cafe
-#define MARK 0xfeff
-#else
-#define MARK 0
-#endif // cafe
-
-Types cHostEndian = markToEndian(MARK);
-
+Types cHostEndian = markToEndian(0xfeff);
 ConvFuncTable cConvFuncTable = { &Null8, &Swap8, &Null16, &Swap16, &Null32, &Swap32, &Null64, &Swap64 };
 
 } } // namespace sead::Endian

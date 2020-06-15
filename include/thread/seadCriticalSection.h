@@ -13,9 +13,10 @@ class CriticalSection : public IDisposer
 {
 public:
     CriticalSection();
-    virtual ~CriticalSection() { }
+    virtual ~CriticalSection();
 
     void lock();
+    bool tryLock();
     void unlock();
 
 #ifdef cafe

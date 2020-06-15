@@ -79,6 +79,8 @@ public:
     ResourceMgr();
     ~ResourceMgr();
 
+    void postCreate();
+
     void registerFactory(ResourceFactory* factory, const SafeString& name);
     void registerDecompressor(Decompressor* decompressor, const SafeString& name);
 

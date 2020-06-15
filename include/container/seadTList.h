@@ -76,10 +76,7 @@ public:
 
     void pushBack(TListNode<T>* obj)
     {
-        TList<T>* list = obj->mList;
-        if (list != NULL)
-            list->erase(obj);
-
+        obj->erase();
         obj->mList = this;
         ListImpl::pushBack(obj);
     }
@@ -100,6 +97,13 @@ public:
     {
         mData = static_cast<T>(this);
         mList = NULL;
+    }
+
+    void erase()
+    {
+        TList<T>* list = mList;
+        if (list != NULL)
+            list->erase(this);
     }
 
     T mData;

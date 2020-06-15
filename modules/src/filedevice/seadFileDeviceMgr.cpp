@@ -117,9 +117,7 @@ void FileDeviceMgr::mount(FileDevice* device, const SafeString& name)
 void FileDeviceMgr::unmount(FileDevice* device)
 {
     if (device->mList != NULL)
-    {
         mDeviceList.erase(device);
-    }
 
     if (device == mDefaultFileDevice)
         mDefaultFileDevice = NULL;
