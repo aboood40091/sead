@@ -11,7 +11,7 @@ template <typename T>
 class SafeStringBase
 {
 public:
-    SafeStringBase() : mStringTop(cNullString) { }
+    SafeStringBase() : mStringTop(&cNullChar) { }
     SafeStringBase(const T* str) : mStringTop(str) { }
     virtual ~SafeStringBase() { }
 
@@ -43,7 +43,6 @@ public:
     inline s32 findIndex(const SafeStringBase<T>& str) const;
 
     static const T cNullChar;
-    static const T cNullString[1];
     static const T cLineBreakChar;
     static const SafeStringBase cEmptyString;
     static const s32 cMaximumLength = 0x40000;
@@ -58,9 +57,6 @@ template <>
 extern const char SafeStringBase<char>::cLineBreakChar;
 
 template <>
-extern const char SafeStringBase<char>::cNullString[1];
-
-template <>
 extern const SafeStringBase<char> SafeStringBase<char>::cEmptyString;
 
 template <>
@@ -68,9 +64,6 @@ extern const char16 SafeStringBase<char16>::cNullChar;
 
 template <>
 extern const char16 SafeStringBase<char16>::cLineBreakChar;
-
-template <>
-extern const char16 SafeStringBase<char16>::cNullString[1];
 
 template <>
 extern const SafeStringBase<char16> SafeStringBase<char16>::cEmptyString;
