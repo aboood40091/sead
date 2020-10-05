@@ -23,6 +23,75 @@ public:
     void** mPtrs;
 };
 
+template <typename T>
+class PtrArray : public PtrArrayImpl
+{
+public:
+    __attribute__((always_inline)) PtrArray(s32 ptrNumMax, T** buf)
+        : PtrArrayImpl(ptrNumMax, buf)
+    {
+    }
+
+    class iterator
+    {
+    public:
+        iterator(T* const* pptr)
+            : mPPtr(pptr)
+        {
+        }
+
+        bool operator==(const iterator& other) const
+        {
+            return mPPtr == other.mPPtr;
+        }
+
+        bool operator!=(const iterator& other) const
+        {
+            return !(*this == other);
+        }
+
+        iterator& operator++()
+        {
+            ++mPPtr;
+            return *this;
+        }
+
+        T& operator*() const
+        {
+            return **mPPtr;
+        }
+
+        T* operator->() const
+        {
+            return *mPPtr;
+        }
+
+        T* const* mPPtr;
+    };
+
+    iterator begin() const
+    {
+        return iterator(reinterpret_cast<T**>(mPtrs));
+    }
+
+    iterator end() const
+    {
+        return iterator(reinterpret_cast<T**>(mPtrs) + mPtrNum);
+    }
+};
+
+template <typename T, s32 N>
+class FixedPtrArray : public PtrArray<T>
+{
+public:
+    __attribute__((always_inline)) FixedPtrArray()
+        : PtrArray<T>(N, reinterpret_cast<T**>(mWork))
+    {
+    }
+
+    u8 mWork[N*sizeof(void*)];
+};
+
 } // namespace sead
 
 #endif // SEAD_PTR_ARRAY_H_

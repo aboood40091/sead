@@ -6,6 +6,9 @@
 #include <heap/seadHeap.h>
 #include <thread/seadCriticalSection.h>
 
+#define NUM_ROOT_HEAPS_MAX         4
+#define NUM_INDEPENDENT_HEAPS_MAX  4
+
 namespace sead {
 
 class HeapMgr
@@ -21,13 +24,20 @@ public:
     static HeapMgr* sInstancePtr;
 
     static Arena sDefaultArena;
-    static PtrArrayImpl sRootHeaps;
-    static PtrArrayImpl sIndependentHeaps;
     static CriticalSection sHeapTreeLockCS;
+
+    typedef FixedPtrArray<Heap,        NUM_ROOT_HEAPS_MAX> RootHeaps;
+    typedef FixedPtrArray<Heap, NUM_INDEPENDENT_HEAPS_MAX> IndependentHeaps;
+
+    static RootHeaps sRootHeaps;
+    static IndependentHeaps sIndependentHeaps;
 
     void* mAllocFailedCallback;  // IAllocFailedCallback* = IDelegate1<const AllocFailedCallbackArg*>*
 };
 
 } // namespace sead
+
+#undef NUM_ROOT_HEAPS_MAX
+#undef NUM_INDEPENDENT_HEAPS_MAX
 
 #endif // SEAD_HEAPMGR_H_
