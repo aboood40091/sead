@@ -12,7 +12,7 @@ template <typename T>
 class TList : public ListImpl
 {
 public:
-    TList()
+    __attribute__((always_inline)) TList()
         : ListImpl()
     {
     }
@@ -92,11 +92,18 @@ template <typename T>
 class TListNode : public ListNode
 {
 public:
-    TListNode()
+    __attribute__((always_inline)) TListNode()
         : ListNode()
+        , mData(NULL)
+        , mList(NULL)
     {
-        mData = static_cast<T>(this);
-        mList = NULL;
+    }
+
+    __attribute__((always_inline)) TListNode(T data)
+        : ListNode()
+        , mData(data)
+        , mList(NULL)
+    {
     }
 
     void erase()

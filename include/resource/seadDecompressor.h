@@ -13,7 +13,7 @@ class Decompressor : public TListNode<Decompressor*>, public IDisposer
 {
 public:
     Decompressor(const SafeString& name)
-        : TListNode<Decompressor*>()
+        : TListNode<Decompressor*>(this)
         , IDisposer()
         , mExt(name)
     {

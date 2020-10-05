@@ -96,7 +96,7 @@ public:
 
 public:
     FileDevice()
-        : TListNode<FileDevice*>()
+        : TListNode<FileDevice*>(this)
         , IDisposer()
         , mDriveName()
         , mPermission(true)
@@ -104,7 +104,7 @@ public:
     }
 
     FileDevice(const SafeString& name)
-        : TListNode<FileDevice*>()
+        : TListNode<FileDevice*>(this)
         , IDisposer()
         , mDriveName()
         , mPermission(true)

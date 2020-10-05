@@ -65,8 +65,8 @@ public:
         return tryAlloc(size, alignment);
     }
 
-    typedef OffsetList HeapList;
-    typedef OffsetList DisposerList;
+    typedef OffsetList<Heap> HeapList;
+    typedef OffsetList<IDisposer> DisposerList;
 
     void *mStart;
     size_t mSize;

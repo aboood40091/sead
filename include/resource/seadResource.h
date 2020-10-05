@@ -45,7 +45,7 @@ class ResourceFactory : public TListNode<ResourceFactory*>, public IDisposer
 {
 public:
     ResourceFactory()
-        : TListNode<ResourceFactory*>()
+        : TListNode<ResourceFactory*>(this)
         , IDisposer()
         , mExt()
     {
