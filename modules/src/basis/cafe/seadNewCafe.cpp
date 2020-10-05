@@ -1,6 +1,7 @@
 #include <stddef.h>
 
 #include <basis/seadNew.h>
+#include <heap/seadHeap.h>
 #include <heap/seadHeapMgr.h>
 
 #include <cafe.h>

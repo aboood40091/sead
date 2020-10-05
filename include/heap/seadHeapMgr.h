@@ -3,13 +3,14 @@
 
 #include <container/seadPtrArray.h>
 #include <heap/seadArena.h>
-#include <heap/seadHeap.h>
 #include <thread/seadCriticalSection.h>
 
 #define NUM_ROOT_HEAPS_MAX         4
 #define NUM_INDEPENDENT_HEAPS_MAX  4
 
 namespace sead {
+
+class Heap;
 
 class HeapMgr
 {
