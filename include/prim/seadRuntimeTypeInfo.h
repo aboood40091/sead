@@ -1,46 +1,41 @@
 #ifndef SEAD_RUNTIMETYPEINFO_H_
 #define SEAD_RUNTIMETYPEINFO_H_
 
-namespace sead {
+namespace sead { namespace RuntimeTypeInfo {
 
-class RuntimeTypeInfo
+struct Interface
 {
-public:
-    class Interface
-    {
-    public:
-        Interface() { }
+    Interface() { }
 
-        virtual bool isDerived(const Interface* typeInfo) const = 0;
-    };
-
-    class Root : public Interface
-    {
-    public:
-        Root() { }
-
-        virtual bool isDerived(const Interface* typeInfo) const
-        {
-            return typeInfo == this;
-        }
-    };
-
-    template <typename BaseType>
-    class Derive : public Interface
-    {
-    public:
-        Derive() { }
-
-        virtual bool isDerived(const Interface* typeInfo) const
-        {
-            if (this == typeInfo)
-                return true;
-
-            const RuntimeTypeInfo::Interface* rootTypeInfo = BaseType::getRuntimeTypeInfoStatic();
-            return rootTypeInfo->isDerived(typeInfo);
-        }
-    };
+    virtual bool isDerived(const Interface* typeInfo) const = 0;
 };
+
+struct Root : public Interface
+{
+    Root() { }
+
+    virtual bool isDerived(const Interface* typeInfo) const
+    {
+        return typeInfo == this;
+    }
+};
+
+template <typename BaseType>
+struct Derive : public Interface
+{
+    Derive() { }
+
+    virtual bool isDerived(const Interface* typeInfo) const
+    {
+        if (this == typeInfo)
+            return true;
+
+        const RuntimeTypeInfo::Interface* rootTypeInfo = BaseType::getRuntimeTypeInfoStatic();
+        return rootTypeInfo->isDerived(typeInfo);
+    }
+};
+
+} // namespace sead::RuntimeTypeInfo
 
 template <typename DerivedType, typename Type>
 inline bool

@@ -3,9 +3,9 @@
 #include <stdarg.h>
 #include <cwchar>
 
-namespace sead {
+namespace sead { namespace StringUtil {
 
-s32 StringUtil::vsw16printf(char16* s, size_t n, const char16* formatStr, va_list args)
+s32 vsw16printf(char16* s, size_t n, const char16* formatStr, va_list args)
 {
     if (n == 0)
         return -1;
@@ -18,4 +18,4 @@ s32 StringUtil::vsw16printf(char16* s, size_t n, const char16* formatStr, va_lis
     return std::vswprintf(s, n, formatStr, args);
 }
 
-} // namespace sead
+} } // namespace sead::StringUtil
