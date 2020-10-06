@@ -6,34 +6,39 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-namespace sead { namespace StringUtil {
+namespace sead {
 
-inline s32 vsnprintf(char* s, size_t n, const char* formatStr, va_list args)
+class StringUtil
 {
-    s32 ret = ::vsnprintf(s, n, formatStr, args);
-    if (ret < 0 || ret >= n)
+public:
+    static s32 vsnprintf(char* s, size_t n, const char* formatStr, va_list args)
     {
-        s[n - 1] = '\0';
-        ret = n - 1;
+        s32 ret = ::vsnprintf(s, n, formatStr, args);
+        if (ret < 0 || ret >= n)
+        {
+            s[n - 1] = '\0';
+            ret = n - 1;
+        }
+
+        return ret;
     }
 
-    return ret;
-}
+    static s32 vsw16printf(char16* s, size_t n, const char16* formatStr, va_list args);
 
-s32 vsw16printf(char16* s, size_t n, const char16* formatStr, va_list args);
-
-inline s32 vsnw16printf(char16* s, size_t n, const char16* formatStr, va_list args)
-{
-    s32 ret = vsw16printf(s, n, formatStr, args);
-    if (ret < 0 || ret >= n)
+    static s32 vsnw16printf(char16* s, size_t n, const char16* formatStr, va_list args)
     {
-        s[n - 1] = 0;
-        ret = n - 1;
+        s32 ret = vsw16printf(s, n, formatStr, args);
+        if (ret < 0 || ret >= n)
+        {
+            s[n - 1] = 0;
+            ret = n - 1;
+        }
+
+        return ret;
     }
 
-    return ret;
-}
+};
 
-} } // namespace sead::StringUtil
+} // namespace sead
 
 #endif // SEAD_STRING_UTIL_H_

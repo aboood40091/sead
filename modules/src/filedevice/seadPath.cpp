@@ -1,9 +1,9 @@
 #include <filedevice/seadPath.h>
 #include <prim/seadSafeString.hpp>
 
-namespace sead { namespace Path {
+namespace sead {
 
-bool getDriveName(BufferedSafeString* driveName, const SafeString& path)
+bool Path::getDriveName(BufferedSafeString* driveName, const SafeString& path)
 {
     driveName->trim(driveName->mBufferSize);
 
@@ -14,7 +14,7 @@ bool getDriveName(BufferedSafeString* driveName, const SafeString& path)
     return index != -1;
 }
 
-void getPathExceptDrive(BufferedSafeString* pathNoDrive, const SafeString& path)
+void Path::getPathExceptDrive(BufferedSafeString* pathNoDrive, const SafeString& path)
 {
     pathNoDrive->trim(pathNoDrive->mBufferSize);
 
@@ -26,4 +26,4 @@ void getPathExceptDrive(BufferedSafeString* pathNoDrive, const SafeString& path)
         pathNoDrive->copyAt(0, path.getPart(index + 3));
 }
 
-} } // namespace sead::Path
+} // namespace sead

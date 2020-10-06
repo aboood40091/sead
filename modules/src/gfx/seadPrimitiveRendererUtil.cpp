@@ -3,9 +3,9 @@
 #include <gfx/seadPrimitiveRendererUtil.h>
 #include <prim/seadMemUtil.h>
 
-namespace sead { namespace PrimitiveRendererUtil {
+namespace sead {
 
-void setQuadVertex(Vertex* vtx, u16* idx)
+void PrimitiveRendererUtil::setQuadVertex(Vertex* vtx, u16* idx)
 {
     static const Vertex cVtx[4] = {
         Vertex( Vector3f(-0.5f,  0.5f, 0.0f), Vector2f(0.0f, 1.0f), Color4f(0.0f, 0.0f, 0.0f, 0.0f) ),
@@ -26,7 +26,7 @@ void setQuadVertex(Vertex* vtx, u16* idx)
         memcpy(idx, cIdx, sizeof(cIdx));
 }
 
-void setLineVertex(Vertex* vtx, u16* idx)
+void PrimitiveRendererUtil::setLineVertex(Vertex* vtx, u16* idx)
 {
     static const Vertex cVtx[2] = {
         Vertex( Vector3f(-0.5f,  0.0f, 0.0f), Vector2f(0.0f, 0.5f), Color4f(0.0f, 0.0f, 0.0f, 0.0f) ),
@@ -44,7 +44,7 @@ void setLineVertex(Vertex* vtx, u16* idx)
         memcpy(idx, cIdx, sizeof(cIdx));
 }
 
-void setCubeVertex(Vertex* vtx, u16* idx)
+void PrimitiveRendererUtil::setCubeVertex(Vertex* vtx, u16* idx)
 {
     static const Vertex cVtx[8] = {
         Vertex( Vector3f(-0.5f, -0.5f, -0.5f), Vector2f(0.0f, 0.0f), Color4f(1.0f / 3.0f, 0.0f, 0.0f, 0.0f) ),
@@ -76,7 +76,7 @@ void setCubeVertex(Vertex* vtx, u16* idx)
         memcpy(idx, cIdx, sizeof(cIdx));
 }
 
-void setWireCubeVertex(Vertex* vtx, u16* idx)
+void PrimitiveRendererUtil::setWireCubeVertex(Vertex* vtx, u16* idx)
 {
     setCubeVertex(vtx, NULL);
 
@@ -94,7 +94,7 @@ void setWireCubeVertex(Vertex* vtx, u16* idx)
         memcpy(idx, cIdx, sizeof(cIdx));
 }
 
-void setSphereVertex(Vertex* vtx, u16* idx, s32 x, s32 y)
+void PrimitiveRendererUtil::setSphereVertex(Vertex* vtx, u16* idx, s32 x, s32 y)
 {
     if (vtx != NULL) {
         for (s32 i = 0; i < y; i++)
@@ -182,7 +182,7 @@ void setSphereVertex(Vertex* vtx, u16* idx, s32 x, s32 y)
     }
 }
 
-void setDiskVertex(Vertex* vtx, u16* idx, s32 div)
+void PrimitiveRendererUtil::setDiskVertex(Vertex* vtx, u16* idx, s32 div)
 {
     if (vtx != NULL)
     {
@@ -219,7 +219,7 @@ void setDiskVertex(Vertex* vtx, u16* idx, s32 div)
         }
 }
 
-void setCylinderVertex(Vertex* vtx, u16* idx, s32 div)
+void PrimitiveRendererUtil::setCylinderVertex(Vertex* vtx, u16* idx, s32 div)
 {
     if (vtx != NULL)
     {
@@ -295,4 +295,4 @@ void setCylinderVertex(Vertex* vtx, u16* idx, s32 div)
     }
 }
 
-} } // namespace sead::PrimitiveRendererUtil
+} // namespace sead

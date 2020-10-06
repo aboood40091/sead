@@ -3,11 +3,15 @@
 
 #include <prim/seadSafeString.h>
 
-namespace sead { namespace Path {
+namespace sead {
 
-bool getDriveName(BufferedSafeString* driveName, const SafeString& path);
-void getPathExceptDrive(BufferedSafeString* pathNoDrive, const SafeString& path);
+class Path
+{
+public:
+    static bool getDriveName(BufferedSafeString* driveName, const SafeString& path);
+    static void getPathExceptDrive(BufferedSafeString* pathNoDrive, const SafeString& path);
+};
 
-} } // namespace sead::Path
+} // namespace sead
 
 #endif // SEAD_PATH_H_

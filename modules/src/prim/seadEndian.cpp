@@ -52,9 +52,9 @@ u64 Null64(u64 x)
     return x;
 }
 
-namespace sead { namespace Endian {
+namespace sead {
 
-Types cHostEndian = markToEndian(0xfeff);
-ConvFuncTable cConvFuncTable = { &Null8, &Swap8, &Null16, &Swap16, &Null32, &Swap32, &Null64, &Swap64 };
+const Endian::Types Endian::cHostEndian = Endian::markToEndian(0xfeff);
+const Endian::ConvFuncTable Endian::cConvFuncTable = { &Null8, &Swap8, &Null16, &Swap16, &Null32, &Swap32, &Null64, &Swap64 };
 
-} } // namespace sead::Endian
+} // namespace sead
