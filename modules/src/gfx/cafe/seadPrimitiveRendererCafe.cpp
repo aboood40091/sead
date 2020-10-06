@@ -9,6 +9,7 @@
 #include <gfx/seadProjection.h>
 #include <heap/seadHeap.h>
 #include <math/seadMatrixCalcCommon.hpp>
+#include <prim/seadMemUtil.h>
 #include <prim/seadSafeString.hpp>
 
 namespace sead {
@@ -84,7 +85,7 @@ void PrimitiveRendererCafe::prepareFromBinaryImpl(
         // Box
         static const u16 idx[4] = { 0, 1, 3, 2 };
         mBoxIndexBuf   = static_cast<u16*>(heap->alloc(sizeof(idx), GX2_INDEX_BUFFER_ALIGNMENT));
-        memcpy(mBoxIndexBuf, idx, sizeof(idx));
+        MemUtil::copy(mBoxIndexBuf, idx, sizeof(idx));
 
         GX2Invalidate(GX2_INVALIDATE_CPU_ATTRIB_BUFFER,   mBoxIndexBuf, 4 * sizeof(u16));
     }

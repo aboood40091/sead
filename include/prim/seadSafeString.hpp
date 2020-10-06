@@ -1,6 +1,5 @@
 #pragma once
 
-#include <string>
 #include <prim/seadMemUtil.h>
 #include <prim/seadSafeString.h>
 
@@ -104,7 +103,7 @@ BufferedSafeStringBase<T>::copy(const SafeStringBase<T>& src, s32 copyLength)
     if (copyLength >= mBufferSize)
         copyLength = mBufferSize - 1;
 
-    std::char_traits<T>::copy(dst, src.cstr(), copyLength);
+    MemUtil::copy(dst, src.cstr(), copyLength * sizeof(T));
     dst[copyLength] = SafeStringBase<T>::cNullChar;
 
     return copyLength;
@@ -133,7 +132,7 @@ BufferedSafeStringBase<T>::copyAt(s32 at, const SafeStringBase<T>& src, s32 copy
     if (copyLength <= 0)
         return 0;
 
-    std::char_traits<T>::copy(dst + at, src.cstr(), copyLength);
+    MemUtil::copy(dst + at, src.cstr(), copyLength * sizeof(T));
     if (at + copyLength > len)
         dst[at + copyLength] = SafeStringBase<T>::cNullChar;
 
