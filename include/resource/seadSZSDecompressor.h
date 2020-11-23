@@ -24,29 +24,6 @@ public:
 
         void initialize(void* dst);
 
-        __attribute__((always_inline)) bool doCopy(u32 n)
-        {
-            if (this->destCount < n)
-            {
-                if (this->forceDestCount == 0)
-                    return false;
-
-                n = this->destCount & 0xFFFF;
-            }
-
-            this->destCount -= n;
-
-            do
-            {
-                *this->destp = *(this->destp - this->lzOffset);
-                this->destp += 1;
-            }
-            while (--n != 0);
-
-            this->step = SZSDecompressor::cStepNormal;
-            return true;
-        }
-
         u8* destp;
         s32 destCount;
         s32 forceDestCount;

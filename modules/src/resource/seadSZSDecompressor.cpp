@@ -365,56 +365,88 @@ SZSDecompressor::streamDecomp(DecompContext* context, const void* src, u32 srcSi
     {
         if (context->step == cStepLong)
         {
-            n = *_src + 0x12;
-            if (!context->doCopy(n))
-                return -2;
+            n = *_src++ + 0x12; srcSize--;
+            if (n > context->destCount)
+            {
+                if (context->forceDestCount == 0)
+                    return -2;
+
+                n = static_cast<u16>(context->destCount);
+            }
+
+            context->destCount -= n;
+
+            do
+            {
+                *context->destp = context->destp[-static_cast<s32>(context->lzOffset)];
+                context->destp++;
+            }
+            while (--n != 0);
+
+            context->step = SZSDecompressor::cStepNormal;
         }
 
         else if (context->step == cStepShort)
         {
-            context->lzOffset = ((context->packHigh << 8) & 0xf00 | *_src) + 1;
+            u32 offsetLen = static_cast<u32>(context->packHigh) << 8 | *_src++; srcSize--;
+            context->lzOffset = (offsetLen & 0xfff) + 1;
 
-            n = context->packHigh >> 4;
-            if (n != 0)
-            {
-                n += 2;
-                if (!context->doCopy(n))
-                    return -2;
-            }
+            n = offsetLen >> 0xC;
+            if (n == 0)
+                context->step = cStepLong;
 
             else
-                context->step = cStepLong;
+            {
+                n  += 2;
+                if (n > context->destCount)
+                {
+                    if (context->forceDestCount == 0)
+                        return -2;
+
+                    n = static_cast<u16>(context->destCount);
+                }
+
+                context->destCount -= n;
+
+                do
+                {
+                    *context->destp = context->destp[-static_cast<s32>(context->lzOffset)];
+                    context->destp++;
+                }
+                while (--n != 0);
+
+                context->step = SZSDecompressor::cStepNormal;
+            }
         }
 
         else
         {
             if (context->flagMask == 0)
             {
-                context->flags = *_src++;
+                context->flags = *_src++; srcSize--;
                 context->flagMask = 0x80;
-                if (--srcSize == 0)
+                if (srcSize == 0)
                     break;
             }
 
-            if ((context->flags & context->flagMask) == 0)
+            if ((context->flags & context->flagMask) != 0)
             {
-                context->packHigh = *_src;
-                context->step = cStepShort;
+                *context->destp++ = *_src++;
+                context->destCount -= 1;
             }
 
             else
             {
-                *context->destp++ = *_src;
-                context->destCount -= 1;
+                context->packHigh = *_src++;
+                context->step = cStepShort;
             }
 
+            srcSize--;
             context->flagMask >>= 1;
         }
 
-        if (--srcSize == 0)
+        if (srcSize == 0)
             break;
-
-        _src++;
     }
 
     if (context->destCount == 0 && context->forceDestCount == 0 && 0x20 < srcSize)
