@@ -297,30 +297,30 @@ SZSDecompressor::readHeader_(DecompContext* context, const u8* src, u32 srcSize)
 
         if (context->headerSize == 0xF)
         {
-            if (*src != 0x59)
+            if (*src != 'Y')
                 return -1;
         }
 
         else if (context->headerSize == 0xE)
         {
-            if (*src != 0x61)
+            if (*src != 'a')
                 return -1;
         }
 
         else if (context->headerSize == 0xD)
         {
-            if (*src != 0x7A)
+            if (*src != 'z')
                 return -1;
         }
 
         else if (context->headerSize == 0xC)
         {
-            if (*src != 0x30)
+            if (*src != '0')
                 return -1;
         }
 
-        else if (7 < context->headerSize)
-            context->destCount |= static_cast<u32>(*src) << (context->headerSize - 8) * 8;
+        else if (context->headerSize >= 8)
+            context->destCount |= static_cast<u32>(*src) << ((context->headerSize - 8) << 3);
 
         src++; len += 1;
         if (--srcSize == 0 && context->headerSize != 0)
@@ -330,7 +330,7 @@ SZSDecompressor::readHeader_(DecompContext* context, const u8* src, u32 srcSize)
     if (context->forceDestCount < 1)
         return len;
 
-    if (context->destCount <= context->forceDestCount)
+    if (context->forceDestCount >= context->destCount)
         return len;
 
     context->destCount = context->forceDestCount;
