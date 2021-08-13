@@ -13,11 +13,16 @@ public:
     static s32 roundDownPow2(T x, s32 y);
     static T gcd(T x, T y);
     static T lcm(T x, T y);
+    static T cos(T t);
+    static T sin(T t);
+    static T deg2rad(T deg);
+    static T rsqrt(T x);
 };
 
-typedef MathCalcCommon<s32> MathCalcCommonS32;
-typedef MathCalcCommon<u32> MathCalcCommonU32;
+typedef MathCalcCommon<s32> Mathi;
+typedef MathCalcCommon<u32> Mathu;
+typedef MathCalcCommon<f32> Mathf;
 
-}
+} // namespace sead
 
 #endif // SEAD_MATHCALCCOMMON_H_

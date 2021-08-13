@@ -214,12 +214,12 @@ void PrimitiveRendererCafe::prepareImpl(
 
 void PrimitiveRendererCafe::setCameraImpl(const Camera& camera)
 {
-    ASM_MTXCopy(const_cast<f32(*)[4]>(camera.mMatrix.m), mCameraMtx.m);
+    mCameraMtx = camera.mMatrix;
 }
 
 void PrimitiveRendererCafe::setProjectionImpl(const Projection& projection)
 {
-    ASM_MTX44Copy(const_cast<f32(*)[4]>(projection.getDeviceProjectionMatrix().m), mProjectionMtx.m);
+    mProjectionMtx = projection.getDeviceProjectionMatrix();
 }
 
 void PrimitiveRendererCafe::beginImpl()
@@ -312,17 +312,17 @@ void PrimitiveRendererCafe::drawDisk32Impl(
 }
 
 void PrimitiveRendererCafe::drawCircle16Impl(
-    const Matrix34f& model_mtx, const Color4f& edge
+    const Matrix34f& model_mtx, const Color4f& color
 )
 {
-    drawLines_(model_mtx, edge, edge, mDiskSVertexBuf, 17, mCircleSIndexBuf, 16);
+    drawLines_(model_mtx, color, color, mDiskSVertexBuf, 17, mCircleSIndexBuf, 16);
 }
 
 void PrimitiveRendererCafe::drawCircle32Impl(
-    const Matrix34f& model_mtx, const Color4f& edge
+    const Matrix34f& model_mtx, const Color4f& color
 )
 {
-    drawLines_(model_mtx, edge, edge, mDiskLVertexBuf, 33, mCircleLIndexBuf, 32);
+    drawLines_(model_mtx, color, color, mDiskLVertexBuf, 33, mCircleLIndexBuf, 32);
 }
 
 void PrimitiveRendererCafe::drawCylinder16Impl(
@@ -376,4 +376,4 @@ void PrimitiveRendererCafe::drawLines_(
     GX2DrawIndexed(GX2_PRIMITIVE_LINE_LOOP, idx_num, GX2_INDEX_FORMAT_U16, idx);
 }
 
-}
+} // namespace sead

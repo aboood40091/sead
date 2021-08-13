@@ -1,15 +1,23 @@
 #ifndef SEAD_MATRIX34_H_
 #define SEAD_MATRIX34_H_
 
-#include <basis/seadTypes.h>
-#include <math/seadMathPolicies.h>
+#include <math/seadQuat.h>
+#include <math/seadVector.h>
 
 namespace sead {
 
 template <typename T>
-struct Matrix34 : public Policies<T>::Mtx34Base
+class Matrix34 : public Policies<T>::Mtx34Base
 {
-    Matrix34() { }
+private:
+    typedef Matrix34<T> Self;
+    typedef Quat<T> Quat;
+    typedef Vector3<T> Vec3;
+
+public:
+    Matrix34()
+    {
+    }
 
     Matrix34(
         T _00, T _01, T _02, T _03,
@@ -33,14 +41,68 @@ struct Matrix34 : public Policies<T>::Mtx34Base
         m[2][3] = _23;
     }
 
+    Self& operator=(const Self& n);
+    void setMul(const Self& a, const Self& b);
+
+    void makeSRT(const Vec3& s, const Vec3& r, const Vec3& t)
+    {
+        Matrix34CalcCommon<T>::makeSRT(*this, s, r, t);
+    }
+
+    void makeST(const Vec3& s, const Vec3& t)
+    {
+        Matrix34CalcCommon<T>::makeST(*this, s, t);
+    }
+
+    void makeS(T x, T y, T z)
+    {
+        Vec3 s(x, y, z);
+        Matrix34CalcCommon<T>::makeS(*this, s);
+    }
+
+    void fromQuat(const Quat& q)
+    {
+        Matrix34CalcCommon<T>::makeQ(*this, q);
+    }
+
+    void setTranslation(const Vec3& t)
+    {
+        Matrix34CalcCommon<T>::setTranslation(*this, t);
+    }
+
     static const Matrix34 zero;
     static const Matrix34 ident;
 };
 
-template <typename T>
-struct Matrix44 : public Policies<T>::Mtx44Base
+#ifdef cafe
+
+template <>
+inline Matrix34<f32>&
+Matrix34<f32>::operator=(const Matrix34<f32>& n)
 {
-    Matrix44() { }
+    ASM_MTXCopy(const_cast<f32(*)[4]>(n.m), this->m);
+    return *this;
+}
+
+template <>
+inline void
+Matrix34<f32>::setMul(const Matrix34<f32>& a, const Matrix34<f32>& b)
+{
+    ASM_MTXConcat(const_cast<f32(*)[4]>(a.m), const_cast<f32(*)[4]>(b.m), this->m);
+}
+
+#endif // cafe
+
+template <typename T>
+class Matrix44 : public Policies<T>::Mtx44Base
+{
+private:
+    typedef Matrix44<T> Self;
+
+public:
+    Matrix44()
+    {
+    }
 
     Matrix44(
         T _00, T _01, T _02, T _03,
@@ -70,9 +132,23 @@ struct Matrix44 : public Policies<T>::Mtx44Base
         m[3][3] = _33;
     }
 
+    Self& operator=(const Self& n);
+
     static const Matrix44 zero;
     static const Matrix44 ident;
 };
+
+#ifdef cafe
+
+template <>
+inline Matrix44<f32>&
+Matrix44<f32>::operator=(const Matrix44<f32>& n)
+{
+    ASM_MTX44Copy(const_cast<f32(*)[4]>(n.m), this->m);
+    return *this;
+}
+
+#endif // cafe
 
 template <>
 extern const Matrix34<f32> Matrix34<f32>::zero;

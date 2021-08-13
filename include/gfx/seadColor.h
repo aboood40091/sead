@@ -22,6 +22,9 @@ public:
     f32 a;
 
     static const Color4f cWhite;
+    static const Color4f cRed;
+    static const Color4f cGreen;
+    static const Color4f cBlue;
 };
 
 }  // namespace sead
