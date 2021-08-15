@@ -9,7 +9,7 @@
 #include <heap/seadDisposer.h>
 #include <heap/seadHeap.h>
 #include <heap/seadHeapMgr.h>
-#include <prim/seadSafeString.hpp>
+#include <prim/seadSafeString.h>
 
 namespace sead {
 

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <math/seadMatrixCalcCommon.h>
-
 namespace sead {
 
 template <typename T>

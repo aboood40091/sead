@@ -18,4 +18,10 @@ public:
 
 }  // namespace sead
 
+#ifdef __cplusplus
+
+#include <math/seadQuatCalcCommon.hpp>
+
+#endif // __cplusplus
+
 #endif // SEAD_QUATCALCCOMMON_H_

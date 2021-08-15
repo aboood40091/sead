@@ -1,8 +1,7 @@
 #pragma once
 
-#include <math/seadMathCalcCommon.hpp>
+#include <math/seadMathCalcCommon.h>
 #include <math/seadQuat.h>
-#include <math/seadQuatCalcCommon.h>
 
 namespace sead {
 

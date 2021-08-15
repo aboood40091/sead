@@ -25,4 +25,10 @@ typedef MathCalcCommon<f32> Mathf;
 
 } // namespace sead
 
+#ifdef __cplusplus
+
+#include <math/seadMathCalcCommon.hpp>
+
+#endif // __cplusplus
+
 #endif // SEAD_MATHCALCCOMMON_H_

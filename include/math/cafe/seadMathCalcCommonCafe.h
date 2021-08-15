@@ -14,4 +14,10 @@ public:
 
 } // namespace sead
 
+#ifdef __cplusplus
+
+#include <math/cafe/seadMathCalcCommonCafe.hpp>
+
+#endif // __cplusplus
+
 #endif // SEAD_MATHCALCCOMMONCAFE_H_

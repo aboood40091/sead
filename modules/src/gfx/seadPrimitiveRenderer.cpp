@@ -3,10 +3,10 @@
 #endif // cafe
 
 #include <gfx/seadPrimitiveRenderer.h>
-#include <math/seadMathCalcCommon.hpp>
-#include <math/seadMatrixCalcCommon.hpp>
-#include <math/seadQuatCalcCommon.hpp>
-#include <math/seadVectorCalcCommon.hpp>
+#include <math/seadMathCalcCommon.h>
+#include <math/seadMatrixCalcCommon.h>
+#include <math/seadQuatCalcCommon.h>
+#include <math/seadVectorCalcCommon.h>
 
 namespace sead {
 

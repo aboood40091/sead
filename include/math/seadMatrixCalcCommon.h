@@ -35,4 +35,10 @@ public:
 
 }  // namespace sead
 
+#ifdef __cplusplus
+
+#include <math/seadMatrixCalcCommon.hpp>
+
+#endif // __cplusplus
+
 #endif // SEAD_MATRIXCALCCOMMON_H_

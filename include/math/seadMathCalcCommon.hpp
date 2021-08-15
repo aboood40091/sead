@@ -1,7 +1,5 @@
 #pragma once
 
-#include <math/seadMathCalcCommon.h>
-
 #define _USE_MATH_DEFINES
 #include <cmath>
 
@@ -46,7 +44,7 @@ MathCalcCommon<f32>::deg2rad(f32 deg)
 
 #ifdef cafe
 
-#include <math/cafe/seadMathCalcCommonCafe.hpp>
+#include <math/cafe/seadMathCalcCommonCafe.h>
 
 namespace sead {
 

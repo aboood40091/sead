@@ -1,4 +1,4 @@
-#include <prim/seadSafeString.hpp>
+#include <prim/seadSafeString.h>
 #include <resource/seadArchiveRes.h>
 
 namespace sead {

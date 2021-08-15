@@ -1,8 +1,8 @@
 #include <basis/seadNew.h>
 #include <filedevice/seadFileDevice.h>
 #include <filedevice/seadFileDeviceMgr.h>
-#include <math/seadMathCalcCommon.hpp>
-#include <prim/seadSafeString.hpp>
+#include <math/seadMathCalcCommon.h>
+#include <prim/seadSafeString.h>
 
 #include <stdlib.h>
 

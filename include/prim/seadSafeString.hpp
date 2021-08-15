@@ -1,7 +1,6 @@
 #pragma once
 
 #include <prim/seadMemUtil.h>
-#include <prim/seadSafeString.h>
 
 namespace sead {
 

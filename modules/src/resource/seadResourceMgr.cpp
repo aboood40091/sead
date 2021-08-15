@@ -1,6 +1,6 @@
 #include <heap/seadHeap.h>
 #include <heap/seadHeapMgr.h>
-#include <prim/seadSafeString.hpp>
+#include <prim/seadSafeString.h>
 #include <resource/seadResource.h>
 #include <resource/seadResourceMgr.h>
 

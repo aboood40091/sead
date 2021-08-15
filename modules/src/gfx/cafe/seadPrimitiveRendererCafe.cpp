@@ -8,9 +8,9 @@
 #include <gfx/seadCamera.h>
 #include <gfx/seadProjection.h>
 #include <heap/seadHeap.h>
-#include <math/seadMatrixCalcCommon.hpp>
+#include <math/seadMatrixCalcCommon.h>
 #include <prim/seadMemUtil.h>
-#include <prim/seadSafeString.hpp>
+#include <prim/seadSafeString.h>
 
 namespace sead {
 

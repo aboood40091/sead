@@ -202,4 +202,10 @@ public:
 
 } // namespace sead
 
+#ifdef __cplusplus
+
+#include <prim/seadSafeString.hpp>
+
+#endif // __cplusplus
+
 #endif // SEAD_SAFE_STRING_H_

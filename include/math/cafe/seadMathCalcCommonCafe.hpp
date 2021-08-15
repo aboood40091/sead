@@ -1,7 +1,5 @@
 #pragma once
 
-#include <math/cafe/seadMathCalcCommonCafe.h>
-
 namespace sead {
 
 template <>

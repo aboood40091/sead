@@ -18,4 +18,10 @@ public:
 
 }  // namespace sead
 
+#ifdef __cplusplus
+
+#include <math/seadVectorCalcCommon.hpp>
+
+#endif // __cplusplus
+
 #endif // SEAD_VECTORCALCCOMMON_H_
