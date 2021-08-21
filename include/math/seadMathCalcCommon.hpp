@@ -1,19 +1,13 @@
 #pragma once
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-
-#ifdef M_PI
-#define F_PI f32(M_PI)
-#else
-//#define F_PI std::acos(-1.0f) <-- Does not match
-#define F_PI 3.1415927410125732f
-#endif // M_PI
+#ifdef cafe
+#include <math/cafe/seadMathCalcCommonCafe.h>
+#endif // cafe
 
 namespace sead {
 
 template <typename T>
-inline s32
+inline T
 MathCalcCommon<T>::roundUpPow2(T x, s32 y)
 {
     return x + y - 1 & (u32)-y;
@@ -33,28 +27,26 @@ MathCalcCommon<T>::sin(T t)
     return std::sin(t);
 }
 
-template <>
-inline f32
-MathCalcCommon<f32>::deg2rad(f32 deg)
+template <typename T>
+inline T
+MathCalcCommon<T>::sqrt(T x)
 {
-    return deg * (F_PI / 180.0f);
-}
-
-} // namespace sead
-
 #ifdef cafe
-
-#include <math/cafe/seadMathCalcCommonCafe.h>
-
-namespace sead {
+    return rsqrt(x) * x;
+#else
+    return std::sqrt(x);
+#endif // cafe
+}
 
 template <typename T>
 inline T
 MathCalcCommon<T>::rsqrt(T x)
 {
+#ifdef cafe
     return MathCafe<T>::rsqrt(x);
+#else
+    return 1 / std::sqrt(x);
+#endif // cafe
 }
 
 } // namespace sead
-
-#endif // cafe

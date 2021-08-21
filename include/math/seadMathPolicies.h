@@ -36,6 +36,24 @@ public:
         T w;
     };
 
+    struct Mtx22Base
+    {
+        union
+        {
+            T m[2][2];
+            T a[4];
+        };
+    };
+
+    struct Mtx33Base
+    {
+        union
+        {
+            T m[3][3];
+            T a[9];
+        };
+    };
+
     struct Mtx34Base
     {
         union

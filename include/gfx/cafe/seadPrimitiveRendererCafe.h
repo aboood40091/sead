@@ -38,8 +38,8 @@ public:
     virtual void drawSphere8x16Impl(const Matrix34f& model_mtx, const Color4f& north, const Color4f& south);
     virtual void drawDisk16Impl(const Matrix34f& model_mtx, const Color4f& center, const Color4f& edge);
     virtual void drawDisk32Impl(const Matrix34f& model_mtx, const Color4f& center, const Color4f& edge);
-    virtual void drawCircle16Impl(const Matrix34f& model_mtx, const Color4f& color);
-    virtual void drawCircle32Impl(const Matrix34f& model_mtx, const Color4f& color);
+    virtual void drawCircle16Impl(const Matrix34f& model_mtx, const Color4f& edge);
+    virtual void drawCircle32Impl(const Matrix34f& model_mtx, const Color4f& edge);
     virtual void drawCylinder16Impl(const Matrix34f& model_mtx, const Color4f& top, const Color4f& btm);
     virtual void drawCylinder32Impl(const Matrix34f& model_mtx, const Color4f& top, const Color4f& btm);
 

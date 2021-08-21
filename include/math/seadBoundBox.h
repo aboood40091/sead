@@ -3,10 +3,7 @@
 
 #include <math/seadVector.h>
 
-#include <limits>
-
-namespace sead
-{
+namespace sead {
 
 template <typename T>
 class BoundBox2
@@ -45,126 +42,59 @@ public:
         return (mMax.y - mMin.y) / 2.0f;
     }
 
-    void getCenter(Vector2* center) const
+    const Vector2& getMin() const
     {
-        center->set((mMin.x + mMax.x) / 2.0f,
-                    (mMin.y + mMax.y) / 2.0f);
+        return mMin;
     }
 
-    bool isUndef() const
+    const Vector2& getMax() const
     {
-        return mMin.x > mMax.x || mMin.y > mMax.y;
+        return mMax;
     }
 
-    bool isInside(const Vector2& p) const
+    Vector2 getTL() const
     {
-        return mMin.x <= p.x && p.x <= mMax.x && mMin.y <= p.y && p.y <= mMax.y;
+        return mMin;
     }
 
-    void setUndef()
+    Vector2 getTR() const
     {
-        const T max = std::numeric_limits<T>::max();
-        mMin.set(max, max);
-        const T min = std::numeric_limits<T>::min();
-        mMax.set(min, min);
+        return Vector2(mMax.x, mMin.y);
     }
 
-    void set(T x0, T y0, T x1, T y1)
+    Vector2 getBL() const
     {
-        if (x0 < x1)
-        {
-            mMin.x = x0;
-            mMax.x = x1;
-        }
-        else
-        {
-            mMin.x = x1;
-            mMax.x = x0;
-        }
-
-        if (y0 < y1)
-        {
-            mMin.y = y0;
-            mMax.y = y1;
-        }
-        else
-        {
-            mMin.y = y1;
-            mMax.y = y0;
-        }
+        return Vector2(mMin.x, mMax.y);
     }
 
-    void set(const Vector2& min, const Vector2& max)
+    Vector2 getBR() const
     {
-        mMin = min;
-        mMax = max;
+        return mMax;
     }
 
-    void setMin(const Vector2& min)
-    {
-        mMin = min;
-    }
+    Vector2 getCenter() const;
+    void getCenter(Vector2* p) const;
+    bool isUndef() const;
+    bool isInside(const Vector2& p) const;
 
-    void setMax(const Vector2& max)
-    {
-        mMax = max;
-    }
-
-    void setFromCornerAndXY(T cornerX, T cornerY, T sizeX, T sizeY)
-    {
-        mMin.set(cornerX, cornerY);
-        mMax.set(cornerX + sizeX, cornerY + sizeY);
-    }
-
-    void scaleX(T sx)
-    {
-        T sizeX = (mMax.x - mMin.x) * (sx / 2.0f);
-        T centerX = (mMin.x + mMax.x) / 2.0f;
-
-        mMin.x = centerX - sizeX;
-        mMax.x = centerX + sizeX;
-    }
-
-    void scaleY(T sy)
-    {
-        T sizeY = (mMax.y - mMin.y) * (sy / 2.0f);
-        T centerY = (mMin.y + mMax.y) / 2.0f;
-
-        mMin.y = centerY - sizeY;
-        mMax.y = centerY + sizeY;
-    }
+    void setUndef();
+    void set(T x0, T y0, T x1, T y1);
+    void set(const Vector2& min, const Vector2& max);
+    void setMin(const Vector2& min);
+    void setMax(const Vector2& max);
+    void setFromCenterAndXY(T centerX, T centerY, T sizeX, T sizeY);
+    void setFromCornerAndXY(T cornerX, T cornerY, T sizeX, T sizeY);
+    void setFromCenterAndXY(const Vector2& center, T sizeX, T sizeY) { setFromCenterAndXY(center.x, center.y, sizeX, sizeY); } // No idea why this is in the header,
+    void setFromCornerAndXY(const Vector2& corner, T sizeX, T sizeY);                                                          // but this is not.
+    void offset(T dx, T dy);
+    void offset(const Vector2& dv);
+    void scaleX(T sx);
+    void scaleY(T sy);
 
 private:
     Vector2 mMin;
     Vector2 mMax;
 };
-
-template <>
-inline void BoundBox2<float>::setUndef()
-{
-    const float max =  std::numeric_limits<float>::max();
-    mMin.set(max, max);
-    const float min = -std::numeric_limits<float>::max();
-    mMax.set(min, min);
-}
-
-template <>
-inline void BoundBox2<double>::setUndef()
-{
-    const double max =  std::numeric_limits<double>::max();
-    mMin.set(max, max);
-    const double min = -std::numeric_limits<double>::max();
-    mMax.set(min, min);
-}
-
-template <>
-inline void BoundBox2<long double>::setUndef()
-{
-    const long double max =  std::numeric_limits<long double>::max();
-    mMin.set(max, max);
-    const long double min = -std::numeric_limits<long double>::max();
-    mMax.set(min, min);
-}
 
 template <typename T>
 class BoundBox3
@@ -213,151 +143,46 @@ public:
         return (mMax.z - mMin.z) / 2.0f;
     }
 
-    void getCenter(Vector3* center) const
+    const Vector3& getMin() const
     {
-        center->set((mMin.x + mMax.x) / 2.0f,
-                    (mMin.y + mMax.y) / 2.0f,
-                    (mMin.z + mMax.z) / 2.0f);
+        return mMin;
     }
 
-    bool isUndef() const
+    const Vector3& getMax() const
     {
-        return mMin.x > mMax.x || mMin.y > mMax.y || mMin.z > mMax.z;
+        return mMax;
     }
 
-    bool isInside(const Vector3& p) const
-    {
-        return mMin.x <= p.x && p.x <= mMax.x && mMin.y <= p.y && p.y <= mMax.y && mMin.z <= p.z && p.z <= mMax.z;
-    }
+    Vector3 getCenter() const;
+    void getCenter(Vector3* p) const;
+    bool isUndef() const;
+    bool isInside(const Vector3& p) const;
 
-    void setUndef()
-    {
-        const T max = std::numeric_limits<T>::max();
-        mMin.set(max, max, max);
-        const T min = std::numeric_limits<T>::min();
-        mMax.set(min, min, min);
-    }
-
-    void set(T x0, T y0, T z0, T x1, T y1, T z1)
-    {
-        if (x0 < x1)
-        {
-            mMin.x = x0;
-            mMax.x = x1;
-        }
-        else
-        {
-            mMin.x = x1;
-            mMax.x = x0;
-        }
-
-        if (y0 < y1)
-        {
-            mMin.y = y0;
-            mMax.y = y1;
-        }
-        else
-        {
-            mMin.y = y1;
-            mMax.y = y0;
-        }
-
-        if (z0 < z1)
-        {
-            mMin.z = z0;
-            mMax.z = z1;
-        }
-        else
-        {
-            mMin.z = z1;
-            mMax.z = z0;
-        }
-    }
-
-    void set(const Vector3& min, const Vector3& max)
-    {
-        mMin = min;
-        mMax = max;
-    }
-
-    void setMin(const Vector3& min)
-    {
-        mMin = min;
-    }
-
-    void setMax(const Vector3& max)
-    {
-        mMax = max;
-    }
-
-    void setFromCornerAndXYZ(T cornerX, T cornerY, T cornerZ, T sizeX, T sizeY, T sizeZ)
-    {
-        mMin.set(cornerX, cornerY, cornerZ);
-        mMax.set(cornerX + sizeX, cornerY + sizeY, cornerZ + sizeZ);
-    }
-
-    void scaleX(T sx)
-    {
-        T sizeX = (mMax.x - mMin.x) * (sx / 2.0f);
-        T centerX = (mMin.x + mMax.x) / 2.0f;
-
-        mMin.x = centerX - sizeX;
-        mMax.x = centerX + sizeX;
-    }
-
-    void scaleY(T sy)
-    {
-        T sizeY = (mMax.y - mMin.y) * (sy / 2.0f);
-        T centerY = (mMin.y + mMax.y) / 2.0f;
-
-        mMin.y = centerY - sizeY;
-        mMax.y = centerY + sizeY;
-    }
-
-    void scaleZ(T sz)
-    {
-        T sizeZ = (mMax.z - mMin.z) * (sz / 2.0f);
-        T centerZ = (mMin.z + mMax.z) / 2.0f;
-
-        mMin.z = centerZ - sizeZ;
-        mMax.z = centerZ + sizeZ;
-    }
+    void setUndef();
+    void set(T x0, T y0, T z0, T x1, T y1, T z1);
+    void set(const Vector3& min, const Vector3& max);
+    void setMin(const Vector3& min);
+    void setMax(const Vector3& max);
+    void offset(T dx, T dy, T dz);
+    void offset(const Vector3& dv);
+    void scaleX(T sx);
+    void scaleY(T sy);
+    void scaleZ(T sz);
 
 private:
     Vector3 mMin;
     Vector3 mMax;
 };
 
-template <>
-inline void BoundBox3<float>::setUndef()
-{
-    const float max =  std::numeric_limits<float>::max();
-    mMin.set(max, max, max);
-    const float min = -std::numeric_limits<float>::max();
-    mMax.set(min, min, min);
-}
-
-template <>
-inline void BoundBox3<double>::setUndef()
-{
-    const double max =  std::numeric_limits<double>::max();
-    mMin.set(max, max, max);
-    const double min = -std::numeric_limits<double>::max();
-    mMax.set(min, min, min);
-}
-
-template <>
-inline void BoundBox3<long double>::setUndef()
-{
-    const long double max =  std::numeric_limits<long double>::max();
-    mMin.set(max, max, max);
-    const long double min = -std::numeric_limits<long double>::max();
-    mMax.set(min, min, min);
-}
-
 typedef BoundBox2<f32> BoundBox2f;
 typedef BoundBox3<f32> BoundBox3f;
 
 }  // namespace sead
+
+#ifdef __cplusplus
+
+#include <math/seadBoundBox.hpp>
+
+#endif // __cplusplus
 
 #endif // SEAD_BOUNDBOX_H_

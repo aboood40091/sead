@@ -225,7 +225,7 @@ void PrimitiveRendererCafe::setProjectionImpl(const Projection& projection)
 void PrimitiveRendererCafe::beginImpl()
 {
     Matrix44f wvp;
-    Matrix44CalcCommon<f32>::multiply(wvp, mProjectionMtx, mCameraMtx);
+    wvp.setMul(mProjectionMtx, mCameraMtx);
 
     GX2SetShaders(&mFetchShader, mVertexShader, mPixelShader);
 
@@ -312,17 +312,17 @@ void PrimitiveRendererCafe::drawDisk32Impl(
 }
 
 void PrimitiveRendererCafe::drawCircle16Impl(
-    const Matrix34f& model_mtx, const Color4f& color
+    const Matrix34f& model_mtx, const Color4f& edge
 )
 {
-    drawLines_(model_mtx, color, color, mDiskSVertexBuf, 17, mCircleSIndexBuf, 16);
+    drawLines_(model_mtx, edge, edge, mDiskSVertexBuf, 17, mCircleSIndexBuf, 16);
 }
 
 void PrimitiveRendererCafe::drawCircle32Impl(
-    const Matrix34f& model_mtx, const Color4f& color
+    const Matrix34f& model_mtx, const Color4f& edge
 )
 {
-    drawLines_(model_mtx, color, color, mDiskLVertexBuf, 33, mCircleLIndexBuf, 32);
+    drawLines_(model_mtx, edge, edge, mDiskLVertexBuf, 33, mCircleLIndexBuf, 32);
 }
 
 void PrimitiveRendererCafe::drawCylinder16Impl(

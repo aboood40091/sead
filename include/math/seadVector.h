@@ -1,12 +1,8 @@
 #ifndef SEAD_VECTOR_H_
 #define SEAD_VECTOR_H_
 
-#ifdef cafe
-#include <cafe.h>
-#endif // cafe
-
 #include <basis/seadTypes.h>
-#include <math/seadVectorCalcCommon.h>
+#include <math/seadMathPolicies.h>
 
 namespace sead {
 
@@ -21,30 +17,17 @@ public:
     {
     }
 
-    Vector2(T x_, T y_)
-    {
-        x = x_;
-        y = y_;
-    }
-
     Vector2(const Self& v)
     {
-        x = v.x;
-        y = v.y;
+        operator=(v);
     }
 
-    Self& operator=(const Self& v)
-    {
-        x = v.x;
-        y = v.y;
-        return *this;
-    }
+    Vector2(T x_, T y_);
 
-    void set(T x_, T y_)
-    {
-        x = x_;
-        y = y_;
-    }
+    Self& operator=(const Self& v);
+
+    void set(const Self& v);
+    void set(T x_, T y_);
 
     static const Vector2 zero;
     static const Vector2 ex;
@@ -63,52 +46,31 @@ public:
     {
     }
 
-    Vector3(T x_, T y_, T z_)
-    {
-        x = x_;
-        y = y_;
-        z = z_;
-    }
-
     Vector3(const Self& v)
     {
-        x = v.x;
-        y = v.y;
-        z = v.z;
+        operator=(v);
     }
 
-    Self operator*(T t) const
-    {
-        Self v = *this;
-        v.multScalar(t);
-        return v;
-    }
+    Vector3(T x_, T y_, T z_);
 
+    Self operator*(T t) const;
+    Self operator+(const Self& v) const;
     Self operator-(const Self& v) const;
+
     Self& operator+=(const Self& v);
+    Self& operator-=(const Self& v);
+    Self& operator=(const Self& v);
 
-    Self& operator=(const Self& v)
-    {
-        x = v.x;
-        y = v.y;
-        z = v.z;
-        return *this;
-    }
-
-    T length() const;
     T dot(const Self& t) const;
-    void setCross(const Self& a, const Self& b);
+    T length() const;
+
+    void add(const Self& a);
     void multScalar(T t);
-
-    T normalize()
-    {
-        return Vector3CalcCommon<T>::normalize(*this);
-    }
-
-    void set(T x_, T y_, T z_)
-    {
-        Vector3CalcCommon<T>::set(*this, x_, y_, z_);
-    }
+    T normalize();
+    void set(const Self& v);
+    void set(T x_, T y_, T z_);
+    void setCross(const Self& a, const Self& b);
+    void setScaleAdd(T t, const Self& a, const Self& b);
 
     static const Vector3 zero;
     static const Vector3 ex;
@@ -117,77 +79,28 @@ public:
     static const Vector3 ones;
 };
 
-#ifdef cafe
-
-template <>
-inline Vector3<f32>
-Vector3<f32>::operator-(const Vector3<f32>& v) const
-{
-    // TODO: Implement using intrinsics
-    Vector3<f32> o;
-    ASM_VECSubtract((const Vec*)this, (const Vec*)&v, (Vec*)&o);
-    return o;
-}
-
-template <>
-inline Vector3<f32>&
-Vector3<f32>::operator+=(const Vector3<f32>& v)
-{
-    // TODO: Implement using intrinsics
-    ASM_VECAdd((const Vec*)this, (const Vec*)&v, (Vec*)this);
-    return *this;
-}
-
-template <>
-inline f32
-Vector3<f32>::length() const
-{
-    return ASM_VECMag((const Vec*)this);
-}
-
-template <>
-inline f32
-Vector3<f32>::dot(const Vector3<f32>& t) const
-{
-     // TODO: Implement using intrinsics
-    return ASM_VECDotProduct((const Vec*)this, (const Vec*)&t);
-}
-
-template <>
-inline void
-Vector3<f32>::setCross(const Vector3<f32>& a, const Vector3<f32>& b)
-{
-    ASM_VECCrossProduct((const Vec*)&a, (const Vec*)&b, (Vec*)this);
-}
-
-template <>
-inline void
-Vector3<f32>::multScalar(f32 t)
-{
-    // TODO: Implement using intrinsics
-    ASM_VECScale((const Vec*)this, (Vec*)this, t);
-}
-
-#endif // cafe
-
 template <typename T>
 class Vector4 : public Policies<T>::Vec4Base
 {
 private:
-    typedef Vector3<T> Self;
+    typedef Vector4<T> Self;
 
 public:
     Vector4()
     {
     }
 
-    Vector4(T x_, T y_, T z_, T w_)
+    Vector4(const Self& v)
     {
-        x = x_;
-        y = y_;
-        z = z_;
-        w = w_;
+        operator=(v);
     }
+
+    Vector4(T x_, T y_, T z_, T w_);
+
+    Self& operator=(const Self& v);
+
+    void set(const Self& v);
+    void set(T x_, T y_, T z_, T w_);
 
     static const Vector4 zero;
     static const Vector4 ex;
@@ -196,6 +109,8 @@ public:
     static const Vector4 ew;
     static const Vector4 ones;
 };
+
+typedef Vector2<s32> Vector2i;
 
 typedef Vector2<f32> Vector2f;
 typedef Vector3<f32> Vector3f;
@@ -247,5 +162,11 @@ template <>
 extern const Vector4<f32> Vector4<f32>::ones;
 
 }  // namespace sead
+
+#ifdef __cplusplus
+
+#include <math/seadVector.hpp>
+
+#endif // __cplusplus
 
 #endif // #define SEAD_VECTOR_H_

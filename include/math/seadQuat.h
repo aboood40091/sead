@@ -17,26 +17,11 @@ public:
     {
     }
 
-    Quat(T x_, T y_, T z_, T w_)
-    {
-        x = x_;
-        y = y_;
-        z = z_;
-        w = w_;
-    }
+    Quat(T w_, T x_, T y_, T z_);
 
-    void set(T x_, T y_, T z_, T w_)
-    {
-        x = x_;
-        y = y_;
-        z = z_;
-        w = w_;
-    }
-
-    bool makeVectorRotation(const Vec3& from, const Vec3& to)
-    {
-        return QuatCalcCommon<T>::makeVectorRotation(*this, from, to);
-    }
+    void makeUnit();
+    bool makeVectorRotation(const Vec3& from, const Vec3& to);
+    void set(T w_, T x_, T y_, T z_);
 
     static const Quat unit;
 };
@@ -47,5 +32,11 @@ template <>
 extern const Quat<f32> Quat<f32>::unit;
 
 }  // namespace sead
+
+#ifdef __cplusplus
+
+#include <math/seadQuat.hpp>
+
+#endif // __cplusplus
 
 #endif // #define SEAD_QUAT_H_

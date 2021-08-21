@@ -33,8 +33,8 @@ public:
     virtual void drawSphere8x16Impl(const Matrix34f& model_mtx, const Color4f& north, const Color4f& south) = 0;
     virtual void drawDisk16Impl(const Matrix34f& model_mtx, const Color4f& center, const Color4f& edge) = 0;
     virtual void drawDisk32Impl(const Matrix34f& model_mtx, const Color4f& center, const Color4f& edge) = 0;
-    virtual void drawCircle16Impl(const Matrix34f& model_mtx, const Color4f& color) = 0;
-    virtual void drawCircle32Impl(const Matrix34f& model_mtx, const Color4f& color) = 0;
+    virtual void drawCircle16Impl(const Matrix34f& model_mtx, const Color4f& edge) = 0;
+    virtual void drawCircle32Impl(const Matrix34f& model_mtx, const Color4f& edge) = 0;
     virtual void drawCylinder16Impl(const Matrix34f& model_mtx, const Color4f& top, const Color4f& btm) = 0;
     virtual void drawCylinder32Impl(const Matrix34f& model_mtx, const Color4f& top, const Color4f& btm) = 0;
 };
@@ -56,12 +56,13 @@ public:
         {
         }
 
-        void setCenter(const Vector3f& center) { mCenter = center; }
-        void setSize(const Vector2f& size) { mSize = size; }
-        void setCornerAndSize(const Vector3f& corner, const Vector2f& size);
-        void setBoundBox(const BoundBox2f& bound_box, f32 centerZ);
-        void setColor(const Color4f& top, const Color4f& btm);
-        void setColorHorizontal(const Color4f& colorL, const Color4f& colorR);
+        QuadArg& setCenter(const Vector3f& p) { mCenter = p; return *this; }
+        QuadArg& setSize(const Vector2f& size) { mSize = size; return *this; }
+        QuadArg& setCornerAndSize(const Vector3f& p, const Vector2f& size);
+        QuadArg& setBoundBox(const BoundBox2f& box, f32 z);
+        QuadArg& setColor(const Color4f& colorT, const Color4f& colorB);
+        QuadArg& setColorHorizontal(const Color4f& colorL, const Color4f& colorR);
+
         const Vector3f& getCenter() const { return mCenter; }
         const Vector2f& getSize() const { return mSize; }
         const Color4f& getColor0() const { return mColor0; }
@@ -69,6 +70,8 @@ public:
         bool isHorizontal() const { return mHorizontal; }
 
     private:
+        friend class PrimitiveRenderer;
+
         Vector3f mCenter;
         Vector2f mSize;
         Color4f mColor0;
@@ -85,12 +88,15 @@ public:
         {
         }
 
-        void setUVSrc(const Vector2f& uv_src) { mUVSrc = uv_src; }
-        void setUVSize(const Vector2f& uv_size) { mUVSize = uv_size; }
+        UVArg& setUVSrc(const Vector2f& uv_src) { mUVSrc = uv_src; return *this; }
+        UVArg& setUVSize(const Vector2f& uv_size) { mUVSize = uv_size; return *this; }
+
         const Vector2f& getUVSrc() const { return mUVSrc; }
         const Vector2f& getUVSize() const { return mUVSize; }
 
     private:
+        friend class PrimitiveRenderer;
+
         Vector2f mUVSrc;
         Vector2f mUVSize;
     };
@@ -106,18 +112,21 @@ public:
         {
         }
 
-        void setCenter(const Vector3f& center) { mCenter = center; }
-        void setSize(const Vector3f& size) { mSize = size; }
-        void setCornerAndSize(const Vector3f& corner, const Vector3f& size);
-        void setBoundBox(const BoundBox3f& bound_box);
-        void setColor(const Color4f& c0, const Color4f& c1) { mColor0 = c0; mColor1 = c1; }
-        void setColor(const Color4f& color) { setColor(color, color); }
+        CubeArg& setCenter(const Vector3f& p) { mCenter = p; return *this; }
+        CubeArg& setSize(const Vector3f& size) { mSize = size; return *this; }
+        CubeArg& setCornerAndSize(const Vector3f& p, const Vector3f& size);
+        CubeArg& setBoundBox(const BoundBox3f& box);
+        CubeArg& setColor(const Color4f& c0, const Color4f& c1) { mColor0 = c0; mColor1 = c1; return *this; }
+        CubeArg& setColor(const Color4f& color) { setColor(color, color); return *this; }
+
         const Vector3f& getCenter() const { return mCenter; }
         const Vector3f& getSize() const { return mSize; }
         const Color4f& getColor0() const { return mColor0; }
         const Color4f& getColor1() const { return mColor1; }
 
     private:
+        friend class PrimitiveRenderer;
+
         Vector3f mCenter;
         Vector3f mSize;
         Color4f mColor0;
@@ -132,7 +141,7 @@ public:
     void prepare(Heap* heap, const SafeString& path);
     void setCamera(const Camera& camera);
     void setProjection(const Projection& projection);
-    void setModelMatrix(const Matrix34f& model_mtx);
+    void setModelMatrix(const Matrix34f& model_to_world_matrix);
     void begin();
     void end();
 
@@ -180,12 +189,12 @@ public:
     void drawDisk32(const Vector3f& pos, f32 radius, const Color4f& color);
     void drawCircle16(const Vector3f& pos, f32 radius, const Color4f& color);
     void drawCircle32(const Vector3f& pos, f32 radius, const Color4f& color);
-    void drawCylinder16(const Vector3f& pos, f32 radius, f32 height, const Color4f& top, const Color4f& btm);
+    void drawCylinder16(const Vector3f& pos, f32 radius, f32 height, const Color4f& top_color, const Color4f& btm_color);
     void drawCylinder16(const Vector3f& pos, f32 radius, f32 height, const Color4f& color);
-    void drawCylinder32(const Vector3f& pos, f32 radius, f32 height, const Color4f& top, const Color4f& btm);
+    void drawCylinder32(const Vector3f& pos, f32 radius, f32 height, const Color4f& top_color, const Color4f& btm_color);
     void drawCylinder32(const Vector3f& pos, f32 radius, f32 height, const Color4f& color);
 
-    void drawAxis(const Vector3f& pos, f32 length);
+    void drawAxis(const Vector3f& pos, f32 scale);
 
     static PrimitiveRenderer* sInstance;
 

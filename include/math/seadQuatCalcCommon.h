@@ -13,7 +13,9 @@ public:
     typedef typename Policies<T>::Vec3Base Vec3;
 
 public:
-    static bool makeVectorRotation(Base& o, const Vec3& from, const Vec3& to);
+    static void makeUnit(Base& q);
+    static bool makeVectorRotation(Base& q, const Vec3& from, const Vec3& to);
+    static void set(Base& q, T w, T x, T y, T z);
 };
 
 }  // namespace sead

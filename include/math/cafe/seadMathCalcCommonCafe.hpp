@@ -5,6 +5,8 @@ namespace sead {
 template <>
 inline f32 MathCafe<f32>::rsqrt(f32 register x)
 {
+    //SEAD_ASSERT_MSG(x >= 0.0f, "x[%f] is out of the domain.", x);
+
     if (x <= 0.0f)
         return 0.0f;
 
