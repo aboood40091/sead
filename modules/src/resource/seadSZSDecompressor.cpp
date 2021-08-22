@@ -143,153 +143,217 @@ SZSDecompressor::DecompContext::initialize(void* dst)
     headerSize = 0x10;
 }
 
-SZSDecompressor::SZSDecompressor(u32 workSize, u8* workBuffer)
+SZSDecompressor::SZSDecompressor(u32 work_size, u8* work_buffer)
     : Decompressor("szs")
 {
-    if (workBuffer == NULL)
+    if (work_buffer == NULL)
     {
-        mWorkSize = Mathu::roundUpPow2(workSize, FileDevice::cBufferMinAlignment);
+        mWorkSize = Mathu::roundUpPow2(work_size, FileDevice::cBufferMinAlignment);
         mWorkBuffer = NULL;
     }
 
     else
     {
-        mWorkSize = workSize;
-        mWorkBuffer = workBuffer;
+        //SEAD_ASSERT_MSG((work_size & FileDevice::cBufferMinAlignment) == 0, "work_size[%d] must be multiple of FileDevice::cBufferMinAlignment", work_size);
+        //SEAD_ASSERT_MSG((work_buffer & FileDevice::cBufferMinAlignment) == 0, "work_buffer[0x%x] must be aligned to FileDevice::cBufferMinAlignment");
+
+        mWorkSize = work_size;
+        mWorkBuffer = work_buffer;
     }
 }
 
 u8*
 SZSDecompressor::tryDecompFromDevice(
-    const ResourceMgr::LoadArg& loadArg, Resource* resource,
-    u32* outSize, u32* outAllocSize, bool* outAllocated
+    const ResourceMgr::LoadArg& arg, Resource* res,
+    u32* out_size, u32* out_buffer_size, bool* out_need_delete
 )
 {
-    Heap* heap = loadArg.load_data_heap;
+    Heap* heap = arg.load_data_heap;
     if (heap == NULL)
         heap = HeapMgr::sInstancePtr->getCurrentHeap();
 
     FileHandle handle;
     FileDevice* device;
-    u8* src;
 
-    if (loadArg.device != NULL)
-        device = loadArg.device->tryOpen(&handle, loadArg.path, FileDevice::cFileOpenFlag_ReadOnly, loadArg.div_size);
+    if (arg.device != NULL)
+        device = arg.device->tryOpen(&handle, arg.path, FileDevice::cFileOpenFlag_ReadOnly, arg.div_size);
     else
-        device = FileDeviceMgr::sInstance->tryOpen(&handle, loadArg.path, FileDevice::cFileOpenFlag_ReadOnly, loadArg.div_size);
+        device = FileDeviceMgr::sInstance->tryOpen(&handle, arg.path, FileDevice::cFileOpenFlag_ReadOnly, arg.div_size);
 
-    if (device != NULL &&
-       ((src = mWorkBuffer, src != NULL) ||
-        (src = new(heap, -FileDevice::cBufferMinAlignment) u8[mWorkSize], src != NULL)))
+    if (device == NULL)
+        return NULL;
+
+    u8* work = mWorkBuffer;
+    if (work == NULL)
+        work = new(heap, -FileDevice::cBufferMinAlignment) u8[mWorkSize];
+
+    if (work == NULL)
     {
-        u32 bytesRead = handle.read(src, mWorkSize);
-        if (bytesRead >= 0x10)
-        {
-            u32 decompSize = getDecompSize(src);
-            s32 decompAlignment = getDecompAlignment(src);
-
-            u32 allocSize = loadArg.load_data_buffer_size;
-            u8* dst = loadArg.load_data_buffer;
-
-            if (decompSize > allocSize && allocSize != 0)
-                decompSize = allocSize;
-
-            bool allocated = false;
-            allocSize = Mathi::roundUpPow2(decompSize, 0x20);
-
-            if (dst == NULL)
-            {
-                DirectResource* directResource = DynamicCast<DirectResource, Resource>(resource);
-                if (directResource != NULL)
-                {
-                    s32 alignment = loadArg.load_data_alignment;
-                    if (alignment != 0)
-                        decompAlignment = (alignment < 0x20) ? 0x20 : alignment;
-
-                    else
-                    {
-                        if (decompAlignment == 0)
-                            decompAlignment = directResource->getLoadDataAlignment();
-
-                        decompAlignment = ((loadArg.instance_alignment < 0) ? -1 : 1) * ((decompAlignment < 0x20) ? 0x20 : decompAlignment);
-                    }
-                }
-
-                else
-                    decompAlignment = -(((loadArg.instance_alignment < 0) ? -1 : 1) << 5);
-
-                dst = new(heap, decompAlignment) u8[allocSize];
-
-                if (dst != NULL)
-                    allocated = true;
-            }
-
-
-            if (dst != NULL)
-            {
-                s32 error;
-                if (bytesRead < mWorkSize)
-                    error = decomp(dst, allocSize, src, mWorkSize);
-
-                else
-                {
-                    DecompContext context(dst);
-                    context.forceDestCount = decompSize;
-
-                    do
-                    {
-                        error = streamDecomp(&context, src, bytesRead);
-                        if (error <= 0)
-                            break;
-                    }
-                    while ((bytesRead = handle.read(src, mWorkSize), bytesRead != 0));
-                }
-
-                if (!(error < 0))
-                {
-                    if (mWorkBuffer == NULL)
-                        delete[] src;
-
-                    if (outSize != NULL)
-                        *outSize = decompSize;
-
-                    if (outAllocSize != NULL)
-                        *outAllocSize = allocSize;
-
-                    if (outAllocated != NULL)
-                        *outAllocated = allocated;
-
-                    return dst;
-                }
-
-                if (allocated)
-                    delete[] dst;
-            }
-        }
-
-        if (mWorkBuffer == NULL)
-            delete[] src;
+        //SEAD_ASSERT_MSG(false, "cannot alloc work buf");
+        return NULL;
     }
 
-    return NULL;
+    u32 bytesRead = handle.read(work, mWorkSize);
+    if (bytesRead < 0x10)
+    {
+        //SEAD_ASSERT_MSG(false, "Invalid header size.");
+
+        if (mWorkBuffer == NULL)
+            delete[] work;
+
+        return NULL;
+    }
+
+    u32 decomp_size = getDecompSize(work);
+    //SEAD_ASSERT(decomp_size > 0);
+
+    s32 decomp_alignment = getDecompAlignment(work);
+    //SEAD_ASSERT_MSG(decomp_alignment == 0 || (decomp_alignment - 1u & decomp_alignment) == 0 "decomp_alignment[%d] must be power of 2.", decomp_alignment);
+
+    if (decomp_size > arg.load_data_buffer_size && arg.load_data_buffer_size != 0)
+        decomp_size = arg.load_data_buffer_size;
+
+    u32 buffer_size = Mathi::roundUpPow2(decomp_size, 0x20);
+
+    u8* dst = arg.load_data_buffer;
+    bool need_delete = false;
+
+    if (dst == NULL)
+    {
+        DirectResource* directResource = DynamicCast<DirectResource, Resource>(res);
+        s32 alignment = 0;
+
+        if (directResource != NULL)
+        {
+            if (arg.load_data_alignment != 0)
+            {
+                alignment = Mathi::max(arg.load_data_alignment, 0x20);
+                //SEAD_ASSERT_MSG(decomp_alignment == 0 || alignment % decomp_alignment == 0, "load_data_alignment[%d] doesn\'t meet decomp_alignment[%d].", arg.load_data_alignment, decomp_alignment);
+            }
+            else
+            {
+                if (decomp_alignment == 0)
+                    alignment = directResource->getLoadDataAlignment();
+                else
+                    alignment = decomp_alignment;
+
+                alignment = Mathi::sign(arg.instance_alignment) * Mathi::max(alignment, 0x20);
+            }
+        }
+        else
+        {
+            alignment = -Mathi::sign(arg.instance_alignment) << 5;
+        }
+
+        dst = new(heap, alignment) u8[buffer_size];
+
+        if (dst == NULL)
+        {
+            //SEAD_ASSERT_MSG(false, "cannot alloc dst buf");
+
+            if (mWorkBuffer == NULL)
+                delete[] work;
+
+            return NULL;
+        }
+        else
+        {
+            need_delete = true;
+        }
+    }
+    else
+    {
+        //SEAD_ASSERT(arg.load_data_buffer_size >= decomp_size);
+        //SEAD_ASSERT_MSG(decomp_alignment == 0 || ((uintptr_t)dst & decomp_alignment - 1u) == 0, "load_data_buffer is not aligned with decomp_alignment[%d]", decomp_alignment);
+    }
+
+    if (bytesRead < mWorkSize)
+    {
+        s32 error = decomp(dst, buffer_size, work, mWorkSize);
+        if (error < 0)
+        {
+            //SEAD_ASSERT_MSG(false, "decompSZS returned error(%d).", error);
+
+            if (need_delete)
+                delete[] dst;
+
+            if (mWorkBuffer == NULL)
+                delete[] work;
+
+            return NULL;
+        }
+    }
+    else
+    {
+        DecompContext context(dst);
+        context.forceDestCount = decomp_size;
+
+        while (bytesRead > 0)
+        {
+            s32 error = streamDecomp(&context, work, bytesRead);
+            if (error == 0)
+                break;
+
+            if (error < 0)
+            {
+                //SEAD_ASSERT_MSG(false, "streamDecompSZS returned error(%d).", error);
+
+                if (need_delete)
+                    delete[] dst;
+
+                if (mWorkBuffer == NULL)
+                    delete[] work;
+
+                return NULL;
+            }
+
+            bytesRead = handle.read(work, mWorkSize);
+        }
+    }
+
+    if (mWorkBuffer == NULL)
+        delete[] work;
+
+    if (out_size != NULL)
+        *out_size = decomp_size;
+
+    if (out_buffer_size != NULL)
+        *out_buffer_size = buffer_size;
+
+    if (out_need_delete != NULL)
+        *out_need_delete = need_delete;
+
+    return dst;
+}
+
+void
+SZSDecompressor::setWorkSize(u32 work_size)
+{
+    if (mWorkBuffer == NULL)
+        mWorkSize = Mathu::roundUpPow2(work_size, FileDevice::cBufferMinAlignment);
+
+    else
+    {
+        //SEAD_ASSERT_MSG(false, "cannot change work_size when work buffer is given");
+    }
 }
 
 u32
-SZSDecompressor::getDecompAlignment(const void* src)
+SZSDecompressor::getDecompAlignment(const void* header)
 {
-    return Endian::readU32(src + 8);
+    return Endian::toHost(Endian::cBig, *(u32*)(header + 8));
 }
 
 u32
-SZSDecompressor::getDecompSize(const void* src)
+SZSDecompressor::getDecompSize(const void* header)
 {
-    return Endian::readU32(src + 4);
+    return Endian::toHost(Endian::cBig, *(u32*)(header + 4));
 }
 
 s32
-SZSDecompressor::readHeader_(DecompContext* context, const u8* src, u32 srcSize)
+SZSDecompressor::readHeader_(DecompContext* context, const u8* srcp, u32 src_size)
 {
-    s32 len = 0;
+    s32 header_size = 0;
 
     while (context->headerSize != 0)
     {
@@ -297,62 +361,62 @@ SZSDecompressor::readHeader_(DecompContext* context, const u8* src, u32 srcSize)
 
         if (context->headerSize == 0xF)
         {
-            if (*src != 'Y')
+            if (*srcp != 'Y')
                 return -1;
         }
 
         else if (context->headerSize == 0xE)
         {
-            if (*src != 'a')
+            if (*srcp != 'a')
                 return -1;
         }
 
         else if (context->headerSize == 0xD)
         {
-            if (*src != 'z')
+            if (*srcp != 'z')
                 return -1;
         }
 
         else if (context->headerSize == 0xC)
         {
-            if (*src != '0')
+            if (*srcp != '0')
                 return -1;
         }
 
         else if (context->headerSize >= 8)
-            context->destCount |= static_cast<u32>(*src) << ((context->headerSize - 8) << 3);
+            context->destCount |= static_cast<u32>(*srcp) << ((context->headerSize - 8) << 3);
 
-        src++; len += 1;
-        if (--srcSize == 0 && context->headerSize != 0)
-            return len;
+        srcp++; header_size++; src_size--;
+        if (src_size == 0 && context->headerSize != 0)
+            return header_size;
     }
 
     if (context->forceDestCount < 1)
-        return len;
+        return header_size;
 
     if (context->forceDestCount >= context->destCount)
-        return len;
+        return header_size;
 
     context->destCount = context->forceDestCount;
-    return len;
+    return header_size;
 }
 
 s32
-SZSDecompressor::streamDecomp(DecompContext* context, const void* src, u32 srcSize)
+SZSDecompressor::streamDecomp(DecompContext* context, const void* src, u32 len)
 {
-    const u8* _src = static_cast<const u8*>(src);
+    const u8* srcp = static_cast<const u8*>(src);
     u32 n;
 
     if (context->headerSize != 0)
     {
-        s32 len = readHeader_(context, _src, srcSize);
-        if (len < 0)
-            return len;
+        s32 header_size = readHeader_(context, srcp, len);
+        if (header_size < 0)
+            return header_size;
 
-        srcSize -= len;
-        _src += len;
+        len -= header_size;
+        srcp += header_size;
 
-        if (srcSize == 0)
+        if (len == 0)
         {
             if (context->headerSize == 0)
                 return context->destCount;
@@ -365,7 +429,7 @@ SZSDecompressor::streamDecomp(DecompContext* context, const void* src, u32 srcSi
     {
         if (context->step == cStepLong)
         {
-            n = *_src++ + 0x12; srcSize--;
+            n = *srcp++ + 0x12; len--;
             if (n > context->destCount)
             {
                 if (context->forceDestCount == 0)
@@ -388,7 +452,7 @@ SZSDecompressor::streamDecomp(DecompContext* context, const void* src, u32 srcSi
 
         else if (context->step == cStepShort)
         {
-            u32 offsetLen = static_cast<u32>(context->packHigh) << 8 | *_src++; srcSize--;
+            u32 offsetLen = static_cast<u32>(context->packHigh) << 8 | *srcp++; len--;
             context->lzOffset = (offsetLen & 0xfff) + 1;
 
             n = offsetLen >> 0xC;
@@ -423,33 +487,33 @@ SZSDecompressor::streamDecomp(DecompContext* context, const void* src, u32 srcSi
         {
             if (context->flagMask == 0)
             {
-                context->flags = *_src++; srcSize--;
+                context->flags = *srcp++; len--;
                 context->flagMask = 0x80;
-                if (srcSize == 0)
+                if (len == 0)
                     break;
             }
 
             if ((context->flags & context->flagMask) != 0)
             {
-                *context->destp++ = *_src++;
+                *context->destp++ = *srcp++;
                 context->destCount -= 1;
             }
 
             else
             {
-                context->packHigh = *_src++;
+                context->packHigh = *srcp++;
                 context->step = cStepShort;
             }
 
-            srcSize--;
+            len--;
             context->flagMask >>= 1;
         }
 
-        if (srcSize == 0)
+        if (len == 0)
             break;
     }
 
-    if (context->destCount == 0 && context->forceDestCount == 0 && 0x20 < srcSize)
+    if (context->destCount == 0 && context->forceDestCount == 0 && 0x20 < len)
         return -1;
 
     else
@@ -457,15 +521,15 @@ SZSDecompressor::streamDecomp(DecompContext* context, const void* src, u32 srcSi
 }
 
 s32
-SZSDecompressor::decomp(void* dst, u32 dstSize, const void* src, u32 srcSize)
+SZSDecompressor::decomp(void* dst, u32 dst_size, const void* src, u32 src_size)
 {
-    u32 magic = Endian::readU32(src);
-    if (magic != 0x59617A30)
+    u32 magic = Endian::toHost(Endian::cBig, *(u32*)src);
+    if (magic != 0x59617A30) // Yaz0
         return -1;
 
-    u32 decompSize = getDecompSize(src);
+    u32 decomp_size = getDecompSize(src);
     s32 error = -2;
-    if (dstSize >= decompSize)
+    if (dst_size >= decomp_size)
 #ifdef cafe
         error = decodeSZSCafeAsm_(dst, src);
 #else

@@ -6,11 +6,20 @@
 
 namespace sead {
 
-template <typename T>
-inline T
-MathCalcCommon<T>::roundUpPow2(T x, s32 y)
+template <>
+inline s32
+MathCalcCommon<s32>::roundUpPow2(s32 val, s32 base)
 {
-    return x + y - 1 & (u32)-y;
+    //SEAD_ASSERT_MSG(val >= 0 && (base - 1u & base) == 0, "illegal param[val:%d, base:%d]", val, base);
+    return val + base - 1 & (u32)-base;
+}
+
+template <>
+inline s32
+MathCalcCommon<u32>::roundUpPow2(u32 val, s32 base)
+{
+    //SEAD_ASSERT_MSG((base - 1u & base) == 0, "illegal param[base:%d]", base);
+    return val + base - 1 & (u32)-base;
 }
 
 template <typename T>

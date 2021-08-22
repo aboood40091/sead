@@ -12,10 +12,10 @@ namespace sead {
 class Decompressor : public TListNode<Decompressor*>, public IDisposer
 {
 public:
-    Decompressor(const SafeString& name)
+    Decompressor(const SafeString& default_ext)
         : TListNode<Decompressor*>(this)
         , IDisposer()
-        , mExt(name)
+        , mExt(default_ext)
     {
     }
 
@@ -25,7 +25,10 @@ public:
             ResourceMgr::sInstance->unregisterDecompressor(this);
     }
 
-    virtual u8* tryDecompFromDevice(const ResourceMgr::LoadArg& loadArg, Resource* resource, u32* outSize, u32* outAllocSize, bool* outAllocated) = 0;
+    virtual u8* tryDecompFromDevice(const ResourceMgr::LoadArg& arg, Resource* res, u32* out_size, u32* out_buffer_size, bool* out_need_delete) = 0;
+
+private:
+    friend class ResourceMgr;
 
     FixedSafeString<32> mExt;
 };

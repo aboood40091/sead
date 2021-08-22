@@ -36,16 +36,19 @@ public:
     };
 
 public:
-    SZSDecompressor(u32 workSize, u8* workBuffer);
+    SZSDecompressor(u32 work_size, u8* work_buffer);
     virtual ~SZSDecompressor() { }
 
-    virtual u8* tryDecompFromDevice(const ResourceMgr::LoadArg& loadArg, Resource* resource, u32* outSize, u32* outAllocSize, bool* outAllocated);
+    virtual u8* tryDecompFromDevice(const ResourceMgr::LoadArg& arg, Resource* res, u32* out_size, u32* out_buffer_size, bool* out_need_delete);
 
-    static u32 getDecompAlignment(const void* src);
-    static u32 getDecompSize(const void* src);
-    static s32 readHeader_(DecompContext* context, const u8* src, u32 srcSize);
-    static s32 streamDecomp(DecompContext* context, const void* src, u32 srcSize);
-    static s32 decomp(void* dst, u32 dstSize, const void* src, u32 srcSize);
+    void setWorkSize(u32 work_size);
+
+private:
+    static u32 getDecompAlignment(const void* header);
+    static u32 getDecompSize(const void* header);
+    static s32 readHeader_(DecompContext* context, const u8* srcp, u32 src_size);
+    static s32 streamDecomp(DecompContext* context, const void* src, u32 len);
+    static s32 decomp(void* dst, u32 dst_size, const void* src, u32 src_size);
 
     u32 mWorkSize;
     u8* mWorkBuffer;

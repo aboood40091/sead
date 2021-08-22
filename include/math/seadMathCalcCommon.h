@@ -20,14 +20,26 @@ template <typename T>
 class MathCalcCommon
 {
 public:
-    static T roundUpPow2(T x, s32 y);
-    static T roundDownPow2(T x, s32 y);
+    static s32 roundUpPow2(T x, s32 y);
+    static s32 roundDownPow2(T x, s32 y);
     static T gcd(T x, T y);
     static T lcm(T x, T y);
     static T cos(T t);
     static T sin(T t);
     static T sqrt(T x);
     static T rsqrt(T x);
+
+    static inline T sign(T t)
+    {
+        if (t >= 0) return  1;
+        else        return -1;
+    }
+
+    static inline T max(T a, T b)
+    {
+        if (a >= b) return a;
+        else        return b;
+    }
 
     static inline T deg2rad(T a)
     {
