@@ -140,7 +140,7 @@ SZSDecompressor::DecompContext::initialize(void* dst)
     packHigh = 0;
     step = SZSDecompressor::cStepNormal;
     lzOffset = 0;
-    headerSize = 0x10;
+    headerSize = SZSDecompressor::getHeaderSize();
 }
 
 SZSDecompressor::SZSDecompressor(u32 work_size, u8* work_buffer)
@@ -194,7 +194,7 @@ SZSDecompressor::tryDecompFromDevice(
     }
 
     u32 bytesRead = handle.read(work, mWorkSize);
-    if (bytesRead < 0x10)
+    if (bytesRead < getHeaderSize())
     {
         //SEAD_ASSERT_MSG(false, "Invalid header size.");
 
@@ -355,28 +355,25 @@ SZSDecompressor::readHeader_(DecompContext* context, const u8* srcp, u32 src_siz
 {
     s32 header_size = 0;
 
-    while (context->headerSize != 0)
+    while (context->headerSize > 0)
     {
-        context->headerSize -= 1;
+        context->headerSize--;
 
         if (context->headerSize == 0xF)
         {
             if (*srcp != 'Y')
                 return -1;
         }
-
         else if (context->headerSize == 0xE)
         {
             if (*srcp != 'a')
                 return -1;
         }
-
         else if (context->headerSize == 0xD)
         {
             if (*srcp != 'z')
                 return -1;
         }
-
         else if (context->headerSize == 0xC)
         {
             if (*srcp != '0')
@@ -384,38 +381,34 @@ SZSDecompressor::readHeader_(DecompContext* context, const u8* srcp, u32 src_siz
         }
 
         else if (context->headerSize >= 8)
-            context->destCount |= static_cast<u32>(*srcp) << ((context->headerSize - 8) << 3);
+            context->destCount |= static_cast<u32>(*srcp) << ((static_cast<u32>(context->headerSize) - 8) << 3);
 
         srcp++; header_size++; src_size--;
-        if (src_size == 0 && context->headerSize != 0)
+        if (src_size == 0 && context->headerSize > 0)
             return header_size;
     }
 
-    if (context->forceDestCount < 1)
-        return header_size;
+    if (context->forceDestCount > 0 && context->forceDestCount < context->destCount)
+        context->destCount = context->forceDestCount;
 
-    if (context->forceDestCount >= context->destCount)
-        return header_size;
-
-    context->destCount = context->forceDestCount;
     return header_size;
 }
 
 s32
 SZSDecompressor::streamDecomp(DecompContext* context, const void* src, u32 len)
 {
-    const u8* srcp = static_cast<const u8*>(src);
-    u32 n;
+    //SEAD_ASSERT(context);
+    //SEAD_ASSERT(src);
 
-    if (context->headerSize != 0)
+    const u8* srcp = static_cast<const u8*>(src);
+
+    if (context->headerSize > 0)
     {
         s32 header_size = readHeader_(context, srcp, len);
         if (header_size < 0)
             return header_size;
 
-        len -= header_size;
-        srcp += header_size;
-
+        srcp += header_size; len -= header_size;
         if (len == 0)
         {
             if (context->headerSize == 0)
@@ -429,7 +422,7 @@ SZSDecompressor::streamDecomp(DecompContext* context, const void* src, u32 len)
     {
         if (context->step == cStepLong)
         {
-            n = *srcp++ + 0x12; len--;
+            u32 n = (*srcp++) + 0x12; len--;
             if (n > context->destCount)
             {
                 if (context->forceDestCount == 0)
@@ -442,20 +435,19 @@ SZSDecompressor::streamDecomp(DecompContext* context, const void* src, u32 len)
 
             do
             {
-                *context->destp = context->destp[-static_cast<s32>(context->lzOffset)];
+                *context->destp = *(context->destp - context->lzOffset);
                 context->destp++;
             }
             while (--n != 0);
 
             context->step = SZSDecompressor::cStepNormal;
         }
-
         else if (context->step == cStepShort)
         {
             u32 offsetLen = static_cast<u32>(context->packHigh) << 8 | *srcp++; len--;
-            context->lzOffset = (offsetLen & 0xfff) + 1;
+            context->lzOffset = (offsetLen & 0xFFFu) + 1;
 
-            n = offsetLen >> 0xC;
+            u32 n = offsetLen >> 12;
             if (n == 0)
                 context->step = cStepLong;
 
@@ -474,7 +466,7 @@ SZSDecompressor::streamDecomp(DecompContext* context, const void* src, u32 len)
 
                 do
                 {
-                    *context->destp = context->destp[-static_cast<s32>(context->lzOffset)];
+                    *context->destp = *(context->destp - context->lzOffset);
                     context->destp++;
                 }
                 while (--n != 0);
@@ -482,7 +474,6 @@ SZSDecompressor::streamDecomp(DecompContext* context, const void* src, u32 len)
                 context->step = SZSDecompressor::cStepNormal;
             }
         }
-
         else
         {
             if (context->flagMask == 0)
@@ -496,9 +487,8 @@ SZSDecompressor::streamDecomp(DecompContext* context, const void* src, u32 len)
             if ((context->flags & context->flagMask) != 0)
             {
                 *context->destp++ = *srcp++;
-                context->destCount -= 1;
+                context->destCount--;
             }
-
             else
             {
                 context->packHigh = *srcp++;
@@ -513,30 +503,37 @@ SZSDecompressor::streamDecomp(DecompContext* context, const void* src, u32 len)
             break;
     }
 
-    if (context->destCount == 0 && context->forceDestCount == 0 && 0x20 < len)
+    if (context->destCount == 0 && context->forceDestCount == 0 && len > 0x20)
         return -1;
 
-    else
-        return context->destCount;
+    return context->destCount;
 }
 
 s32
 SZSDecompressor::decomp(void* dst, u32 dst_size, const void* src, u32 src_size)
 {
-    u32 magic = Endian::toHost(Endian::cBig, *(u32*)src);
+    //SEAD_ASSERT(src_size >= getHeaderSize());
+    //SEAD_ASSERT(dst);
+    //SEAD_ASSERT(src);
+
+    //
+    //SEAD_ASSERT_MSG(((uintptr_t)dst & 0x20-1u) == 0, "dst[0x%x] must be aligned to 32.", (uintptr_t)dst);
+    //SEAD_ASSERT_MSG((dst_size & 0x20-1u) == 0, "dst_size[%u] must be multiple of 32.", dst_size);
+
+    u32 magic = *static_cast<const u32*>(src);
+    magic = Endian::toHost(Endian::cBig, magic);
     if (magic != 0x59617A30) // Yaz0
         return -1;
 
     u32 decomp_size = getDecompSize(src);
-    s32 error = -2;
-    if (dst_size >= decomp_size)
-#ifdef cafe
-        error = decodeSZSCafeAsm_(dst, src);
-#else
-        #error "Unknown platform"
-#endif // cafe
+    if (dst_size < decomp_size)
+        return -2;
 
-    return error;
+#ifdef cafe
+    return decodeSZSCafeAsm_(dst, src);
+#else
+    #error "Unknown platform"
+#endif // cafe
 }
 
 } // namespace sead

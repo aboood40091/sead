@@ -41,6 +41,7 @@ public:
 
     virtual u8* tryDecompFromDevice(const ResourceMgr::LoadArg& arg, Resource* res, u32* out_size, u32* out_buffer_size, bool* out_need_delete);
 
+    static inline u32 getHeaderSize() { return 0x10; }
     void setWorkSize(u32 work_size);
 
 private:
