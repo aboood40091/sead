@@ -12,6 +12,42 @@ Vector2<T>::Vector2(T x_, T y_)
 }
 
 template <typename T>
+inline Vector2<T>
+Vector2<T>::operator+(const Self& v) const
+{
+
+    Self o;
+    Vector2CalcCommon<T>::add(o, *this, v);
+    return o;
+}
+
+template <typename T>
+inline Vector2<T>
+Vector2<T>::operator-(const Self& v) const
+{
+
+    Self o;
+    Vector2CalcCommon<T>::sub(o, *this, v);
+    return o;
+}
+
+template <typename T>
+inline Vector2<T>&
+Vector2<T>::operator+=(const Self& v)
+{
+    Vector2CalcCommon<T>::add(*this, *this, v);
+    return *this;
+}
+
+template <typename T>
+inline Vector2<T>&
+Vector2<T>::operator-=(const Self& v)
+{
+    Vector2CalcCommon<T>::sub(*this, *this, v);
+    return *this;
+}
+
+template <typename T>
 inline Vector2<T>&
 Vector2<T>::operator=(const Self& v)
 {

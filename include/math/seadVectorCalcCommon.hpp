@@ -10,6 +10,22 @@ namespace sead {
 
 template <typename T>
 inline void
+Vector2CalcCommon<T>::add(Base& o, const Base& a, const Base& b)
+{
+    o.x = a.x + b.x;
+    o.y = a.y + b.y;
+}
+
+template <typename T>
+inline void
+Vector2CalcCommon<T>::sub(Base& o, const Base& a, const Base& b)
+{
+    o.x = a.x - b.x;
+    o.y = a.y - b.y;
+}
+
+template <typename T>
+inline void
 Vector2CalcCommon<T>::set(Base& o, const Base& v)
 {
     o.x = v.x;

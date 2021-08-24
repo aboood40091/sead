@@ -24,6 +24,11 @@ public:
 
     Vector2(T x_, T y_);
 
+    Self operator+(const Self& v) const;
+    Self operator-(const Self& v) const;
+
+    Self& operator+=(const Self& v);
+    Self& operator-=(const Self& v);
     Self& operator=(const Self& v);
 
     void set(const Self& v);

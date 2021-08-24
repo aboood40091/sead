@@ -12,6 +12,9 @@ public:
     typedef typename Policies<T>::Vec2Base Base;
 
 public:
+    static void add(Base& o, const Base& a, const Base& b);
+    static void sub(Base& o, const Base& a, const Base& b);
+
     static void set(Base& o, const Base& v);
     static void set(Base& v, T x, T y);
 };
