@@ -25,30 +25,32 @@ private:
 
 #define SEAD_SINGLETON_DISPOSER(CLASS)                                            \
     public:                                                                       \
-        class SingletonDisposer_ : public IDisposer                               \
+        static CLASS* instance() { return sInstance; }                            \
+        static CLASS* createInstance(sead::Heap* heap);                           \
+        static void deleteInstance();                                             \
+                                                                                  \
+    protected:                                                                    \
+        static CLASS* sInstance;                                                  \
+                                                                                  \
+    private:                                                                      \
+        class SingletonDisposer_ : public sead::IDisposer                         \
         {                                                                         \
         public:                                                                   \
-            SingletonDisposer_() : IDisposer() { }                                \
-            virtual ~SingletonDisposer_()                                         \
-            {                                                                     \
-                if (this == sStaticDisposer)                                      \
-                {                                                                 \
-                    sStaticDisposer = NULL;                                       \
-                    CLASS::sInstance->~CLASS();                                   \
-                    CLASS::sInstance = NULL;                                      \
-                }                                                                 \
-            }                                                                     \
+            SingletonDisposer_() : sead::IDisposer() { }                          \
+            virtual ~SingletonDisposer_();                                        \
+                                                                                  \
+        private:                                                                  \
+            friend class CLASS;                                                   \
                                                                                   \
             static SingletonDisposer_* sStaticDisposer;                           \
         };                                                                        \
                                                                                   \
-        static CLASS* createInstance(Heap* heap);                                 \
-        static void deleteInstance();                                             \
+        friend class SingletonDisposer_;                                          \
                                                                                   \
         u32 mSingletonDisposerBuf_[sizeof(SingletonDisposer_) / sizeof(u32)];
 
 #define SEAD_CREATE_SINGLETON_INSTANCE(CLASS)                                                                    \
-    CLASS* CLASS::createInstance(Heap* heap)                                                                     \
+    CLASS* CLASS::createInstance(sead::Heap* heap)                                                               \
     {                                                                                                            \
         CLASS::SingletonDisposer_* staticDisposer = CLASS::SingletonDisposer_::sStaticDisposer;                  \
         CLASS* instance = CLASS::sInstance;                                                                      \
@@ -66,6 +68,16 @@ private:
     }
 
 #define SEAD_DELETE_SINGLETON_INSTANCE(CLASS)                                                       \
+    CLASS::SingletonDisposer_::~SingletonDisposer_()                                                \
+    {                                                                                               \
+        if (this == sStaticDisposer)                                                                \
+        {                                                                                           \
+            sStaticDisposer = NULL;                                                                 \
+            CLASS::sInstance->~CLASS();                                                             \
+            CLASS::sInstance = NULL;                                                                \
+        }                                                                                           \
+    }                                                                                               \
+                                                                                                    \
     void CLASS::deleteInstance()                                                                    \
     {                                                                                               \
         CLASS::SingletonDisposer_* staticDisposer = CLASS::SingletonDisposer_::sStaticDisposer;     \

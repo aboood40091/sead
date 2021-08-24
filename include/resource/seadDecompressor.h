@@ -21,8 +21,8 @@ public:
 
     virtual ~Decompressor()
     {
-        if (ResourceMgr::sInstance != NULL)
-            ResourceMgr::sInstance->unregisterDecompressor(this);
+        if (ResourceMgr::instance() != NULL)
+            ResourceMgr::instance()->unregisterDecompressor(this);
     }
 
     virtual u8* tryDecompFromDevice(const ResourceMgr::LoadArg& arg, Resource* res, u32* out_size, u32* out_buffer_size, bool* out_need_delete) = 0;

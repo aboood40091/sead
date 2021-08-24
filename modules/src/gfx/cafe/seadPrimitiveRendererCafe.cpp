@@ -208,7 +208,7 @@ void PrimitiveRendererCafe::prepareImpl(
     arg.alignment = 0x20;
     arg.heap = heap;
 
-    const void* file = sead::FileDeviceMgr::sInstance->tryLoad(arg);
+    const void* file = sead::FileDeviceMgr::instance()->tryLoad(arg);
     prepareFromBinaryImpl(heap, file, arg.read_size);
 }
 

@@ -1,6 +1,8 @@
 #ifndef SEAD_BIT_FLAG_H_
 #define SEAD_BIT_FLAG_H_
 
+#include <basis/seadTypes.h>
+
 namespace sead {
 
 template <typename T>

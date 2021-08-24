@@ -39,7 +39,7 @@ struct Derive : public Interface
 
 template <typename DerivedType, typename Type>
 inline bool
-IsDerivedFrom(const Type* obj)
+IsDerivedTypes(const Type* obj)
 {
     const RuntimeTypeInfo::Interface* typeInfo = DerivedType::getRuntimeTypeInfoStatic();
     return obj != NULL && obj->checkDerivedRuntimeTypeInfo(typeInfo);
@@ -49,7 +49,7 @@ template<typename DerivedType, typename Type>
 inline DerivedType*
 DynamicCast(Type* obj)
 {
-    if (IsDerivedFrom<DerivedType, Type>(obj))
+    if (IsDerivedTypes<DerivedType, Type>(obj))
         return static_cast<DerivedType*>(obj);
 
     return NULL;
@@ -67,7 +67,7 @@ DynamicCast(Type* obj)
                                                                                                              \
         virtual bool checkDerivedRuntimeTypeInfo(const sead::RuntimeTypeInfo::Interface* typeInfo) const     \
         {                                                                                                    \
-            const RuntimeTypeInfo::Interface* clsTypeInfo = CLASS::getRuntimeTypeInfoStatic();               \
+            const sead::RuntimeTypeInfo::Interface* clsTypeInfo = CLASS::getRuntimeTypeInfoStatic();         \
             return typeInfo == clsTypeInfo;                                                                  \
         }                                                                                                    \
                                                                                                              \
@@ -86,7 +86,7 @@ DynamicCast(Type* obj)
                                                                                                              \
         virtual bool checkDerivedRuntimeTypeInfo(const sead::RuntimeTypeInfo::Interface* typeInfo) const     \
         {                                                                                                    \
-            const RuntimeTypeInfo::Interface* clsTypeInfo = CLASS::getRuntimeTypeInfoStatic();               \
+            const sead::RuntimeTypeInfo::Interface* clsTypeInfo = CLASS::getRuntimeTypeInfoStatic();         \
             if (typeInfo == clsTypeInfo)                                                                     \
                 return true;                                                                                 \
                                                                                                              \

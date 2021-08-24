@@ -407,7 +407,7 @@ FSClient*
 CafeFSAFileDevice::getUsableFSClient_() const
 {
     if (client == NULL)
-        return &FileDeviceMgr::sInstance->client;
+        return &FileDeviceMgr::instance()->client;
 
     return client;
 }

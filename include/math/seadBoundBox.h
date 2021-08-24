@@ -52,22 +52,22 @@ public:
         return mMax;
     }
 
-    Vector2 getTL() const
+    Vector2 getBL() const
     {
         return mMin;
     }
 
-    Vector2 getTR() const
+    Vector2 getBR() const
     {
         return Vector2(mMax.x, mMin.y);
     }
 
-    Vector2 getBL() const
+    Vector2 getTL() const
     {
         return Vector2(mMin.x, mMax.y);
     }
 
-    Vector2 getBR() const
+    Vector2 getTR() const
     {
         return mMax;
     }

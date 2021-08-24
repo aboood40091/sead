@@ -196,8 +196,6 @@ public:
 
     void drawAxis(const Vector3f& pos, f32 scale);
 
-    static PrimitiveRenderer* sInstance;
-
 private:
     void doPrepare_(Heap* heap);
 
