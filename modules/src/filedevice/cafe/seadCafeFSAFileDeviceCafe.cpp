@@ -55,6 +55,7 @@ CafeFSAFileDevice::doOpen_(
         mode = "w+";
         break;
     default:
+        //SEAD_ASSERT_MSG(false, "illegal open flag[%d]", (s32)flag);
         mode = "r";
     }
 
@@ -91,6 +92,8 @@ CafeFSAFileDevice::doRead_(
     u8* outBuffer, u32 bytesToRead
 )
 {
+    //SEAD_ASSERT_MSG(((uintptr_t)outBuffer & LL_CACHE_FETCH_SIZE - 1u) == 0, "buf[0x%p] is not aligned with LL_CACHE_FETCH_SIZE[%d]", outBuffer, LL_CACHE_FETCH_SIZE);
+
     FSCmdBlock block;
     FSInitCmdBlock(&block);
 
@@ -119,6 +122,8 @@ CafeFSAFileDevice::doWrite_(
     const u8* inBuffer, u32 bytesToWrite
 )
 {
+    //SEAD_ASSERT_MSG(((uintptr_t)inBuffer & LL_CACHE_FETCH_SIZE - 1u) == 0, "buf[0x%p] is not aligned with LL_CACHE_FETCH_SIZE[%d]", inBuffer, LL_CACHE_FETCH_SIZE);
+
     FSCmdBlock block;
     FSInitCmdBlock(&block);
 
@@ -152,15 +157,15 @@ CafeFSAFileDevice::doSeek_(
     FSClient* client_ = getUsableFSClient_();
     FSFileHandle* fsHandle = getFileHandleInner_(handle);
 
-    if (origin != FileDevice::cSeekOrigin_Begin)
+    switch (origin)
     {
-        if (origin == FileDevice::cSeekOrigin_Current)
-            offset += fsHandle[1];
-
-        else if (origin != FileDevice::cSeekOrigin_End)
-            return false;
-
-        else
+    case FileDevice::cSeekOrigin_Begin:
+        break;
+    case FileDevice::cSeekOrigin_Current:
+        offset += fsHandle[1];
+        break;
+    case FileDevice::cSeekOrigin_End:
+        //SEAD_ASSERT(offset <= 0);
         {
             u32 fileSize = 0;
             if(!doGetFileSize_(&fileSize, handle))
@@ -168,6 +173,9 @@ CafeFSAFileDevice::doSeek_(
 
             offset += fileSize;
         }
+        break;
+    default:
+        return false;
     }
 
     FSStatus status = FSSetPosFile(client_, &block, *fsHandle, offset, FS_RET_NO_ERROR);
@@ -253,7 +261,7 @@ CafeFSAFileDevice::doIsExistFile_(
     }
 
     else
-        *exists = (stat.flag & (FS_STAT_FLAG_IS_DIRECTORY | FS_STAT_FLAG_IS_QUOTA)) != 0;
+        *exists = stat.flag & (FS_STAT_FLAG_IS_DIRECTORY | FS_STAT_FLAG_IS_QUOTA);
 
     return true;
 }
@@ -416,14 +424,14 @@ CafeFSAFileDevice::getFileHandleInner_(
     FileHandle* handle
 )
 {
-    return reinterpret_cast<FSFileHandle*>(getHandleBaseHandleBuffer_(handle));
+    return reinterpret_cast<FSFileHandle*>(&getHandleBaseHandleBuffer_(handle)[0]);
 }
 FSDirHandle*
 CafeFSAFileDevice::getDirHandleInner_(
     DirectoryHandle* handle
 )
 {
-    return reinterpret_cast<FSDirHandle*>(getHandleBaseHandleBuffer_(handle));
+    return reinterpret_cast<FSDirHandle*>(&getHandleBaseHandleBuffer_(handle)[0]);
 }
 
 CafeContentFileDevice::CafeContentFileDevice()

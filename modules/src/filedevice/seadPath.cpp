@@ -5,25 +5,28 @@ namespace sead {
 
 bool Path::getDriveName(BufferedSafeString* driveName, const SafeString& path)
 {
-    driveName->trim(driveName->mBufferSize);
+    //SEAD_ASSERT_MSG(driveName, "destination buffer is null");
+
+    driveName->trim(0);
 
     s32 index = path.findIndex(":");
-    if (index != -1)
-        driveName->copy(path, index);
+    if (index == -1)
+        return false;
 
-    return index != -1;
+    driveName->copy(path, index);
+    return true;
 }
 
 void Path::getPathExceptDrive(BufferedSafeString* pathNoDrive, const SafeString& path)
 {
-    pathNoDrive->trim(pathNoDrive->mBufferSize);
+    pathNoDrive->trim(0);
 
     s32 index = path.findIndex("://");
-    if (index == -1)
-        pathNoDrive->copyAt(0, path);
+    if (index != -1)
+        pathNoDrive->copyAt(0, path.getPart(index + 3));
 
     else
-        pathNoDrive->copyAt(0, path.getPart(index + 3));
+        pathNoDrive->copyAt(0, path);
 }
 
 } // namespace sead

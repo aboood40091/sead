@@ -28,49 +28,49 @@ template <>
 const SafeStringBase<char16> SafeStringBase<char16>::cEmptyString(cEmptyStringChar16);
 
 template <>
-s32 BufferedSafeStringBase<char>::formatImpl_(char* s, s32 n, const char* formatStr, va_list args)
+s32 BufferedSafeStringBase<char>::formatImpl_(char* dst, s32 dst_size, const char* format_string, va_list varg)
 {
-    return StringUtil::vsnprintf(s, n, formatStr, args);
+    return StringUtil::vsnprintf(dst, dst_size, format_string, varg);
 }
 
 template <>
-s32 BufferedSafeStringBase<char16>::formatImpl_(char16* s, s32 n, const char16* formatStr, va_list args)
+s32 BufferedSafeStringBase<char16>::formatImpl_(char16* dst, s32 dst_size, const char16* format_string, va_list varg)
 {
-    return StringUtil::vsnw16printf(s, n, formatStr, args);
+    return StringUtil::vsnw16printf(dst, dst_size, format_string, varg);
 }
 
 template <>
-s32 BufferedSafeStringBase<char>::formatV(const char* formatStr, va_list args)
+s32 BufferedSafeStringBase<char>::formatV(const char* format_string, va_list varg)
 {
     char* mutableString = getMutableStringTop_();
-    return formatImpl_(mutableString, mBufferSize, formatStr, args);
+    return formatImpl_(mutableString, mBufferSize, format_string, varg);
 }
 
 template <>
-s32 BufferedSafeStringBase<char16>::formatV(const char16* formatStr, va_list args)
+s32 BufferedSafeStringBase<char16>::formatV(const char16* format_string, va_list varg)
 {
     char16* mutableString = getMutableStringTop_();
-    return formatImpl_(mutableString, mBufferSize, formatStr, args);
+    return formatImpl_(mutableString, mBufferSize, format_string, varg);
 }
 
 template <>
-s32 BufferedSafeStringBase<char>::format(const char* formatStr, ...)
+s32 BufferedSafeStringBase<char>::format(const char* format_string, ...)
 {
-    va_list args;
-    va_start(args, formatStr);
-    s32 ret = formatV(formatStr, args);
-    va_end(args);
+    va_list va;
+    va_start(va, format_string);
+    s32 ret = formatV(format_string, va);
+    va_end(va);
 
     return ret;
 }
 
 template <>
-s32 BufferedSafeStringBase<char16>::format(const char16* formatStr, ...)
+s32 BufferedSafeStringBase<char16>::format(const char16* format_string, ...)
 {
-    va_list args;
-    va_start(args, formatStr);
-    s32 ret = formatV(formatStr, args);
-    va_end(args);
+    va_list va;
+    va_start(va, format_string);
+    s32 ret = formatV(format_string, va);
+    va_end(va);
 
     return ret;
 }

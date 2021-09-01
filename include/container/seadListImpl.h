@@ -8,7 +8,7 @@ namespace sead {
 class ListNode
 {
 public:
-    __attribute__((always_inline)) ListNode()
+    ListNode()
         : mPrev(NULL)
         , mNext(NULL)
     {
@@ -24,7 +24,7 @@ public:
 class ListImpl
 {
 public:
-    __attribute__((always_inline)) ListImpl()
+    ListImpl()
         : mStartEnd(), mCount(0)
     {
         mStartEnd.mNext = &mStartEnd;

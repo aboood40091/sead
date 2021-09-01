@@ -8,7 +8,7 @@ namespace sead {
 class PtrArrayImpl
 {
 public:
-    __attribute__((always_inline)) PtrArrayImpl(s32 ptrNumMax, void* buf)
+    PtrArrayImpl(s32 ptrNumMax, void* buf)
         : mPtrNum(0)
         , mPtrNumMax(0)
         , mPtrs(NULL)
@@ -27,7 +27,7 @@ template <typename T>
 class PtrArray : public PtrArrayImpl
 {
 public:
-    __attribute__((always_inline)) PtrArray(s32 ptrNumMax, T** buf)
+    PtrArray(s32 ptrNumMax, T** buf)
         : PtrArrayImpl(ptrNumMax, buf)
     {
     }
@@ -84,7 +84,7 @@ template <typename T, s32 N>
 class FixedPtrArray : public PtrArray<T>
 {
 public:
-    __attribute__((always_inline)) FixedPtrArray()
+    FixedPtrArray()
         : PtrArray<T>(N, reinterpret_cast<T**>(mWork))
     {
     }

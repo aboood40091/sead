@@ -12,7 +12,7 @@ template <typename T>
 class TList : public ListImpl
 {
 public:
-    __attribute__((always_inline)) TList()
+    TList()
         : ListImpl()
     {
     }
@@ -92,14 +92,14 @@ template <typename T>
 class TListNode : public ListNode
 {
 public:
-    __attribute__((always_inline)) TListNode()
+    TListNode()
         : ListNode()
         , mData(NULL)
         , mList(NULL)
     {
     }
 
-    __attribute__((always_inline)) TListNode(T data)
+    TListNode(T data)
         : ListNode()
         , mData(data)
         , mList(NULL)

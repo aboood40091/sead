@@ -160,11 +160,7 @@ public:
     void setFileHandleDivSize_(FileHandle* handle, u32 divSize) const;
     void setHandleBaseFileDevice_(HandleBase* handle, FileDevice* device) const;
     void setHandleBaseOriginalFileDevice_(HandleBase* handle, FileDevice* device) const;
-
-    inline u8* getHandleBaseHandleBuffer_(HandleBase* handle) const
-    {
-        return handle->mHandleBuffer;
-    }
+    u8* getHandleBaseHandleBuffer_(HandleBase* handle) const;
 
     static const s32 cBufferMinAlignment = 0x40;
 

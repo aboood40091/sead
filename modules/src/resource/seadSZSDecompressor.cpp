@@ -154,8 +154,9 @@ SZSDecompressor::SZSDecompressor(u32 work_size, u8* work_buffer)
 
     else
     {
-        //SEAD_ASSERT_MSG((work_size & FileDevice::cBufferMinAlignment) == 0, "work_size[%d] must be multiple of FileDevice::cBufferMinAlignment", work_size);
-        //SEAD_ASSERT_MSG((work_buffer & FileDevice::cBufferMinAlignment) == 0, "work_buffer[0x%x] must be aligned to FileDevice::cBufferMinAlignment");
+        //SEAD_ASSERT_MSG((work_size & FileDevice::cBufferMinAlignment - 1u) == 0, "work_size[%d] must be multiple of FileDevice::cBufferMinAlignment", work_size);
+
+        //SEAD_ASSERT_MSG((work_buffer & FileDevice::cBufferMinAlignment - 1u) == 0, "work_buffer[0x%x] must be aligned to FileDevice::cBufferMinAlignment");
 
         mWorkSize = work_size;
         mWorkBuffer = work_buffer;
@@ -206,7 +207,6 @@ SZSDecompressor::tryDecompFromDevice(
 
     u32 decomp_size = getDecompSize(work);
     //SEAD_ASSERT(decomp_size > 0);
-
     s32 decomp_alignment = getDecompAlignment(work);
     //SEAD_ASSERT_MSG(decomp_alignment == 0 || (decomp_alignment - 1u & decomp_alignment) == 0 "decomp_alignment[%d] must be power of 2.", decomp_alignment);
 
@@ -264,6 +264,7 @@ SZSDecompressor::tryDecompFromDevice(
     else
     {
         //SEAD_ASSERT(arg.load_data_buffer_size >= decomp_size);
+
         //SEAD_ASSERT_MSG(decomp_alignment == 0 || ((uintptr_t)dst & decomp_alignment - 1u) == 0, "load_data_buffer is not aligned with decomp_alignment[%d]", decomp_alignment);
     }
 

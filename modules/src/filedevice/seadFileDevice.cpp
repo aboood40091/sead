@@ -467,4 +467,12 @@ FileDevice::setHandleBaseOriginalFileDevice_(
     handle->mOriginalDevice = device;
 }
 
+u8*
+FileDevice::getHandleBaseHandleBuffer_(
+    HandleBase* handle
+) const
+{
+    return handle->mHandleBuffer;
+}
+
 } // namespace sead

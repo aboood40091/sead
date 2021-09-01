@@ -9,7 +9,7 @@ template <typename T>
 class OffsetList : public ListImpl
 {
 public:
-    __attribute__((always_inline)) OffsetList()
+    OffsetList()
         : ListImpl(), mOffset(-1)
     {
     }
