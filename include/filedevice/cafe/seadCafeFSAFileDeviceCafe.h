@@ -14,38 +14,70 @@ class CafeFSAFileDevice : public FileDevice
     SEAD_RTTI_OVERRIDE(CafeFSAFileDevice, FileDevice)
 
 public:
-    CafeFSAFileDevice(const SafeString& name, const SafeString& devicePath);
+    CafeFSAFileDevice(const SafeString& default_drive_name, const SafeString& cwd_path);
     virtual ~CafeFSAFileDevice() { }
 
-    virtual bool doIsAvailable_() const;
-    virtual FileDevice* doOpen_(FileHandle* handle, const SafeString& path, FileOpenFlag flag);
+    void changeDir(const char* path)
+    {
+        mCWDPath = SafeString(path).cstr();
+    }
+
+    const char* getCWD()
+    {
+        return mCWDPath;
+    }
+
+    bool setCurrentDirectory(const SafeString& path);
+
+protected:
+    virtual bool doIsAvailable_() const
+    {
+        return true;
+    }
+
+    virtual FileDevice* doOpen_(FileHandle* handle, const SafeString& filename, FileOpenFlag flag);
     virtual bool doClose_(FileHandle* handle);
-    virtual bool doRead_(u32* bytesRead, FileHandle* handle, u8* outBuffer, u32 bytesToRead);
-    virtual bool doWrite_(u32* bytesWritten, FileHandle* handle, const u8* inBuffer, u32 bytesToWrite);
+    virtual bool doRead_(u32* read_size, FileHandle* handle, u8* buf, u32 size);
+    virtual bool doWrite_(u32* write_size, FileHandle* handle, const u8* buf, u32 size);
     virtual bool doSeek_(FileHandle* handle, s32 offset, SeekOrigin origin);
-    virtual bool doGetCurrentSeekPos_(u32* seekPos, FileHandle* handle);
-    virtual bool doGetFileSize_(u32* fileSize, const SafeString& path);
-    virtual bool doGetFileSize_(u32* fileSize, FileHandle* handle);
-    virtual bool doIsExistFile_(bool* exists, const SafeString& path);
-    virtual bool doIsExistDirectory_(bool* exists, const SafeString& path);
-    virtual FileDevice* doOpenDirectory_(DirectoryHandle* handle, const SafeString& path);
+    virtual bool doGetCurrentSeekPos_(u32* pos, FileHandle* handle);
+    virtual bool doGetFileSize_(u32* size, const SafeString& path);
+    virtual bool doGetFileSize_(u32* size, FileHandle* handle);
+    virtual bool doIsExistFile_(bool* is_exist, const SafeString& path);
+    virtual bool doIsExistDirectory_(bool* is_exist, const SafeString& path);
+    virtual FileDevice* doOpenDirectory_(DirectoryHandle* handle, const SafeString& dirname);
     virtual bool doCloseDirectory_(DirectoryHandle* handle);
-    virtual bool doReadDirectory_(u32* entriesRead, DirectoryHandle* handle, DirectoryEntry* entries, u32 entriesToRead);
-    virtual bool doMakeDirectory_(const SafeString& path, u32);
-    virtual s32 doGetLastRawError_() const;
+    virtual bool doReadDirectory_(u32* read_num, DirectoryHandle* handle, DirectoryEntry* entry, u32 num);
+    virtual bool doMakeDirectory_(const SafeString& path, u32 permission);
+    virtual RawErrorCode doGetLastRawError_() const;
     virtual void doResolvePath_(BufferedSafeString* out, const SafeString& path) const;
     virtual void formatPathForFSA_(BufferedSafeString* out, const SafeString& path) const;
 
     FSClient* getUsableFSClient_() const;
-    FSFileHandle* getFileHandleInner_(FileHandle* handle);
-    FSDirHandle* getDirHandleInner_(DirectoryHandle* handle);
 
-    const char* devicePath;
-    FSStatus status;
-    FSRetFlag openErrHandling;
-    FSRetFlag closeErrHandling;
-    FSRetFlag readErrHandling;
-    FSClient* client;
+protected:
+    struct FileHandleInner
+    {
+        FSFileHandle mHandle;
+        FSFilePosition mPosition;
+    };
+
+    struct DirHandleInner
+    {
+        FSDirHandle mHandle;
+    };
+
+protected:
+    FileHandleInner* getFileHandleInner_(FileHandle* handle);
+    DirHandleInner* getDirHandleInner_(DirectoryHandle* handle);
+
+protected:
+    const char* mCWDPath;
+    FSStatus mLastRawError;
+    FSRetFlag mFSOpenRetFlag;
+    FSRetFlag mFSCloseRetFlag;
+    FSRetFlag mFSReadRetFlag;
+    FSClient* mFSClient;
 };
 
 class CafeContentFileDevice : public CafeFSAFileDevice
@@ -55,6 +87,41 @@ class CafeContentFileDevice : public CafeFSAFileDevice
 public:
     CafeContentFileDevice();
     virtual ~CafeContentFileDevice() { }
+};
+
+class CafeSDFileDevice : public CafeFSAFileDevice
+{
+    SEAD_RTTI_OVERRIDE(CafeSDFileDevice, CafeFSAFileDevice)
+
+public:
+    CafeSDFileDevice();
+    virtual ~CafeSDFileDevice() { }
+};
+
+class CafeHostIOFileDevice : public CafeFSAFileDevice
+{
+    SEAD_RTTI_OVERRIDE(CafeHostIOFileDevice, CafeFSAFileDevice)
+
+public:
+    CafeHostIOFileDevice();
+    virtual ~CafeHostIOFileDevice() { }
+
+protected:
+    virtual void formatPathForFSA_(BufferedSafeString* out, const SafeString& path) const;
+
+    void convertPathWinToFSA_(char*, u32, const char*) const;
+};
+
+class CafeFSNativePathFileDevice : public CafeFSAFileDevice
+{
+    SEAD_RTTI_OVERRIDE(CafeFSNativePathFileDevice, CafeFSAFileDevice)
+
+public:
+    CafeFSNativePathFileDevice();
+    virtual ~CafeFSNativePathFileDevice() { }
+
+protected:
+    virtual void formatPathForFSA_(BufferedSafeString* out, const SafeString& path) const;
 };
 
 } // namespace sead

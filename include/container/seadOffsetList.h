@@ -8,22 +8,56 @@ namespace sead {
 template <typename T>
 class OffsetList : public ListImpl
 {
+private:
+    typedef s32 (*CompareCallback)(const T*, const T*);
+
 public:
     OffsetList()
         : ListImpl(), mOffset(-1)
     {
     }
 
-    void pushBack(T* item)
+    void initOffset(s32 offset);
+    void clear();
+    void unsafeClear();
+
+    void pushBack(T* obj)
     {
-        ListImpl::pushBack(objToListNode(item));
+        //SEAD_ASSRT(mOffset >= 0);
+        ListImpl::pushBack(objToListNode(obj));
     }
 
-    void erase(T* item)
+    void pushFront(T* obj);
+    T* popBack();
+    T* popFront();
+    void insertBefore(const T* basis, T* obj);
+    void insertAfter(const T* basis, T* obj);
+
+    void erase(T* obj)
     {
-        ListImpl::erase(objToListNode(item));
+        ListImpl::erase(objToListNode(obj));
     }
 
+    T* front() const;
+    T* back() const;
+    T* prev(const T* obj) const;
+    T* next(const T* obj) const;
+    T* nth(s32 index) const;
+    s32 indexOf(const T* obj) const;
+    bool isNodeLinked(const T* obj) const;
+    void swap(T* obj1, T* obj2);
+    void moveAfter(T* basis, T* obj);
+    void moveBefore(T* basis, T* obj);
+    void sort();
+    void sort(CompareCallback cmp);
+    void mergeSort();
+    void mergeSort(CompareCallback cmp);
+    T* find(const T* obj) const;
+    T* find(const T* obj, CompareCallback cmp) const;
+    void uniq();
+    void uniq(CompareCallback cmp);
+
+public:
     class iterator
     {
     public:
@@ -32,20 +66,10 @@ public:
         {
         }
 
-        bool operator==(const iterator& other) const
-        {
-            return mPtr == other.mPtr;
-        }
-
-        bool operator!=(const iterator& other) const
-        {
-            return !(*this == other);
-        }
-
         iterator& operator++()
         {
-            ListNode* node = static_cast<ListNode*>(static_cast<void*>(mPtr) + mOffset)->mNext;
-            mPtr = static_cast<T*>(static_cast<void*>(node) + -mOffset);
+            ListNode* node = reinterpret_cast<ListNode*>((uintptr_t)mPtr + mOffset)->next();
+            mPtr = reinterpret_cast<T*>((uintptr_t)node - mOffset);
             return *this;
         }
 
@@ -59,13 +83,40 @@ public:
             return mPtr;
         }
 
+        friend bool operator==(const iterator& it1, const iterator& it2)
+        {
+            return it1.mPtr == it2.mPtr;
+        }
+
+        friend bool operator!=(const iterator& it1, const iterator& it2)
+        {
+            return !(it1 == it2);
+        }
+
+    protected:
         T* mPtr;
         s32 mOffset;
     };
 
+    // TODO
+    class constIterator { };
+
+    // TODO
+    class robustIterator { };
+
+    // TODO
+    class reverseIterator { };
+
+    // TODO
+    class reverseConstIterator { };
+
+    // TODO
+    class reverseRobustIterator { };
+
+public:
     iterator begin() const
     {
-        return iterator(listNodeToObj(mStartEnd.mNext), mOffset);
+        return iterator(listNodeToObj(mStartEnd.next()), mOffset);
     }
 
     iterator end() const
@@ -73,26 +124,39 @@ public:
         return iterator(listNodeToObj(const_cast<ListNode*>(&mStartEnd)), mOffset);
     }
 
-    ListNode* objToListNode(T* obj) const
+    iterator toIterator(T*) const;
+    constIterator constBegin() const;
+    constIterator constEnd() const;
+    constIterator toConstIterator(const T*) const;
+    robustIterator robustBegin();
+    robustIterator robustEnd();
+    robustIterator toRobustIterator(T*);
+    reverseIterator reverseBegin() const;
+    reverseIterator reverseEnd() const;
+    reverseIterator toReverseIterator(T*) const;
+    reverseConstIterator reverseConstBegin() const;
+    reverseConstIterator reverseConstEnd() const;
+    reverseConstIterator toReverseConstIterator(const T*) const;
+    reverseRobustIterator reverseRobustBegin();
+    reverseRobustIterator reverseRobustEnd();
+    reverseRobustIterator toReverseRobustIterator(T*);
+
+protected:
+    static s32 compareT(const T*, const T*);
+
+    ListNode* objToListNode(const T* obj) const
     {
-        return static_cast<ListNode*>(static_cast<void*>(obj) + mOffset);
+        return reinterpret_cast<ListNode*>((uintptr_t)obj + mOffset);
     }
 
-    const ListNode* objToListNode(const T* obj) const
+    T* listNodeToObj(const ListNode* node) const
     {
-        return static_cast<const ListNode*>(static_cast<const void*>(obj) + mOffset);
+        return reinterpret_cast<T*>((uintptr_t)node - mOffset);
     }
 
-    T* listNodeToObj(ListNode* node) const
-    {
-        return static_cast<T*>(static_cast<void*>(node) + -mOffset);
-    }
+    T* listNodeToObjWithNullCheck(const ListNode* node) const;
 
-    const T* listNodeToObj(const ListNode* node) const
-    {
-        return static_cast<const T*>(static_cast<const void*>(node) + -mOffset);
-    }
-
+protected:
     s32 mOffset;
 };
 

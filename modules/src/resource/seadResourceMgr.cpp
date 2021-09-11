@@ -15,10 +15,13 @@ ResourceMgr::ResourceMgr()
     , mDecompList()
     , mNullResourceFactory(NULL)
 {
-    if (HeapMgr::sInstancePtr == NULL)
+    if (!HeapMgr::isInitialized())
+    {
+        //SEAD_ASSERT_MSG(false, ResourceMgr need HeapMgr);
         return;
+    }
 
-    mNullResourceFactory = new(HeapMgr::sInstancePtr->findContainHeap(this), 4) DirectResourceFactory<DirectResource>();
+    mNullResourceFactory = new (HeapMgr::instance()->findContainHeap(this), 4) DirectResourceFactory<DirectResource>();
     registerFactory(mNullResourceFactory, "");
 }
 

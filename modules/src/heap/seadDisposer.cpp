@@ -14,9 +14,9 @@ IDisposer::IDisposer()
     : mListNode()
     , mDisposerHeap(NULL)
 {
-    if (sead::HeapMgr::sInstancePtr != NULL)
+    if (sead::HeapMgr::isInitialized())
     {
-        mDisposerHeap = sead::HeapMgr::sInstancePtr->findContainHeap(this);
+        mDisposerHeap = sead::HeapMgr::instance()->findContainHeap(this);
         if (mDisposerHeap != NULL)
             mDisposerHeap->appendDisposer_(this);
     }
@@ -24,12 +24,16 @@ IDisposer::IDisposer()
 
 IDisposer::~IDisposer()
 {
-    if (*reinterpret_cast<size_t*>(&mDisposerHeap) != cDestructedFlag)
+    if (*(uintptr_t*)&mDisposerHeap == cDestructedFlag)
+    {
+        //SEAD_ASSERT_MSG(false, "Destruct twice. [%p] Your class has possibilities for wrong order of multipleinheritance.", this);
+    }
+    else
     {
         if (mDisposerHeap != NULL)
             mDisposerHeap->removeDisposer_(this);
 
-        *reinterpret_cast<size_t*>(&mDisposerHeap) = cDestructedFlag;
+        *(uintptr_t*)&mDisposerHeap = cDestructedFlag;
     }
 }
 

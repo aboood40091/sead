@@ -8,36 +8,31 @@
 namespace sead {
 
 CafeFSAFileDevice::CafeFSAFileDevice(
-    const SafeString& name, const SafeString& devicePath
+    const SafeString& default_drive_name, const SafeString& cwd_path
 )
-    : FileDevice(name)
-    , devicePath(devicePath.cstr())
-    , status(FS_STATUS_OK)
-    , openErrHandling(FS_RET_PERMISSION_ERROR | FS_RET_ACCESS_ERROR |
-                      FS_RET_NOT_FILE | FS_RET_NOT_FOUND |
-                      FS_RET_ALREADY_OPEN)
-    , closeErrHandling(FS_RET_NO_ERROR)
-    , readErrHandling(FS_RET_NO_ERROR)
-    , client(NULL)
+    : FileDevice(default_drive_name)
+    , mCWDPath(cwd_path.cstr())
+    , mLastRawError(FS_STATUS_OK)
+    , mFSOpenRetFlag(FS_RET_PERMISSION_ERROR | FS_RET_ACCESS_ERROR |
+                     FS_RET_NOT_FILE | FS_RET_NOT_FOUND |
+                     FS_RET_ALREADY_OPEN)
+    , mFSCloseRetFlag(FS_RET_NO_ERROR)
+    , mFSReadRetFlag(FS_RET_NO_ERROR)
+    , mFSClient(NULL)
 {
-}
-
-bool CafeFSAFileDevice::doIsAvailable_() const
-{
-    return true;
 }
 
 FileDevice*
 CafeFSAFileDevice::doOpen_(
-    FileHandle* handle, const SafeString& path,
+    FileHandle* handle, const SafeString& filename,
     FileDevice::FileOpenFlag flag
 )
 {
     FSCmdBlock block;
     FSInitCmdBlock(&block);
 
-    FSClient* client_ = getUsableFSClient_();
-    FSFileHandle* fsHandle = getFileHandleInner_(handle);
+    FSClient* client = getUsableFSClient_();
+    FileHandleInner* handle_inner = getFileHandleInner_(handle);
 
     char* mode;
     switch (flag)
@@ -59,15 +54,15 @@ CafeFSAFileDevice::doOpen_(
         mode = "r";
     }
 
-    FixedSafeString<FS_MAX_ENTNAME_SIZE> fullPath;
-    formatPathForFSA_(&fullPath, path);
+    FixedSafeString<FileDeviceMgr::cNoDrivePathBufferSize> file_path;
+    formatPathForFSA_(&file_path, filename);
 
-    FSStatus status = FSOpenFile(client_, &block, fullPath.cstr(), mode, fsHandle, openErrHandling);
-    fsHandle[1] = 0;
+    FSStatus status = FSOpenFile(client, &block, file_path.cstr(), mode, &handle_inner->mHandle, mFSOpenRetFlag);
+    handle_inner->mPosition = 0;
 
-    if (this->status = status, status != FS_STATUS_OK)
+    if (mLastRawError = status, status != FS_STATUS_OK)
     {
-        fsHandle[0] = 0;
+        handle_inner->mHandle = 0;
         return NULL;
     }
 
@@ -80,69 +75,73 @@ CafeFSAFileDevice::doClose_(FileHandle* handle)
     FSCmdBlock block;
     FSInitCmdBlock(&block);
 
-    FSClient* client_ = getUsableFSClient_();
-    FSFileHandle* fsHandle = getFileHandleInner_(handle);
+    FSClient* client = getUsableFSClient_();
+    FileHandleInner* handle_inner = getFileHandleInner_(handle);
 
-    return FSCloseFile(client_, &block, *fsHandle, closeErrHandling) == FS_STATUS_OK;
+    FSStatus status = FSCloseFile(client, &block, handle_inner->mHandle, mFSCloseRetFlag);
+    if (/*mLastRawError = status, */status != FS_STATUS_OK)
+        return false;
+
+    return true;
 }
 
 bool
 CafeFSAFileDevice::doRead_(
-    u32* bytesRead, FileHandle* handle,
-    u8* outBuffer, u32 bytesToRead
+    u32* read_size, FileHandle* handle,
+    u8* buf, u32 size
 )
 {
-    //SEAD_ASSERT_MSG(((uintptr_t)outBuffer & LL_CACHE_FETCH_SIZE - 1u) == 0, "buf[0x%p] is not aligned with LL_CACHE_FETCH_SIZE[%d]", outBuffer, LL_CACHE_FETCH_SIZE);
+    //SEAD_ASSERT_MSG(((uintptr_t)buf & LL_CACHE_FETCH_SIZE - 1u) == 0, "buf[0x%p] is not aligned with LL_CACHE_FETCH_SIZE[%d]", buf, LL_CACHE_FETCH_SIZE);
 
     FSCmdBlock block;
     FSInitCmdBlock(&block);
 
-    FSClient* client_ = getUsableFSClient_();
-    FSFileHandle* fsHandle = getFileHandleInner_(handle);
+    FSClient* client = getUsableFSClient_();
+    FileHandleInner* handle_inner = getFileHandleInner_(handle);
 
-    s32 status = FSReadFile(client_, &block, outBuffer, sizeof(u8), bytesToRead, *fsHandle, 0, readErrHandling);
-    if (status >= 0)
+    s32 result = FSReadFile(client, &block, buf, sizeof(u8), size, handle_inner->mHandle, 0, mFSReadRetFlag);
+    if (result >= FS_STATUS_OK)
     {
-        this->status = FS_STATUS_OK;
-        fsHandle[1] += status;
+        mLastRawError = FS_STATUS_OK;
+        handle_inner->mPosition += result;
 
-        if (bytesRead != NULL)
-            *bytesRead = status;
+        if (read_size != NULL)
+            *read_size = result;
 
         return true;
     }
 
-    this->status = status;
+    mLastRawError = result;
     return false;
 }
 
 bool
 CafeFSAFileDevice::doWrite_(
-    u32* bytesWritten, FileHandle* handle,
-    const u8* inBuffer, u32 bytesToWrite
+    u32* write_size, FileHandle* handle,
+    const u8* buf, u32 size
 )
 {
-    //SEAD_ASSERT_MSG(((uintptr_t)inBuffer & LL_CACHE_FETCH_SIZE - 1u) == 0, "buf[0x%p] is not aligned with LL_CACHE_FETCH_SIZE[%d]", inBuffer, LL_CACHE_FETCH_SIZE);
+    //SEAD_ASSERT_MSG(((uintptr_t)buf & LL_CACHE_FETCH_SIZE - 1u) == 0, "buf[0x%p] is not aligned with LL_CACHE_FETCH_SIZE[%d]", buf, LL_CACHE_FETCH_SIZE);
 
     FSCmdBlock block;
     FSInitCmdBlock(&block);
 
-    FSClient* client_ = getUsableFSClient_();
-    FSFileHandle* fsHandle = getFileHandleInner_(handle);
+    FSClient* client = getUsableFSClient_();
+    FileHandleInner* handle_inner = getFileHandleInner_(handle);
 
-    s32 status = FSWriteFile(client_, &block, inBuffer, sizeof(const u8), bytesToWrite, *fsHandle, 0, FS_RET_STORAGE_FULL | FS_RET_FILE_TOO_BIG);
-    if (status >= 0)
+    s32 result = FSWriteFile(client, &block, buf, sizeof(const u8), size, handle_inner->mHandle, 0, FS_RET_STORAGE_FULL | FS_RET_FILE_TOO_BIG);
+    if (result >= FS_STATUS_OK)
     {
-        this->status = FS_STATUS_OK;
-        fsHandle[1] += status;
+        mLastRawError = FS_STATUS_OK;
+        handle_inner->mPosition += result;
 
-        if (bytesWritten != NULL)
-            *bytesWritten = status;
+        if (write_size != NULL)
+            *write_size = result;
 
         return true;
     }
 
-    this->status = status;
+    mLastRawError = result;
     return false;
 }
 
@@ -154,165 +153,173 @@ CafeFSAFileDevice::doSeek_(
     FSCmdBlock block;
     FSInitCmdBlock(&block);
 
-    FSClient* client_ = getUsableFSClient_();
-    FSFileHandle* fsHandle = getFileHandleInner_(handle);
+    FSClient* client = getUsableFSClient_();
+    FileHandleInner* handle_inner = getFileHandleInner_(handle);
 
     switch (origin)
     {
     case FileDevice::cSeekOrigin_Begin:
         break;
     case FileDevice::cSeekOrigin_Current:
-        offset += fsHandle[1];
+        offset += handle_inner->mPosition;
         break;
     case FileDevice::cSeekOrigin_End:
         //SEAD_ASSERT(offset <= 0);
         {
-            u32 fileSize = 0;
-            if(!doGetFileSize_(&fileSize, handle))
-                return false;
+            u32 size = 0;
+            if (doGetFileSize_(&size, handle))
+                offset += size;
 
-            offset += fileSize;
+            else
+                return false;
         }
         break;
     default:
         return false;
     }
 
-    FSStatus status = FSSetPosFile(client_, &block, *fsHandle, offset, FS_RET_NO_ERROR);
-    if (this->status = status, status != FS_STATUS_OK)
-        return false;
+    FSStatus status = FSSetPosFile(client, &block, handle_inner->mHandle, offset, FS_RET_NO_ERROR);
+    if (mLastRawError = status, status == FS_STATUS_OK)
+    {
+        handle_inner->mPosition = offset;
+        return true;
+    }
 
-    fsHandle[1] = offset;
-    return true;
+    return false;
 }
 
 bool
 CafeFSAFileDevice::doGetCurrentSeekPos_(
-    u32* seekPos, FileHandle* handle
+    u32* pos, FileHandle* handle
 )
 {
-    *seekPos = getFileHandleInner_(handle)[1];
+    FileHandleInner* handle_inner = getFileHandleInner_(handle);
+    *pos = handle_inner->mPosition;
     return true;
 }
 
 bool
 CafeFSAFileDevice::doGetFileSize_(
-    u32* fileSize, const SafeString& path
+    u32* size, const SafeString& path
 )
 {
     FSCmdBlock block;
     FSInitCmdBlock(&block);
 
-    FSClient* client_ = getUsableFSClient_();
+    FSClient* client = getUsableFSClient_();
+
+    FixedSafeString<FileDeviceMgr::cNoDrivePathBufferSize> file_path;
+    formatPathForFSA_(&file_path, path);
+
     FSStat stat;
+    FSStatus status = FSGetStat(client, &block, file_path.cstr(), &stat, FS_RET_NO_ERROR);
 
-    FixedSafeString<FS_MAX_ENTNAME_SIZE> fullPath;
-    formatPathForFSA_(&fullPath, path);
-
-    FSStatus status = FSGetStat(client_, &block, fullPath.cstr(), &stat, FS_RET_NO_ERROR);
-    if (this->status = status, status != FS_STATUS_OK)
+    if (mLastRawError = status, status != FS_STATUS_OK)
         return false;
 
-    *fileSize = stat.size;
+    *size = stat.size;
     return true;
 }
 
 bool
 CafeFSAFileDevice::doGetFileSize_(
-    u32* fileSize, FileHandle* handle
+    u32* size, FileHandle* handle
 )
 {
     FSCmdBlock block;
     FSInitCmdBlock(&block);
 
-    FSClient* client_ = getUsableFSClient_();
-    FSFileHandle* fsHandle = getFileHandleInner_(handle);
-    FSStat stat;
+    FSClient* client = getUsableFSClient_();
+    FileHandleInner* handle_inner = getFileHandleInner_(handle);
 
-    FSStatus status = FSGetStatFile(client_, &block, *fsHandle, &stat, FS_RET_NO_ERROR);
-    if (this->status = status, status != FS_STATUS_OK)
+    FSStat stat;
+    FSStatus status = FSGetStatFile(client, &block, handle_inner->mHandle, &stat, FS_RET_NO_ERROR);
+
+    if (mLastRawError = status, status != FS_STATUS_OK)
         return false;
 
-    *fileSize = stat.size;
+    *size = stat.size;
     return true;
 }
 
 bool
 CafeFSAFileDevice::doIsExistFile_(
-    bool* exists, const SafeString& path
+    bool* is_exist, const SafeString& path
 )
 {
     FSCmdBlock block;
     FSInitCmdBlock(&block);
 
-    FSClient* client_ = getUsableFSClient_();
+    FSClient* client = getUsableFSClient_();
+
+    FixedSafeString<FileDeviceMgr::cNoDrivePathBufferSize> file_path;
+    formatPathForFSA_(&file_path, path);
+
     FSStat stat;
+    FSStatus status = FSGetStat(client, &block, file_path.cstr(), &stat, FS_RET_PERMISSION_ERROR | FS_RET_NOT_FOUND);
 
-    FixedSafeString<FS_MAX_ENTNAME_SIZE> fullPath;
-    formatPathForFSA_(&fullPath, path);
-
-    FSStatus status = FSGetStat(client_, &block, fullPath.cstr(), &stat, FS_RET_PERMISSION_ERROR | FS_RET_NOT_FOUND);
-    if (this->status = status, status != FS_STATUS_OK)
+    if (mLastRawError = status, status != FS_STATUS_OK)
     {
         if (status != FS_STATUS_NOT_FOUND)
             return false;
 
-        *exists = false;
+        *is_exist = false;
     }
 
     else
-        *exists = stat.flag & (FS_STAT_FLAG_IS_DIRECTORY | FS_STAT_FLAG_IS_QUOTA);
+        *is_exist = stat.flag & (FS_STAT_FLAG_IS_DIRECTORY | FS_STAT_FLAG_IS_QUOTA);
 
     return true;
 }
 
 bool
 CafeFSAFileDevice::doIsExistDirectory_(
-    bool* exists, const SafeString& path
+    bool* is_exist, const SafeString& path
 )
 {
     FSCmdBlock block;
     FSInitCmdBlock(&block);
 
-    FSClient* client_ = getUsableFSClient_();
+    FSClient* client = getUsableFSClient_();
+
+    FixedSafeString<FileDeviceMgr::cNoDrivePathBufferSize> dir_path;
+    formatPathForFSA_(&dir_path, path);
+
     FSStat stat;
+    FSStatus status = FSGetStat(client, &block, dir_path.cstr(), &stat, FS_RET_PERMISSION_ERROR | FS_RET_NOT_FOUND);
 
-    FixedSafeString<FS_MAX_ENTNAME_SIZE> fullPath;
-    formatPathForFSA_(&fullPath, path);
-
-    FSStatus status = FSGetStat(client_, &block, fullPath.cstr(), &stat, FS_RET_PERMISSION_ERROR | FS_RET_NOT_FOUND);
-    if (this->status = status, status != FS_STATUS_OK)
+    if (mLastRawError = status, status != FS_STATUS_OK)
     {
         if (status != FS_STATUS_NOT_FOUND)
             return false;
 
-        *exists = false;
+        *is_exist = false;
     }
 
     else
-        *exists = (stat.flag & FS_STAT_FLAG_IS_DIRECTORY) != 0;
+        *is_exist = stat.flag & FS_STAT_FLAG_IS_DIRECTORY;
 
     return true;
 }
 
 FileDevice*
 CafeFSAFileDevice::doOpenDirectory_(
-    DirectoryHandle* handle, const SafeString& path
+    DirectoryHandle* handle, const SafeString& dirname
 )
 {
     FSCmdBlock block;
     FSInitCmdBlock(&block);
 
-    FSClient* client_ = getUsableFSClient_();
-    FSDirHandle* fsHandle = getDirHandleInner_(handle);
+    FSClient* client = getUsableFSClient_();
+    DirHandleInner* handle_inner = getDirHandleInner_(handle);
 
-    FixedSafeString<FS_MAX_ENTNAME_SIZE> fullPath;
-    formatPathForFSA_(&fullPath, path);
+    FixedSafeString<FileDeviceMgr::cNoDrivePathBufferSize> dir_path;
+    formatPathForFSA_(&dir_path, dirname);
 
-    FSStatus status = FSOpenDir(client_, &block, fullPath.cstr(), fsHandle, FS_RET_PERMISSION_ERROR | FS_RET_ACCESS_ERROR |
-                                                                             FS_RET_NOT_DIR | FS_RET_NOT_FOUND | FS_RET_ALREADY_OPEN);
+    FSStatus status = FSOpenDir(client, &block, dir_path.cstr(), &handle_inner->mHandle, FS_RET_PERMISSION_ERROR | FS_RET_ACCESS_ERROR |
+                                                                                         FS_RET_NOT_DIR | FS_RET_NOT_FOUND | FS_RET_ALREADY_OPEN);
 
-    if (this->status = status, status != FS_STATUS_OK)
+    if (mLastRawError = status, status != FS_STATUS_OK)
         return NULL;
 
     return this;
@@ -326,33 +333,37 @@ CafeFSAFileDevice::doCloseDirectory_(
     FSCmdBlock block;
     FSInitCmdBlock(&block);
 
-    FSClient* client_ = getUsableFSClient_();
-    FSDirHandle* fsHandle = getDirHandleInner_(handle);
+    FSClient* client = getUsableFSClient_();
+    DirHandleInner* handle_inner = getDirHandleInner_(handle);
 
-    return (status = FSCloseDir(client_, &block, *fsHandle, FS_RET_NO_ERROR), status == FS_STATUS_OK);
+    FSStatus status = FSCloseDir(client, &block, handle_inner->mHandle, FS_RET_NO_ERROR);
+    if (mLastRawError = status, status != FS_STATUS_OK)
+        return false;
+
+    return true;
 }
 
 bool
 CafeFSAFileDevice::doReadDirectory_(
-    u32* entriesRead, DirectoryHandle* handle,
-    DirectoryEntry* entries, u32 entriesToRead
+    u32* read_num, DirectoryHandle* handle,
+    DirectoryEntry* entry, u32 num
 )
 {
+    FSDirEntry dir_entry;
+
     FSCmdBlock block;
     FSInitCmdBlock(&block);
 
-    FSClient* client_ = getUsableFSClient_();
-    FSDirHandle* fsHandle = getDirHandleInner_(handle);
+    FSClient* client = getUsableFSClient_();
+    DirHandleInner* handle_inner = getDirHandleInner_(handle);
 
-    for (s32 i = 0; i < entriesToRead; i++)
+    for (u32 i = 0; i < num; i++)
     {
-        FSDirEntry dirEntry;
-
-        status = FSReadDir(client_, &block, *fsHandle, &dirEntry, FS_RET_NO_ERROR);
-        if (status != FS_STATUS_OK)
+        FSStatus status = FSReadDir(client, &block, handle_inner->mHandle, &dir_entry, FS_RET_NO_ERROR);
+        if (mLastRawError = status, status != FS_STATUS_OK)
         {
-            if (entriesRead != NULL)
-                *entriesRead = i;
+            if (read_num != NULL)
+                *read_num = i;
 
             if (status == FS_STATUS_END)
                 return true;
@@ -360,39 +371,40 @@ CafeFSAFileDevice::doReadDirectory_(
             return false;
         }
 
-        SafeString name(dirEntry.name);
-
-        entries[i].name.copy(name);
-        entries[i].is_directory = (dirEntry.stat.flag & FS_STAT_FLAG_IS_DIRECTORY) != 0;
+        entry[i].name.copy(SafeString(dir_entry.name));
+        entry[i].is_directory = (dir_entry.stat.flag & FS_STAT_FLAG_IS_DIRECTORY) != 0;
     }
 
-    if (entriesRead != NULL)
-        *entriesRead = entriesToRead;
+    if (read_num != NULL)
+        *read_num = num;
 
     return true;
 }
 
 bool
 CafeFSAFileDevice::doMakeDirectory_(
-    const SafeString& path, u32
+    const SafeString& path, u32 permission
 )
 {
     FSCmdBlock block;
     FSInitCmdBlock(&block);
 
-    FSClient* client_ = getUsableFSClient_();
+    FSClient* client = getUsableFSClient_();
 
-    FixedSafeString<FS_MAX_ENTNAME_SIZE> fullPath;
-    formatPathForFSA_(&fullPath, path);
+    FixedSafeString<FileDeviceMgr::cNoDrivePathBufferSize> dir_path;
+    formatPathForFSA_(&dir_path, path);
 
-    return (status = FSMakeDir(client_, &block, fullPath.cstr(), FS_RET_JOURNAL_FULL | FS_RET_STORAGE_FULL |
-                                                                  FS_RET_PERMISSION_ERROR | FS_RET_NOT_FOUND), status == FS_STATUS_OK);
+    FSStatus status = FSMakeDir(client, &block, dir_path.cstr(), FS_RET_JOURNAL_FULL | FS_RET_STORAGE_FULL |
+                                                                 FS_RET_PERMISSION_ERROR | FS_RET_NOT_FOUND);
+    if (mLastRawError = status, status != FS_STATUS_OK)
+        return false;
 
+    return true;
 }
 
-s32 CafeFSAFileDevice::doGetLastRawError_() const
+RawErrorCode CafeFSAFileDevice::doGetLastRawError_() const
 {
-    return status;
+    return mLastRawError;
 }
 
 void
@@ -408,30 +420,30 @@ CafeFSAFileDevice::formatPathForFSA_(
     BufferedSafeString* out, const SafeString& path
 ) const
 {
-    out->format("%s/%s", devicePath, path.cstr());
+    out->format("%s/%s", mCWDPath, path.cstr());
 }
 
 FSClient*
 CafeFSAFileDevice::getUsableFSClient_() const
 {
-    if (client == NULL)
-        return &FileDeviceMgr::instance()->client;
+    if (mFSClient == NULL)
+        return FileDeviceMgr::instance()->getFSClient_();
 
-    return client;
+    return mFSClient;
 }
-FSFileHandle*
+CafeFSAFileDevice::FileHandleInner*
 CafeFSAFileDevice::getFileHandleInner_(
     FileHandle* handle
 )
 {
-    return reinterpret_cast<FSFileHandle*>(&getHandleBaseHandleBuffer_(handle)[0]);
+    return reinterpret_cast<FileHandleInner*>(&getHandleBaseHandleBuffer_(handle)[0]);
 }
-FSDirHandle*
+CafeFSAFileDevice::DirHandleInner*
 CafeFSAFileDevice::getDirHandleInner_(
     DirectoryHandle* handle
 )
 {
-    return reinterpret_cast<FSDirHandle*>(&getHandleBaseHandleBuffer_(handle)[0]);
+    return reinterpret_cast<DirHandleInner*>(&getHandleBaseHandleBuffer_(handle)[0]);
 }
 
 CafeContentFileDevice::CafeContentFileDevice()

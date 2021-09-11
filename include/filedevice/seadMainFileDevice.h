@@ -1,10 +1,6 @@
 #ifndef SEAD_MAIN_FILEDEVICE_H_
 #define SEAD_MAIN_FILEDEVICE_H_
 
-#ifdef cafe
-#include <filedevice/cafe/seadCafeFSAFileDeviceCafe.h>
-#endif // cafe
-
 #include <filedevice/seadFileDevice.h>
 #include <prim/seadRuntimeTypeInfo.h>
 #include <prim/seadSafeString.h>
@@ -23,29 +19,95 @@ public:
     virtual void traceDirectoryPath(const SafeString& path) const;
     virtual void resolveFilePath(BufferedSafeString* out, const SafeString& path) const;
     virtual void resolveDirectoryPath(BufferedSafeString* out, const SafeString& path) const;
-    virtual bool isMatchDevice_(const HandleBase* handle) const;
-    virtual bool doIsAvailable_() const;
-    virtual FileDevice* doOpen_(FileHandle* handle, const SafeString& path, FileOpenFlag flag);
-    virtual bool doClose_(FileHandle* handle);
-    virtual bool doRead_(u32* bytesRead, FileHandle* handle, u8* outBuffer, u32 bytesToRead);
-    virtual bool doWrite_(u32* bytesWritten, FileHandle* handle, const u8* inBuffer, u32 bytesToWrite);
-    virtual bool doSeek_(FileHandle* handle, s32 offset, SeekOrigin origin);
-    virtual bool doGetCurrentSeekPos_(u32* seekPos, FileHandle* handle);
-    virtual bool doGetFileSize_(u32* fileSize, const SafeString& path);
-    virtual bool doGetFileSize_(u32* fileSize, FileHandle* handle);
-    virtual bool doIsExistFile_(bool* exists, const SafeString& path);
-    virtual bool doIsExistDirectory_(bool* exists, const SafeString& path);
-    virtual FileDevice* doOpenDirectory_(DirectoryHandle* handle, const SafeString& path);
-    virtual bool doCloseDirectory_(DirectoryHandle* handle);
-    virtual bool doReadDirectory_(u32* entriesRead, DirectoryHandle* handle, DirectoryEntry* entries, u32 entriesToRead);
-    virtual bool doMakeDirectory_(const SafeString& path, u32);
-    virtual s32 doGetLastRawError_() const;
 
-#ifdef cafe
-    CafeContentFileDevice* mFileDevice;
-#else
-    #error "Unknown platform"
-#endif // cafe
+protected:
+    virtual bool doIsAvailable_() const
+    {
+        return mFileDevice->isAvailable();
+    }
+
+    virtual FileDevice* doOpen_(FileHandle* handle, const SafeString& filename, FileOpenFlag flag)
+    {
+        return mFileDevice->tryOpen(handle, filename, flag, handle->getDivSize());
+    }
+
+    virtual bool doClose_(FileHandle* handle)
+    {
+        return mFileDevice->tryClose(handle);
+    }
+
+    virtual bool doRead_(u32* read_size, FileHandle* handle, u8* buf, u32 size)
+    {
+        return mFileDevice->tryRead(read_size, handle, buf, size);
+    }
+
+    virtual bool doWrite_(u32* write_size, FileHandle* handle, const u8* buf, u32 size)
+    {
+        return mFileDevice->tryWrite(write_size, handle, buf, size);
+    }
+
+    virtual bool doSeek_(FileHandle* handle, s32 offset, SeekOrigin origin)
+    {
+        return mFileDevice->trySeek(handle, offset, origin);
+    }
+
+    virtual bool doGetCurrentSeekPos_(u32* pos, FileHandle* handle)
+    {
+        return mFileDevice->tryGetCurrentSeekPos(pos, handle);
+    }
+
+    virtual bool doGetFileSize_(u32* size, const SafeString& path)
+    {
+        return mFileDevice->tryGetFileSize(size, path);
+    }
+
+    virtual bool doGetFileSize_(u32* size, FileHandle* handle)
+    {
+        return mFileDevice->tryGetFileSize(size, handle);
+    }
+
+    virtual bool doIsExistFile_(bool* is_exist, const SafeString& path)
+    {
+        return mFileDevice->tryIsExistFile(is_exist, path);
+    }
+
+    virtual bool doIsExistDirectory_(bool* is_exist, const SafeString& path)
+    {
+        return mFileDevice->tryIsExistDirectory(is_exist, path);
+    }
+
+    virtual FileDevice* doOpenDirectory_(DirectoryHandle* handle, const SafeString& dirname)
+    {
+        return mFileDevice->tryOpenDirectory(handle, dirname);
+    }
+
+    virtual bool doCloseDirectory_(DirectoryHandle* handle)
+    {
+        return mFileDevice->tryCloseDirectory(handle);
+    }
+
+    virtual bool doReadDirectory_(u32* read_num, DirectoryHandle* handle, DirectoryEntry* entry, u32 num)
+    {
+        return mFileDevice->tryReadDirectory(read_num, handle, entry, num);
+    }
+
+    virtual bool doMakeDirectory_(const SafeString& path, u32 permission)
+    {
+        return mFileDevice->tryMakeDirectory(path, permission);
+    }
+
+    virtual bool isMatchDevice_(const HandleBase* handle) const
+    {
+        return mFileDevice->isMatchDevice_(handle);
+    }
+
+    virtual RawErrorCode doGetLastRawError_() const
+    {
+        return mFileDevice->getLastRawError();
+    }
+
+protected:
+    FileDevice* mFileDevice;
 };
 
 } // namespace sead

@@ -15,10 +15,10 @@ public:
     virtual ~IDisposer();
 
 private:
-    friend class Heap;
-
     Heap* mDisposerHeap;
     ListNode mListNode;
+
+    friend class Heap;
 };
 
 } // namespace sead
@@ -30,24 +30,24 @@ private:
         static void deleteInstance();                                             \
                                                                                   \
     protected:                                                                    \
-        static CLASS* sInstance;                                                  \
-                                                                                  \
-    private:                                                                      \
         class SingletonDisposer_ : public sead::IDisposer                         \
         {                                                                         \
         public:                                                                   \
             SingletonDisposer_() : sead::IDisposer() { }                          \
             virtual ~SingletonDisposer_();                                        \
                                                                                   \
-        private:                                                                  \
-            friend class CLASS;                                                   \
-                                                                                  \
             static SingletonDisposer_* sStaticDisposer;                           \
         };                                                                        \
                                                                                   \
-        friend class SingletonDisposer_;                                          \
+        CLASS(const CLASS&);                                                      \
+        const CLASS& operator=(const CLASS&);                                     \
                                                                                   \
-        u32 mSingletonDisposerBuf_[sizeof(SingletonDisposer_) / sizeof(u32)];
+    protected:                                                                    \
+        static CLASS* sInstance;                                                  \
+                                                                                  \
+        u32 mSingletonDisposerBuf_[sizeof(SingletonDisposer_) / sizeof(u32)];     \
+                                                                                  \
+        friend class SingletonDisposer_;
 
 #define SEAD_CREATE_SINGLETON_INSTANCE(CLASS)                                                                    \
     CLASS* CLASS::createInstance(sead::Heap* heap)                                                               \
@@ -58,10 +58,16 @@ private:
         if (CLASS::sInstance == NULL)                                                                            \
         {                                                                                                        \
             instance = reinterpret_cast<CLASS*>(new(heap, 4) u8[sizeof(CLASS)]);                                 \
+                                                                                                                 \
+            /*SEAD_ASSERT_MSG(staticDisposer == NULL, "Create Singleton Twice (%s).", "CLASS");*/                \
             staticDisposer = reinterpret_cast<CLASS::SingletonDisposer_*>(instance->mSingletonDisposerBuf_);     \
                                                                                                                  \
             CLASS::SingletonDisposer_::sStaticDisposer = new (staticDisposer) SingletonDisposer_();              \
             CLASS::sInstance = new (instance) CLASS();                                                           \
+        }                                                                                                        \
+        else                                                                                                     \
+        {                                                                                                        \
+            /*SEAD_ASSERT_MSG(false, "Create Singleton Twice (%s) : addr %x", "CLASS", CLASS::sInstance);*/      \
         }                                                                                                        \
                                                                                                                  \
         return CLASS::sInstance;                                                                                 \

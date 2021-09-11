@@ -16,6 +16,7 @@ class DelegateEvent
 public:
     class Slot;
 
+private:
     typedef TList<Slot*> SlotList;
     typedef TListNode<Slot*> SlotListNode;
 
@@ -62,10 +63,18 @@ public:
 
     virtual ~DelegateEvent()
     {
-        for (SlotList::iterator it = mList.begin(); it != mList.end(); it++)
-            it.mPtr->mData->release();
+        for (SlotList::iterator it = mList.begin(); it != mList.end(); ++it)
+            (*it)->release();
     }
 
+    void connect(Slot&);
+    void disconnect(Slot&);
+    DelegateEvent<T>& operator+=(Slot&);
+    DelegateEvent<T>& operator-=(Slot&);
+    void fire(T);
+    s32 getSlotLength() const;
+
+protected:
     SlotList mList;
 };
 

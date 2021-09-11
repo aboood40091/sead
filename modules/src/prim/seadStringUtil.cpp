@@ -5,9 +5,9 @@
 
 namespace sead { namespace StringUtil {
 
-s32 vsw16printf(char16* s, size_t n, const char16* formatStr, va_list args)
+s32 vsw16printf(char16* dst, size_t dst_len, const char16* format, va_list varg)
 {
-    if (n == 0)
+    if (dst_len == 0)
         return -1;
 
     // Nintendo actually made their own implementation of vswprintf
@@ -15,7 +15,7 @@ s32 vsw16printf(char16* s, size_t n, const char16* formatStr, va_list args)
 
     // TODO: actually implement this
 
-    return std::vswprintf(s, n, formatStr, args);
+    return std::vswprintf(dst, dst_len, format, varg);
 }
 
 } } // namespace sead::StringUtil

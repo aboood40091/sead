@@ -16,9 +16,6 @@ public:
     static const SafeStringBase<CharType> cEmptyString;
     static const s32 cMaximumLength = 0x40000;
 
-protected:
-    const CharType* mStringTop;
-
 public:
     SafeStringBase()
         : mStringTop(&cNullChar)
@@ -111,6 +108,9 @@ protected:
     virtual void assureTerminationImpl_() const
     {
     }
+
+protected:
+    const CharType* mStringTop;
 };
 
 template <>
@@ -134,9 +134,6 @@ extern const SafeStringBase<char16> SafeStringBase<char16>::cEmptyString;
 template <typename CharType>
 class BufferedSafeStringBase : public SafeStringBase<CharType>
 {
-private:
-    s32 mBufferSize;
-
 public:
     BufferedSafeStringBase(CharType* buffer, s32 size)
         : SafeStringBase<CharType>(buffer)
@@ -257,14 +254,14 @@ protected:
         BufferedSafeStringBase<CharType>* mutableSafeString = const_cast<BufferedSafeStringBase<CharType>*>(this);
         mutableSafeString->getMutableStringTop_()[mBufferSize - 1] = 0;
     }
+
+private:
+    s32 mBufferSize;
 };
 
 template <typename CharType, s32 N>
 class FixedSafeStringBase : public BufferedSafeStringBase<CharType>
 {
-private:
-    CharType mBuffer[N];
-
 public:
     FixedSafeStringBase()
         : BufferedSafeStringBase<CharType>(mBuffer, N)
@@ -297,12 +294,15 @@ public:
     {
         copy(rhs);
     }
+
+private:
+    CharType mBuffer[N];
 };
 
 typedef SafeStringBase<char> SafeString;
-typedef SafeStringBase<char16> SafeString16;
+typedef SafeStringBase<char16> WSafeString;
 typedef BufferedSafeStringBase<char> BufferedSafeString;
-typedef BufferedSafeStringBase<char16> BufferedSafeString16;
+typedef BufferedSafeStringBase<char16> WBufferedSafeString;
 
 template <s32 N>
 class FixedSafeString : public FixedSafeStringBase<char, N>

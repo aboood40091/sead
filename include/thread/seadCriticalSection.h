@@ -13,14 +13,21 @@ class CriticalSection : public IDisposer
 {
 public:
     CriticalSection();
+
+private:
+    CriticalSection(const CriticalSection&);
+    const CriticalSection& operator=(const CriticalSection&);
+
+public:
     virtual ~CriticalSection();
 
     void lock();
     bool tryLock();
     void unlock();
 
+protected:
 #ifdef cafe
-    OSMutex mCriticalSectionInner;
+    OSMutex mMutexInner;
 #else
     #error "Unknown platform"
 #endif // cafe

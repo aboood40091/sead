@@ -4,19 +4,21 @@
 
 namespace sead {
 
-inline void* MemUtil::fill(void* ptr, u8 c, size_t size)
+inline void* MemUtil::fill(void* addr, u8 val, size_t size)
 {
-    return OSBlockSet(ptr, c, size);
+    return OSBlockSet(addr, val, size);
 }
 
-inline void* MemUtil::fillZero(void* ptr, size_t size)
+inline void* MemUtil::fillZero(void* addr, size_t size)
 {
-    return OSBlockSet(ptr, 0, size);
+    return OSBlockSet(addr, 0, size);
 }
 
-inline void* MemUtil::copy(void* dest, const void* src, size_t size)
+inline void* MemUtil::copy(void* dst, const void* src, size_t size)
 {
-    return OSBlockMove(dest, src, size, 0);
+    //SEAD_ASSERT_MSG(false, (src < dst || src >= (u8*)dst + size)
+    //                    && (dst < src || dst >= (u8*)src + size), "cross copy area");
+    return OSBlockMove(dst, src, size, 0);
 }
 
 }  // namespace sead

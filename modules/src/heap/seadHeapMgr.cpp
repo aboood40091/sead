@@ -4,9 +4,11 @@
 namespace sead {
 
 HeapMgr* HeapMgr::sInstancePtr = NULL;
-
 HeapMgr HeapMgr::sInstance;
+
+Arena* HeapMgr::sArena = NULL;
 Arena HeapMgr::sDefaultArena;
+
 CriticalSection HeapMgr::sHeapTreeLockCS;
 
 HeapMgr::RootHeaps HeapMgr::sRootHeaps;
@@ -17,28 +19,33 @@ HeapMgr::HeapMgr()
 {
 }
 
+HeapMgr::~HeapMgr()
+{
+}
+
 Heap*
 HeapMgr::findContainHeap(const void* ptr) const
 {
+    // ScopedLock<CriticalSection>
     sHeapTreeLockCS.lock();
 
     for (RootHeaps::iterator it = sRootHeaps.begin(); it != sRootHeaps.end(); ++it)
     {
-        Heap* containHeap = it->findContainHeap_(ptr);
-        if (containHeap != NULL)
+        Heap* heap = it->findContainHeap_(ptr);
+        if (heap != NULL)
         {
             sHeapTreeLockCS.unlock();
-            return containHeap;
+            return heap;
         }
     }
 
     for (IndependentHeaps::iterator it = sIndependentHeaps.begin(); it != sIndependentHeaps.end(); ++it)
     {
-        Heap* containHeap = it->findContainHeap_(ptr);
-        if (containHeap != NULL)
+        Heap* heap = it->findContainHeap_(ptr);
+        if (heap != NULL)
         {
             sHeapTreeLockCS.unlock();
-            return containHeap;
+            return heap;
         }
     }
 

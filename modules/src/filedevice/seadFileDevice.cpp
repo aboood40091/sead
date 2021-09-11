@@ -8,52 +8,19 @@
 
 namespace sead {
 
-u32 FileHandle::read(u8* outBuffer, u32 bytesToRead)
+u32 FileHandle::read(u8* buf, u32 size)
 {
-    if (mDevice == NULL)
-        return 0;
+    if (mDevice != NULL)
+        return mDevice->read(this, buf, size);
 
-    u32 bytesRead = 0;
-    mDevice->tryRead(&bytesRead, this, outBuffer, bytesToRead);
-    return bytesRead;
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return 0;
 }
 
 FileDevice::~FileDevice()
 {
     if (FileDeviceMgr::instance() != NULL)
         FileDeviceMgr::instance()->unmount(this);
-}
-
-void
-FileDevice::traceFilePath(
-    const SafeString& path
-) const
-{
-    doTracePath_(path);
-}
-
-void
-FileDevice::traceDirectoryPath(
-    const SafeString& path
-) const
-{
-    doTracePath_(path);
-}
-
-void
-FileDevice::resolveFilePath(
-    BufferedSafeString* out, const SafeString& path
-) const
-{
-    doResolvePath_(out, path);
-}
-
-void
-FileDevice::resolveDirectoryPath(
-    BufferedSafeString* out, const SafeString& path
-) const
-{
-    doResolvePath_(out, path);
 }
 
 bool
@@ -67,51 +34,62 @@ FileDevice::isMatchDevice_(
 u8* FileDevice::doLoad_(LoadArg& arg)
 {
     if (arg.buffer != NULL && arg.buffer_size == 0)
-        return NULL;
-
-    FileHandle handle;
-    if(tryOpen(&handle, arg.path, FileDevice::cFileOpenFlag_ReadOnly, arg.div_size))
     {
-        u32 fileSize = 0;
-        if (tryGetFileSize(&fileSize, &handle))
-        {
-            u32 bytesToRead = arg.buffer_size;
-            if (bytesToRead == 0)
-                bytesToRead = Mathi::roundUpPow2(fileSize, FileDevice::cBufferMinAlignment);
-
-            else if (bytesToRead < fileSize)
-                goto return_fail;
-
-            u8* buf = arg.buffer;
-            bool allocated = false;
-
-            if (buf == NULL)
-            {
-                s32 sign = (arg.alignment < 0) ? -1 : 1;
-                s32 alignment = abs(arg.alignment);
-                alignment = sign * ((alignment < 0x40) ? 0x40 : alignment);
-
-                buf = new(arg.heap, alignment) u8[bytesToRead];
-                allocated = true;
-            }
-
-            u32 bytesRead = 0;
-            if (tryRead(&bytesRead, &handle, buf, bytesToRead) && tryClose(&handle))
-            {
-                arg.read_size = bytesRead;
-                arg.roundup_size = bytesToRead;
-                arg.need_unload = allocated;
-
-                return buf;
-            }
-
-            else if (allocated)
-                delete[] buf;
-        }
+        //SEAD_WARNING(false, "arg.buffer is specified, but arg.buffer_size is zero\n");
+        return NULL;
     }
 
-return_fail:
-    return NULL;
+    FileHandle handle;
+    if (tryOpen(&handle, arg.path, FileDevice::cFileOpenFlag_ReadOnly, arg.div_size) == NULL)
+        return NULL;
+
+    u32 file_size = 0;
+    if (!tryGetFileSize(&file_size, &handle))
+        return NULL;
+
+    //SEAD_ASSERT(file_size != 0);
+
+    u32 buffer_size = arg.buffer_size;
+    if (buffer_size == 0)
+        buffer_size = Mathi::roundUpPow2(file_size, FileDevice::cBufferMinAlignment);
+
+    else if (buffer_size < file_size)
+    {
+        //SEAD_WARNING(false, "arg.buffer_size[%u] is smaller than file size[%u]\n", buffer_size, file_size);
+        return NULL;
+    }
+
+    u8* buffer = arg.buffer;
+    bool need_unload = false;
+
+    if (buffer == NULL)
+    {
+        buffer = new (arg.heap, Mathi::sign(arg.alignment) * Mathi::max(Mathi::abs(arg.alignment), FileDevice::cBufferMinAlignment)) u8[buffer_size];
+        need_unload = true;
+    }
+
+    u32 read_size = 0;
+    if (!tryRead(&read_size, &handle, buffer, buffer_size))
+    {
+        if (need_unload)
+            delete[] buffer;
+
+        return NULL;
+    }
+
+    if (!tryClose(&handle))
+    {
+        if (need_unload)
+            delete[] buffer;
+
+        return NULL;
+    }
+
+    arg.read_size = read_size;
+    arg.roundup_size = buffer_size;
+    arg.need_unload = need_unload;
+
+    return buffer;
 }
 
 void
@@ -133,6 +111,8 @@ FileDevice::doResolvePath_(
 
 bool FileDevice::isAvailable() const
 {
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
     if (!mPermission)
         return false;
 
@@ -141,6 +121,8 @@ bool FileDevice::isAvailable() const
 
 u8* FileDevice::tryLoad(LoadArg& arg)
 {
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
     if (!mPermission)
         return NULL;
 
@@ -149,18 +131,23 @@ u8* FileDevice::tryLoad(LoadArg& arg)
 
 FileDevice*
 FileDevice::tryOpen(
-    FileHandle* handle, const SafeString& path,
-    FileOpenFlag flag, u32 divSize
+    FileHandle* handle, const SafeString& filename,
+    FileOpenFlag flag, u32 div_size
 )
 {
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
     if (!mPermission)
         return NULL;
 
     if (handle == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "handle is null");
         return NULL;
+    }
 
-    setFileHandleDivSize_(handle, divSize);
-    FileDevice* device = doOpen_(handle, path, flag);
+    setFileHandleDivSize_(handle, div_size);
+    FileDevice* device = doOpen_(handle, filename, flag);
     setHandleBaseFileDevice_(handle, device);
     if (device != NULL)
         setHandleBaseOriginalFileDevice_(handle, this);
@@ -171,95 +158,129 @@ FileDevice::tryOpen(
 bool
 FileDevice::tryClose(FileHandle* handle)
 {
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
     if (!mPermission)
         return false;
 
     if (handle == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "handle is null");
         return false;
+    }
 
     if (!isMatchDevice_(handle))
+    {
+        //SEAD_ASSERT_MSG(false, "handle device miss match");
         return false;
+    }
 
-    bool closed = doClose_(handle);
-    if (closed)
+    bool success = doClose_(handle);
+    if (success)
     {
         setHandleBaseFileDevice_(handle, NULL);
         setHandleBaseOriginalFileDevice_(handle, NULL);
     }
 
-    return closed;
+    return success;
 }
 
 bool
 FileDevice::tryRead(
-    u32* bytesRead, FileHandle* handle,
-    u8* outBuffer, u32 bytesToRead
+    u32* read_size, FileHandle* handle,
+    u8* buf, u32 size
 )
 {
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
     if (!mPermission)
         return false;
 
     if (handle == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "handle is null");
         return false;
+    }
 
     if (!isMatchDevice_(handle))
+    {
+        //SEAD_ASSERT_MSG(false, "handle device miss match");
         return false;
+    }
 
-    if (outBuffer == NULL)
+    if (buf == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "buf is null");
         return false;
+    }
 
     if (handle->mDivSize == 0)
-        return doRead_(bytesRead, handle, outBuffer, bytesToRead);
+    {
+        bool success = doRead_(read_size, handle, buf, size);
+        //SEAD_ASSERT_MSG(read_size == NULL || *read_size <= size, "buffer overflow");
+        return success;
+    }
 
-    u32 totalReadSize = 0;
+    u32 total_read_size = 0;
 
     do
     {
-        u32 readSize = 0;
-        u32 size = (static_cast<s32>(bytesToRead) < handle->mDivSize) ? bytesToRead : handle->mDivSize;
+        u32 buf_size = Mathi::min(size, handle->mDivSize);
+        u32 tmp_read_size = 0;
 
-        if (!doRead_(&readSize, handle, outBuffer, size))
+        if (!doRead_(&tmp_read_size, handle, buf, buf_size))
         {
-            if (bytesRead != NULL)
-                *bytesRead = totalReadSize;
+            if (read_size != NULL)
+                *read_size = total_read_size;
 
             return false;
         }
 
-        totalReadSize += readSize;
-        if (readSize < size)
+        total_read_size += tmp_read_size;
+        if (tmp_read_size < buf_size)
             break;
 
-        outBuffer += readSize;
-        bytesToRead -= size;
+        buf += tmp_read_size;
+        size -= buf_size;
     }
-    while(bytesToRead != 0);
+    while (size != 0);
 
-    if (bytesRead != NULL)
-        *bytesRead = totalReadSize;
+    if (read_size != NULL)
+        *read_size = total_read_size;
 
     return true;
 }
 
 bool
 FileDevice::tryWrite(
-    u32* bytesWritten, FileHandle* handle,
-    const u8* inBuffer, u32 bytesToWrite
+    u32* write_size, FileHandle* handle,
+    const u8* buf, u32 size
 )
 {
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
     if (!mPermission)
         return false;
 
     if (handle == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "handle is null");
         return false;
+    }
 
-    if (inBuffer == NULL)
+    if (buf == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "buf is null");
         return false;
+    }
 
     if (!isMatchDevice_(handle))
+    {
+        //SEAD_ASSERT_MSG(false, "handle device miss match");
         return false;
+    }
 
-    return doWrite_(bytesWritten, handle, inBuffer, bytesToWrite);
+    return doWrite_(write_size, handle, buf, size);
 }
 
 bool
@@ -268,109 +289,156 @@ FileDevice::trySeek(
     FileDevice::SeekOrigin origin
 )
 {
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
     if (!mPermission)
         return false;
 
     if (handle == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "handle is null");
         return false;
+    }
 
     if (!isMatchDevice_(handle))
+    {
+        //SEAD_ASSERT_MSG(false, "handle device miss match");
         return false;
+    }
 
     return doSeek_(handle, offset, origin);
 }
 
 bool
 FileDevice::tryGetCurrentSeekPos(
-    u32* seekPos, FileHandle* handle
+    u32* pos, FileHandle* handle
 )
 {
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
     if (!mPermission)
         return false;
 
     if (handle == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "handle is null");
         return false;
+    }
 
     if (!isMatchDevice_(handle))
+    {
+        //SEAD_ASSERT_MSG(false, "handle device miss match");
         return false;
+    }
 
-    if (seekPos == NULL)
+    if (pos == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "pos is null");
         return false;
+    }
 
-    return doGetCurrentSeekPos_(seekPos, handle);
+    return doGetCurrentSeekPos_(pos, handle);
 }
 
 bool
 FileDevice::tryGetFileSize(
-    u32* fileSize, const SafeString& path
+    u32* size, const SafeString& path
 )
 {
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
     if (!mPermission)
         return false;
 
-    if (fileSize == NULL)
+    if (size == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "size is null");
         return false;
+    }
 
-    return doGetFileSize_(fileSize, path);
+    return doGetFileSize_(size, path);
 }
 
 bool
 FileDevice::tryGetFileSize(
-    u32* fileSize, FileHandle* handle
+    u32* size, FileHandle* handle
 )
 {
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
     if (!mPermission)
         return false;
 
     if (handle == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "handle is null");
         return false;
+    }
 
-    if (fileSize == NULL)
+    if (size == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "size is null");
         return false;
+    }
 
-    return doGetFileSize_(fileSize, handle);
+    return doGetFileSize_(size, handle);
 }
 
 bool
 FileDevice::tryIsExistFile(
-    bool* exists, const SafeString& path
+    bool* is_exist, const SafeString& path
 )
 {
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
     if (!mPermission)
         return false;
 
-    if (exists == NULL)
+    if (is_exist == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "is_exist is null");
         return false;
+    }
 
-    return doIsExistFile_(exists, path);
+    return doIsExistFile_(is_exist, path);
 }
 
 bool
 FileDevice::tryIsExistDirectory(
-    bool* exists, const SafeString& path
+    bool* is_exist, const SafeString& path
 )
 {
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
     if (!mPermission)
         return false;
 
-    if (exists == NULL)
+    if (is_exist == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "is_exist is null");
         return false;
+    }
 
-    return doIsExistDirectory_(exists, path);
+    return doIsExistDirectory_(is_exist, path);
 }
 
 FileDevice*
 FileDevice::tryOpenDirectory(
-    DirectoryHandle* handle, const SafeString& path
+    DirectoryHandle* handle, const SafeString& dirname
 )
 {
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
     if (!mPermission)
         return NULL;
 
     if (handle == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "handle is null");
         return NULL;
+    }
 
-    FileDevice* device = doOpenDirectory_(handle, path);
+    FileDevice* device = doOpenDirectory_(handle, dirname);
     setHandleBaseFileDevice_(handle, device);
     if (device != NULL)
         setHandleBaseOriginalFileDevice_(handle, this);
@@ -381,74 +449,95 @@ FileDevice::tryOpenDirectory(
 bool
 FileDevice::tryCloseDirectory(DirectoryHandle* handle)
 {
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
     if (!mPermission)
         return false;
 
     if (handle == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "handle is null");
         return false;
+    }
 
     if (!isMatchDevice_(handle))
+    {
+        //SEAD_ASSERT_MSG(false, "handle device miss match");
         return false;
+    }
 
-    bool closed = doCloseDirectory_(handle);
-    if (closed)
+    bool success = doCloseDirectory_(handle);
+    if (success)
     {
         setHandleBaseFileDevice_(handle, NULL);
         setHandleBaseOriginalFileDevice_(handle, NULL);
     }
 
-    return closed;
+    return success;
 }
 
 bool
 FileDevice::tryReadDirectory(
-    u32* entriesRead, DirectoryHandle* handle,
-    DirectoryEntry* entries, u32 entriesToRead
+    u32* read_num, DirectoryHandle* handle,
+    DirectoryEntry* entry, u32 num
 )
 {
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
     if (!mPermission)
         return false;
 
     if (handle == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "handle is null");
         return false;
+    }
 
     if (!isMatchDevice_(handle))
+    {
+        //SEAD_ASSERT_MSG(false, "handle device miss match");
         return false;
+    }
 
-    u32 readCount = 0;
-    bool success = doReadDirectory_(&readCount, handle, entries, entriesToRead);
+    u32 tmp_read_num = 0;
+    bool success = doReadDirectory_(&tmp_read_num, handle, entry, num);
 
-    if (entriesRead != NULL)
-        *entriesRead = readCount;
+    if (read_num != NULL)
+        *read_num = tmp_read_num;
 
-    if (readCount > entriesToRead)
+    if (tmp_read_num > num)
+    {
+        //SEAD_ASSERT_MSG(false, "buffer overflow");
         return false;
+    }
 
     return success;
 }
 
 bool
 FileDevice::tryMakeDirectory(
-    const SafeString& path, u32 _
+    const SafeString& path, u32 permission
 )
 {
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
     if (!mPermission)
         return false;
 
-    return doMakeDirectory_(path, _);
+    return doMakeDirectory_(path, permission);
 }
 
-s32 FileDevice::getLastRawError() const
+RawErrorCode FileDevice::getLastRawError() const
 {
     return doGetLastRawError_();
 }
 
 void
 FileDevice::setFileHandleDivSize_(
-    FileHandle* handle, u32 divSize
+    FileHandle* handle, u32 div_size
 ) const
 {
-    handle->mDivSize = divSize;
+    handle->mDivSize = div_size;
 }
 
 void
@@ -467,7 +556,7 @@ FileDevice::setHandleBaseOriginalFileDevice_(
     handle->mOriginalDevice = device;
 }
 
-u8*
+HandleBuffer&
 FileDevice::getHandleBaseHandleBuffer_(
     HandleBase* handle
 ) const

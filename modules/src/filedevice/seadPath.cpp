@@ -3,30 +3,32 @@
 
 namespace sead {
 
-bool Path::getDriveName(BufferedSafeString* driveName, const SafeString& path)
+bool Path::getDriveName(BufferedSafeString* dst, const SafeString& src)
 {
-    //SEAD_ASSERT_MSG(driveName, "destination buffer is null");
+    //SEAD_ASSERT_MSG(dst, "destination buffer is null");
 
-    driveName->trim(0);
+    dst->trim(0);
 
-    s32 index = path.findIndex(":");
+    s32 index = src.findIndex(":");
     if (index == -1)
         return false;
 
-    driveName->copy(path, index);
+    dst->copy(src, index);
     return true;
 }
 
-void Path::getPathExceptDrive(BufferedSafeString* pathNoDrive, const SafeString& path)
+void Path::getPathExceptDrive(BufferedSafeString* dst, const SafeString& src)
 {
-    pathNoDrive->trim(0);
+    //SEAD_ASSERT_MSG(dst, "destination buffer is null");
 
-    s32 index = path.findIndex("://");
+    dst->trim(0);
+
+    s32 index = src.findIndex("://");
     if (index != -1)
-        pathNoDrive->copyAt(0, path.getPart(index + 3));
+        dst->copyAt(0, src.getPart(index + 3));
 
     else
-        pathNoDrive->copyAt(0, path);
+        dst->copyAt(0, src);
 }
 
 } // namespace sead

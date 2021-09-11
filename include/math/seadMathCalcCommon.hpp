@@ -8,6 +8,20 @@ namespace sead {
 
 template <>
 inline s32
+MathCalcCommon<s32>::abs(s32 t)
+{
+    return (t ^ t >> 31) - (t >> 31);
+}
+
+template <>
+inline u32
+MathCalcCommon<u32>::abs(u32 t)
+{
+    return t;
+}
+
+template <>
+inline s32
 MathCalcCommon<s32>::roundUpPow2(s32 val, s32 base)
 {
     //SEAD_ASSERT_MSG(val >= 0 && (base - 1u & base) == 0, "illegal param[val:%d, base:%d]", val, base);

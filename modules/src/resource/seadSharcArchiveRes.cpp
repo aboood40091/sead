@@ -91,18 +91,20 @@ SharcArchiveRes::getFileFastImpl_(
     s32 entry_id, FileInfo* file_info
 )
 {
-    if (entry_id < 0 || entry_id >= mFATEntrys.mSize)
+    if (entry_id < 0 || entry_id >= mFATEntrys.getSize())
         return NULL;
 
-    u32 start = mFATEntrys[entry_id].data_start_offset;
+    u32 start = mFATEntrys.unsafeGet(entry_id)->data_start_offset;
 
     if (file_info != NULL)
     {
-        u32 end = mFATEntrys[entry_id].data_end_offset;
+        u32 end = mFATEntrys.unsafeGet(entry_id)->data_end_offset;
         if (start > end)
             return NULL;
 
         u32 length = end - start;
+
+        //SEAD_ASSERT(file_info);
 
         file_info->mStartOffset = start;
         file_info->mLength = length;
@@ -119,13 +121,13 @@ SharcArchiveRes::convertPathToEntryIDImpl_(
     u32 hash = calcHash32(file_path, mFATBlockHeader->hash_key);
 
     s32 start = 0;
-    s32 end = mFATEntrys.mSize;
+    s32 end = mFATEntrys.getSize();
 
-    s32 id = binarySearch_(hash, mFATEntrys.mBuffer, start, end);
+    s32 id = binarySearch_(hash, mFATEntrys.getBufferPtr(), start, end);
     if (id == -1)
         return -1;
 
-    u32 offset = mFATEntrys[id].name_offset;
+    u32 offset = mFATEntrys.unsafeGet(id)->name_offset;
     if (offset != 0)
     {
         id -= (offset >> 24) - 1;
@@ -186,9 +188,9 @@ SharcArchiveRes::readDirectoryImpl_(
     {
         u32 id = *handle + count;
 
-        u32 offset = mFATEntrys[id].name_offset;
+        u32 offset = mFATEntrys.unsafeGet(id)->name_offset;
         if (offset == 0)
-            entry[count].name.format("%08x", mFATEntrys[id].hash);
+            entry[count].name.format("%08x", mFATEntrys.unsafeGet(id)->hash);
 
         else
         {

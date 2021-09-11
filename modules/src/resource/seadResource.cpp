@@ -28,7 +28,7 @@ DirectResource::DirectResource()
 
 DirectResource::~DirectResource()
 {
-    if (mSettingFlag.mBits & 1)
+    if (mSettingFlag.isOnBit(0))
         delete[] mRawData;
 }
 
@@ -44,17 +44,15 @@ void DirectResource::doCreate_(u8*, u32, Heap*)
 void DirectResource::create(u8* buffer, u32 bufferSize, u32 allocSize, bool allocated, Heap* heap)
 {
     if (mRawData != NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "read twice");
         return;
+    }
 
     mRawSize = bufferSize;
     mBufferSize = allocSize;
     mRawData = buffer;
-
-    if (allocated)
-        mSettingFlag.mBits |= 1;
-
-    else
-        mSettingFlag.mBits &= ~1;
+    mSettingFlag.changeBit(0, allocated);
 
     return doCreate_(buffer, bufferSize, heap);
 }
@@ -69,12 +67,16 @@ Resource* DirectResourceFactoryBase::create(const ResourceMgr::CreateArg& create
 {
     DirectResource* resource = newResource_(createArg.heap, createArg.alignment);
     if (resource == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "resource new failed.");
         return NULL;
+    }
 
-    size_t bufferPtr = reinterpret_cast<size_t>(createArg.buffer);
+    uintptr_t bufferPtr = reinterpret_cast<uintptr_t>(createArg.buffer);
     s32 alignment = resource->getLoadDataAlignment();
     if (bufferPtr % alignment != 0)
     {
+        //SEAD_ASSERT_MSG(false, "buffer alignment invalid: %p, %d", createArg.buffer, alignment);
         delete resource;
         return NULL;
     }
@@ -87,7 +89,10 @@ Resource* DirectResourceFactoryBase::tryCreate(const ResourceMgr::LoadArg& loadA
 {
     DirectResource* resource = newResource_(loadArg.instance_heap, loadArg.instance_alignment);
     if (resource == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "resource new failed.");
         return NULL;
+    }
 
     FileDevice::LoadArg fileLoadArg;
     u8* data;
@@ -127,7 +132,10 @@ DirectResourceFactoryBase::tryCreateWithDecomp(
 {
     DirectResource* resource = newResource_(loadArg.instance_heap, loadArg.instance_alignment);
     if (resource == NULL)
+    {
+        //SEAD_ASSERT_MSG(false, "resource new failed.");
         return NULL;
+    }
 
     u32 outSize = 0;
     u32 outAllocSize = 0;

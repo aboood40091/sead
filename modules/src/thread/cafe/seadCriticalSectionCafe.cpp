@@ -4,9 +4,9 @@ namespace sead {
 
 CriticalSection::CriticalSection()
     : IDisposer()
-    , mCriticalSectionInner()
+    , mMutexInner()
 {
-    OSInitMutex(&mCriticalSectionInner);
+    OSInitMutex(&mMutexInner);
 }
 
 CriticalSection::~CriticalSection()
@@ -15,17 +15,17 @@ CriticalSection::~CriticalSection()
 
 void CriticalSection::lock()
 {
-    OSLockMutex(&mCriticalSectionInner);
+    OSLockMutex(&mMutexInner);
 }
 
 bool CriticalSection::tryLock()
 {
-    return OSTryLockMutex(&mCriticalSectionInner);
+    return OSTryLockMutex(&mMutexInner);
 }
 
 void CriticalSection::unlock()
 {
-    OSUnlockMutex(&mCriticalSectionInner);
+    OSUnlockMutex(&mMutexInner);
 }
 
 } // namespace sead

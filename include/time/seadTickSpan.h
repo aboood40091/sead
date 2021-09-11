@@ -8,12 +8,20 @@ namespace sead {
 class TickSpan
 {
 public:
-    TickSpan(s64 span=0)
-        : mSpan(span)
+    TickSpan()
+        : mSpan(0)
     {
     }
 
+    TickSpan(s64 tick)
+        : mSpan(tick)
+    {
+    }
+
+private:
     s64 mSpan;
+
+    static const s64 cFrequency;
 };
 
 } // namespace sead
