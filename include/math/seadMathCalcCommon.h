@@ -40,7 +40,7 @@ public:
     static T neg(T);
     static T inv(T t);
 
-    static inline T sign(T t)
+    static T sign(T t)
     {
         if (t >= 0) return  1;
         else        return -1;
@@ -85,13 +85,13 @@ public:
         return std::abs(t);
     }
 
-    static inline T max(T a, T b)
+    static T max(T a, T b)
     {
         if (a < b)  return b;
         else        return a;
     }
 
-    static inline T min(T a, T b)
+    static T min(T a, T b)
     {
         if (a < b) return a;
         else       return b;
@@ -100,16 +100,36 @@ public:
     static T max3(T, T, T);
     static T min3(T, T, T);
 
-    static inline T deg2rad(T a)
+    static T deg2rad(T a)
     {
         return static_cast<T>(a * (M_PI / 180.0));
     }
 
-    static T rad2deg(T);
-    static u32 deg2idx(T);
-    static u32 rad2idx(T);
-    static T idx2deg(u32);
-    static T idx2rad(u32 a);
+    static T rad2deg(T a)
+    {
+        return static_cast<T>(a * (180.0 / M_PI));
+    }
+
+    static u32 deg2idx(T a)
+    {
+        return static_cast<u32>(a * (0x80000000 / 180.0));
+    }
+
+    static u32 rad2idx(T a)
+    {
+        return static_cast<u32>(a * (0x80000000 / M_PI));
+    }
+
+    static T idx2deg(u32 a)
+    {
+        return static_cast<T>(a * (180.0 / 0x80000000));
+    }
+
+    static T idx2rad(u32 a)
+    {
+        return static_cast<T>(a * (M_PI / 0x80000000));
+    }
+
     static T roundAngle(T);
     static T angleDist(T, T);
     static T random();
@@ -152,6 +172,48 @@ public:
     static const ExpSample       cExpTbl[ 32 + 1];
     static const LogSample       cLogTbl[256 + 1];
 };
+
+template <>
+inline
+f32 MathCalcCommon<f32>::deg2rad(f32 a)
+{
+    return a * (pi() / 180.0f);
+}
+
+template <>
+inline
+f32 MathCalcCommon<f32>::rad2deg(f32 a)
+{
+    return a * (180.0f / pi());
+}
+
+template <>
+inline
+u32 MathCalcCommon<f32>::deg2idx(f32 a)
+{
+    return static_cast<u32>(a * (0x80000000 / 180.0f));
+}
+
+template <>
+inline
+u32 MathCalcCommon<f32>::rad2idx(f32 a)
+{
+    return static_cast<u32>(a * (0x80000000 / pi()));
+}
+
+template <>
+inline
+f32 MathCalcCommon<f32>::idx2deg(u32 a)
+{
+    return a * (180.0f / 0x80000000);
+}
+
+template <>
+inline
+f32 MathCalcCommon<f32>::idx2rad(u32 a)
+{
+    return a * (pi() / 0x80000000);
+}
 
 // For convenience
 typedef MathCalcCommon<s32> Mathi;

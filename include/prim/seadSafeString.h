@@ -345,7 +345,7 @@ public:
     {
     }
 
-    explicit WFixedSafeString(const SafeString16& rhs)
+    explicit WFixedSafeString(const WSafeString& rhs)
         : FixedSafeStringBase<char16, N>(rhs)
     {
     }
@@ -362,7 +362,7 @@ public:
         copy(rhs);
     }
 
-    WFixedSafeString<N>& operator=(const SafeString16& rhs)
+    WFixedSafeString<N>& operator=(const WSafeString& rhs)
     {
         copy(rhs);
     }

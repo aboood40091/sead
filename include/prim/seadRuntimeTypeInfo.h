@@ -1,6 +1,8 @@
 #ifndef SEAD_RUNTIMETYPEINFO_H_
 #define SEAD_RUNTIMETYPEINFO_H_
 
+#include <basis/seadTypes.h>
+
 namespace sead { namespace RuntimeTypeInfo {
 
 struct Interface
