@@ -13,8 +13,7 @@
 
 namespace sead {
 
-FileDeviceMgr* FileDeviceMgr::sInstance = NULL;
-FileDeviceMgr::SingletonDisposer_* FileDeviceMgr::SingletonDisposer_::sStaticDisposer = NULL;
+SEAD_SINGLETON_DISPOSER_IMPL(FileDeviceMgr)
 
 FileDeviceMgr::FileDeviceMgr()
     : mDeviceList()
@@ -73,9 +72,6 @@ FileDeviceMgr::~FileDeviceMgr()
     #error "Unknown platform"
 #endif // cafe
 }
-
-SEAD_CREATE_SINGLETON_INSTANCE(FileDeviceMgr)
-SEAD_DELETE_SINGLETON_INSTANCE(FileDeviceMgr)
 
 void FileDeviceMgr::traceFilePath(const SafeString& path) const
 {

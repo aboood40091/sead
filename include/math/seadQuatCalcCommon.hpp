@@ -19,7 +19,7 @@ bool QuatCalcCommon<T>::makeVectorRotation(Base& q, const Vec3& from, const Vec3
     cross.setCross(*static_cast<const Vector3<T>*>(&from),     *static_cast<const Vector3<T>*>(&to));
     const T dot =   static_cast<const Vector3<T>*>(&from)->dot(*static_cast<const Vector3<T>*>(&to)) + 1;
 
-    if (dot <= std::numeric_limits<T>::epsilon())
+    if (dot <= MathCalcCommon<T>::epsilon())
     {
         makeUnit(q);
         return false;

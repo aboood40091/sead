@@ -10,8 +10,7 @@
 
 namespace sead {
 
-PrimitiveRenderer* PrimitiveRenderer::sInstance = NULL;
-PrimitiveRenderer::SingletonDisposer_* PrimitiveRenderer::SingletonDisposer_::sStaticDisposer = NULL;
+SEAD_SINGLETON_DISPOSER_IMPL(PrimitiveRenderer)
 
 PrimitiveRenderer::PrimitiveRenderer()
     : IDisposer()
@@ -19,9 +18,6 @@ PrimitiveRenderer::PrimitiveRenderer()
     , mModelMtx(Matrix34f::ident)
 {
 }
-
-SEAD_CREATE_SINGLETON_INSTANCE(PrimitiveRenderer)
-SEAD_DELETE_SINGLETON_INSTANCE(PrimitiveRenderer)
 
 void PrimitiveRenderer::doPrepare_(Heap* heap)
 {

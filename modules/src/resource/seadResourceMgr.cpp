@@ -6,8 +6,7 @@
 
 namespace sead {
 
-ResourceMgr* ResourceMgr::sInstance = NULL;
-ResourceMgr::SingletonDisposer_* ResourceMgr::SingletonDisposer_::sStaticDisposer = NULL;
+SEAD_SINGLETON_DISPOSER_IMPL(ResourceMgr)
 
 ResourceMgr::ResourceMgr()
     : mFactoryList()
@@ -33,9 +32,6 @@ ResourceMgr::~ResourceMgr()
     delete mNullResourceFactory;
     mNullResourceFactory = NULL;
 }
-
-SEAD_CREATE_SINGLETON_INSTANCE(ResourceMgr)
-SEAD_DELETE_SINGLETON_INSTANCE(ResourceMgr)
 
 void ResourceMgr::registerFactory(ResourceFactory* factory, const SafeString& name)
 {
