@@ -15,9 +15,9 @@ QuatCalcCommon<T>::makeUnit(Base& q)
 template <typename T>
 bool QuatCalcCommon<T>::makeVectorRotation(Base& q, const Vec3& from, const Vec3& to)
 {
-    Vector3<T> cross;
-    cross.setCross(*static_cast<const Vector3<T>*>(&from),     *static_cast<const Vector3<T>*>(&to));
-    const T dot =   static_cast<const Vector3<T>*>(&from)->dot(*static_cast<const Vector3<T>*>(&to)) + 1;
+    Vec3 cross;
+    Vector3CalcCommon<T>::cross(cross, from, to);
+    const T dot = Vector3CalcCommon<T>::dot(from, to) + 1;
 
     if (dot <= MathCalcCommon<T>::epsilon())
     {

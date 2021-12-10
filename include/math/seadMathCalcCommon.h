@@ -3,8 +3,6 @@
 
 #include <basis/seadTypes.h>
 
-#include <cstdlib>
-
 namespace sead {
 
 template <typename T>
@@ -118,7 +116,8 @@ public:
 
     static T abs(T t)
     {
-        return std::abs(t);
+        if (x > 0) return  x;
+        else       return -x;
     }
 
     static T max(T a, T b)
