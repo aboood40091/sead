@@ -40,7 +40,7 @@ public:
     bool isOnAll(T mask) const { return (mBits & mask) == mask; }
     bool isOff(T mask) const { return !isOn(mask); }
 
-    T getMask(T mask) const { return m_Bits & mask; }
+    T getMask(T mask) const { return mBits & mask; }
 
     static T makeMask(s32 bit)
     {

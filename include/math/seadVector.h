@@ -17,10 +17,10 @@ public:
     {
     }
 
-    Vector2(const Self& v)
-    {
-        operator=(v);
-    }
+    //Vector2(const Self& v)
+    //{
+    //    operator=(v);
+    //}
 
     Vector2(T x_, T y_);
 
@@ -51,10 +51,10 @@ public:
     {
     }
 
-    Vector3(const Self& v)
-    {
-        operator=(v);
-    }
+    //Vector3(const Self& v)
+    //{
+    //    operator=(v);
+    //}
 
     Vector3(T x_, T y_, T z_);
 
@@ -95,10 +95,10 @@ public:
     {
     }
 
-    Vector4(const Self& v)
-    {
-        operator=(v);
-    }
+    //Vector4(const Self& v)
+    //{
+    //    operator=(v);
+    //}
 
     Vector4(T x_, T y_, T z_, T w_);
 

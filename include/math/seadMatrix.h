@@ -29,10 +29,10 @@ public:
     {
     }
 
-    Matrix22(const Self& n)
-    {
-        operator=(n);
-    }
+    //Matrix22(const Self& n)
+    //{
+    //    operator=(n);
+    //}
 
     Matrix22(
         T a00, T a01,
@@ -71,10 +71,10 @@ public:
     {
     }
 
-    Matrix33(const Self& n)
-    {
-        operator=(n);
-    }
+    //Matrix33(const Self& n)
+    //{
+    //    operator=(n);
+    //}
 
     Matrix33(
         T a00, T a01, T a02,
@@ -131,10 +131,10 @@ public:
     {
     }
 
-    Matrix34(const Self& n)
-    {
-        operator=(n);
-    }
+    //Matrix34(const Self& n)
+    //{
+    //    operator=(n);
+    //}
 
     Matrix34(
         T a00, T a01, T a02, T a03,
@@ -212,10 +212,10 @@ public:
     {
     }
 
-    Matrix44(const Self& n)
-    {
-        operator=(n);
-    }
+    //Matrix44(const Self& n)
+    //{
+    //    operator=(n);
+    //}
 
     Matrix44(
         T a00, T a01, T a02, T a03,

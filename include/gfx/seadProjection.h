@@ -1,27 +1,12 @@
 #ifndef SEAD_PROJECTION_H_
 #define SEAD_PROJECTION_H_
 
+#include <gfx/seadGraphics.h>
 #include <math/seadMatrix.h>
 #include <math/seadVector.h>
 #include <prim/seadRuntimeTypeInfo.h>
 
 namespace sead {
-
-class Graphics
-{
-public:
-    enum DevicePosture
-    {
-        cDevicePosture_Same = 0,
-        cDevicePosture_RotateRight = 1,
-        cDevicePosture_RotateLeft = 2,
-        cDevicePosture_RotateHalfAround = 3,
-        cDevicePosture_FlipX = 4,
-        cDevicePosture_FlipY = 5,
-        cDevicePosture_FlipXY = 3,
-        cDevicePosture_Invalid = 4,
-    };
-};
 
 class Projection
 {
