@@ -32,10 +32,17 @@ public:
         a = _a;
     }
 
-    f32 r;
-    f32 g;
-    f32 b;
-    f32 a;
+    union
+    {
+        struct
+        {
+            f32 r;
+            f32 g;
+            f32 b;
+            f32 a;
+        };
+        f32 c[4];
+    };
 
     static const f32 cElementMin = 0.0f;
     static const f32 cElementMax = 1.0f;
