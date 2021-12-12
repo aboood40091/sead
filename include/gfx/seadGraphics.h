@@ -78,7 +78,6 @@ public:
         cBlendEquation_Min        = GX2_BLEND_COMBINE_MIN,
         cBlendEquation_Max        = GX2_BLEND_COMBINE_MAX,
         cBlendEquation_ReverseSub = GX2_BLEND_COMBINE_DST_MINUS_SRC
-
 #endif // cafe
     };
 

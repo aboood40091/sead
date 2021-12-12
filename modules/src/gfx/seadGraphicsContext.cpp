@@ -40,7 +40,7 @@ GraphicsContext::GraphicsContext()
     , mPolygonModeBack(Graphics::cPolygonMode_Fill)
     , mPolygonOffsetFrontEnable(false)
     , mPolygonOffsetBackEnable(false)
-    , mPolylineOffsetEnable(false)
+    , mPolygonOffsetPointLineEnable(false)
 #endif // cafe
 {
 }

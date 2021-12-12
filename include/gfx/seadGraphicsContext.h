@@ -22,6 +22,12 @@ public:
     void applyBlendConstantColor() const;
     void applyCullingAndPolygonModeAndPolygonOffset() const;
 
+    void setDepthEnable(bool test_enable, bool write_enable)
+    {
+        setDepthTestEnable(test_enable);
+        setDepthWriteEnable(write_enable);
+    }
+
     void setDepthTestEnable(bool test_enable)
     {
         mDepthTestEnable = test_enable;
@@ -42,23 +48,77 @@ public:
         mCullingMode = mode;
     }
 
-    void setBlendEnable(bool enable)
+    void setBlendEnable(bool blend)
     {
-        mBlendEnable = enable;
+        mBlendEnable = blend;
     }
 
-    void setBlendFactor(Graphics::BlendFactor src_factor_rgb, Graphics::BlendFactor dst_factor_rgb, Graphics::BlendFactor src_factor_a, Graphics::BlendFactor dst_factor_a)
+    void setBlendFactor(Graphics::BlendFactor src_factor, Graphics::BlendFactor dst_factor)
     {
-        mBlendFactorSrcRGB = src_factor_rgb;
-        mBlendFactorDstRGB = dst_factor_rgb;
-        mBlendFactorSrcA = src_factor_a;
-        mBlendFactorDstA = dst_factor_a;
+        setBlendFactorSrc(src_factor);
+        setBlendFactorDst(dst_factor);
     }
 
-    void setBlendEquation(Graphics::BlendEquation equation_rgb, Graphics::BlendEquation equation_a)
+    void setBlendFactorSeparate(Graphics::BlendFactor src_factor_rgb, Graphics::BlendFactor dst_factor_rgb, Graphics::BlendFactor src_factor_a, Graphics::BlendFactor dst_factor_a)
     {
-        mBlendEquationRGB = equation_rgb;
-        mBlendEquationA = equation_a;
+        setBlendFactorSrcRGB(src_factor_rgb);
+        setBlendFactorDstRGB(dst_factor_rgb);
+        setBlendFactorSrcAlpha(src_factor_a);
+        setBlendFactorDstAlpha(dst_factor_a);
+    }
+
+    void setBlendFactorSrc(Graphics::BlendFactor factor)
+    {
+        setBlendFactorSrcRGB(factor);
+        setBlendFactorSrcAlpha(factor);
+    }
+
+    void setBlendFactorDst(Graphics::BlendFactor factor)
+    {
+        setBlendFactorDstRGB(factor);
+        setBlendFactorDstAlpha(factor);
+    }
+
+    void setBlendFactorSrcRGB(Graphics::BlendFactor factor)
+    {
+        mBlendFactorSrcRGB = factor;
+    }
+
+    void setBlendFactorSrcAlpha(Graphics::BlendFactor factor)
+    {
+        mBlendFactorSrcA = factor;
+    }
+
+    void setBlendFactorDstRGB(Graphics::BlendFactor factor)
+    {
+        mBlendFactorDstRGB = factor;
+    }
+
+    void setBlendFactorDstAlpha(Graphics::BlendFactor factor)
+    {
+        mBlendFactorDstA = factor;
+    }
+
+    void setBlendEquation(Graphics::BlendEquation equation)
+    {
+        setBlendEquationRGB(equation);
+        setBlendEquationAlpha(equation);
+    }
+
+    void setBlendEquationSeparate(Graphics::BlendEquation equation_rgb, Graphics::BlendEquation equation_a)
+    {
+        setBlendEquationRGB(equation_rgb);
+        setBlendEquationAlpha(equation_a);
+    }
+
+    void setBlendEquationRGB(Graphics::BlendEquation equation)
+    {
+        mBlendEquationRGB = equation;
+    }
+
+    void setBlendEquationAlpha(Graphics::BlendEquation equation)
+    {
+        mBlendEquationA = equation;
     }
 
     void setBlendConstantColor(const Color4f& color)
@@ -112,12 +172,177 @@ public:
 #endif // cafe
     }
 
-    void setPolygonOffsetEnable(bool front, bool back, bool line)
+    void setPolygonOffsetEnable(bool fill_front_enable, bool fill_back_enable, bool point_line_enable)
     {
 #ifdef cafe
-        mPolygonOffsetFrontEnable = front;
-        mPolygonOffsetBackEnable = back;
-        mPolylineOffsetEnable = line;
+        mPolygonOffsetFrontEnable = fill_front_enable;
+        mPolygonOffsetBackEnable = fill_back_enable;
+        mPolygonOffsetPointLineEnable = point_line_enable;
+#endif // cafe
+    }
+
+    bool getDepthTestEnable() const
+    {
+        return mDepthTestEnable;
+    }
+
+    bool getDepthWriteEnable() const
+    {
+        return mDepthWriteEnable;
+    }
+
+    Graphics::DepthFunc getDepthFunc() const
+    {
+        return mDepthFunc;
+    }
+
+    Graphics::CullingMode getCullingMode() const
+    {
+        return mCullingMode;
+    }
+
+    bool getBlendEnable() const
+    {
+        return mBlendEnable;
+    }
+
+    Graphics::BlendFactor getBlendFactorSrcRGB() const
+    {
+        return mBlendFactorSrcRGB;
+    }
+
+    Graphics::BlendFactor getBlendFactorSrcAlpha() const
+    {
+        return mBlendFactorSrcA;
+    }
+
+    Graphics::BlendFactor getBlendFactorDstRGB() const
+    {
+        return mBlendFactorDstRGB;
+    }
+
+    Graphics::BlendFactor getBlendFactorDstAlpha() const
+    {
+        return mBlendFactorDstA;
+    }
+
+    Graphics::BlendEquation getBlendEquationRGB() const
+    {
+        return mBlendEquationRGB;
+    }
+
+    Graphics::BlendEquation getBlendEquationAlpha() const
+    {
+        return mBlendEquationA;
+    }
+
+    const Color4f& getBlendConstantColor() const
+    {
+        return mBlendConstantColor;
+    }
+
+    bool getAlphaTestEnable() const
+    {
+        return mAlphaTestEnable;
+    }
+
+    Graphics::AlphaFunc getAlphaTestFunc() const
+    {
+        return mAlphaTestFunc;
+    }
+
+    f32 getAlphaTestRef() const
+    {
+        return mAlphaTestRef;
+    }
+
+    bool getColorMaskR() const
+    {
+        return mColorMaskR;
+    }
+
+    bool getColorMaskG() const
+    {
+        return mColorMaskG;
+    }
+
+    bool getColorMaskB() const
+    {
+        return mColorMaskB;
+    }
+
+    bool getColorMaskA() const
+    {
+        return mColorMaskA;
+    }
+
+    bool getStencilTestEnable() const
+    {
+        return mStencilTestEnable;
+    }
+
+    Graphics::StencilFunc getStencilTestFunc() const
+    {
+        return mStencilTestFunc;
+    }
+
+    s32 getStencilTestRef() const
+    {
+        return mStencilTestRef;
+    }
+
+    u32 getStencilTestMask() const
+    {
+        return mStencilTestMask;
+    }
+
+    Graphics::StencilOp getStencilTestOpFail() const
+    {
+        return mStencilOpFail;
+    }
+
+    Graphics::StencilOp getStencilTestOpZFail() const
+    {
+        return mStencilOpZFail;
+    }
+
+    Graphics::StencilOp getStencilTestOpZPass() const
+    {
+        return mStencilOpZPass;
+    }
+
+    Graphics::PolygonMode getPolygonModeFront() const
+    {
+#ifdef cafe
+        return mPolygonModeFront;
+#endif // cafe
+    }
+
+    Graphics::PolygonMode getPolygonModeBack() const
+    {
+#ifdef cafe
+        return mPolygonModeBack;
+#endif // cafe
+    }
+
+    bool getPolygonOffsetFrontEnable() const
+    {
+#ifdef cafe
+        return mPolygonOffsetFrontEnable;
+#endif // cafe
+    }
+
+    bool getPolygonOffsetBackEnable() const
+    {
+#ifdef cafe
+        return mPolygonOffsetBackEnable;
+#endif // cafe
+    }
+
+    bool getPolygonOffsetPointLineEnable() const
+    {
+#ifdef cafe
+        return mPolygonOffsetPointLineEnable;
 #endif // cafe
     }
 
@@ -153,7 +378,7 @@ private:
     Graphics::PolygonMode mPolygonModeBack;
     bool mPolygonOffsetFrontEnable;
     bool mPolygonOffsetBackEnable;
-    bool mPolylineOffsetEnable;
+    bool mPolygonOffsetPointLineEnable;
 #endif // cafe
 };
 static_assert(sizeof(GraphicsContext) == 0x74, "sead::GraphicsContext size mismatch");
