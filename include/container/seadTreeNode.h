@@ -7,7 +7,7 @@ namespace sead {
 
 class TreeNode
 {
-  public:
+public:
     TreeNode();
 
     void clearLinks();
@@ -38,20 +38,29 @@ template <typename T>
 class TTreeNode : public TreeNode
 {
 public:
-    TTreeNode();
-    TTreeNode(T);
+    TTreeNode()
+        : TreeNode()
+        , mData(NULL)
+    {
+    }
+
+    TTreeNode(T ptr)
+        : TreeNode()
+        , mData(ptr)
+    {
+    }
 
     TTreeNode<T>* parent() const { return static_cast<TTreeNode<T>*>(mParent); }
     TTreeNode<T>* child() const { return static_cast<TTreeNode<T>*>(mChild); }
     TTreeNode<T>* next() const { return static_cast<TTreeNode<T>*>(mNext); }
     TTreeNode<T>* prev() const { return static_cast<TTreeNode<T>*>(mPrev); }
-    TTreeNode<T>* findRoot();
-    const TTreeNode<T>* findRoot() const;
-    void pushBackSibling(TTreeNode<T>*);
-    void pushBackChild(TTreeNode<T>*);
-    void pushFrontChild(TTreeNode<T>*);
-    void insertBeforeSelf(TTreeNode<T>*);
-    void insertAfterSelf(TTreeNode<T>*);
+    TTreeNode<T>* findRoot() { return static_cast<TTreeNode<T>*>(TreeNode::findRoot()); }
+    const TTreeNode<T>* findRoot() const { return static_cast<TTreeNode<T>*>(TreeNode::findRoot()); }
+    void pushBackSibling(TTreeNode<T>* o) { TreeNode::pushBackSibling(o); }
+    void pushBackChild(TTreeNode<T>* o) { TreeNode::pushBackChild(o); }
+    void pushFrontChild(TTreeNode<T>* o) { TreeNode::pushFrontChild(o); }
+    void insertBeforeSelf(TTreeNode<T>* o) { TreeNode::insertBeforeSelf(o); }
+    void insertAfterSelf(TTreeNode<T>* o) { TreeNode::insertAfterSelf(o); }
     T& val() { return mData; }
     const T& val() const { return mData; }
 
