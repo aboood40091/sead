@@ -18,8 +18,8 @@ class TreeNode
     void pushFrontChild(TreeNode* n);
     void insertBeforeSelf(TreeNode* n);
     void insertAfterSelf(TreeNode* n);
-    bool isRoot() const;
-    bool isLeaf() const;
+    bool isRoot() const { return mParent == NULL; }
+    bool isLeaf() const { return mChild == NULL; }
     const TreeNode* findRoot() const;
     TreeNode* findRoot();
     s32 countChildren() const;
