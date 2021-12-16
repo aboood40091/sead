@@ -2,6 +2,11 @@
 
 namespace sead {
 
+TreeNode::TreeNode()
+{
+    clearLinks();
+}
+
 void TreeNode::clearLinks()
 {
     mParent = mChild = mNext = mPrev = NULL;
@@ -44,6 +49,19 @@ void TreeNode::detachSubTree()
             mNext = NULL;
         }
     }
+}
+
+void TreeNode::pushBackSibling(TreeNode* n)
+{
+    n->detachSubTree();
+
+    TreeNode* node = this;
+    while (node->mNext != NULL)
+        node = node->mNext;
+
+    node->mNext = n;
+    n->mPrev = node;
+    n->mParent = node->mParent;
 }
 
 void TreeNode::clearChildLinksRecursively_()

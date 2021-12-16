@@ -13,11 +13,11 @@ class TreeNode
     void clearLinks();
     void detachAll();
     void detachSubTree();
-    void pushBackSibling(TreeNode*);
-    void pushBackChild(TreeNode*);
-    void pushFrontChild(TreeNode*);
-    void insertBeforeSelf(TreeNode*);
-    void insertAfterSelf(TreeNode*);
+    void pushBackSibling(TreeNode* n);
+    void pushBackChild(TreeNode* n);
+    void pushFrontChild(TreeNode* n);
+    void insertBeforeSelf(TreeNode* n);
+    void insertAfterSelf(TreeNode* n);
     bool isRoot() const;
     bool isLeaf() const;
     const TreeNode* findRoot() const;
