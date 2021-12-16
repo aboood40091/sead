@@ -1,7 +1,8 @@
 #ifndef SEAD_THREAD_H_
 #define SEAD_THREAD_H_
 
-#include <thread/seadThread.h>
+#include <heap/seadDisposer.h>
+#include <prim/seadNamable.h>
 
 namespace sead {
 

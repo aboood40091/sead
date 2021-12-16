@@ -2,29 +2,15 @@
 
 namespace sead {
 
-void TreeNode::clearChildLinksRecursively_()
-{
-    TreeNode* node = this->mChild;
-    while (node != NULL)
-    {
-        TreeNode* next = node->mNext;
-        node->clearChildLinksRecursively_();
-        node->clearLinks();
-        node = next;
-    }
-}
-
 void TreeNode::clearLinks()
 {
-    mPrev = NULL;
-    mParent = NULL;
-    mNext = NULL;
-    mChild = NULL;
+    mParent = mChild = mNext = mPrev = NULL;
 }
 
 void TreeNode::detachAll()
 {
     detachSubTree();
+
     clearChildLinksRecursively_();
     clearLinks();
 }
@@ -43,21 +29,33 @@ void TreeNode::detachSubTree()
 
         mPrev = NULL;
         mParent = NULL;
-
-        return;
     }
-
-    if (mParent != NULL)
+    else
     {
-        mParent->mChild = mNext;
-        mParent = NULL;
+        if (mParent != NULL)
+        {
+            mParent->mChild = mNext;
+            mParent = NULL;
+        }
+
+        if (mNext != NULL)
+        {
+            mNext->mPrev = mPrev;
+            mNext = NULL;
+        }
     }
+}
 
-    if (mNext == NULL)
-        return;
-
-    mNext->mPrev = mPrev;
-    mNext = NULL;
+void TreeNode::clearChildLinksRecursively_()
+{
+    TreeNode* node = this->mChild;
+    while (node != NULL)
+    {
+        TreeNode* n = node;
+        node = node->mNext;
+        n->clearChildLinksRecursively_();
+        n->clearLinks();
+    }
 }
 
 } // namespace sead
