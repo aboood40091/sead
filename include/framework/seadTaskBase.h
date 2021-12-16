@@ -15,6 +15,7 @@ namespace sead {
 
 class FaderTaskBase;
 class MethodTreeNode;
+struct TaskConstructArg;
 class TaskEvent;
 class TaskMgr;
 class TaskParameter;
@@ -50,6 +51,9 @@ public:
     {
         typedef void (*SingletonFunc)(TaskBase*);
 
+        CreateArg();
+        CreateArg(const TaskClassID& class_id);
+
         TaskClassID factory;
         HeapPolicies heap_policies;
         TaskBase* parent;
@@ -64,12 +68,21 @@ public:
     };
 
 public:
+    TaskBase(const TaskConstructArg& arg);
+    TaskBase(const TaskConstructArg& arg, const char* name);
+
     virtual void pauseCalc(bool b) = 0;
     virtual void pauseDraw(bool b) = 0;
     virtual void pauseCalcRec(bool b) = 0;
     virtual void pauseDrawRec(bool b) = 0;
-    virtual void pauseCalcChild(bool b);
-    virtual void pauseDrawChild(bool b);
+
+    virtual void pauseCalcChild(bool b)
+    {
+    }
+
+    virtual void pauseDrawChild(bool b)
+    {
+    }
 
     virtual ~TaskBase();
 
@@ -84,9 +97,15 @@ public:
     virtual void detachDrawImpl() = 0;
     virtual const RuntimeTypeInfo::Interface* getCorrespondingMethodTreeMgrTypeInfo() const = 0;
     virtual MethodTreeNode* getMethodTreeNode(s32 method_type) = 0;
-    virtual void onDestroy();
 
-    TaskParameter *mParameter;
+    virtual void onDestroy()
+    {
+        doneDestroy();
+    }
+
+    void doneDestroy();
+
+    TaskParameter* mParameter;
     BitFlag32 mInternalFlag;
     ListNode mTaskListNode;
     HeapArray mHeapArray;

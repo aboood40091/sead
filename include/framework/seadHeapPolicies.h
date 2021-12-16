@@ -1,36 +1,49 @@
 #ifndef SEAD_HEAP_POLICIES_H_
 #define SEAD_HEAP_POLICIES_H_
 
-#include <basis/seadTypes.h>
+#include <heap/seadHeapMgr.h>
 
 namespace sead {
-
-class Heap;
 
 class HeapArray
 {
 public:
-    HeapArray(HeapArray& other)
+    HeapArray()
+        : mPrimaryIndex(0)
     {
-        mHeaps[0] = other.mHeaps[0];
-        mHeaps[1] = other.mHeaps[1];
-        mHeaps[2] = other.mHeaps[2];
-        mHeaps[3] = other.mHeaps[3];
-        *reinterpret_cast<u32*>(mAdjusted) = *reinterpret_cast<u32*>(other.mAdjusted);
-        mPrimaryIndex = other.mPrimaryIndex;
+        for (u32 i = 0; i < 4; i++)
+            mAdjusted[i] = false;
     }
 
-    const Heap* getHeap(s32) const;
+    Heap* getHeap(s32 idx) const
+    {
+        if (idx < HeapMgr::getRootHeapNum())
+            return mHeaps[idx];
 
+        //SEAD_ASSERT_MSG(false, "illegal idx: %d", idx);
+        return mHeaps[0];
+    }
+
+private:
     Heap* mHeaps[4];
     bool mAdjusted[4];
     s32 mPrimaryIndex;
+
+    friend class TaskMgr;
 };
 
-class HeapPolicy
+struct HeapPolicy
 {
-public:
-    HeapPolicy();
+    HeapPolicy()
+        : parent(NULL)
+        , size(0)
+        , create_slack(0)
+        , adjust_slack(0)
+        , adjust(0)
+        , temporary(0)
+        , dont_create(0)
+    {
+    }
 
     Heap* parent;
     u32 size;
@@ -44,6 +57,11 @@ public:
 class HeapPolicies
 {
 public:
+    HeapPolicies()
+        : mPrimaryIndex(0)
+    {
+    }
+
     HeapPolicy mPolicies[4];
     s32 mPrimaryIndex;
 };
