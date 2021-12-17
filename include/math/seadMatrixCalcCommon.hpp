@@ -2088,10 +2088,10 @@ void Matrix44CalcCommon<T>::multiply(Base& o, const Base& a, const Base& b)
     const T a33 = a.m[2][2];
     const T a34 = a.m[2][3];
 
-    const T a41 = a.m[2][0];
-    const T a42 = a.m[2][1];
-    const T a43 = a.m[2][2];
-    const T a44 = a.m[2][3];
+    const T a41 = a.m[3][0];
+    const T a42 = a.m[3][1];
+    const T a43 = a.m[3][2];
+    const T a44 = a.m[3][3];
 
     const T b11 = b.m[0][0];
     const T b12 = b.m[0][1];
@@ -2108,10 +2108,10 @@ void Matrix44CalcCommon<T>::multiply(Base& o, const Base& a, const Base& b)
     const T b33 = b.m[2][2];
     const T b34 = b.m[2][3];
 
-    const T b41 = b.m[2][0];
-    const T b42 = b.m[2][1];
-    const T b43 = b.m[2][2];
-    const T b44 = b.m[2][3];
+    const T b41 = b.m[3][0];
+    const T b42 = b.m[3][1];
+    const T b43 = b.m[3][2];
+    const T b44 = b.m[3][3];
 
     o.m[0][0] = a11 * b11 + a12 * b21 + a13 * b31 + a14 * b41;
     o.m[0][1] = a11 * b12 + a12 * b22 + a13 * b32 + a14 * b42;
