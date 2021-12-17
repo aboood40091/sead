@@ -1,8 +1,8 @@
 #ifndef SEAD_NEW_H_
 #define SEAD_NEW_H_
 
+#include <cstddef>
 #include <new>
-#include <stddef.h>
 
 #include <basis/seadTypes.h>
 

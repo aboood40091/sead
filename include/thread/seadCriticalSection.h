@@ -32,6 +32,9 @@ protected:
     #error "Unknown platform"
 #endif // cafe
 };
+#ifdef cafe
+static_assert(sizeof(CriticalSection) == 0x3C, "sead::CriticalSection size mismatch");
+#endif // cafe
 
 } // namespace sead
 

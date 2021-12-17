@@ -31,6 +31,9 @@ public:
 private:
     SafeString mINamableName;
 };
+#ifdef cafe
+static_assert(sizeof(INamable) == 8, "sead::INamable size mismatch");
+#endif // cafe
 
 class IWNamable
 {
@@ -58,6 +61,9 @@ public:
 private:
     WSafeString mIWNamableName;
 };
+#ifdef cafe
+static_assert(sizeof(IWNamable) == 8, "sead::IWNamable size mismatch");
+#endif // cafe
 
 } // namespace sead
 

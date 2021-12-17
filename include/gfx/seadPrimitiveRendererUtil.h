@@ -12,6 +12,9 @@ struct Vertex
     Vector2f uv;
     Color4f color;
 };
+#ifdef cafe
+static_assert(sizeof(Vertex) == 0x24, "sead::PrimitiveRendererUtil::Vertex size mismatch");
+#endif // cafe
 
 void setQuadVertex(Vertex* vtx, u16* idx);
 void setLineVertex(Vertex* vtx, u16* idx);

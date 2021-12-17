@@ -32,6 +32,9 @@ public:
     f32 mDeviceZScale;
     f32 mDeviceZOffset;
 };
+#ifdef cafe
+static_assert(sizeof(Projection) == 0x94, "sead::Projection size mismatch");
+#endif // cafe
 
 } // namespace sead
 

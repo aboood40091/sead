@@ -37,6 +37,9 @@ private:
 
     friend class ListImpl;
 };
+#ifdef cafe
+static_assert(sizeof(ListNode) == 8, "sead::ListNode size mismatch");
+#endif // cafe
 
 class ListImpl
 {
@@ -102,6 +105,9 @@ protected:
     ListNode mStartEnd;
     s32 mCount;
 };
+#ifdef cafe
+static_assert(sizeof(ListImpl) == 0xC, "sead::ListImpl size mismatch");
+#endif // cafe
 
 } // namespace sead
 

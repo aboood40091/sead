@@ -69,7 +69,9 @@ protected:
     Vector2f mVirtualSize;
     BoundBox2f mPhysicalArea;
 };
+#ifdef cafe
 static_assert(sizeof(LogicalFrameBuffer) == 0x1C, "sead::LogicalFrameBuffer size mismatch");
+#endif // cafe
 
 class DisplayBuffer;
 
@@ -103,7 +105,9 @@ public:
 
     void bind() const;
 };
+#ifdef cafe
 static_assert(sizeof(FrameBuffer) == 0x1C, "sead::FrameBuffer size mismatch");
+#endif // cafe
 
 }  // namespace sead
 

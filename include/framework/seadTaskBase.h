@@ -66,6 +66,9 @@ public:
         Tag tag;
         SingletonFunc instance_cb;
     };
+#ifdef cafe
+    static_assert(sizeof(CreateArg) == 0x80, "sead::TaskBase::CreateArg size mismatch");
+#endif // cafe
 
 public:
     TaskBase(const TaskConstructArg& arg);
@@ -114,6 +117,9 @@ public:
     Tag mTag;
     TaskClassID mClassID;
 };
+#ifdef cafe
+static_assert(sizeof(TaskBase) == 0x74, "sead::TaskBase size mismatch");
+#endif // cafe
 
 } // namespace sead
 

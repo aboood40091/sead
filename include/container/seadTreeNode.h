@@ -33,6 +33,9 @@ protected:
     TreeNode* mNext;
     TreeNode* mPrev;
 };
+#ifdef cafe
+static_assert(sizeof(TreeNode) == 0x10, "sead::TreeNode size mismatch");
+#endif // cafe
 
 template <typename T>
 class TTreeNode : public TreeNode
@@ -96,6 +99,9 @@ public:
 protected:
     T mData;
 };
+#ifdef cafe
+static_assert(sizeof(TTreeNode<int*>) == 0x14, "sead::TTreeNode<T> size mismatch");
+#endif // cafe
 
 } // namespace sead
 

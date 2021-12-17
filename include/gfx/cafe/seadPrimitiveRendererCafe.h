@@ -48,6 +48,7 @@ public:
     void drawTriangles_(const Matrix34f& model_mtx, const Color4f& c0, const Color4f& c1, PrimitiveRendererUtil::Vertex* vtx, u32 vtx_num, u16* idx, u32 idx_num, const GX2Texture* tex);
     void drawLines_(const Matrix34f& model_mtx, const Color4f& c0, const Color4f& c1, PrimitiveRendererUtil::Vertex* vtx, u32 vtx_num, u16* idx, u32 idx_num);
 
+private:
     Matrix34f mCameraMtx;
     Matrix44f mProjectionMtx;
     GX2VertexShader* mVertexShader;
@@ -107,6 +108,7 @@ public:
     PrimitiveRendererUtil::Vertex* mCylinderLVertexBuf;
     u16*                           mCylinderLIndexBuf;
 };
+static_assert(sizeof(PrimitiveRendererCafe) == 0x18C, "sead::PrimitiveRendererCafe size mismatch");
 
 } // namespace sead
 

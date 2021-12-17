@@ -109,6 +109,9 @@ protected:
 protected:
     FileDevice* mFileDevice;
 };
+#ifdef cafe
+static_assert(sizeof(MainFileDevice) == 0x58, "sead::MainFileDevice size mismatch");
+#endif // cafe
 
 } // namespace sead
 

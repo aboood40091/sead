@@ -23,6 +23,8 @@ public:
         u16 version;
         u16 reserved;
     };
+    static_assert(sizeof(ArchiveBlockHeader) == 0x14,
+                  "sead::SharcArchiveRes::ArchiveBlockHeader size mismatch");
 
     struct FATBlockHeader
     {
@@ -31,6 +33,8 @@ public:
         u16 file_num;
         u32 hash_key;
     };
+    static_assert(sizeof(FATBlockHeader) == 0xC,
+                  "sead::SharcArchiveRes::FATBlockHeader size mismatch");
 
     struct FATEntry
     {
@@ -39,6 +43,8 @@ public:
         u32 data_start_offset;
         u32 data_end_offset;
     };
+    static_assert(sizeof(FATEntry) == 0x10,
+                  "sead::SharcArchiveRes::FATEntry size mismatch");
 
     struct FNTBlockHeader
     {
@@ -46,6 +52,8 @@ public:
         u16 header_size;
         u16 reserved;
     };
+    static_assert(sizeof(FNTBlockHeader) == 8,
+                  "sead::SharcArchiveRes::FNTBlockHeader size mismatch");
 
 public:
     SharcArchiveRes();
@@ -71,6 +79,9 @@ public:
     const u8* mDataBlock;
     Endian::Types mEndianType;
 };
+#ifdef cafe
+static_assert(sizeof(SharcArchiveRes) == 0x44, "sead::SharcArchiveRes size mismatch");
+#endif // cafe
 
 } // namespace sead
 

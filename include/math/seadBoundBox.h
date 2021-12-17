@@ -187,6 +187,11 @@ private:
 typedef BoundBox2<f32> BoundBox2f;
 typedef BoundBox3<f32> BoundBox3f;
 
+#ifdef cafe
+static_assert(sizeof(BoundBox2f) == 0x10, "sead::BoundBox2<T> size mismatch");
+static_assert(sizeof(BoundBox3f) == 0x18, "sead::BoundBox3<T> size mismatch");
+#endif // cafe
+
 }  // namespace sead
 
 #ifdef __cplusplus

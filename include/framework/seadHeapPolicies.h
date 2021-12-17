@@ -31,6 +31,9 @@ private:
 
     friend class TaskMgr;
 };
+#ifdef cafe
+static_assert(sizeof(HeapArray) == 0x18, "sead::HeapArray size mismatch");
+#endif // cafe
 
 struct HeapPolicy
 {
@@ -53,6 +56,9 @@ struct HeapPolicy
     u8 temporary;
     u8 dont_create;
 };
+#ifdef cafe
+static_assert(sizeof(HeapPolicy) == 0x14, "sead::HeapPolicy size mismatch");
+#endif // cafe
 
 class HeapPolicies
 {
@@ -65,6 +71,9 @@ public:
     HeapPolicy mPolicies[4];
     s32 mPrimaryIndex;
 };
+#ifdef cafe
+static_assert(sizeof(HeapPolicies) == 0x54, "sead::HeapPolicies size mismatch");
+#endif // cafe
 
 } // namespace sead
 

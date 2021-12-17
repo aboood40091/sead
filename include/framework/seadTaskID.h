@@ -25,6 +25,9 @@ struct TaskConstructArg
     TaskMgr* mgr;
     TaskParameter* param;
 };
+#ifdef cafe
+static_assert(sizeof(TaskConstructArg) == 0xC, "sead::TaskConstructArg size mismatch");
+#endif // cafe
 
 typedef TaskBase* (*TaskFactory)(const TaskConstructArg&);
 
@@ -48,12 +51,18 @@ public:
         const char* mString;
     } mID;
 };
+#ifdef cafe
+static_assert(sizeof(TaskClassID) == 8, "sead::TaskClassID size mismatch");
+#endif // cafe
 
 class TaskUserID
 {
 public:
     s32 mID;
 };
+#ifdef cafe
+static_assert(sizeof(TaskUserID) == 4, "sead::TaskUserID size mismatch");
+#endif // cafe
 
 } // namespace sead
 

@@ -77,6 +77,9 @@ public:
 protected:
     SlotList mList;
 };
+#ifdef cafe
+static_assert(sizeof(DelegateEvent<float>) == 0x10, "sead::DelegateEvent<T> size mismatch");
+#endif // cafe
 
 } // namespace sead
 

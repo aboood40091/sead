@@ -69,6 +69,12 @@ typedef BitFlag<u8> BitFlag8;
 typedef BitFlag<u16> BitFlag16;
 typedef BitFlag<u32> BitFlag32;
 
+#ifdef cafe
+static_assert(sizeof(BitFlag8) == 1, "sead::BitFlag8 size mismatch");
+static_assert(sizeof(BitFlag16) == 2, "sead::BitFlag16 size mismatch");
+static_assert(sizeof(BitFlag32) == 4, "sead::BitFlag32 size mismatch");
+#endif // cafe
+
 } // namespace sead
 
 #endif // SEAD_BIT_FLAG_H_

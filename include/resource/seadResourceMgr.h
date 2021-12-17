@@ -17,7 +17,6 @@ class Decompressor;
 template <typename T>
 class DirectResourceFactory;
 
-
 class ResourceMgr
 {
     SEAD_SINGLETON_DISPOSER(ResourceMgr)
@@ -41,11 +40,14 @@ public:
         u32 file_size;
         u32 buffer_size;
         bool need_unload;
-        ResourceFactory *factory;
+        ResourceFactory* factory;
         SafeString ext;
         Heap* heap;
         s32 alignment;
     };
+#ifdef cafe
+    static_assert(sizeof(CreateArg) == 0x24, "sead::ResourceMgr::CreateArg size mismatch");
+#endif // cafe
 
     struct LoadArg
     {
@@ -74,6 +76,9 @@ public:
         FileDevice* device;
         u32 div_size;
     };
+#ifdef cafe
+    static_assert(sizeof(LoadArg) == 0x2C, "sead::ResourceMgr::LoadArg size mismatch");
+#endif // cafe
 
 public:
     ResourceMgr();
@@ -96,6 +101,9 @@ public:
     DecompressorList mDecompList;
     ResourceFactory* mNullResourceFactory;
 };
+#ifdef cafe
+static_assert(sizeof(ResourceMgr) == 0x38, "sead::ResourceMgr size mismatch");
+#endif // cafe
 
 } // namespace sead
 

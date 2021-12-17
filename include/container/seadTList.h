@@ -41,6 +41,9 @@ public:
 
     friend class TList<T>;
 };
+#ifdef cafe
+static_assert(sizeof(TListNode<int*>) == 0x10, "sead::TListNode<T> size mismatch");
+#endif // cafe
 
 template <typename T>
 class TList : public ListImpl

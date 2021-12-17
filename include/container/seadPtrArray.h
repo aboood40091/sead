@@ -70,6 +70,9 @@ protected:
     s32 mPtrNumMax;
     void** mPtrs;
 };
+#ifdef cafe
+static_assert(sizeof(PtrArrayImpl) == 0xC, "sead::PtrArrayImpl size mismatch");
+#endif // cafe
 
 template <typename T>
 class PtrArray : public PtrArrayImpl

@@ -15,6 +15,9 @@ public:
 
     IDelegate2<Thread*, s32>* mDelegate; // IDelegate2<Thread*, MessageQueue::Element>*
 };
+#ifdef cafe
+static_assert(sizeof(DelegateThread) == 0x94, "sead::DelegateThread size mismatch");
+#endif // cafe
 
 } // namespace sead
 

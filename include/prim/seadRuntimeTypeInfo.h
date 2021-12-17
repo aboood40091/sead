@@ -11,6 +11,9 @@ struct Interface
 
     virtual bool isDerived(const Interface* other) const = 0;
 };
+#ifdef cafe
+static_assert(sizeof(Interface) == 4, "sead::RuntimeTypeInfo::Interface size mismatch");
+#endif // cafe
 
 struct Root : public Interface
 {

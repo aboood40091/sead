@@ -23,6 +23,9 @@ protected:
     size_t mSize;
     bool mInitWithStartAddress;
 };
+#ifdef cafe
+static_assert(sizeof(Arena) == 0xC, "sead::Arena size mismatch");
+#endif // cafe
 
 } // namespace sead
 

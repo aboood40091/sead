@@ -62,6 +62,9 @@ public:
     PauseEventDelegate* mPauseEventDelegate;
     void* mUserID;
 };
+#ifdef cafe
+static_assert(sizeof(MethodTreeNode) == 0x54, "sead::MethodTreeNode size mismatch");
+#endif // cafe
 
 } // namespace sead
 

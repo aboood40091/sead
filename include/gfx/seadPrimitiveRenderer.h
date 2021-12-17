@@ -38,6 +38,9 @@ public:
     virtual void drawCylinder16Impl(const Matrix34f& model_mtx, const Color4f& top, const Color4f& btm) = 0;
     virtual void drawCylinder32Impl(const Matrix34f& model_mtx, const Color4f& top, const Color4f& btm) = 0;
 };
+#ifdef cafe
+static_assert(sizeof(PrimitiveRendererBase) == 4, "sead::PrimitiveRendererBase size mismatch");
+#endif // cafe
 
 class PrimitiveRenderer : public IDisposer
 {
@@ -70,14 +73,17 @@ public:
         bool isHorizontal() const { return mHorizontal; }
 
     private:
-        friend class PrimitiveRenderer;
-
         Vector3f mCenter;
         Vector2f mSize;
         Color4f mColor0;
         Color4f mColor1;
         bool mHorizontal;
+
+        friend class PrimitiveRenderer;
     };
+#ifdef cafe
+    static_assert(sizeof(QuadArg) == 0x38, "sead::PrimitiveRenderer::QuadArg size mismatch");
+#endif // cafe
 
     class UVArg
     {
@@ -95,11 +101,14 @@ public:
         const Vector2f& getUVSize() const { return mUVSize; }
 
     private:
-        friend class PrimitiveRenderer;
-
         Vector2f mUVSrc;
         Vector2f mUVSize;
+
+        friend class PrimitiveRenderer;
     };
+#ifdef cafe
+    static_assert(sizeof(UVArg) == 0x10, "sead::PrimitiveRenderer::UVArg size mismatch");
+#endif // cafe
 
     class CubeArg
     {
@@ -125,13 +134,16 @@ public:
         const Color4f& getColor1() const { return mColor1; }
 
     private:
-        friend class PrimitiveRenderer;
-
         Vector3f mCenter;
         Vector3f mSize;
         Color4f mColor0;
         Color4f mColor1;
+
+        friend class PrimitiveRenderer;
     };
+#ifdef cafe
+    static_assert(sizeof(CubeArg) == 0x38, "sead::PrimitiveRenderer::CubeArg size mismatch");
+#endif // cafe
 
 public:
     PrimitiveRenderer();
@@ -199,9 +211,13 @@ public:
 private:
     void doPrepare_(Heap* heap);
 
+private:
     PrimitiveRendererBase* mRendererImpl;
     Matrix34f mModelMtx;
 };
+#ifdef cafe
+static_assert(sizeof(PrimitiveRenderer) == 0x54, "sead::PrimitiveRenderer size mismatch");
+#endif // cafe
 
 } // namespace sead
 

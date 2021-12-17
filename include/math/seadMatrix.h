@@ -313,6 +313,13 @@ typedef Matrix33<f32> Matrix33f;
 typedef Matrix34<f32> Matrix34f;
 typedef Matrix44<f32> Matrix44f;
 
+#ifdef cafe
+static_assert(sizeof(Matrix22f) == 0x10, "sead::Matrix22<T> size mismatch");
+static_assert(sizeof(Matrix33f) == 0x24, "sead::Matrix33<T> size mismatch");
+static_assert(sizeof(Matrix34f) == 0x30, "sead::Matrix34<T> size mismatch");
+static_assert(sizeof(Matrix44f) == 0x40, "sead::Matrix44<T> size mismatch");
+#endif // cafe
+
 typedef Matrix34<f32> Matrixf;
 
 }  // namespace sead

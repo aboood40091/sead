@@ -34,6 +34,9 @@ public:
         HostIOMgr::Parameter* hostio_parameter;
         TickSpan infloop_detection_span;
     };
+#ifdef cafe
+    static_assert(sizeof(CreateSystemTaskArg) == 0x10, "sead::Framework::CreateSystemTaskArg size mismatch");
+#endif // cafe
 
     struct InitializeArg
     {
@@ -42,6 +45,9 @@ public:
         u32 heap_size;
         Arena* arena;
     };
+#ifdef cafe
+    static_assert(sizeof(InitializeArg) == 8, "sead::Framework::InitializeArg size mismatch");
+#endif // cafe
 
     struct RunArg
     {
@@ -50,6 +56,9 @@ public:
         u32 prepare_stack_size;
         s32 prepare_priority;
     };
+#ifdef cafe
+    static_assert(sizeof(RunArg) == 8, "sead::Framework::RunArg size mismatch");
+#endif // cafe
 
     enum ProcessPriority
     {
@@ -83,6 +92,9 @@ public:
     MethodTreeMgr* mMethodTreeMgr;
     Heap* mMethodTreeMgrHeap;
 };
+#ifdef cafe
+static_assert(sizeof(Framework) == 0x28, "sead::Framework size mismatch");
+#endif // cafe
 
 } // namespace sead
 

@@ -214,7 +214,7 @@ void PrimitiveRendererCafe::prepareImpl(
 
 void PrimitiveRendererCafe::setCameraImpl(const Camera& camera)
 {
-    mCameraMtx = camera.mMatrix;
+    mCameraMtx = camera.getMatrix();
 }
 
 void PrimitiveRendererCafe::setProjectionImpl(const Projection& projection)
@@ -252,7 +252,7 @@ void PrimitiveRendererCafe::drawQuadImpl(
 )
 {
     const TextureCafeGX2* texure_cafe_gx2 = DynamicCast<const TextureCafeGX2, const Texture>(&texture);
-    drawTriangles_(model_mtx, colorL, colorR, mQuadVertexBuf, 4, mQuadIndexBuf, 6, texure_cafe_gx2->mGX2Texture);
+    drawTriangles_(model_mtx, colorL, colorR, mQuadVertexBuf, 4, mQuadIndexBuf, 6, texure_cafe_gx2->getGX2Texture());
 }
 
 void PrimitiveRendererCafe::drawBoxImpl(

@@ -24,6 +24,9 @@ public:
 
     CriticalSection mCS;
 };
+#ifdef cafe
+static_assert(sizeof(MethodTreeMgr) == 0x40, "sead::MethodTreeMgr size mismatch");
+#endif // cafe
 
 } // namespace sead
 

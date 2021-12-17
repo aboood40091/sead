@@ -381,7 +381,9 @@ private:
     bool mPolygonOffsetPointLineEnable;
 #endif // cafe
 };
+#ifdef cafe
 static_assert(sizeof(GraphicsContext) == 0x74, "sead::GraphicsContext size mismatch");
+#endif // cafe
 
 } // namespace sead
 

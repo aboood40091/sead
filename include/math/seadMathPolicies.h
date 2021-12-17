@@ -73,6 +73,17 @@ public:
     };
 };
 
+#ifdef cafe
+static_assert(sizeof(Policies<float>::Vec2Base) == 8, "sead::Policies<T>::Vec2Base size mismatch");
+static_assert(sizeof(Policies<float>::Vec3Base) == 0xC, "sead::Policies<T>::Vec3Base size mismatch");
+static_assert(sizeof(Policies<float>::Vec4Base) == 0x10, "sead::Policies<T>::Vec4Base size mismatch");
+static_assert(sizeof(Policies<float>::QuatBase) == 0x10, "sead::Policies<T>::QuatBase size mismatch");
+static_assert(sizeof(Policies<float>::Mtx22Base) == 0x10, "sead::Policies<T>::Mtx22Base size mismatch");
+static_assert(sizeof(Policies<float>::Mtx33Base) == 0x24, "sead::Policies<T>::Mtx33Base size mismatch");
+static_assert(sizeof(Policies<float>::Mtx34Base) == 0x30, "sead::Policies<T>::Mtx34Base size mismatch");
+static_assert(sizeof(Policies<float>::Mtx44Base) == 0x40, "sead::Policies<T>::Mtx44Base size mismatch");
+#endif // cafe
+
 } // namespace sead
 
 #endif // SEAD_MATHPOLICIES_H_

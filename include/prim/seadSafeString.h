@@ -304,6 +304,11 @@ typedef SafeStringBase<char16> WSafeString;
 typedef BufferedSafeStringBase<char> BufferedSafeString;
 typedef BufferedSafeStringBase<char16> WBufferedSafeString;
 
+#ifdef cafe
+static_assert(sizeof(SafeString) == 8, "sead::SafeStringBase<T> size mismatch");
+static_assert(sizeof(BufferedSafeString) == 0xC, "sead::BufferedSafeStringBase<T> size mismatch");
+#endif // cafe
+
 template <s32 N>
 class FixedSafeString : public FixedSafeStringBase<char, N>
 {

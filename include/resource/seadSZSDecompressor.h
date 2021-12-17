@@ -34,6 +34,9 @@ public:
         u16 lzOffset;
         u8 headerSize;
     };
+#ifdef cafe
+    static_assert(sizeof(DecompContext) == 0x18, "sead::SZSDecompressor::DecompContext size mismatch");
+#endif // cafe
 
 public:
     SZSDecompressor(u32 work_size, u8* work_buffer);
@@ -54,6 +57,9 @@ private:
     u32 mWorkSize;
     u8* mWorkBuffer;
 };
+#ifdef cafe
+static_assert(sizeof(SZSDecompressor) == 0x58, "sead::SZSDecompressor size mismatch");
+#endif // cafe
 
 } // namespace sead
 

@@ -37,6 +37,9 @@ public:
         Heap* heap;
         Framework* parent_framework;
     };
+#ifdef cafe
+    static_assert(sizeof(InitializeArg) == 0x18, "sead::TaskMgr::InitializeArg size mismatch");
+#endif // cafe
 
     class TaskCreateContextMgr;
 
@@ -66,9 +69,12 @@ public:
     TaskBase::CreateArg mRootTaskCreateArg;
     TaskMgr::InitializeArg mInitializeArg;
     MethodTreeNode mCalcDestructionTreeNode;
-    u32 useless1;
-    u32 useless2;
+    u32 _1a0;
+    u32 _1a4;
 };
+#ifdef cafe
+static_assert(sizeof(TaskMgr) == 0x1A8, "sead::TaskMgr size mismatch");
+#endif // cafe
 
 } // namespace sead
 

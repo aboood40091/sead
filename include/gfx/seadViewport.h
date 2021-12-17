@@ -24,6 +24,9 @@ public:
 protected:
     Graphics::DevicePosture mDevicePos;
 };
+#ifdef cafe
+static_assert(sizeof(Viewport) == 0x18, "sead::Viewport size mismatch");
+#endif // cafe
 
 }  // namespace sead
 

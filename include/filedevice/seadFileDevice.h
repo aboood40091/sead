@@ -43,6 +43,9 @@ protected:
 
     friend class FileDevice;
 };
+#ifdef cafe
+static_assert(sizeof(HandleBase) == 0x38, "sead::HandleBase size mismatch");
+#endif // cafe
 
 class FileHandle;
 class DirectoryHandle;
@@ -113,6 +116,9 @@ public:
         u32 roundup_size;
         bool need_unload;
     };
+#ifdef cafe
+    static_assert(sizeof(LoadArg) == 0x28, "sead::FileDevice::LoadArg size mismatch");
+#endif // cafe
 
 public:
     FileDevice(const SafeString& default_drive_name)
@@ -228,7 +234,7 @@ public:
         return size;
     }
 
-    u32 getFileSize(class FileHandle* handle)
+    u32 getFileSize(FileHandle* handle)
     {
         u32 size = 0;
         bool success = tryGetFileSize(&size, handle);
@@ -361,6 +367,9 @@ protected:
 
     friend class FileDeviceMgr;
 };
+#ifdef cafe
+static_assert(sizeof(FileDevice) == 0x54, "sead::FileDevice size mismatch");
+#endif // cafe
 
 class FileHandle : public HandleBase
 {
@@ -403,6 +412,9 @@ protected:
 
     friend class FileDevice;
 };
+#ifdef cafe
+static_assert(sizeof(FileHandle) == 0x3C, "sead::FileHandle size mismatch");
+#endif // cafe
 
 class DirectoryHandle : public HandleBase
 {
@@ -434,6 +446,9 @@ struct DirectoryEntry
     FixedSafeString<256> name;
     bool is_directory;
 };
+#ifdef cafe
+static_assert(sizeof(DirectoryEntry) == 0x110, "sead::DirectoryEntry size mismatch");
+#endif // cafe
 
 } // namespace sead
 

@@ -162,6 +162,9 @@ protected:
     s32 mSize;
     T* mBuffer;
 };
+#ifdef cafe
+static_assert(sizeof(Buffer<int>) == 8, "sead::Buffer<T> size mismatch");
+#endif // cafe
 
 } // namespace sead
 

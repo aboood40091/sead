@@ -19,8 +19,11 @@ public:
     Resource();
     virtual ~Resource();
 
-    virtual void doPostCreate_();
+    virtual void doPostCreate_() { }
 };
+#ifdef cafe
+static_assert(sizeof(Resource) == 0x14, "sead::Resource size mismatch");
+#endif // cafe
 
 class DirectResource : public Resource
 {
@@ -30,8 +33,8 @@ public:
     DirectResource();
     virtual ~DirectResource();
 
-    virtual s32 getLoadDataAlignment();
-    virtual void doCreate_(u8*, u32, Heap*);
+    virtual u32 getLoadDataAlignment() { return 4; }
+    virtual void doCreate_(u8*, u32, Heap*) { }
 
     void create(u8* buffer, u32 bufferSize, u32 allocSize, bool allocated, Heap* heap);
 
@@ -40,6 +43,9 @@ public:
     u32 mBufferSize;
     BitFlag32 mSettingFlag;
 };
+#ifdef cafe
+static_assert(sizeof(DirectResource) == 0x24, "sead::DirectResource size mismatch");
+#endif // cafe
 
 class ResourceFactory : public TListNode<ResourceFactory*>, public IDisposer
 {
@@ -59,6 +65,9 @@ public:
 
     FixedSafeString<32> mExt;
 };
+#ifdef cafe
+static_assert(sizeof(ResourceFactory) == 0x50, "sead::ResourceFactory size mismatch");
+#endif // cafe
 
 class DirectResourceFactoryBase : public ResourceFactory
 {

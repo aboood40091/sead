@@ -34,7 +34,9 @@ public:
 
     MethodTreeNode mCalcNode;
 };
+#ifdef cafe
 static_assert(sizeof(CalculateTask) == 0xC8, "sead::CalculateTask size mismatch");
+#endif // cafe
 
 } // namespace sead
 

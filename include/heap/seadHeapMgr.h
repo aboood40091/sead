@@ -100,6 +100,9 @@ protected:
     static CriticalSection sHeapTreeLockCS;
     static IndependentHeaps sIndependentHeaps;
 };
+#ifdef cafe
+static_assert(sizeof(HeapMgr) == 8, "sead::HeapMgr size mismatch");
+#endif // cafe
 
 } // namespace sead
 

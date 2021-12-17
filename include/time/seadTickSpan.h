@@ -23,6 +23,9 @@ private:
 
     static const s64 cFrequency;
 };
+#ifdef cafe
+static_assert(sizeof(TickSpan) == 8, "sead::TickSpan size mismatch");
+#endif // cafe
 
 } // namespace sead
 

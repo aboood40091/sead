@@ -32,6 +32,9 @@ private:
 
     FixedSafeString<32> mExt;
 };
+#ifdef cafe
+static_assert(sizeof(Decompressor) == 0x50, "sead::Decompressor size mismatch");
+#endif // cafe
 
 } // namespace sead
 

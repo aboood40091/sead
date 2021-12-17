@@ -159,6 +159,9 @@ protected:
 protected:
     s32 mOffset;
 };
+#ifdef cafe
+static_assert(sizeof(OffsetList<int>) == 0x10, "sead::OffsetList<T> size mismatch");
+#endif // cafe
 
 } // namespace sead
 

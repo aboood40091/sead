@@ -13,10 +13,6 @@ Resource::~Resource()
 {
 }
 
-void Resource::doPostCreate_()
-{
-}
-
 DirectResource::DirectResource()
     : Resource()
     , mRawData(NULL)
@@ -30,15 +26,6 @@ DirectResource::~DirectResource()
 {
     if (mSettingFlag.isOnBit(0))
         delete[] mRawData;
-}
-
-s32 DirectResource::getLoadDataAlignment()
-{
-    return 4;
-}
-
-void DirectResource::doCreate_(u8*, u32, Heap*)
-{
 }
 
 void DirectResource::create(u8* buffer, u32 bufferSize, u32 allocSize, bool allocated, Heap* heap)

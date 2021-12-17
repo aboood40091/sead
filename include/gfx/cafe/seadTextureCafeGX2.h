@@ -13,14 +13,38 @@ class TextureCafeGX2 : public Texture
     SEAD_RTTI_OVERRIDE(TextureCafeGX2, Texture)
 
 public:
-    TextureCafeGX2() { }
-    virtual ~TextureCafeGX2() { }
+    TextureCafeGX2()
+        : Texture()
+        , mGX2Texture(NULL)
+    {
+    }
+
+    virtual ~TextureCafeGX2()
+    {
+    }
 
     virtual u32 getWidth() const;
     virtual u32 getHeight() const;
 
+    const GX2Texture* getGX2Texture() const
+    {
+        return mGX2Texture;
+    }
+
+    GX2Texture* getGX2Texture()
+    {
+        return mGX2Texture;
+    }
+
+    void setGX2Texture(GX2Texture* texture)
+    {
+        mGX2Texture = texture;
+    }
+
+private:
     GX2Texture* mGX2Texture;
 };
+static_assert(sizeof(TextureCafeGX2) == 8, "sead::TextureCafeGX2 size mismatch");
 
 } // namespace sead
 

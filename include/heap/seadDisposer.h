@@ -20,6 +20,9 @@ private:
 
     friend class Heap;
 };
+#ifdef cafe
+static_assert(sizeof(IDisposer) == 0x10, "sead::IDisposer size mismatch");
+#endif // cafe
 
 } // namespace sead
 

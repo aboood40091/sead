@@ -118,6 +118,9 @@ protected:
     #error "Unknown platform"
 #endif // cafe
 };
+#ifdef cafe
+static_assert(sizeof(FileDeviceMgr) == 0x182C, "sead::FileDeviceMgr size mismatch");
+#endif // cafe
 
 } // namespace sead
 

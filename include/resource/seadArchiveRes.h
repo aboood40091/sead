@@ -22,9 +22,18 @@ public:
         {
         }
 
+        u32 getStartOffset() const { return mStartOffset; }
+        u32 getLength() const { return mLength; }
+
+    private:
         u32 mStartOffset;
         u32 mLength;
+
+        friend class ArchiveRes;
     };
+#ifdef cafe
+    static_assert(sizeof(FileInfo) == 8, "sead::ArchiveRes::FileInfo size mismatch");
+#endif // cafe
 
 public:
     ArchiveRes()
@@ -36,9 +45,9 @@ public:
     virtual ~ArchiveRes() { }
 
     virtual void doPostCreate_();
-    virtual s32 getLoadDataAlignment();
+    virtual u32 getLoadDataAlignment() { return 0x80; }
     virtual void doCreate_(u8* buf, u32, Heap*);
-    virtual void* getFileImpl_(const SafeString& file_path, FileInfo* file_info=NULL) = 0;
+    virtual void* getFileImpl_(const SafeString& file_path, FileInfo* file_info = NULL) = 0;
     virtual void* getFileFastImpl_(s32 entry_id, FileInfo* file_info) = 0;
     virtual s32 convertPathToEntryIDImpl_(const SafeString& file_path) = 0;
     virtual bool setCurrentDirectoryImpl_(const SafeString&) = 0;
@@ -47,8 +56,22 @@ public:
     virtual u32 readDirectoryImpl_(u32* handle, DirectoryEntry* entry, u32 num) = 0;        // readDirectoryImpl_(SafeArray<u8, 32>*, DirectoryEntry*, u32)
     virtual bool prepareArchive_(const void* archive) = 0;
 
+    Resource* load(ResourceMgr::LoadArg& arg);
+
+protected:
+    void setFileInfo(FileInfo* file_info, u32 start_offset, u32 length)
+    {
+        //SEAD_ASSERT(file_info);
+        file_info->mStartOffset = start_offset;
+        file_info->mLength      = length;
+    }
+
+protected:
     bool mEnable;
 };
+#ifdef cafe
+static_assert(sizeof(ArchiveRes) == 0x28, "sead::ArchiveRes size mismatch");
+#endif // cafe
 
 } // namespace sead
 

@@ -79,6 +79,7 @@ protected:
     FSRetFlag mFSReadRetFlag;
     FSClient* mFSClient;
 };
+static_assert(sizeof(CafeFSAFileDevice) == 0x6C, "sead::CafeFSAFileDevice size mismatch");
 
 class CafeContentFileDevice : public CafeFSAFileDevice
 {

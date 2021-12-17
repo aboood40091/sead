@@ -115,6 +115,9 @@ protected:
     friend IDisposer::~IDisposer();
     friend class HeapMgr;
 };
+#ifdef cafe
+static_assert(sizeof(Heap) == 0x90, "sead::Heap size mismatch");
+#endif // cafe
 
 } // namespace sead
 

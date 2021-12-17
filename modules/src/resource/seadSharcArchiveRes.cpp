@@ -104,10 +104,7 @@ SharcArchiveRes::getFileFastImpl_(
 
         u32 length = end - start;
 
-        //SEAD_ASSERT(file_info);
-
-        file_info->mStartOffset = start;
-        file_info->mLength = length;
+        setFileInfo(file_info, start, length);
     }
 
     return const_cast<u8*>(mDataBlock) + start;

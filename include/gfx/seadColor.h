@@ -5,9 +5,8 @@
 
 namespace sead {
 
-class Color4f
+struct Color4f
 {
-public:
     Color4f()
         : r(cElementMin)
         , g(cElementMin)
@@ -52,6 +51,9 @@ public:
     static const Color4f cGreen;
     static const Color4f cBlue;
 };
+#ifdef cafe
+static_assert(sizeof(Color4f) == 0x10, "sead::Color4f size mismatch");
+#endif // cafe
 
 }  // namespace sead
 
