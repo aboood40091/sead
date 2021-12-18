@@ -21,7 +21,7 @@ public:
         : IDisposer()
         , mDevice(NULL)
         , mOriginalDevice(NULL)
-        , mHandleBuffer()
+        //, mHandleBuffer()
     {
     }
 
