@@ -45,6 +45,9 @@ protected:
     u32 mFreeSize;
     FreeList mFreeList;
 };
+#ifdef cafe
+static_assert(sizeof(UnitHeap) == 0xA8, "sead::UnitHeap size mismatch");
+#endif // cafe
 
 } // namespace sead
 
