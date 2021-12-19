@@ -52,7 +52,7 @@ public:
     public:
         QuadArg()
             : mCenter(Vector3f::zero)
-            , mSize(Vector2f::ones)
+            , mSize(Vector3f::ones.x, Vector3f::ones.y) // Yes, not Vector2f::ones, for some reason
             , mColor0(Color4f::cWhite)
             , mColor1(Color4f::cWhite)
             , mHorizontal(false)

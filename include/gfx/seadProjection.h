@@ -64,6 +64,63 @@ protected:
 static_assert(sizeof(Projection) == 0x94, "sead::Projection size mismatch");
 #endif // cafe
 
+class PerspectiveProjection : public Projection
+{
+    SEAD_RTTI_OVERRIDE(PerspectiveProjection, Projection)
+
+public:
+    PerspectiveProjection();
+    PerspectiveProjection(f32 near, f32 far, f32 fovy_rad, f32 aspect);
+    virtual ~PerspectiveProjection();
+
+    void set(f32 _near, f32 _far, f32 fovy_rad, f32 aspect);
+
+    virtual Type getProjectionType() const { return Projection::cType_Perspective; }
+    virtual void doUpdateMatrix(Matrix44f* dst) const;
+    virtual void doScreenPosToCameraPosTo(Vector3f* dst, const Vector3f& screen_pos) const;
+
+    void setNear(f32 near)
+    {
+        mNear = near;
+        mDirty = true;
+    }
+
+    void setFar(f32 far)
+    {
+        mFar = far;
+        mDirty = true;
+    }
+
+    void setFovx(f32 fovx);
+    void setFovy_(f32 fovy);
+
+    void setAspect(f32 aspect)
+    {
+        mAspect = aspect;
+        mDirty = true;
+    }
+
+    f32 getTop() const;
+    f32 getBottom() const;
+    f32 getLeft() const;
+    f32 getRight() const;
+
+    void setTBLR(f32 top, f32 bottom, f32 left, f32 right);
+
+private:
+    f32 mNear;
+    f32 mFar;
+    f32 mAngle;
+    f32 mFovySin;
+    f32 mFovyCos;
+    f32 mFovyTan;
+    f32 mAspect;
+    Vector2f mOffset;
+};
+#ifdef cafe
+static_assert(sizeof(PerspectiveProjection) == 0xB8, "sead::PerspectiveProjection size mismatch");
+#endif // cafe
+
 } // namespace sead
 
 #endif // SEAD_PROJECTION_H_
