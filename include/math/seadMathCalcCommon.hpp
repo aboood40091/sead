@@ -251,14 +251,14 @@ MathCalcCommon<f32>::atan2Idx(f32 y, f32 x)
 
 template <>
 inline void
-MathCalcCommon<f32>::sinCosIdx(f32* pSin, f32* pCos, u32 idx)
+MathCalcCommon<f32>::sinCosIdx(f32* p_sin, f32* p_cos, u32 idx)
 {
     u32 index = (idx >> 24) & 0xff;
     f32 rest = static_cast<f32>(idx & 0xffffff) / 0x1000000;
     const SinCosSample& sample = cSinCosTbl[index];
 
-    /*if (pSin != NULL)*/ *pSin = sample.sin_val + sample.sin_delta * rest;
-    /*if (pCos != NULL)*/ *pCos = sample.cos_val + sample.cos_delta * rest;
+    /*if (p_sin != NULL)*/ *p_sin = sample.sin_val + sample.sin_delta * rest;
+    /*if (p_cos != NULL)*/ *p_cos = sample.cos_val + sample.cos_delta * rest;
 }
 
 template <typename T>

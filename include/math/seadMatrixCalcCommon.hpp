@@ -2266,21 +2266,21 @@ void Matrix44CalcCommon<T>::multiply(Base& o, const Base& a, const Mtx34& b)
 template <typename T>
 void Matrix44CalcCommon<T>::transpose(Base& o)
 {
-    const T a12 = n.m[0][1];
-    const T a13 = n.m[0][2];
-    const T a14 = n.m[0][3];
+    const T a12 = o.m[0][1];
+    const T a13 = o.m[0][2];
+    const T a14 = o.m[0][3];
 
-    const T a21 = n.m[1][0];
-    const T a23 = n.m[1][2];
-    const T a24 = n.m[1][3];
+    const T a21 = o.m[1][0];
+    const T a23 = o.m[1][2];
+    const T a24 = o.m[1][3];
 
-    const T a31 = n.m[2][0];
-    const T a32 = n.m[2][1];
-    const T a34 = n.m[2][3];
+    const T a31 = o.m[2][0];
+    const T a32 = o.m[2][1];
+    const T a34 = o.m[2][3];
 
-    const T a41 = n.m[3][0];
-    const T a42 = n.m[3][1];
-    const T a43 = n.m[3][2];
+    const T a41 = o.m[3][0];
+    const T a42 = o.m[3][1];
+    const T a43 = o.m[3][2];
 
     o.m[0][1] = a21;
     o.m[0][2] = a31;
