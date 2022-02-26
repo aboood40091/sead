@@ -8,7 +8,7 @@ const f32 ControllerBase::cStickReleaseThresholdDefault = 0.25f;
 const Vector2f ControllerBase::cInvalidPointer(Mathf::minNumber(), Mathf::minNumber());
 const Vector2i ControllerBase::cInvalidPointerS32(Mathi::minNumber(), Mathi::minNumber());
 
-ControllerBase::ControllerBase(s32 pad_bit_max, s32 left_stick_cross_start_bit, s32 right_stick_cross_start_bit, s32 touch_key_bit)
+ControllerBase::ControllerBase(s32 padBitMax, s32 leftStickCrossStartBit, s32 rightStickCrossStartBit, s32 touchKeyBit)
     : mPadTrig()
     , mPadRelease()
     , mPadRepeat()
@@ -19,10 +19,10 @@ ControllerBase::ControllerBase(s32 pad_bit_max, s32 left_stick_cross_start_bit, 
     , mRightStickHoldThreshold(0.5f)
     , mLeftStickReleaseThreshold(0.25f)
     , mRightStickReleaseThreshold(0.25f)
-    , mPadBitMax(pad_bit_max)
-    , mLeftStickCrossStartBit(left_stick_cross_start_bit)
-    , mRightStickCrossStartBit(right_stick_cross_start_bit)
-    , mTouchKeyBit(touch_key_bit)
+    , mPadBitMax(padBitMax)
+    , mLeftStickCrossStartBit(leftStickCrossStartBit)
+    , mRightStickCrossStartBit(rightStickCrossStartBit)
+    , mTouchKeyBit(touchKeyBit)
     , mIdleFrame(0)
     , mPadHold()
     , mPointer(cInvalidPointer)
@@ -31,9 +31,9 @@ ControllerBase::ControllerBase(s32 pad_bit_max, s32 left_stick_cross_start_bit, 
     , mLeftAnalogTrigger(0.0f)
     , mRightAnalogTrigger(0.0f)
 {
-    if (cPadIdxMaxBase < pad_bit_max)
+    if (cPadIdxMaxBase < padBitMax)
     {
-        //SEAD_ASSERT_MSG(false, "illegal padBitMax[%d]", pad_bit_max);
+        //SEAD_ASSERT_MSG(false, "illegal padBitMax[%d]", padBitMax);
         mPadBitMax = cPadIdxMaxBase;
     }
 
@@ -136,6 +136,169 @@ void ControllerBase::updateDerivativeParams_(u32 prev_hold, bool prev_pointer_on
 
     mPointerS32.x = (s32)mPointer.x;
     mPointerS32.y = (s32)mPointer.y;
+}
+
+u32 ControllerBase::getPadHoldCount(s32 bit) const
+{
+    //SEAD_ASSERT(bit < mPadBitMax);
+    return mPadHoldCounts[bit];
+}
+
+void ControllerBase::setPadRepeat(u32 mask, u8 delay_frame, u8 pulse_frame)
+{
+    BitFlag32 pad_to_set(mask);
+
+    for (u32 i = 0; i < mPadBitMax; i++)
+    {
+        if (pad_to_set.isOnBit(i))
+        {
+            mPadRepeatDelays[i] = delay_frame;
+            mPadRepeatPulses[i] = pulse_frame;
+        }
+    }
+}
+
+void ControllerBase::setLeftStickCrossThreshold(f32 hold, f32 release)
+{
+    if (hold >= release)
+    {
+        mLeftStickHoldThreshold = hold;
+        mLeftStickReleaseThreshold = release;
+    }
+    else
+    {
+        //SEAD_ASSERT_MSG(false, "hold[%f] must be larger than or equal to release[%f].", hold, release);
+    }
+}
+
+void ControllerBase::setRightStickCrossThreshold(f32 hold, f32 release)
+{
+    if (hold >= release)
+    {
+        mRightStickHoldThreshold = hold;
+        mRightStickReleaseThreshold = release;
+    }
+    else
+    {
+        //SEAD_ASSERT_MSG(false, "hold[%f] must be larger than or equal to release[%f].", hold, release);
+    }
+}
+
+void ControllerBase::setPointerBound(const BoundBox2f& bound)
+{
+    mPointerBound.set(bound.getMin(),
+                      bound.getMax());
+    mPointerFlag.set(cPointerUnkFlag3);
+}
+
+u32 ControllerBase::getStickHold_(u32 prev_hold, const Vector2f& stick, f32 hold_threshold, f32 release_threshold, s32 start_bit)
+{
+    f32 length = stick.length();
+
+    if (length < release_threshold || (length < hold_threshold &&
+                                       (prev_hold & (1 << start_bit + cCrossUp    |
+                                                     1 << start_bit + cCrossDown  |
+                                                     1 << start_bit + cCrossLeft  |
+                                                     1 << start_bit + cCrossRight )) == 0))
+    {
+        return 0;
+    }
+    else
+    {
+        u32 angle = Mathf::atan2Idx(stick.y, stick.x);
+
+        if (angle < 0x10000000)
+        {
+            return 1 << start_bit + cCrossRight;
+        }
+        else if (angle < 0x30000000)
+        {
+            return 1 << start_bit + cCrossRight |
+                   1 << start_bit + cCrossUp;
+        }
+        else if (angle < 0x50000000)
+        {
+            return 1 << start_bit + cCrossUp;
+        }
+        else if (angle < 0x70000000)
+        {
+            return 1 << start_bit + cCrossLeft |
+                   1 << start_bit + cCrossUp;
+        }
+        else if (angle < 0x90000000)
+        {
+            return 1 << start_bit + cCrossLeft;
+        }
+        else if (angle < 0xb0000000)
+        {
+            return 1 << start_bit + cCrossLeft |
+                   1 << start_bit + cCrossDown;
+        }
+        else if (angle < 0xd0000000)
+        {
+            return 1 << start_bit + cCrossDown;
+        }
+        else if (angle < 0xf0000000)
+        {
+            return 1 << start_bit + cCrossRight |
+                   1 << start_bit + cCrossDown;
+        }
+        else
+        {
+            return 1 << start_bit + cCrossRight;
+        }
+    }
+}
+
+bool ControllerBase::isIdleBase_()
+{
+    return getHoldMask() == 0 &&
+           mLeftStick.isZero() &&
+           mRightStick.isZero() &&
+           mLeftAnalogTrigger == 0.0f &&
+           mRightAnalogTrigger == 0.0f;
+}
+
+void ControllerBase::setIdleBase_()
+{
+    mPadHold.makeAllZero();
+    mPadTrig.makeAllZero();
+    mPadRelease.makeAllZero();
+    mPadRepeat.makeAllZero();
+    mPointerFlag.makeAllZero();
+
+    for (u32 i = 0; i < mPadBitMax; i++)
+        mPadHoldCounts[i] = 0;
+
+    mPointer.set(cInvalidPointer);
+    mPointerS32.set(cInvalidPointerS32);
+    mLeftStick.set(0.0f, 0.0f);
+    mRightStick.set(0.0f, 0.0f);
+    mLeftAnalogTrigger = 0.0f;
+    mRightAnalogTrigger = 0.0f;
+}
+
+u32 ControllerBase::createStickCrossMask_()
+{
+    BitFlag32 mask;
+
+    if (mLeftStickCrossStartBit >= 0)
+    {
+        mask.setBit(mLeftStickCrossStartBit + cCrossUp);
+        mask.setBit(mLeftStickCrossStartBit + cCrossDown);
+        mask.setBit(mLeftStickCrossStartBit + cCrossLeft);
+        mask.setBit(mLeftStickCrossStartBit + cCrossRight);
+    }
+
+    if (mRightStickCrossStartBit >= 0)
+    {
+        mask.setBit(mRightStickCrossStartBit + cCrossUp);
+        mask.setBit(mRightStickCrossStartBit + cCrossDown);
+        mask.setBit(mRightStickCrossStartBit + cCrossLeft);
+        mask.setBit(mRightStickCrossStartBit + cCrossRight);
+    }
+
+    return mask.getDirect();
 }
 
 } // namespace sead

@@ -15,6 +15,9 @@ public:
     static void add(Base& o, const Base& a, const Base& b);
     static void sub(Base& o, const Base& a, const Base& b);
 
+    static T squaredLength(const Base& v);
+    static T length(const Base& v);
+
     static void set(Base& o, const Base& v);
     static void set(Base& v, T x, T y);
 };
@@ -47,6 +50,9 @@ public:
     typedef typename Policies<T>::Vec4Base Base;
 
 public:
+    static T squaredLength(const Base& v);
+    static T length(const Base& v);
+
     static void set(Base& o, const Base& v);
     static void set(Base& v, T x, T y, T z, T w);
 };

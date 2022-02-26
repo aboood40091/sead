@@ -31,6 +31,10 @@ public:
     Self& operator-=(const Self& v);
     Self& operator=(const Self& v);
 
+    bool isZero() const;
+
+    T length() const;
+
     void set(const Self& v);
     void set(T x_, T y_);
 
@@ -65,6 +69,8 @@ public:
     Self& operator+=(const Self& v);
     Self& operator-=(const Self& v);
     Self& operator=(const Self& v);
+
+    bool isZero() const;
 
     T dot(const Self& t) const;
     T length() const;
@@ -103,6 +109,10 @@ public:
     Vector4(T x_, T y_, T z_, T w_);
 
     Self& operator=(const Self& v);
+
+    bool isZero() const;
+
+    T length() const;
 
     void set(const Self& v);
     void set(T x_, T y_, T z_, T w_);

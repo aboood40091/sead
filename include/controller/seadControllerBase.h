@@ -16,7 +16,7 @@ public:
     static const Vector2i cInvalidPointerS32;
 
 public:
-    ControllerBase(s32 pad_bit_max, s32 left_stick_cross_start_bit, s32 right_stick_cross_start_bit, s32 touch_key_bit);
+    ControllerBase(s32 padBitMax, s32 leftStickCrossStartBit, s32 rightStickCrossStartBit, s32 touchKeyBit);
 
     u32 getHoldMask() const { return mPadHold.getDirect(); }
     u32 getTrigMask() const { return mPadTrig.getDirect(); }
@@ -76,6 +76,14 @@ protected:
         cPointerOnNow    = 1 << 1,
         cPointerOffNow   = 1 << 2,
         cPointerUnkFlag3 = 1 << 3
+    };
+
+    enum
+    {
+        cCrossUp,
+        cCrossDown,
+        cCrossLeft,
+        cCrossRight
     };
 
     BitFlag32 mPadTrig;

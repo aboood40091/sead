@@ -56,6 +56,21 @@ Vector2<T>::operator=(const Self& v)
 }
 
 template <typename T>
+inline bool
+Vector2<T>::isZero() const
+{
+    return this->x == zero.x &&
+           this->y == zero.y;
+}
+
+template <typename T>
+inline T
+Vector2<T>::length() const
+{
+    return Vector2CalcCommon<T>::length(*this);
+}
+
+template <typename T>
 inline void
 Vector2<T>::set(const Self& v)
 {
@@ -127,6 +142,15 @@ Vector3<T>::operator=(const Self& v)
 {
     Vector3CalcCommon<T>::set(*this, v);
     return *this;
+}
+
+template <typename T>
+inline bool
+Vector3<T>::isZero() const
+{
+    return this->x == zero.x &&
+           this->y == zero.y &&
+           this->z == zero.z;
 }
 
 template <typename T>
@@ -205,6 +229,23 @@ Vector4<T>::operator=(const Self& v)
 {
     Vector4CalcCommon<T>::set(*this, v);
     return *this;
+}
+
+template <typename T>
+inline bool
+Vector4<T>::isZero() const
+{
+    return this->x == zero.x &&
+           this->y == zero.y &&
+           this->z == zero.z &&
+           this->w == zero.w;
+}
+
+template <typename T>
+inline T
+Vector4<T>::length() const
+{
+    return Vector4CalcCommon<T>::length(*this);
 }
 
 template <typename T>
