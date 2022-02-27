@@ -10,7 +10,7 @@ class ControllerWrapper : public ControllerWrapperBase
     SEAD_RTTI_OVERRIDE(ControllerWrapper, ControllerWrapperBase)
 
 public:
-    static const u8 cPadConfigDefault[28];
+    static const u8 cPadConfigDefault[Controller::cPadIdx_Max];
 
 public:
     ControllerWrapper();
@@ -22,7 +22,7 @@ public:
     void setPadConfig(s32 padbit_max, const u8* pad_config, bool enable_stickcross_emulation);
 
 protected:
-    u8 mPadConfig[32];
+    u8 mPadConfig[cPadIdx_MaxBase];
 };
 #ifdef cafe
 static_assert(sizeof(ControllerWrapper) == 0x194, "sead::ControllerWrapper size mismatch");

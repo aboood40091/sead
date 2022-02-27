@@ -1,4 +1,3 @@
-#include <controller/seadController.h>
 #include <controller/seadControllerWrapperBase.h>
 #include <prim/seadMemUtil.h>
 

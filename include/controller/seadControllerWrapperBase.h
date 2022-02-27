@@ -1,7 +1,7 @@
 #ifndef SEAD_CONTROLLER_WRAPPER_BASE_H_
 #define SEAD_CONTROLLER_WRAPPER_BASE_H_
 
-#include <controller/seadControllerBase.h>
+#include <controller/seadController.h>
 #include <heap/seadDisposer.h>
 #include <prim/seadRuntimeTypeInfo.h>
 
@@ -34,7 +34,7 @@ protected:
     Controller* mController;
     bool mIsEnable;
     ListNode mListNode;
-    u8 mPadConfig[32];
+    u8 mPadConfig[cPadIdx_MaxBase];
 
     friend class Controller;
 };
