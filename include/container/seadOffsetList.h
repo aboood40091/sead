@@ -17,7 +17,7 @@ public:
     {
     }
 
-    void initOffset(s32 offset);
+    void initOffset(s32 offset) { mOffset = offset; }
     void clear();
     void unsafeClear();
 

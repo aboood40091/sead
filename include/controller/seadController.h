@@ -41,9 +41,14 @@ public:
 
     virtual void calc();
     virtual bool isConnected() const { return true; }
+
+protected:
     virtual void calcImpl_() = 0;
     virtual bool isIdle_();
     virtual void setIdle_();
+
+public:
+    ControllerAddon* getAddon(ControllerDefine::AddonId id) const;
 
 protected:
     ControllerDefine::ControllerId mId;

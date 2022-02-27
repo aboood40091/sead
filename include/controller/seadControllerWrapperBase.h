@@ -19,8 +19,11 @@ public:
 
     virtual void calc(u32 prev_hold, bool prev_pointer_on) = 0;
     virtual void setIdle();
+
+protected:
     virtual bool isIdle_();
 
+public:
     void registerWith(Controller* controller, bool copy_repeat_setting);
     void unregister();
     void copyRepeatSetting(const Controller* controller);
@@ -32,6 +35,8 @@ protected:
     bool mIsEnable;
     ListNode mListNode;
     u8 mPadConfig[32];
+
+    friend class Controller;
 };
 #ifdef cafe
 static_assert(sizeof(ControllerWrapperBase) == 0x174, "sead::ControllerWrapperBase size mismatch");

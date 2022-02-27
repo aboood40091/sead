@@ -21,6 +21,20 @@ public:
         cController_UserDefine = 10
     };
 
+    enum DeviceId
+    {
+        cDevice_Null          = 0,
+        cDevice_KeyboardMouse = 1,
+        cDevice_CtrHid        = 2,
+        cDevice_WinJoyPad     = 3,
+        cDevice_RvlWPad       = 4,
+        cDevice_WinWPad       = 5,
+        cDevice_CafeDebugPad  = 6,
+        cDevice_CafeWPad      = 7,
+        cDevice_CafeVPad      = 8,
+        cDevice_UserDefine    = 9
+    };
+
     enum AddonId
     {
         cAddon_Null          = 0,
