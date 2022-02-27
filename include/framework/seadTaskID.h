@@ -12,7 +12,12 @@ class TaskParameter;
 
 struct TaskConstructArg
 {
-    inline TaskConstructArg();
+    TaskConstructArg()
+        : heap_array(NULL)
+        , mgr(NULL)
+        , param(NULL)
+    {
+    }
 
     TaskConstructArg(HeapArray* heap_array_, TaskMgr* mgr_, TaskParameter* param_)
         : heap_array(heap_array_)

@@ -57,6 +57,7 @@ protected:
     OffsetList<ControllerWrapperBase> mWrappers;
 
     friend class ControllerWrapperBase;
+    friend class ControllerMgr;
 };
 #ifdef cafe
 static_assert(sizeof(Controller) == 0x15C, "sead::Controller size mismatch");

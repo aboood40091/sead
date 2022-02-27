@@ -22,8 +22,8 @@ public:
     }
 
     void setBuffer(s32 ptrNumMax, void* buf);
-    void allocBuffer(s32 ptrNumMax, Heap* heap, s32 alignment);
-    bool tryAllocBuffer(s32 ptrNumMax, Heap* heap, s32 alignment);
+    void allocBuffer(s32 ptrNumMax, Heap* heap, s32 alignment = 4);
+    bool tryAllocBuffer(s32 ptrNumMax, Heap* heap, s32 alignment = 4);
     void freeBuffer();
     bool isBufferReady() const;
     bool isEmpty() const;

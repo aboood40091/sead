@@ -1,16 +1,46 @@
 #ifndef SEAD_CONTROLLER_MGR_H_
 #define SEAD_CONTROLLER_MGR_H_
 
+#include <container/seadOffsetList.h>
+#include <controller/seadControllerDefine.h>
 #include <framework/seadCalculateTask.h>
 #include <framework/seadTaskMgr.h>
+#include <framework/seadTaskParameter.h>
 
 namespace sead {
 
 class ControlDevice;
+class Controller;
+class ControllerAddon;
 
 class ControllerMgr : public CalculateTask
 {
     SEAD_TASK_SINGLETON_DISPOSER(ControllerMgr)
+
+private:
+    class ConstructArg : public TaskConstructArg
+    {
+    public:
+        ConstructArg()
+            : TaskConstructArg()
+            , mHeapArray()
+        {
+            heap_array = &mHeapArray;
+        }
+
+    private:
+        HeapArray mHeapArray;
+    };
+
+public:
+    struct Parameter : public TaskParameter
+    {
+        SEAD_RTTI_OVERRIDE(Parameter, TaskParameter)
+
+    public:
+        s32 controllerMax;
+        IDelegate1<ControllerMgr*>* proc;
+    };
 
 public:
     ControllerMgr();
