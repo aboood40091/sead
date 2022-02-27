@@ -55,6 +55,8 @@ protected:
     ControllerMgr* mMgr;
     OffsetList<ControllerAddon> mAddons;
     OffsetList<ControllerWrapperBase> mWrappers;
+
+    friend class ControllerWrapperBase;
 };
 #ifdef cafe
 static_assert(sizeof(Controller) == 0x15C, "sead::Controller size mismatch");
