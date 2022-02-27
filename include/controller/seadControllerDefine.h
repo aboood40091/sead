@@ -20,6 +20,14 @@ public:
         cController_Merge      = 9,
         cController_UserDefine = 10
     };
+
+    enum AddonId
+    {
+        cAddon_Null          = 0,
+        cAddon_Accelerometer = 1,
+        cAddon_PatternRumble = 2,
+        cAddon_UserDefine    = 3
+    };
 };
 
 } // namespace sead

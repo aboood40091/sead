@@ -67,7 +67,7 @@ protected:
 
     enum
     {
-        cPadIdxMaxBase = 32
+        cPadIdx_MaxBase = 32
     };
 
     enum PointerFlagMask
@@ -92,9 +92,9 @@ protected:
     BitFlag32 mPointerFlag;
     Vector2i mPointerS32;
     BoundBox2f mPointerBound;
-    u32 mPadHoldCounts[cPadIdxMaxBase];
-    u8 mPadRepeatDelays[cPadIdxMaxBase];
-    u8 mPadRepeatPulses[cPadIdxMaxBase];
+    u32 mPadHoldCounts[cPadIdx_MaxBase];
+    u8 mPadRepeatDelays[cPadIdx_MaxBase];
+    u8 mPadRepeatPulses[cPadIdx_MaxBase];
     f32 mLeftStickHoldThreshold;
     f32 mRightStickHoldThreshold;
     f32 mLeftStickReleaseThreshold;

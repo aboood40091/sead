@@ -17,22 +17,22 @@ class Controller : public ControllerBase
     SEAD_RTTI_BASE(Controller)
 
 public:
-    enum
+    enum PadIdx
     {
-        cPadIdxTouch           = 15,
-        cPadIdxUp              = 16,
-        cPadIdxDown            = 17,
-        cPadIdxLeft            = 18,
-        cPadIdxRight           = 19,
-        cPadIdxLeftStickUp     = 20,
-        cPadIdxLeftStickDown   = 21,
-        cPadIdxLeftStickLeft   = 22,
-        cPadIdxLeftStickRight  = 23,
-        cPadIdxRightStickUp    = 24,
-        cPadIdxRightStickDown  = 25,
-        cPadIdxRightStickLeft  = 26,
-        cPadIdxRightStickRight = 27,
-        cPadIdxMax             = 28
+        cPadIdx_Touch           = 15,
+        cPadIdx_Up              = 16,
+        cPadIdx_Down            = 17,
+        cPadIdx_Left            = 18,
+        cPadIdx_Right           = 19,
+        cPadIdx_LeftStickUp     = 20,
+        cPadIdx_LeftStickDown   = 21,
+        cPadIdx_LeftStickLeft   = 22,
+        cPadIdx_LeftStickRight  = 23,
+        cPadIdx_RightStickUp    = 24,
+        cPadIdx_RightStickDown  = 25,
+        cPadIdx_RightStickLeft  = 26,
+        cPadIdx_RightStickRight = 27,
+        cPadIdx_Max             = 28
     };
 
 public:

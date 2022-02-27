@@ -31,13 +31,13 @@ ControllerBase::ControllerBase(s32 padBitMax, s32 leftStickCrossStartBit, s32 ri
     , mLeftAnalogTrigger(0.0f)
     , mRightAnalogTrigger(0.0f)
 {
-    if (cPadIdxMaxBase < padBitMax)
+    if (cPadIdx_MaxBase < padBitMax)
     {
         //SEAD_ASSERT_MSG(false, "illegal padBitMax[%d]", padBitMax);
-        mPadBitMax = cPadIdxMaxBase;
+        mPadBitMax = cPadIdx_MaxBase;
     }
 
-    for (u32 i = 0; i < cPadIdxMaxBase; i++)
+    for (u32 i = 0; i < cPadIdx_MaxBase; i++)
     {
         mPadRepeatDelays[i] = 30;
         mPadRepeatPulses[i] = 1;

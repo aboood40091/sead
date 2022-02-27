@@ -16,11 +16,12 @@ public:
     ControllerWrapper();
     virtual ~ControllerWrapper() { }
 
-    virtual void calc(u32, bool);
+    virtual void calc(u32 prev_hold, bool prev_pointer_on);
 
-    u32 createPadMaskFromControllerPadMask_(u32) const;
-    void setPadConfig(s32, const u8*, bool);
+    u32 createPadMaskFromControllerPadMask_(u32 controller_mask) const;
+    void setPadConfig(s32 padbit_max, const u8* pad_config, bool enable_stickcross_emulation);
 
+protected:
     u8 mPadConfig[32];
 };
 #ifdef cafe

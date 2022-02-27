@@ -1,4 +1,6 @@
 #include <controller/seadController.h>
+#include <controller/seadControllerAddon.h>
+#include <controller/seadControllerWrapperBase.h>
 
 namespace sead {
 
