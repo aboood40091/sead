@@ -66,6 +66,9 @@ public:
     // TODO: Add/remove addon
     ControllerAddon* getAddon(ControllerDefine::AddonId id) const;
 
+    template <typename T>
+    T getAddonAs() const;
+
 protected:
     ControllerDefine::ControllerId mId;
     ControllerMgr* mMgr;
@@ -80,5 +83,17 @@ static_assert(sizeof(Controller) == 0x15C, "sead::Controller size mismatch");
 #endif // cafe
 
 } // namespace sead
+
+// TODO: Move this
+
+namespace {
+
+template <typename T> struct remove_pointer                    { typedef T type; };
+template <typename T> struct remove_pointer<T*>                { typedef T type; };
+template <typename T> struct remove_pointer<T* const>          { typedef T type; };
+template <typename T> struct remove_pointer<T* volatile>       { typedef T type; };
+template <typename T> struct remove_pointer<T* const volatile> { typedef T type; };
+
+}
 
 #endif // SEAD_CONTROLLER_H_

@@ -117,4 +117,66 @@ Controller* ControllerMgr::getControllerByOrder(ControllerDefine::ControllerId i
     return NULL;
 }
 
+ControlDevice* ControllerMgr::getControlDevice(ControllerDefine::DeviceId id) const
+{
+    for (OffsetList<ControlDevice>::iterator it = mDevices.begin(); it != mDevices.end(); ++it)
+    {
+        ControlDevice& device = *it;
+        if (device.mId == id)
+            return &device;
+    }
+
+    return NULL;
+}
+
+ControllerAddon* ControllerMgr::getControllerAddon(s32 index, ControllerDefine::AddonId id) const
+{
+    Controller* controller = mControllers.at(index);
+    if (controller)
+        return controller->getAddon(id);
+
+    return NULL;
+}
+
+template <typename T>
+T ControllerMgr::getControllerByOrderAs(s32 index) const
+{
+    for (PtrArray<Controller>::iterator it = mControllers.begin(); it != mControllers.end(); ++it)
+    {
+        T controller = DynamicCast<remove_pointer<T>::type>(&(*it));
+        if (controller)
+        {
+            if (index == 0)
+                return controller;
+
+            index--;
+        }
+    }
+
+    return NULL;
+}
+
+template <typename T>
+T ControllerMgr::getControlDeviceAs() const
+{
+    for (OffsetList<ControlDevice>::iterator it = mDevices.begin(); it != mDevices.end(); ++it)
+    {
+        T device = DynamicCast<remove_pointer<T>::type>(&(*it));
+        if (device)
+            return device;
+    }
+
+    return NULL;
+}
+
+template <typename T>
+T ControllerMgr::getControllerAddonAs(s32 index) const
+{
+    Controller* controller = mControllers.at(index);
+    if (controller)
+        return controller->getAddonAs<T>();
+
+    return NULL;
+}
+
 } // namespace sead

@@ -52,6 +52,19 @@ ControllerAddon* Controller::getAddon(ControllerDefine::AddonId id) const
     return NULL;
 }
 
+template <typename T>
+T Controller::getAddonAs() const
+{
+    for (OffsetList<ControllerAddon>::iterator it = mAddons.begin(); it != mAddons.end(); ++it)
+    {
+        T addon = DynamicCast<remove_pointer<T>::type>(&(*it));
+        if (addon)
+            return addon;
+    }
+
+    return NULL;
+}
+
 bool Controller::isIdle_()
 {
     return isIdleBase_();
