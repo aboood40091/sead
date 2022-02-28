@@ -14,10 +14,10 @@ class ControlDevice
     SEAD_RTTI_BASE(ControlDevice)
 
 public:
-    ControlDevice()
+    ControlDevice(ControllerMgr* mgr)
         : mListNode()
         , mId(ControllerDefine::cDevice_Null)
-        , mMgr(NULL)
+        , mMgr(mgr)
     {
     }
 

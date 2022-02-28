@@ -62,6 +62,13 @@ public:
     ControlDevice* getControlDevice(ControllerDefine::DeviceId id) const;
     ControllerAddon* getControllerAddon(s32 index, ControllerDefine::AddonId id) const;
 
+    template <typename T>
+    T getControllerByOrderAs(s32 index) const;
+    template <typename T>
+    T getControlDeviceAs() const;
+    template <typename T>
+    T getControllerAddonAs(s32 index) const;
+
     s32 findControllerPort(const Controller* controller) const;
 
 private:

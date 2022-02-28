@@ -1,6 +1,12 @@
+#include <basis/seadNew.h>
 #include <controller/seadControlDevice.h>
+#include <controller/seadController.h>
 #include <controller/seadControllerMgr.h>
 #include <prim/seadDelegate.h>
+
+#ifdef cafe
+#include <controller/cafe/seadCafeWPadDeviceCafe.h>
+#endif // cafe
 
 namespace sead {
 
@@ -45,8 +51,16 @@ void ControllerMgr::finalize()
 
 void ControllerMgr::initializeDefault(Heap* heap)
 {
-    initialize(6, heap);
+    initialize(
+#ifdef cafe
+        6,
+#else
+#error "Unknown Platform"
+#endif
+        heap
+    );
 
+#ifdef cafe
     // TODO: CafeDebugPadDevice, CafeDebugController,
     //       CafeWPadDevice, CafeRemoteController, CafeRemotePatternRumbleAddon
     //       CafeVPadDevice, CafeDRCController, CafeDRCPatternRumbleAddon
@@ -56,7 +70,7 @@ void ControllerMgr::initializeDefault(Heap* heap)
     //    mControllers.pushBack(new (heap) CafeDebugController(this, 0));
     //}
 
-    //mDevices.pushBack(new (heap) CafeWPadDevice(this, heap));
+    mDevices.pushBack(new (heap) CafeWPadDevice(this, heap));
     //for (u32 i = 0; i < 4; i++)
     //{
     //    Controller* controller = new (heap) CafeRemoteController(this, i);
@@ -70,17 +84,37 @@ void ControllerMgr::initializeDefault(Heap* heap)
     //    controller->mAddons.pushBack(new (heap) CafeDRCPatternRumbleAddon(controller));
     //    mControllers.pushBack(controller);
     //}
+#endif // cafe
 }
 
 void ControllerMgr::finalizeDefault()
 {
+#ifdef cafe
     // TODO: CafeDebugPadDevice, CafeDebugController,
     //       CafeWPadDevice, CafeRemoteController, CafeRemotePatternRumbleAddon
     //       CafeVPadDevice, CafeDRCController, CafeDRCPatternRumbleAddon
 
     // ...
+#endif // cafe
 
     finalize();
+}
+
+Controller* ControllerMgr::getControllerByOrder(ControllerDefine::ControllerId id, s32 index) const
+{
+    for (PtrArray<Controller>::iterator it = mControllers.begin(); it != mControllers.end(); ++it)
+    {
+        Controller& controller = *it;
+        if (controller.mId == id)
+        {
+            if (index == 0)
+                return &controller;
+
+            index--;
+        }
+    }
+
+    return NULL;
 }
 
 } // namespace sead
