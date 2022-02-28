@@ -56,6 +56,8 @@ public:
     void initializeDefault(Heap* heap);
     void finalizeDefault();
 
+    // TODO: Add/remove devices & controllers
+
     Controller* getControllerByOrder(ControllerDefine::ControllerId id, s32 index) const;
     ControlDevice* getControlDevice(ControllerDefine::DeviceId id) const;
     ControllerAddon* getControllerAddon(s32 index, ControllerDefine::AddonId id) const;

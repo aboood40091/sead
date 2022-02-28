@@ -19,6 +19,21 @@ class Controller : public ControllerBase
 public:
     enum PadIdx
     {
+        cPadIdx_A               = 0,
+        cPadIdx_B               = 1,
+        cPadIdx_ZL              = 2,
+        cPadIdx_X               = 3,
+        cPadIdx_Y               = 4,
+        cPadIdx_ZR              = 5,
+        cPadIdx_2               = 6, // Also Right-Stick Click
+        cPadIdx_1               = 7, // Also Left-Stick Click
+        cPadIdx_Home            = 8,
+        cPadIdx_Minus           = 9,
+        cPadIdx_Plus            = 10,
+        cPadIdx_Start           = 11,
+        cPadIdx_Select          = 12,
+        cPadIdx_L               = 13,
+        cPadIdx_R               = 14,
         cPadIdx_Touch           = 15,
         cPadIdx_Up              = 16,
         cPadIdx_Down            = 17,
@@ -48,6 +63,7 @@ protected:
     virtual void setIdle_();
 
 public:
+    // TODO: Add/remove addon
     ControllerAddon* getAddon(ControllerDefine::AddonId id) const;
 
 protected:
