@@ -1,6 +1,18 @@
 #ifndef SEAD_CONTROLLER_H_
 #define SEAD_CONTROLLER_H_
 
+// TODO: Move this
+
+namespace {
+
+template <typename T> struct remove_pointer                    { typedef T type; };
+template <typename T> struct remove_pointer<T*>                { typedef T type; };
+template <typename T> struct remove_pointer<T* const>          { typedef T type; };
+template <typename T> struct remove_pointer<T* volatile>       { typedef T type; };
+template <typename T> struct remove_pointer<T* const volatile> { typedef T type; };
+
+}
+
 #include <container/seadOffsetList.h>
 #include <controller/seadControllerBase.h>
 #include <controller/seadControllerDefine.h>
@@ -21,12 +33,12 @@ public:
     {
         cPadIdx_A               = 0,
         cPadIdx_B               = 1,
-        cPadIdx_ZL              = 2,
+        cPadIdx_C               = 2, // Nunchuck C, also ZL
         cPadIdx_X               = 3,
         cPadIdx_Y               = 4,
-        cPadIdx_ZR              = 5,
-        cPadIdx_2               = 6, // Also Right-Stick Click
-        cPadIdx_1               = 7, // Also Left-Stick Click
+        cPadIdx_Z               = 5, // Nunchuck Z, also ZR
+        cPadIdx_2               = 6, // Wiimote 2, also Right-Stick Click
+        cPadIdx_1               = 7, // Wiimote 1, also Left-Stick Click
         cPadIdx_Home            = 8,
         cPadIdx_Minus           = 9,
         cPadIdx_Plus            = 10,
@@ -82,18 +94,19 @@ protected:
 static_assert(sizeof(Controller) == 0x15C, "sead::Controller size mismatch");
 #endif // cafe
 
-} // namespace sead
+template <typename T>
+T Controller::getAddonAs() const
+{
+    for (OffsetList<ControllerAddon>::iterator it = mAddons.begin(); it != mAddons.end(); ++it)
+    {
+        T addon = DynamicCast<remove_pointer<T>::type>(&(*it));
+        if (addon)
+            return addon;
+    }
 
-// TODO: Move this
-
-namespace {
-
-template <typename T> struct remove_pointer                    { typedef T type; };
-template <typename T> struct remove_pointer<T*>                { typedef T type; };
-template <typename T> struct remove_pointer<T* const>          { typedef T type; };
-template <typename T> struct remove_pointer<T* volatile>       { typedef T type; };
-template <typename T> struct remove_pointer<T* const volatile> { typedef T type; };
-
+    return NULL;
 }
+
+} // namespace sead
 
 #endif // SEAD_CONTROLLER_H_

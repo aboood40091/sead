@@ -2,7 +2,7 @@
 #define SEAD_CONTROLLER_MGR_H_
 
 #include <container/seadOffsetList.h>
-#include <controller/seadControllerDefine.h>
+#include <controller/seadController.h>
 #include <framework/seadCalculateTask.h>
 #include <framework/seadTaskMgr.h>
 #include <framework/seadTaskParameter.h>
@@ -78,6 +78,47 @@ private:
 #ifdef cafe
 static_assert(sizeof(ControllerMgr) == 0xE8, "sead::ControllerMgr size mismatch");
 #endif // cafe
+
+template <typename T>
+T ControllerMgr::getControllerByOrderAs(s32 index) const
+{
+    for (PtrArray<Controller>::iterator it = mControllers.begin(); it != mControllers.end(); ++it)
+    {
+        T controller = DynamicCast<remove_pointer<T>::type>(&(*it));
+        if (controller)
+        {
+            if (index == 0)
+                return controller;
+
+            index--;
+        }
+    }
+
+    return NULL;
+}
+
+template <typename T>
+T ControllerMgr::getControlDeviceAs() const
+{
+    for (OffsetList<ControlDevice>::iterator it = mDevices.begin(); it != mDevices.end(); ++it)
+    {
+        T device = DynamicCast<remove_pointer<T>::type>(&(*it));
+        if (device)
+            return device;
+    }
+
+    return NULL;
+}
+
+template <typename T>
+T ControllerMgr::getControllerAddonAs(s32 index) const
+{
+    Controller* controller = mControllers.at(index);
+    if (controller)
+        return controller->getAddonAs<T>();
+
+    return NULL;
+}
 
 } // namespace sead
 

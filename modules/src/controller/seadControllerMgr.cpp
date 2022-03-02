@@ -1,11 +1,11 @@
 #include <basis/seadNew.h>
 #include <controller/seadControlDevice.h>
-#include <controller/seadController.h>
 #include <controller/seadControllerMgr.h>
 #include <prim/seadDelegate.h>
 
 #ifdef cafe
 #include <controller/cafe/seadCafeWPadDeviceCafe.h>
+#include <controller/cafe/seadCafeRemoteControllerCafe.h>
 #endif // cafe
 
 namespace sead {
@@ -71,12 +71,12 @@ void ControllerMgr::initializeDefault(Heap* heap)
     //}
 
     mDevices.pushBack(new (heap) CafeWPadDevice(this, heap));
-    //for (u32 i = 0; i < 4; i++)
-    //{
-    //    Controller* controller = new (heap) CafeRemoteController(this, i);
+    for (u32 i = 0; i < 4; i++)
+    {
+        Controller* controller = new (heap) CafeRemoteController(this, i);
     //    controller->mAddons.pushBack(new (heap) CafeRemotePatternRumbleAddon(controller));
-    //    mControllers.pushBack(controller);
-    //}
+        mControllers.pushBack(controller);
+    }
 
     //mDevices.pushBack(new (heap) CafeVPadDevice(this));
     //{
@@ -138,45 +138,18 @@ ControllerAddon* ControllerMgr::getControllerAddon(s32 index, ControllerDefine::
     return NULL;
 }
 
-template <typename T>
-T ControllerMgr::getControllerByOrderAs(s32 index) const
+s32 ControllerMgr::findControllerPort(const Controller* controller) const
 {
-    for (PtrArray<Controller>::iterator it = mControllers.begin(); it != mControllers.end(); ++it)
+    //SEAD_ASSERT(controller);
+
+     s32 i = 0;
+     for (PtrArray<Controller>::iterator it = mControllers.begin(); it != mControllers.end(); ++it)
     {
-        T controller = DynamicCast<remove_pointer<T>::type>(&(*it));
-        if (controller)
-        {
-            if (index == 0)
-                return controller;
-
-            index--;
-        }
+        if (&(*it) == controller)
+            return i;
+        i++;
     }
-
-    return NULL;
-}
-
-template <typename T>
-T ControllerMgr::getControlDeviceAs() const
-{
-    for (OffsetList<ControlDevice>::iterator it = mDevices.begin(); it != mDevices.end(); ++it)
-    {
-        T device = DynamicCast<remove_pointer<T>::type>(&(*it));
-        if (device)
-            return device;
-    }
-
-    return NULL;
-}
-
-template <typename T>
-T ControllerMgr::getControllerAddonAs(s32 index) const
-{
-    Controller* controller = mControllers.at(index);
-    if (controller)
-        return controller->getAddonAs<T>();
-
-    return NULL;
+    return -1;
 }
 
 } // namespace sead

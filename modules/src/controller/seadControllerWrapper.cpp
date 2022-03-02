@@ -6,10 +6,10 @@ namespace sead {
 const u8 ControllerWrapper::cPadConfigDefault[Controller::cPadIdx_Max] = {
     Controller::cPadIdx_A,
     Controller::cPadIdx_B,
-    Controller::cPadIdx_ZL,
+    Controller::cPadIdx_C,
     Controller::cPadIdx_X,
     Controller::cPadIdx_Y,
-    Controller::cPadIdx_ZR,
+    Controller::cPadIdx_Z,
     Controller::cPadIdx_2,
     Controller::cPadIdx_1,
     Controller::cPadIdx_Home,
