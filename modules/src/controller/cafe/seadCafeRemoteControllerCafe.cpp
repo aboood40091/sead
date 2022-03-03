@@ -22,6 +22,7 @@ void CafeRemoteController::calcImpl_()
         return;
 
     const CafeWPadDevice::KPadInfo& k_pad_info = device->getKPadInfo(mChannel);
+
     if (k_pad_info.last_read_length > 0 || k_pad_info.last_read_error == KPAD_READ_ERR_NO_DATA)
     {
         const KPADStatus& status = k_pad_info.status[0];
@@ -40,10 +41,10 @@ void CafeRemoteController::calcImpl_()
                 mPadHold.change(1 << Controller::cPadIdx_B,      hold & KPAD_UC_BUTTON_B);
                 mPadHold.change(1 << Controller::cPadIdx_X,      hold & KPAD_UC_BUTTON_X);
                 mPadHold.change(1 << Controller::cPadIdx_Y,      hold & KPAD_UC_BUTTON_Y);
-                mPadHold.change(1 << Controller::cPadIdx_L,      hold & KPAD_UC_BUTTON_L);
-                mPadHold.change(1 << Controller::cPadIdx_R,      hold & KPAD_UC_BUTTON_R);
-                mPadHold.change(1 << Controller::cPadIdx_C,      hold & KPAD_UC_BUTTON_ZL);
-                mPadHold.change(1 << Controller::cPadIdx_Z,      hold & KPAD_UC_BUTTON_ZR);
+                mPadHold.change(1 << Controller::cPadIdx_L,      hold & KPAD_UC_TRIGGER_L);
+                mPadHold.change(1 << Controller::cPadIdx_R,      hold & KPAD_UC_TRIGGER_R);
+                mPadHold.change(1 << Controller::cPadIdx_C,      hold & KPAD_UC_TRIGGER_ZL);
+                mPadHold.change(1 << Controller::cPadIdx_Z,      hold & KPAD_UC_TRIGGER_ZR);
                 mPadHold.change(1 << Controller::cPadIdx_Plus |
                                 1 << Controller::cPadIdx_Start,  hold & KPAD_UC_BUTTON_PLUS);
                 mPadHold.change(1 << Controller::cPadIdx_Minus |
@@ -102,10 +103,10 @@ void CafeRemoteController::calcImpl_()
                                                                      1 << Controller::cPadIdx_Start);
                     if (cl_hold & WPAD_CL_BUTTON_MINUS) mPadHold.set(1 << Controller::cPadIdx_Minus |
                                                                      1 << Controller::cPadIdx_Select);
-                    if (cl_hold & WPAD_CL_BUTTON_L)     mPadHold.set(1 << Controller::cPadIdx_L);
-                    if (cl_hold & WPAD_CL_BUTTON_R)     mPadHold.set(1 << Controller::cPadIdx_R);
-                    if (cl_hold & WPAD_CL_BUTTON_ZL)    mPadHold.set(1 << Controller::cPadIdx_C);
-                    if (cl_hold & WPAD_CL_BUTTON_ZR)    mPadHold.set(1 << Controller::cPadIdx_Z);
+                    if (cl_hold & WPAD_CL_TRIGGER_L)    mPadHold.set(1 << Controller::cPadIdx_L);
+                    if (cl_hold & WPAD_CL_TRIGGER_R)    mPadHold.set(1 << Controller::cPadIdx_R);
+                    if (cl_hold & WPAD_CL_TRIGGER_ZL)   mPadHold.set(1 << Controller::cPadIdx_C);
+                    if (cl_hold & WPAD_CL_TRIGGER_ZR)   mPadHold.set(1 << Controller::cPadIdx_Z);
                     if (cl_hold & WPAD_CL_BUTTON_HOME)  mPadHold.set(1 << Controller::cPadIdx_Home);
                     if (cl_hold & WPAD_CL_BUTTON_UP)    mPadHold.set(1 << Controller::cPadIdx_Up);
                     if (cl_hold & WPAD_CL_BUTTON_DOWN)  mPadHold.set(1 << Controller::cPadIdx_Down);

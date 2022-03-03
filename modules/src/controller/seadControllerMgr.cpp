@@ -4,6 +4,7 @@
 #include <prim/seadDelegate.h>
 
 #ifdef cafe
+#include <controller/cafe/seadCafeDRCControllerCafe.h>
 #include <controller/cafe/seadCafeRemoteControllerCafe.h>
 #include <controller/cafe/seadCafeRemotePatternRumbleAddonCafe.h>
 #include <controller/cafe/seadCafeVPadDeviceCafe.h>
@@ -80,11 +81,11 @@ void ControllerMgr::initializeDefault(Heap* heap)
     }
 
     mDevices.pushBack(new (heap) CafeVPadDevice(this));
-    //{
-    //    Controller* controller = new (heap) CafeDRCController(this);
+    {
+        Controller* controller = new (heap) CafeDRCController(this);
     //    controller->mAddons.pushBack(new (heap) CafeDRCPatternRumbleAddon(controller));
-    //    mControllers.pushBack(controller);
-    //}
+        mControllers.pushBack(controller);
+    }
 #endif // cafe
 }
 

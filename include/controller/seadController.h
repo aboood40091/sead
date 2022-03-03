@@ -33,17 +33,19 @@ public:
     {
         cPadIdx_A               = 0,
         cPadIdx_B               = 1,
-        cPadIdx_C               = 2, // Nunchuck C, also ZL
+        cPadIdx_C               = 2,
         cPadIdx_X               = 3,
         cPadIdx_Y               = 4,
-        cPadIdx_Z               = 5, // Nunchuck Z, also ZR
-        cPadIdx_2               = 6, // Wiimote 2, also Right-Stick Click
-        cPadIdx_1               = 7, // Wiimote 1, also Left-Stick Click
+        cPadIdx_Z               = 5,
+        cPadIdx_2               = 6, // Also Right-Stick Click
+        cPadIdx_1               = 7, // Also Left-Stick Click
         cPadIdx_Home            = 8,
         cPadIdx_Minus           = 9,
         cPadIdx_Plus            = 10,
         cPadIdx_Start           = 11,
         cPadIdx_Select          = 12,
+        cPadIdx_ZL              = cPadIdx_C,
+        cPadIdx_ZR              = cPadIdx_Z,
         cPadIdx_L               = 13,
         cPadIdx_R               = 14,
         cPadIdx_Touch           = 15,

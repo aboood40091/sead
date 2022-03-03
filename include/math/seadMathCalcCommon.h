@@ -201,7 +201,7 @@ public:
     static T clamp2(T min_, T val, T max_)
     {
         if (val < min_) return min_;
-        if (max_ < val) return max_;
+        if (val > max_) return max_;
 
         return val;
     }

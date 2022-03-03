@@ -30,7 +30,7 @@ public:
 
     virtual void calc();
 
-    const VPadInfo& getPadInfo() const
+    const VPadInfo& getVPadInfo() const
     {
         return mVPadInfo;
     }
