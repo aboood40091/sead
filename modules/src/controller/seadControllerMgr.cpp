@@ -4,9 +4,10 @@
 #include <prim/seadDelegate.h>
 
 #ifdef cafe
-#include <controller/cafe/seadCafeWPadDeviceCafe.h>
 #include <controller/cafe/seadCafeRemoteControllerCafe.h>
 #include <controller/cafe/seadCafeRemotePatternRumbleAddonCafe.h>
+#include <controller/cafe/seadCafeVPadDeviceCafe.h>
+#include <controller/cafe/seadCafeWPadDeviceCafe.h>
 #endif // cafe
 
 namespace sead {
@@ -63,7 +64,6 @@ void ControllerMgr::initializeDefault(Heap* heap)
 
 #ifdef cafe
     // TODO: CafeDebugPadDevice, CafeDebugController,
-    //       CafeWPadDevice, CafeRemoteController, CafeRemotePatternRumbleAddon
     //       CafeVPadDevice, CafeDRCController, CafeDRCPatternRumbleAddon
 
     //mDevices.pushBack(new (heap) CafeDebugPadDevice(this));
@@ -79,7 +79,7 @@ void ControllerMgr::initializeDefault(Heap* heap)
         mControllers.pushBack(controller);
     }
 
-    //mDevices.pushBack(new (heap) CafeVPadDevice(this));
+    mDevices.pushBack(new (heap) CafeVPadDevice(this));
     //{
     //    Controller* controller = new (heap) CafeDRCController(this);
     //    controller->mAddons.pushBack(new (heap) CafeDRCPatternRumbleAddon(controller));
