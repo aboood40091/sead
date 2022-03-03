@@ -6,6 +6,7 @@
 #ifdef cafe
 #include <controller/cafe/seadCafeWPadDeviceCafe.h>
 #include <controller/cafe/seadCafeRemoteControllerCafe.h>
+#include <controller/cafe/seadCafeRemotePatternRumbleAddonCafe.h>
 #endif // cafe
 
 namespace sead {
@@ -73,8 +74,8 @@ void ControllerMgr::initializeDefault(Heap* heap)
     mDevices.pushBack(new (heap) CafeWPadDevice(this, heap));
     for (u32 i = 0; i < 4; i++)
     {
-        Controller* controller = new (heap) CafeRemoteController(this, i);
-    //    controller->mAddons.pushBack(new (heap) CafeRemotePatternRumbleAddon(controller));
+        CafeRemoteController* controller = new (heap) CafeRemoteController(this, i);
+        controller->mAddons.pushBack(new (heap) CafeRemotePatternRumbleAddon(controller));
         mControllers.pushBack(controller);
     }
 

@@ -15,6 +15,8 @@ public:
 
     virtual bool isConnected() const { return mIsConnected; }
 
+    s32 getChannel() const { return mChannel; }
+
     u8 getInternalDeviceType() const { return mDeviceTypeInternal; }
     u8 getDeviceType() const { return mDeviceType; }
 
