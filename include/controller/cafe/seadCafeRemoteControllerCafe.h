@@ -18,8 +18,8 @@ public:
     u8 getInternalDeviceType() const { return mDeviceTypeInternal; }
     u8 getDeviceType() const { return mDeviceType; }
 
-    void enableCL(bool enable) { mIsEnableCL = enable; }
     bool isEnableCL() const { return mIsEnableCL; }
+    void setEnableCL(bool enable) { mIsEnableCL = enable; }
 
 private:
     virtual void calcImpl_();
