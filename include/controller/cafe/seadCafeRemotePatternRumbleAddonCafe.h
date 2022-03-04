@@ -15,6 +15,7 @@ public:
     CafeRemotePatternRumbleAddon(CafeRemoteController* controller);
     virtual ~CafeRemotePatternRumbleAddon() { }
 
+private:
     virtual void startRumbleImpl_();
     virtual void stopRumbleImpl_();
 };

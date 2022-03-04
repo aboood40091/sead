@@ -14,9 +14,12 @@ public:
     virtual ~PatternRumbleAddon() { }
 
     virtual bool calc();
+
+protected:
     virtual void startRumbleImpl_() = 0;
     virtual void stopRumbleImpl_() = 0;
 
+public:
     bool isPatternEnable() const;
     void startPattern(const char* pattern, u32 duration);
     void stopPattern();
