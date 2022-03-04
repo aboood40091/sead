@@ -92,14 +92,111 @@ void ControllerMgr::initializeDefault(Heap* heap)
 void ControllerMgr::finalizeDefault()
 {
 #ifdef cafe
-    // TODO: CafeDebugPadDevice, CafeDebugController,
-    //       CafeWPadDevice, CafeRemoteController, CafeRemotePatternRumbleAddon
-    //       CafeVPadDevice, CafeDRCController, CafeDRCPatternRumbleAddon
+    // TODO: CafeDebugPadDevice, CafeDebugController
 
-    // ...
+    //{
+    //    ControlDevice* device = getControlDevice(ControllerDefine::cDevice_CafeDebugPad);
+    //    if (device)
+    //    {
+    //        mDevices.erase(device);
+    //        delete device;
+    //    }
+    //    else
+    //    {
+    //        //SEAD_ASSERT_MSG(false, "CafeDebugPadDevice is not found.");
+    //    }
+    //
+    //    {
+    //        Controller* controller = getControllerByOrder(ControllerDefine::cController_CafeDebug, 0);
+    //        if (controller)
+    //        {
+    //            mControllers.erase(mControllers.indexOf(controller));
+    //            delete controller;
+    //        }
+    //        else
+    //        {
+    //            //SEAD_ASSERT_MSG(false, "CafeDebugController is not found.");
+    //        }
+    //    }
+    //}
+
+    {
+        ControlDevice* device = getControlDevice(ControllerDefine::cDevice_CafeWPad);
+        if (device)
+        {
+            mDevices.erase(device);
+            delete device;
+        }
+        else
+        {
+            //SEAD_ASSERT_MSG(false, "CafeWPadDevice is not found.");
+        }
+
+        for (u32 i = 0; i < 4; i++)
+        {
+            Controller* controller = getControllerByOrder(ControllerDefine::cController_CafeRemote, 0);
+            if (controller)
+            {
+                ControllerAddon* addon = controller->getAddon(ControllerDefine::cAddon_PatternRumble);
+                if (addon)
+                {
+                    delete addon;
+                }
+                else
+                {
+                    //SEAD_ASSERT_MSG(false, "CafeRemotePatternRumbleAddon[%d] is not found.", i);
+                }
+
+                mControllers.erase(mControllers.indexOf(controller));
+                delete controller;
+            }
+            else
+            {
+                //SEAD_ASSERT_MSG(false, "CafeRemoteController[%d] is not found.", i);
+            }
+        }
+    }
+
+    {
+        {
+            Controller* controller = getControllerByOrder(ControllerDefine::cController_CafeDRC, 0);
+            if (controller)
+            {
+                // Dear Nintendo,
+                // You forgot to delete the CafeDRCPatternRumbleAddon instance
+
+                mControllers.erase(mControllers.indexOf(controller));
+                delete controller;
+            }
+            else
+            {
+                //SEAD_ASSERT_MSG(false, "CafeDRCController is not found.");
+            }
+        }
+
+        ControlDevice* device = getControlDevice(ControllerDefine::cDevice_CafeVPad);
+        if (device)
+        {
+            mDevices.erase(device);
+            delete device;
+        }
+        else
+        {
+            //SEAD_ASSERT_MSG(false, "CafeVPadDevice is not found.");
+        }
+    }
 #endif // cafe
 
     finalize();
+}
+
+void ControllerMgr::calc()
+{
+    for (OffsetList<ControlDevice>::iterator it = mDevices.begin(); it != mDevices.end(); ++it)
+        (*it).calc();
+
+    for (PtrArray<Controller>::iterator it = mControllers.begin(); it != mControllers.end(); ++it)
+        (*it).calc();
 }
 
 Controller* ControllerMgr::getControllerByOrder(ControllerDefine::ControllerId id, s32 index) const

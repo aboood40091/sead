@@ -30,7 +30,7 @@ public:
     bool isFull() const;
     s32 size() const { return mPtrNum; }
     s32 maxSize() const { return mPtrNumMax; }
-    void erase(s32 pos);
+    void erase(s32 pos) { return erase(pos, 1); }
     void erase(s32 pos, s32 num);
     void clear();
     void resize(s32);
