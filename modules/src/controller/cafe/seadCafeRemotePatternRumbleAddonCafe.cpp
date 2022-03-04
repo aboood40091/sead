@@ -13,6 +13,7 @@ void CafeRemotePatternRumbleAddon::startRumbleImpl_()
 {
     WPADStartMotor(static_cast<CafeRemoteController*>(mController)->getChannel());
 }
+
 void CafeRemotePatternRumbleAddon::stopRumbleImpl_()
 {
     WPADStopMotor(static_cast<CafeRemoteController*>(mController)->getChannel());
