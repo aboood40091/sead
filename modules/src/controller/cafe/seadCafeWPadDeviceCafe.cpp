@@ -1,8 +1,7 @@
 #include <basis/seadNew.h>
 #include <controller/cafe/seadCafeWPadDeviceCafe.h>
 
-namespace sead
-{
+namespace sead {
 
 CafeWPadDevice::CafeWPadDevice(ControllerMgr* mgr, Heap* heap)
     : ControlDevice(mgr)

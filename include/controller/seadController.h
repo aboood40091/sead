@@ -77,6 +77,8 @@ protected:
     virtual void setIdle_();
 
 public:
+    ControllerDefine::ControllerId getId() const { return mId; }
+
     // TODO: Add/remove addon
     ControllerAddon* getAddon(ControllerDefine::AddonId id) const;
 

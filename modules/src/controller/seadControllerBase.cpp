@@ -148,7 +148,7 @@ void ControllerBase::setPadRepeat(u32 mask, u8 delay_frame, u8 pulse_frame)
 {
     BitFlag32 pad_to_set(mask);
 
-    for (u32 i = 0; i < mPadBitMax; i++)
+    for (s32 i = 0; i < mPadBitMax; i++)
     {
         if (pad_to_set.isOnBit(i))
         {
@@ -267,7 +267,7 @@ void ControllerBase::setIdleBase_()
     mPadRepeat.makeAllZero();
     mPointerFlag.makeAllZero();
 
-    for (u32 i = 0; i < mPadBitMax; i++)
+    for (s32 i = 0; i < mPadBitMax; i++)
         mPadHoldCounts[i] = 0;
 
     mPointer.set(cInvalidPointer);

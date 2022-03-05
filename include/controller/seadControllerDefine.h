@@ -1,6 +1,8 @@
 #ifndef SEAD_CONTROLLER_DEFINE_H_
 #define SEAD_CONTROLLER_DEFINE_H_
 
+#include <basis/seadTypes.h>
+
 namespace sead {
 
 class ControllerDefine

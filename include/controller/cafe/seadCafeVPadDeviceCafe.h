@@ -7,8 +7,6 @@
 
 namespace sead {
 
-class Heap;
-
 class CafeVPadDevice : public ControlDevice
 {
     SEAD_RTTI_OVERRIDE(CafeVPadDevice, ControlDevice)

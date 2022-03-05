@@ -1,8 +1,7 @@
 #include <controller/cafe/seadCafeVPadDeviceCafe.h>
 #include <prim/seadMemUtil.h>
 
-namespace sead
-{
+namespace sead {
 
 CafeVPadDevice::VPadInfo::VPadInfo()
     : last_read_length(0)

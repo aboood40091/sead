@@ -27,6 +27,8 @@ public:
 
     virtual void calc() = 0;
 
+    ControllerDefine::DeviceId getId() const { return mId; }
+
 protected:
     ListNode mListNode;
     ControllerDefine::DeviceId mId;
