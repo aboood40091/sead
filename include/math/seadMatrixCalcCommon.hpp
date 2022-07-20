@@ -939,17 +939,17 @@ void Matrix34CalcCommon<T>::inverseTranspose(Base& o, const Base& n)
 
     det = 1 / det;
 
-    o.m[0][0] = (a22 * a33 - a32 * a23) * det;
-    o.m[0][1] = (a31 * a23 - a21 * a33) * det;
-    o.m[0][2] = (a21 * a32 - a31 * a22) * det;
+    o.m[0][0] = (a22 * a33 - a23 * a32) * det;
+    o.m[0][1] = (a23 * a31 - a21 * a33) * det;
+    o.m[0][2] = (a21 * a32 - a22 * a31) * det;
 
-    o.m[1][0] = (a32 * a13 - a12 * a33) * det;
-    o.m[1][1] = (a11 * a33 - a31 * a13) * det;
-    o.m[1][2] = (a31 * a12 - a11 * a32) * det;
+    o.m[1][0] = (a13 * a32 - a12 * a33) * det;
+    o.m[1][1] = (a11 * a33 - a13 * a31) * det;
+    o.m[1][2] = (a12 * a31 - a11 * a32) * det;
 
-    o.m[2][0] = (a12 * a23 - a22 * a13) * det;
-    o.m[2][1] = (a21 * a13 - a11 * a23) * det;
-    o.m[2][2] = (a11 * a22 - a21 * a12) * det;
+    o.m[2][0] = (a12 * a23 - a13 * a22) * det;
+    o.m[2][1] = (a13 * a21 - a11 * a23) * det;
+    o.m[2][2] = (a11 * a22 - a12 * a21) * det;
 
     o.m[0][3] = 0;
     o.m[1][3] = 0;

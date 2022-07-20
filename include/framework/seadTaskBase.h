@@ -31,20 +31,20 @@ public:
 public:
     enum State
     {
-        cCreated = 0,
-        cPrepare = 1,
+        cCreated     = 0,
+        cPrepare     = 1,
         cPrepareDone = 2,
-        cSleep = 3,
-        cRunning = 4,
-        cDying = 5,
+        cSleep       = 3,
+        cRunning     = 4,
+        cDying       = 5,
         cDestroyable = 6,
-        cDead = 7
+        cDead        = 7
     };
 
     enum Tag
     {
         cSystem = 0,
-        cApp = 1
+        cApp    = 1
     };
 
     struct CreateArg
@@ -69,6 +69,9 @@ public:
 #ifdef cafe
     static_assert(sizeof(CreateArg) == 0x80, "sead::TaskBase::CreateArg size mismatch");
 #endif // cafe
+
+    struct TakeoverArg;
+    struct PushArg;
 
 public:
     TaskBase(const TaskConstructArg& arg);
@@ -108,6 +111,7 @@ public:
 
     void doneDestroy();
 
+protected:
     TaskParameter* mParameter;
     BitFlag32 mInternalFlag;
     ListNode mTaskListNode;
@@ -116,6 +120,8 @@ public:
     State mState;
     Tag mTag;
     TaskClassID mClassID;
+
+    friend class TaskMgr;
 };
 #ifdef cafe
 static_assert(sizeof(TaskBase) == 0x74, "sead::TaskBase size mismatch");

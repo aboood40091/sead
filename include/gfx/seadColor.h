@@ -46,6 +46,7 @@ struct Color4f
     static const f32 cElementMin = 0.0f;
     static const f32 cElementMax = 1.0f;
 
+    static const Color4f cBlack;
     static const Color4f cWhite;
     static const Color4f cRed;
     static const Color4f cGreen;
@@ -54,6 +55,8 @@ struct Color4f
 #ifdef cafe
 static_assert(sizeof(Color4f) == 0x10, "sead::Color4f size mismatch");
 #endif // cafe
+
+bool operator==(const Color4f& lhs, const Color4f& rhs);
 
 }  // namespace sead
 

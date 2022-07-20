@@ -1,10 +1,23 @@
 #ifndef SEAD_THREAD_H_
 #define SEAD_THREAD_H_
 
+#include <container/seadTList.h>
 #include <heap/seadDisposer.h>
+#include <heap/seadHeap.h>
 #include <prim/seadNamable.h>
+#include <thread/seadThreadLocalStorage.h>
+
+
+#ifdef cafe
+#include <cafe/os/OSThread.h>
+#endif // cafe
 
 namespace sead {
+
+class Thread;
+
+typedef TList<Thread*> ThreadList;
+typedef TListNode<Thread*> ThreadListNode;
 
 class Thread : public IDisposer, public INamable
 {
@@ -20,10 +33,69 @@ public:
     virtual void quitAndDestroySingleThread(bool is_jam);
     //...
 
-    u8 _18[0x90 - 0x18];
+    Heap* getCurrentHeap() const { return mCurrentHeap; }
+
+    //...
+
+private:
+    u32 mMessageQueue[0x40 / sizeof(u32)]; // MessageQueue
+    s32 mStackSize;
+    ThreadListNode mListNode;
+    Heap* mCurrentHeap;
+    u32 mBlockType; // MessageQueue::BlockType
+    s32 mQuitMsg; // MessageQueue::Element
+    u32 mID;
+    u32 mState[1]; // State
+    s32 mCoreNo;
+#ifdef cafe
+    OSThread* mThreadInner;
+#endif // cafe
+    u8* mStackTop;
+    s32 mPriority;
 };
 #ifdef cafe
 static_assert(sizeof(Thread) == 0x90, "sead::Thread size mismatch");
+#endif // cafe
+
+class ThreadMgr
+{
+    SEAD_SINGLETON_DISPOSER(ThreadMgr)
+
+public:
+    ThreadMgr();
+    virtual ~ThreadMgr();
+
+    void initialize(Heap*);
+    void destroy();
+    //void initHostIO();
+
+    Thread* getCurrentThread() const;
+    bool isMainThread() const;
+
+    static void quitAndWaitDoneMultipleThread(Thread **, s32, bool);
+    static void waitDoneMultipleThread(Thread* const*, s32);
+
+protected:
+    void initMainThread_(Heap*);
+    void destroyMainThread_();
+
+protected:
+    ThreadList mList;
+    Thread* mMainThread;
+    ThreadLocalStorage mThreadPtrTLS;
+};
+#ifdef cafe
+static_assert(sizeof(ThreadMgr) == 0x28, "sead::ThreadMgr size mismatch");
+#endif // cafe
+
+#ifdef cafe
+
+inline Thread*
+ThreadMgr::getCurrentThread() const
+{
+    return static_cast<Thread*>(OSGetThreadSpecific(mThreadPtrTLS.getValue()));
+}
+
 #endif // cafe
 
 } // namespace sead

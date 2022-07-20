@@ -44,7 +44,6 @@ public:
 
     virtual ~ArchiveRes() { }
 
-    virtual void doPostCreate_();
     virtual u32 getLoadDataAlignment() { return 0x80; }
     virtual void doCreate_(u8* buf, u32, Heap*);
     virtual void* getFileImpl_(const SafeString& file_path, FileInfo* file_info = NULL) = 0;
@@ -57,6 +56,16 @@ public:
     virtual bool prepareArchive_(const void* archive) = 0;
 
     Resource* load(ResourceMgr::LoadArg& arg);
+
+    void* getFile(const SafeString& file_path, u32* length = NULL)
+    {
+        FileInfo file_info;
+        void* data = getFileImpl_(file_path, &file_info);
+        if (data && length)
+            *length = file_info.getLength();
+
+        return data;
+    }
 
 protected:
     void setFileInfo(FileInfo* file_info, u32 start_offset, u32 length)

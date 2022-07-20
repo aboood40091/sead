@@ -195,7 +195,7 @@ public:
 
     inline s32 append(const SafeStringBase<CharType>& src, s32 append_length = -1);
     inline s32 append(CharType src_chr);
-    inline s32 append(CharType src_chr, s32);
+    // inline s32 append(CharType src_chr, s32);
     inline s32 chop(s32);
     inline s32 chopMatchedChar(CharType);
     inline s32 chopMatchedChar(const SafeStringBase<CharType>&);
@@ -394,6 +394,40 @@ private:
     WFormatFixedSafeString(const WFormatFixedSafeString<N>&);
     WFormatFixedSafeString<N>& operator=(const WFormatFixedSafeString<N>&);
 };
+
+class Heap;
+
+template <typename T>
+class HeapSafeStringBase : public BufferedSafeStringBase<T>
+{
+public:
+    HeapSafeStringBase(Heap* heap, const SafeStringBase<T>& string, s32 size)
+        : BufferedSafeStringBase<T>(new (heap, 4) T[size](),
+                                    size)
+    {
+        copy(string);
+    }
+
+    HeapSafeStringBase(Heap* heap, const SafeStringBase<T>& string)
+        : BufferedSafeStringBase<T>(new (heap, 4) T[string.calcLength() + 1](),
+                                    string.calcLength() + 1)
+    {
+        copy(string);
+    }
+
+    virtual ~HeapSafeStringBase()
+    {
+        if (mStringTop)
+            delete[] mStringTop;
+    }
+
+private:
+    HeapSafeStringBase(const HeapSafeStringBase<T>&);
+    HeapSafeStringBase<T>& operator=(const HeapSafeStringBase<T>&);
+};
+
+typedef HeapSafeStringBase<char> HeapSafeString;
+typedef HeapSafeStringBase<char16> WHeapSafeString;
 
 template <>
 s32 BufferedSafeStringBase<char>::format(const char* format_string, ...);

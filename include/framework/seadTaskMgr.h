@@ -13,6 +13,7 @@ class DelegateThread;
 class Framework;
 class Heap;
 class NullFaderTask;
+class Thread;
 
 class TaskMgr
 {
@@ -46,12 +47,60 @@ public:
 public:
     TaskMgr(const InitializeArg& arg);
 
-    void appendToList_(TaskBase::List& ls, TaskBase* task);
-    bool changeTaskState_(TaskBase* task, TaskBase::State state);
-    void destroyTaskSync(TaskBase* task);
-    void doDestroyTask_(TaskBase* task);
+    static TaskMgr* initialize(const InitializeArg& arg);
     void finalize();
 
+private:
+    void doInit_();
+    void beginCreateRootTask_();
+    void createHeap_(HeapArray* ha, const TaskBase::CreateArg& arg);
+
+public:
+    TaskBase* createTaskSync(const TaskBase::CreateArg& arg);
+
+    template <typename T>
+    T* createSingletonTaskSync(const TaskBase::CreateArg& arg);
+
+private:
+    TaskBase* doCreateTask_(const TaskBase::CreateArg& arg, HeapArray* ha);
+
+public:
+    bool requestCreateTask(const TaskBase::CreateArg& arg);
+
+private:
+    bool doRequestCreateTask_(const TaskBase::CreateArg& arg, DelegateEvent<TaskBase*>::Slot* system_slot);
+    void appendToList_(TaskBase::List& ls, TaskBase* task);
+    bool changeTaskState_(TaskBase* task, TaskBase::State state);
+
+public:
+    bool requestTakeover(const TaskBase::TakeoverArg& arg);
+    bool requestTransition(TaskBase* from, TaskBase* to, FaderTaskBase* fader);
+    bool requestPush(const TaskBase::PushArg& arg);
+    TaskBase* pushSync(const TaskBase::PushArg& arg);
+    bool requestPop(TaskBase* pop_task, FaderTaskBase* fader);
+    bool popSync(TaskBase* pop_task);
+    bool requestPop(TaskBase* pop_task, TaskBase* to_task, FaderTaskBase* fader);
+
+private:
+    void prepare_(Thread*, /* MessageQueue::Element */ s32 msg);
+
+public:
+    void destroyTaskSync(TaskBase* task);
+    void requestDestroyTask(TaskBase* task, FaderTaskBase* fader);
+
+private:
+    bool destroyable_(TaskBase* task);
+    void doDestroyTask_(TaskBase* task);
+    void calcCreation_();
+    void calcDestruction_();
+
+public:
+    void destroyAllAndCreateRoot();
+    TaskBase* findTask(const TaskClassID& classID);
+    void beforeCalc();
+    void afterCalc();
+
+private:
     CriticalSection mCriticalSection;
     Framework* mParentFramework;
     DelegateThread* mPrepareThread;

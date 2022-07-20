@@ -10,7 +10,7 @@ class Random;
 
 class PtrArrayImpl
 {
-private:
+protected:
     typedef s32 (*CompareCallbackImpl)(const void*, const void*);
 
 public:
@@ -25,14 +25,14 @@ public:
     void allocBuffer(s32 ptrNumMax, Heap* heap, s32 alignment = 4);
     bool tryAllocBuffer(s32 ptrNumMax, Heap* heap, s32 alignment = 4);
     void freeBuffer();
-    bool isBufferReady() const;
-    bool isEmpty() const;
-    bool isFull() const;
+    bool isBufferReady() const { return mPtrs != NULL; }
+    bool isEmpty() const { return mPtrNum == 0; }
+    bool isFull() const { return mPtrNum >= mPtrNumMax; }
     s32 size() const { return mPtrNum; }
     s32 maxSize() const { return mPtrNumMax; }
     void erase(s32 pos) { return erase(pos, 1); }
     void erase(s32 pos, s32 num);
-    void clear();
+    void clear() { mPtrNum = 0; }
     void resize(s32);
     void unsafeResize(s32);
     void swap(s32 pos1, s32 pos2);
@@ -44,9 +44,21 @@ public:
 protected:
     void* at(s32 n) const;
     void* unsafeAt(s32 n) const;
-    void* front() const;
-    void* back() const;
-    void pushBack(void* ptr);
+    void* front() const { return mPtrs[0]; }
+    void* back() const { return mPtrs[mPtrNum - 1]; }
+
+    void pushBack(void* ptr)
+    {
+        if (isFull())
+        {
+            // SEAD_ASSERT_MSG(false, "list is full.");
+            return;
+        }
+
+        mPtrs[mPtrNum] = ptr;
+        ++mPtrNum;
+    }
+
     void pushFront(void* ptr);
     void* popBack();
     void* popFront();
@@ -89,9 +101,9 @@ public:
     T* at(s32 n) const;
     T* unsafeAt(s32 n) const;
     T* operator[](s32 n) const;
-    T* front() const;
-    T* back() const;
-    void pushBack(T* ptr);
+    T* front() const { return static_cast<T*>(PtrArrayImpl::front()); }
+    T* back() const { return static_cast<T*>(PtrArrayImpl::back()); }
+    void pushBack(T* ptr) { PtrArrayImpl::pushBack((void*)ptr); }
     void pushFront(T* ptr);
     T* popBack();
     T* popFront();
@@ -99,9 +111,9 @@ public:
     void insert(s32, T*, s32);
     void replace(s32 pos, T* ptr);
     s32 indexOf(const T* ptr) const;
-    void* getWork() const;
+    void* getWork() const { return mPtrs; }
     void sort();
-    void sort(CompareCallback cmp);
+    void sort(CompareCallback cmp) { PtrArrayImpl::sort((CompareCallbackImpl)cmp); }
     void heapSort();
     void heapSort(CompareCallback cmp);
     bool equal(const PtrArray<T>* o, CompareCallback cmp) const;
@@ -166,8 +178,49 @@ public:
         T* const* mPPtr;
     };
 
-    // TODO
-    class constIterator { };
+    class constIterator
+    {
+    public:
+        constIterator(const T* const* pptr)
+            : mPPtr(pptr)
+        {
+        }
+
+    public:
+        constIterator& operator++()
+        {
+            ++mPPtr;
+            return *this;
+        }
+
+        const T& operator*() const
+        {
+            return **mPPtr;
+        }
+
+        const T* operator->() const
+        {
+            return *mPPtr;
+        }
+
+        friend bool operator==(const constIterator& it1, const constIterator& it2)
+        {
+            return it1.mPPtr == it2.mPPtr;
+        }
+
+        friend bool operator!=(const constIterator& it1, const constIterator& it2)
+        {
+            return !(it1 == it2);
+        }
+
+        const T* getPtr() const
+        {
+            return *mPPtr;
+        }
+
+    private:
+        const T* const* mPPtr;
+    };
 
     // TODO
     class reverseIterator { };
@@ -187,14 +240,26 @@ public:
     }
 
     iterator toIterator(s32) const;
-    constIterator constBegin() const;
-    constIterator constEnd() const;
+
+    constIterator constBegin() const
+    {
+        return constIterator(reinterpret_cast<T**>(mPtrs));
+    }
+    constIterator constEnd() const
+    {
+        return constIterator(reinterpret_cast<T**>(mPtrs) + mPtrNum);
+    }
+
     constIterator toConstIterator(s32) const;
+
     reverseIterator reverseBegin() const;
     reverseIterator reverseEnd() const;
+
     reverseIterator toReverseIterator(s32) const;
+
     reverseConstIterator reverseConstBegin() const;
     reverseConstIterator reverseConstEnd() const;
+
     reverseConstIterator toReverseConstIterator(s32) const;
 
 protected:

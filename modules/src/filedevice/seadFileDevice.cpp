@@ -17,6 +17,15 @@ u32 FileHandle::read(u8* buf, u32 size)
     return 0;
 }
 
+u32 FileHandle::write(const u8* buf, u32 size)
+{
+    if (mDevice != NULL)
+        return mDevice->write(this, buf, size);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return 0;
+}
+
 FileDevice::~FileDevice()
 {
     if (FileDeviceMgr::instance() != NULL)

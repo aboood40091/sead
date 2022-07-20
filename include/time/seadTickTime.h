@@ -23,7 +23,7 @@ public:
     void setNow();
 #endif
 
-    TickSpan diff(const TickTime& t) const;
+    TickSpan diff(TickTime t) const;
     TickSpan diffToNow() const;
 
     TickTime& operator+=(TickSpan rhs);
@@ -38,10 +38,10 @@ private:
     u64 mTick;
 };
 
+TickSpan operator-(TickTime lhs, TickTime rhs);
+
 TickTime operator+(TickTime time, TickSpan span);
 TickTime operator-(TickTime time, TickSpan span);
-
-TickSpan operator-(TickTime lhs, TickTime rhs);
 
 }  // namespace sead
 

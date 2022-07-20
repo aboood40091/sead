@@ -13,6 +13,9 @@ private:
     typedef Vector2<T> Self;
 
 public:
+    typedef T ValueType;
+
+public:
     Vector2()
     {
     }
@@ -49,6 +52,9 @@ class Vector3 : public Policies<T>::Vec3Base
 {
 private:
     typedef Vector3<T> Self;
+
+public:
+    typedef T ValueType;
 
 public:
     Vector3()
@@ -95,6 +101,9 @@ class Vector4 : public Policies<T>::Vec4Base
 {
 private:
     typedef Vector4<T> Self;
+
+public:
+    typedef T ValueType;
 
 public:
     Vector4()

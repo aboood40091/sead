@@ -1,5 +1,6 @@
 #include <heap/seadHeap.h>
 #include <heap/seadHeapMgr.h>
+#include <thread/seadThread.h>
 
 namespace sead {
 
@@ -51,6 +52,12 @@ HeapMgr::findContainHeap(const void* ptr) const
 
     sHeapTreeLockCS.unlock();
     return NULL;
+}
+
+Heap*
+HeapMgr::getCurrentHeap() const
+{
+    return ThreadMgr::instance()->getCurrentThread()->getCurrentHeap();
 }
 
 } // namespace sead
