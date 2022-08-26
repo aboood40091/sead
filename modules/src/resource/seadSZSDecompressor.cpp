@@ -49,12 +49,12 @@ __attribute__((aligned(0x20))) s32 decodeSZSCafeAsm_(void* dst, const void* src)
     asm ("rlwinm. r10, r8, 0x1c, 4, 0x1f\n");
     asm ("bne _decloop3\n");
     asm ("lbzu r10, 1(r4)\n");
-    asm ("addi r10, r10, 0x10");
+    asm ("addi r10, r10, 0x10\n");
 
     asm ("_decloop3: addi r10, r10, 2\n");
     asm ("rlwimi r9, r8, 8, 0x14, 0x17\n");
     asm ("subf r5, r10, r5\n");
-    asm ("subf r8, r9, r4\n");
+    asm ("subf r8, r9, r3\n");
     asm ("mtspr CTR, r10\n");
     asm ("addi r8, r8, 1\n");
 
