@@ -79,6 +79,12 @@ public:
     virtual void doUpdateMatrix(Matrix44f* dst) const;
     virtual void doScreenPosToCameraPosTo(Vector3f* dst, const Vector3f& screen_pos) const;
 
+    f32 getNear() const { return mNear; }
+    f32 getFar() const { return mFar; }
+    f32 fovy() const { return mAngle; }
+    f32 aspect() const { return mAspect; }
+    const Vector2f& offset() const { return mOffset; }
+
     void setNear(f32 near)
     {
         mNear = near;
@@ -92,11 +98,22 @@ public:
     }
 
     void setFovx(f32 fovx);
-    void setFovy_(f32 fovy);
+
+    void setFovy(f32 fovy)
+    {
+        setFovy_(fovy);
+        mDirty = true;
+    }
 
     void setAspect(f32 aspect)
     {
         mAspect = aspect;
+        mDirty = true;
+    }
+
+    void setOffset(f32 offsetx, f32 offsety)
+    {
+        mOffset.set(offsetx, offsety);
         mDirty = true;
     }
 
@@ -106,6 +123,9 @@ public:
     f32 getRight() const;
 
     void setTBLR(f32 top, f32 bottom, f32 left, f32 right);
+
+private:
+    void setFovy_(f32 fovy);
 
 private:
     f32 mNear;

@@ -9,7 +9,7 @@ template <typename VectorType>
 class Sphere
 {
 public:
-    typedef VectorType::ValueType T;
+    typedef typename VectorType::ValueType T;
 
 public:
     Sphere()
@@ -25,7 +25,7 @@ public:
     }
 
     const VectorType& getCenter() const { return mCenter; }
-    T getRadius() const { return radius; }
+    T getRadius() const { return mRadius; }
 
     void setCenter(const VectorType& center)
     {

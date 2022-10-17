@@ -23,6 +23,11 @@ public:
     Matrix34f& getMatrix() { return mMatrix; }
     const Matrix34f& getMatrix() const { return mMatrix; }
 
+    void updateMatrix()
+    {
+        doUpdateMatrix(&mMatrix);
+    }
+
 protected:
     Matrix34f mMatrix;
 };
