@@ -791,7 +791,7 @@ template <typename T>
 inline void
 Matrix44<T>::setRow(s32 row, const Vec4& v)
 {
-    Matrix44CalcCommon<T>::setRow(*this, row, v);
+    Matrix44CalcCommon<T>::setRow(*this, v, row);
 }
 
 }  // namespace sead

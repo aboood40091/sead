@@ -5,6 +5,10 @@ namespace sead {
 
 Graphics* Graphics::sInstance = NULL;
 
+Graphics::DevicePosture Graphics::sDefaultDevicePosture = Graphics::cDevicePosture_Same;
+f32 Graphics::sDefaultDeviceZScale = 1.0f;
+f32 Graphics::sDefaultDeviceZOffset = 0.0f;
+
 void Graphics::lockDrawContext()
 {
     sead::Thread* current = ThreadMgr::instance()->getCurrentThread();

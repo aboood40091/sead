@@ -15,6 +15,8 @@ public:
     static void add(Base& o, const Base& a, const Base& b);
     static void sub(Base& o, const Base& a, const Base& b);
 
+    static bool isEqual(const Base& a, const Base& b);
+
     static T squaredLength(const Base& v);
     static T length(const Base& v);
 
@@ -27,18 +29,25 @@ class Vector3CalcCommon
 {
 public:
     typedef typename Policies<T>::Vec3Base Base;
+    typedef typename Policies<T>::Mtx34Base Mtx34;
 
 public:
     static void add(Base& o, const Base& a, const Base& b);
     static void sub(Base& o, const Base& a, const Base& b);
 
+    static bool isEqual(const Base& a, const Base& b);
+
     static void cross(Base& o, const Base& a, const Base& b);
     static T dot(const Base& a, const Base& b);
+
     static T squaredLength(const Base& v);
     static T length(const Base& v);
+
+    static void mul(Base& o, const Mtx34& m, const Base& v);
     static void multScalar(Base& o, const Base& v, T t);
     static void multScalarAdd(Base& o, T t, const Base& a, const Base& b);
     static T normalize(Base& v);
+
     static void set(Base& o, const Base& v);
     static void set(Base& v, T x, T y, T z);
 };
@@ -50,6 +59,8 @@ public:
     typedef typename Policies<T>::Vec4Base Base;
 
 public:
+    static bool isEqual(const Base& a, const Base& b);
+
     static T squaredLength(const Base& v);
     static T length(const Base& v);
 

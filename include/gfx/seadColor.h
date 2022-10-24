@@ -43,8 +43,8 @@ struct Color4f
         f32 c[4];
     };
 
-    static const f32 cElementMin = 0.0f;
-    static const f32 cElementMax = 1.0f;
+    static const f32 cElementMax;
+    static const f32 cElementMin;
 
     static const Color4f cBlack;
     static const Color4f cWhite;

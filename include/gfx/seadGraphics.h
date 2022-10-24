@@ -28,6 +28,12 @@ public:
         cDevicePosture_Invalid          = 4
     };
 
+public:
+    static DevicePosture getDefaultDevicePosture() { return sDefaultDevicePosture; }
+    static f32 getDefaultDeviceZScale() { return sDefaultDeviceZScale; }
+    static f32 getDefaultDeviceZOffset() { return sDefaultDeviceZOffset; }
+
+public:
     // The value for each enumerator in the following enums has been confirmed to be platform-specific
     // when comparing sead between several platforms (3DS, Wii U, Switch)
 
@@ -228,10 +234,15 @@ public:
     void unlockDrawContext();
 
 protected:
-    static Graphics* sInstance;
     Thread* mContextHolderThread;
     s32 mContextRefCounter;
     CriticalSection mContextCriticalSection;
+
+    static Graphics* sInstance;
+
+    static DevicePosture sDefaultDevicePosture;
+    static f32 sDefaultDeviceZScale;
+    static f32 sDefaultDeviceZOffset;
 };
 #ifdef cafe
 static_assert(sizeof(Graphics) == 0x54, "sead::Graphics size mismatch");

@@ -57,6 +57,20 @@ Vector2<T>::operator=(const Self& v)
 
 template <typename T>
 inline bool
+Vector2<T>::operator==(const Self& v) const
+{
+    return Vector2CalcCommon<T>::isEqual(*this, v);
+}
+
+template <typename T>
+inline bool
+Vector2<T>::operator!=(const Self& v) const
+{
+    return !Vector2CalcCommon<T>::isEqual(*this, v);
+}
+
+template <typename T>
+inline bool
 Vector2<T>::isZero() const
 {
     return this->x == zero.x &&
@@ -146,6 +160,20 @@ Vector3<T>::operator=(const Self& v)
 
 template <typename T>
 inline bool
+Vector3<T>::operator==(const Self& v) const
+{
+    return Vector3CalcCommon<T>::isEqual(*this, v);
+}
+
+template <typename T>
+inline bool
+Vector3<T>::operator!=(const Self& v) const
+{
+    return !Vector3CalcCommon<T>::isEqual(*this, v);
+}
+
+template <typename T>
+inline bool
 Vector3<T>::isZero() const
 {
     return this->x == zero.x &&
@@ -211,6 +239,13 @@ Vector3<T>::setCross(const Self& a, const Self& b)
 
 template <typename T>
 inline void
+Vector3<T>::setMul(const Mtx34& m, const Self& v)
+{
+    Vector3CalcCommon<T>::mul(*this, m, v);
+}
+
+template <typename T>
+inline void
 Vector3<T>::setScaleAdd(T t, const Self& a, const Self& b)
 {
     Vector3CalcCommon<T>::multScalarAdd(*this, t, a, b);
@@ -229,6 +264,20 @@ Vector4<T>::operator=(const Self& v)
 {
     Vector4CalcCommon<T>::set(*this, v);
     return *this;
+}
+
+template <typename T>
+inline bool
+Vector4<T>::operator==(const Self& v) const
+{
+    return Vector4CalcCommon<T>::isEqual(*this, v);
+}
+
+template <typename T>
+inline bool
+Vector4<T>::operator!=(const Self& v) const
+{
+    return !Vector4CalcCommon<T>::isEqual(*this, v);
 }
 
 template <typename T>

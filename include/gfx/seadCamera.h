@@ -6,6 +6,12 @@
 
 namespace sead {
 
+class Projection;
+class Viewport;
+
+template <typename T>
+class Ray;
+
 class Camera
 {
     SEAD_RTTI_BASE(Camera)
@@ -16,17 +22,30 @@ public:
     {
     }
 
-    virtual ~Camera();
+    virtual ~Camera()
+    {
+    }
 
     virtual void doUpdateMatrix(Matrix34f* dst) const = 0;
 
-    Matrix34f& getMatrix() { return mMatrix; }
-    const Matrix34f& getMatrix() const { return mMatrix; }
+    Matrix34f& getViewMatrix() { return mMatrix; }
+    const Matrix34f& getViewMatrix() const { return mMatrix; }
 
-    void updateMatrix()
+    void updateViewMatrix()
     {
         doUpdateMatrix(&mMatrix);
     }
+
+    void getWorldPosByMatrix(Vector3f* dst) const;
+    void getLookVectorByMatrix(Vector3f* dst) const;
+    void getRightVectorByMatrix(Vector3f* dst) const;
+    void getUpVectorByMatrix(Vector3f* dst) const;
+
+    void worldPosToCameraPosByMatrix(Vector3f* dst, const Vector3f& world_pos) const;
+    void cameraPosToWorldPosByMatrix(Vector3f* dst, const Vector3f& camera_pos) const;
+
+    void projectByMatrix(Vector2f* dst, const Vector3f& world_pos, const Projection& projection, const Viewport& viewport) const;
+    void unprojectRayByMatrix(Ray<Vector3f>* dst, const Vector3f& camera_pos) const;
 
 protected:
     Matrix34f mMatrix;

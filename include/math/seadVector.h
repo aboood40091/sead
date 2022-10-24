@@ -34,6 +34,9 @@ public:
     Self& operator-=(const Self& v);
     Self& operator=(const Self& v);
 
+    bool operator==(const Self& v) const;
+    bool operator!=(const Self& v) const;
+
     bool isZero() const;
 
     T length() const;
@@ -48,10 +51,18 @@ public:
 };
 
 template <typename T>
+class Matrix34;
+
+template <typename T>
+class Matrix44;
+
+template <typename T>
 class Vector3 : public Policies<T>::Vec3Base
 {
 private:
     typedef Vector3<T> Self;
+    typedef Matrix34<T> Mtx34;
+    typedef Matrix44<T> Mtx44;
 
 public:
     typedef T ValueType;
@@ -76,6 +87,9 @@ public:
     Self& operator-=(const Self& v);
     Self& operator=(const Self& v);
 
+    bool operator==(const Self& v) const;
+    bool operator!=(const Self& v) const;
+
     bool isZero() const;
 
     T dot(const Self& t) const;
@@ -87,6 +101,8 @@ public:
     void set(const Self& v);
     void set(T x_, T y_, T z_);
     void setCross(const Self& a, const Self& b);
+    void setMul(const Mtx34& m, const Self& v);
+    void setMulAndDivByW(const Mtx44& m, const Self& v);
     void setScaleAdd(T t, const Self& a, const Self& b);
 
     static const Vector3 zero;
@@ -118,6 +134,9 @@ public:
     Vector4(T x_, T y_, T z_, T w_);
 
     Self& operator=(const Self& v);
+
+    bool operator==(const Self& v) const;
+    bool operator!=(const Self& v) const;
 
     bool isZero() const;
 

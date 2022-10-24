@@ -38,6 +38,14 @@ Vector2CalcCommon<T>::sub(Base& o, const Base& a, const Base& b)
 }
 
 template <typename T>
+inline bool
+Vector2CalcCommon<T>::isEqual(const Base& a, const Base& b)
+{
+    return a.x == b.x &&
+           a.y == b.y;
+}
+
+template <typename T>
 inline T
 Vector2CalcCommon<T>::squaredLength(const Base& v)
 {
@@ -110,6 +118,15 @@ Vector3CalcCommon<f32>::sub(Base& o, const Base& a, const Base& b)
 #endif // cafe
 
 template <typename T>
+inline bool
+Vector3CalcCommon<T>::isEqual(const Base& a, const Base& b)
+{
+    return a.x == b.x &&
+           a.y == b.y &&
+           a.z == b.z;
+}
+
+template <typename T>
 inline void
 Vector3CalcCommon<T>::cross(Base& o, const Base& a, const Base& b)
 {
@@ -178,6 +195,17 @@ inline f32
 Vector3CalcCommon<f32>::length(const Base& v)
 {
     return ASM_VECMag((const Vec*)&v);
+}
+
+#endif // cafe
+
+#ifdef cafe
+
+template <>
+inline void
+Vector3CalcCommon<f32>::mul(Base& o, const Mtx34& m, const Base& v)
+{
+    ASM_MTXMultVec(const_cast<f32(*)[4]>(m.m), (const Vec*)&v, (Vec*)&o);
 }
 
 #endif // cafe
@@ -255,6 +283,16 @@ Vector3CalcCommon<T>::set(Base& v, T x, T y, T z)
     v.x = x;
     v.y = y;
     v.z = z;
+}
+
+template <typename T>
+inline bool
+Vector4CalcCommon<T>::isEqual(const Base& a, const Base& b)
+{
+    return a.x == b.x &&
+           a.y == b.y &&
+           a.z == b.z &&
+           a.w == b.w;
 }
 
 template <typename T>

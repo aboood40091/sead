@@ -214,7 +214,7 @@ void PrimitiveRendererCafe::prepareImpl(
 
 void PrimitiveRendererCafe::setCameraImpl(const Camera& camera)
 {
-    mCameraMtx = camera.getMatrix();
+    mCameraMtx = camera.getViewMatrix();
 }
 
 void PrimitiveRendererCafe::setProjectionImpl(const Projection& projection)
