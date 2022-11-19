@@ -288,11 +288,13 @@ public:
     FixedSafeStringBase<CharType, N>& operator=(const FixedSafeStringBase<CharType, N>& rhs)
     {
         copy(rhs);
+        return *this;
     }
 
     FixedSafeStringBase<CharType, N>& operator=(const SafeStringBase<CharType>& rhs)
     {
         copy(rhs);
+        return *this;
     }
 
 private:
@@ -333,11 +335,13 @@ public:
     FixedSafeString<N>& operator=(const FixedSafeString<N>& rhs)
     {
         copy(rhs);
+        return *this;
     }
 
     FixedSafeString<N>& operator=(const SafeString& rhs)
     {
         copy(rhs);
+        return *this;
     }
 };
 
@@ -365,11 +369,13 @@ public:
     WFixedSafeString<N>& operator=(const WFixedSafeString<N>& rhs)
     {
         copy(rhs);
+        return *this;
     }
 
     WFixedSafeString<N>& operator=(const WSafeString& rhs)
     {
         copy(rhs);
+        return *this;
     }
 };
 
