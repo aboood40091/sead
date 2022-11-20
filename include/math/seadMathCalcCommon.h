@@ -144,7 +144,7 @@ public:
 
     static T deg2rad(T a)
     {
-        return a * pi() / 180;
+        return a * (pi() / 180);
     }
 
     static T rad2deg(T a)

@@ -1598,6 +1598,17 @@ void Matrix34CalcCommon<T>::makeT(Base& o, const Vec3& t)
     o.m[2][3] = t.z;
 }
 
+#ifdef cafe
+
+template <>
+inline void
+Matrix34CalcCommon<f32>::makeT(Base& o, const Vec3& t)
+{
+    ASM_MTXTrans(o.m, t.x, t.y, t.z);
+}
+
+#endif // cafe
+
 template <typename T>
 void Matrix34CalcCommon<T>::toQuat(Quat& q, const Base& n)
 {

@@ -1,7 +1,6 @@
 #ifndef SEAD_PTCL_SYSTEM_H_
 #define SEAD_PTCL_SYSTEM_H_
 
-#include <gfx/seadGraphics.h>
 #include <heap/seadHeap.h>
 #include <time/seadTickTime.h>
 
@@ -35,30 +34,6 @@ static_assert(sizeof(PtclEditorInterface) == 0xE58, "sead::ptcl::PtclEditorInter
 
 class PtclSystem : public nw::eft::System
 {
-public:
-    void beginRender(const Matrix44f& proj, const Matrix34f& view, const Vector3f& cam_pos, f32 _near, f32 _far)
-    {
-        GX2SetShaderMode(GX2_SHADER_MODE_UNIFORM_BLOCK);
-        GX2Invalidate(GX2_INVALIDATE_SHADER, 0, 0xffffffff);
-
-        BeginRender(
-            reinterpret_cast<const nw::math::MTX44&>(proj),
-            reinterpret_cast<const nw::math::MTX34&>(view),
-            reinterpret_cast<const nw::math::VEC3&>(cam_pos),
-            _near,
-            _far
-        );
-    }
-
-    void endRender()
-    {
-        EndRender();
-
-        GX2SetShaderMode(GX2_SHADER_MODE_UNIFORM_REGISTER);
-        Graphics::instance()->setBlendEnableImpl(true);
-    }
-
-private:
     TickTime mTime;
     Heap mHeap;
     Heap mViewerSysHeap;

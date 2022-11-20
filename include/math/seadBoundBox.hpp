@@ -8,8 +8,8 @@ template <typename T>
 inline Vector2<T>
 BoundBox2<T>::getCenter() const
 {
-    return Vector2<T>((mMin.x + mMax.x) / 2.0f,
-                      (mMin.y + mMax.y) / 2.0f);
+    return Vector2((mMin.x + mMax.x) / 2.0f,
+                   (mMin.y + mMax.y) / 2.0f);
 }
 
 template <typename T>
@@ -160,9 +160,9 @@ template <typename T>
 inline Vector3<T>
 BoundBox3<T>::getCenter() const
 {
-    Vector3<T>((mMin.x + mMax.x) / 2.0f,
-               (mMin.y + mMax.y) / 2.0f,
-               (mMin.z + mMax.z) / 2.0f);
+    return Vector3((mMin.x + mMax.x) / 2.0f,
+                   (mMin.y + mMax.y) / 2.0f,
+                   (mMin.z + mMax.z) / 2.0f);
 }
 
 template <typename T>

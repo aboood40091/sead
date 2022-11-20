@@ -100,6 +100,7 @@ public:
     T normalize();
     void set(const Self& v);
     void set(T x_, T y_, T z_);
+    void setAdd(const Self& a, const Self& b);
     void setCross(const Self& a, const Self& b);
     void setMul(const Mtx34& m, const Self& v);
     void setMulAndDivByW(const Mtx44& m, const Self& v);
