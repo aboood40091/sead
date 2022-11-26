@@ -3,6 +3,7 @@
 
 #include <gfx/seadColor.h>
 #include <gfx/seadGraphics.h>
+#include <prim/seadBitFlag.h>
 
 namespace sead {
 
@@ -48,7 +49,7 @@ public:
     Graphics::DepthFunc mDepthFunc;
     Graphics::CullingMode mCullingMode;
     sead::BitFlag32 mBlendEnableMask;
-    BlendExpression mBlendExpression[8];
+    BlendExpression mBlendExpression[8]; // sead::UnsafeArray<BlendExpression, 8>
     Color4f mBlendConstantColor;
     bool mAlphaTestEnable;
     Graphics::AlphaFunc mAlphaTestFunc;
