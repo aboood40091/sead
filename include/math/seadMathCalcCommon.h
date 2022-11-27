@@ -220,7 +220,10 @@ public:
     static bool chaseAngle(T*, T, T);
     static bool chaseAngleIdx(u32*, u32, s64);
 
-    static T lerp(T a, T b, f32 ratio);
+    static T lerp(T a, T b, f32 ratio)
+    {
+        return a + (b - a) * ratio;
+    }
 
 protected:
     static u32 atanIdx_(T t);
