@@ -22,7 +22,7 @@ public:
     operator T() const { return mBits; }
 
     void makeAllZero() { mBits = 0; }
-    void makeAllOne() { mBits = -1; }
+    void makeAllOne() { mBits = T(-1); }
 
     void setDirect(T bits) { mBits = bits; }
     T getDirect() const { return mBits; }
