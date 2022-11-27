@@ -41,6 +41,37 @@ private:
 };
 static_assert(sizeof(FrameBufferCafe) == 0x24, "sead::FrameBufferCafe size mismatch");
 
+class DisplayBufferCafe : public DisplayBuffer
+{
+    SEAD_RTTI_OVERRIDE(DisplayBufferCafe, DisplayBuffer)
+
+public:
+    enum ScanOutTarget
+    {
+        cTarget_TV,
+        cTarget_DRC,
+    };
+    static_assert(sizeof(ScanOutTarget) == 4, "sead::DisplayBufferCafe::ScanOutTarget size mismatch");
+
+    enum Resolution
+    {
+        cResolution_Auto, // Maybe? Idk
+        cResolution_720P
+    };
+    static_assert(sizeof(Resolution) == 4, "sead::DisplayBufferCafe::Resolution size mismatch");
+
+public:
+    DisplayBufferCafe(ScanOutTarget target, Resolution resolution);
+
+    virtual void initializeImpl_(sead::Heap* heap);
+
+private:
+    ScanOutTarget mScanOutTarget;
+    Resolution mResolution;
+    void* mpScanBuffer;
+};
+static_assert(sizeof(DisplayBufferCafe) == 0x18, "sead::DisplayBufferCafe size mismatch");
+
 }  // namespace sead
 
 #endif // SEAD_FRAME_BUFFER_CAFE_H_

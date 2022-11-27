@@ -109,6 +109,29 @@ public:
 static_assert(sizeof(FrameBuffer) == 0x1C, "sead::FrameBuffer size mismatch");
 #endif // cafe
 
+class Heap;
+
+class DisplayBuffer
+{
+    SEAD_RTTI_BASE(DisplayBuffer)
+
+public:
+    DisplayBuffer()
+        : mWidth(0.0f)
+        , mHeight(0.0f)
+    {
+    }
+
+    virtual void initializeImpl_(sead::Heap* heap) = 0;
+
+protected:
+    f32 mWidth;
+    f32 mHeight;
+};
+#ifdef cafe
+static_assert(sizeof(DisplayBuffer) == 0xC, "sead::DisplayBuffer size mismatch");
+#endif // cafe
+
 }  // namespace sead
 
 #endif // SEAD_FRAME_BUFFER_H_
