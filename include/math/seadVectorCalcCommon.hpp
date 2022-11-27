@@ -61,6 +61,14 @@ Vector2CalcCommon<T>::length(const Base& v)
 
 template <typename T>
 inline void
+Vector2CalcCommon<T>::lerp(Base& o, const Base& a, const Base& b, f32 ratio)
+{
+    o.x = a.x + (b.x - a.x) * ratio;
+    o.y = a.y + (b.y - a.y) * ratio;
+}
+
+template <typename T>
+inline void
 Vector2CalcCommon<T>::set(Base& o, const Base& v)
 {
     o.x = v.x;
@@ -199,6 +207,15 @@ Vector3CalcCommon<f32>::length(const Base& v)
 
 #endif // cafe
 
+template <typename T>
+inline void
+Vector3CalcCommon<T>::lerp(Base& o, const Base& a, const Base& b, f32 ratio)
+{
+    o.x = a.x + (b.x - a.x) * ratio;
+    o.y = a.y + (b.y - a.y) * ratio;
+    o.z = a.z + (b.z - a.z) * ratio;
+}
+
 #ifdef cafe
 
 template <>
@@ -307,6 +324,16 @@ inline T
 Vector4CalcCommon<T>::length(const Base& v)
 {
     return MathCalcCommon<T>::sqrt(squaredLength(v));
+}
+
+template <typename T>
+inline void
+Vector4CalcCommon<T>::lerp(Base& o, const Base& a, const Base& b, f32 ratio)
+{
+    o.x = a.x + (b.x - a.x) * ratio;
+    o.y = a.y + (b.y - a.y) * ratio;
+    o.z = a.z + (b.z - a.z) * ratio;
+    o.w = a.w + (b.w - a.w) * ratio;
 }
 
 template <typename T>

@@ -20,6 +20,8 @@ public:
     static T squaredLength(const Base& v);
     static T length(const Base& v);
 
+    static void lerp(Base& o, const Base& a, const Base& b, f32 ratio);
+
     static void set(Base& o, const Base& v);
     static void set(Base& v, T x, T y);
 };
@@ -43,6 +45,8 @@ public:
     static T squaredLength(const Base& v);
     static T length(const Base& v);
 
+    static void lerp(Base& o, const Base& a, const Base& b, f32 ratio);
+
     static void mul(Base& o, const Mtx34& m, const Base& v);
     static void multScalar(Base& o, const Base& v, T t);
     static void multScalarAdd(Base& o, T t, const Base& a, const Base& b);
@@ -63,6 +67,8 @@ public:
 
     static T squaredLength(const Base& v);
     static T length(const Base& v);
+
+    static void lerp(Base& o, const Base& a, const Base& b, f32 ratio);
 
     static void set(Base& o, const Base& v);
     static void set(Base& v, T x, T y, T z, T w);
