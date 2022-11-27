@@ -1,6 +1,8 @@
 #ifndef SEAD_HOST_IO_DEFINE_H_
 #define SEAD_HOST_IO_DEFINE_H_
 
+#include <prim/seadSafeString.h>
+
 namespace sead { namespace hostio {
 
 struct FileInfo
