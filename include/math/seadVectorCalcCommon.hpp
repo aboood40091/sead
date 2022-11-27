@@ -63,8 +63,8 @@ template <typename T>
 inline void
 Vector2CalcCommon<T>::lerp(Base& o, const Base& a, const Base& b, f32 ratio)
 {
-    o.x = a.x + (b.x - a.x) * ratio;
-    o.y = a.y + (b.y - a.y) * ratio;
+    o.x = MathCalcCommon<T>::lerp(a.x, b.x, ratio);
+    o.y = MathCalcCommon<T>::lerp(a.y, b.y, ratio);
 }
 
 template <typename T>
@@ -211,9 +211,9 @@ template <typename T>
 inline void
 Vector3CalcCommon<T>::lerp(Base& o, const Base& a, const Base& b, f32 ratio)
 {
-    o.x = a.x + (b.x - a.x) * ratio;
-    o.y = a.y + (b.y - a.y) * ratio;
-    o.z = a.z + (b.z - a.z) * ratio;
+    o.x = MathCalcCommon<T>::lerp(a.x, b.x, ratio);
+    o.y = MathCalcCommon<T>::lerp(a.y, b.y, ratio);
+    o.z = MathCalcCommon<T>::lerp(a.z, b.z, ratio);
 }
 
 #ifdef cafe
@@ -330,10 +330,10 @@ template <typename T>
 inline void
 Vector4CalcCommon<T>::lerp(Base& o, const Base& a, const Base& b, f32 ratio)
 {
-    o.x = a.x + (b.x - a.x) * ratio;
-    o.y = a.y + (b.y - a.y) * ratio;
-    o.z = a.z + (b.z - a.z) * ratio;
-    o.w = a.w + (b.w - a.w) * ratio;
+    o.x = MathCalcCommon<T>::lerp(a.x, b.x, ratio);
+    o.y = MathCalcCommon<T>::lerp(a.y, b.y, ratio);
+    o.z = MathCalcCommon<T>::lerp(a.z, b.z, ratio);
+    o.w = MathCalcCommon<T>::lerp(a.w, b.w, ratio);
 }
 
 template <typename T>
