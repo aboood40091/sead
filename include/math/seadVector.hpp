@@ -99,6 +99,13 @@ Vector2<T>::set(T x_, T y_)
 }
 
 template <typename T>
+inline void
+Vector2<T>::setLerp(const Self& a, const Self& b, f32 ratio)
+{
+    Vector2CalcCommon<T>::lerp(*this, a, b, ratio);
+}
+
+template <typename T>
 inline
 Vector3<T>::Vector3(T x_, T y_, T z_)
 {
@@ -246,6 +253,13 @@ Vector3<T>::setCross(const Self& a, const Self& b)
 
 template <typename T>
 inline void
+Vector3<T>::setLerp(const Self& a, const Self& b, f32 ratio)
+{
+    Vector3CalcCommon<T>::lerp(*this, a, b, ratio);
+}
+
+template <typename T>
+inline void
 Vector3<T>::setMul(const Mtx34& m, const Self& v)
 {
     Vector3CalcCommon<T>::mul(*this, m, v);
@@ -316,6 +330,13 @@ inline void
 Vector4<T>::set(T x_, T y_, T z_, T w_)
 {
     Vector4CalcCommon<T>::set(*this, x_, y_, z_, w_);
+}
+
+template <typename T>
+inline void
+Vector4<T>::setLerp(const Self& a, const Self& b, f32 ratio)
+{
+    Vector4CalcCommon<T>::lerp(*this, a, b, ratio);
 }
 
 }  // namespace sead

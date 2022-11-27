@@ -44,6 +44,8 @@ public:
     void set(const Self& v);
     void set(T x_, T y_);
 
+    void setLerp(const Self& a, const Self& b, f32 ratio);
+
     static const Vector2 zero;
     static const Vector2 ex;
     static const Vector2 ey;
@@ -102,6 +104,7 @@ public:
     void set(T x_, T y_, T z_);
     void setAdd(const Self& a, const Self& b);
     void setCross(const Self& a, const Self& b);
+    void setLerp(const Self& a, const Self& b, f32 ratio);
     void setMul(const Mtx34& m, const Self& v);
     void setMulAndDivByW(const Mtx44& m, const Self& v);
     void setScaleAdd(T t, const Self& a, const Self& b);
@@ -145,6 +148,8 @@ public:
 
     void set(const Self& v);
     void set(T x_, T y_, T z_, T w_);
+
+    void setLerp(const Self& a, const Self& b, f32 ratio);
 
     static const Vector4 zero;
     static const Vector4 ex;
