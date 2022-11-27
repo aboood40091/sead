@@ -31,6 +31,8 @@ struct Color4f
         a = _a;
     }
 
+    void setLerp(const sead::Color4f& from, const sead::Color4f& to, f32 ratio);
+
     union
     {
         struct
