@@ -1,6 +1,7 @@
 #ifndef SEAD_FILEDEVICE_H_
 #define SEAD_FILEDEVICE_H_
 
+#include <container/seadSafeArray.h>
 #include <container/seadTList.h>
 #include <heap/seadDisposer.h>
 #include <heap/seadHeap.h>
@@ -10,7 +11,7 @@
 namespace sead {
 
 typedef s32 RawErrorCode;
-typedef u8 HandleBuffer[32]; // typedef SafeArray<u8, 32> HandleBuffer;
+typedef SafeArray<u8, 32> HandleBuffer;
 
 class FileDevice;
 
@@ -21,7 +22,7 @@ public:
         : IDisposer()
         , mDevice(NULL)
         , mOriginalDevice(NULL)
-        //, mHandleBuffer()
+        , mHandleBuffer()
     {
     }
 

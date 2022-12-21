@@ -161,29 +161,31 @@ SharcArchiveRes::setCurrentDirectoryImpl_(const SafeString&)
 
 bool
 SharcArchiveRes::openDirectoryImpl_(
-    u32* handle, const SafeString&
+    SafeArray<u8, 32>* handle, const SafeString&
 )
 {
-    *handle = 0;
+    *reinterpret_cast<u32*>(handle->getBufferPtr()) = 0;
     return true;
 }
 
 bool
-SharcArchiveRes::closeDirectoryImpl_(u32* handle)
+SharcArchiveRes::closeDirectoryImpl_(SafeArray<u8, 32>* handle)
 {
     return true;
 }
 
 u32
 SharcArchiveRes::readDirectoryImpl_(
-    u32* handle, DirectoryEntry* entry, u32 num
+    SafeArray<u8, 32>* handle, DirectoryEntry* entry, u32 num
 )
 {
+    u32& handle_32 = *reinterpret_cast<u32*>(handle->getBufferPtr());
+
     u32 count = 0;
 
-    while (*handle + count < mFATBlockHeader->file_num && count < num)
+    while (handle_32 + count < mFATBlockHeader->file_num && count < num)
     {
-        u32 id = *handle + count;
+        u32 id = handle_32 + count;
 
         u32 offset = mFATEntrys.unsafeGet(id)->name_offset;
         if (offset == 0)
@@ -202,7 +204,7 @@ SharcArchiveRes::readDirectoryImpl_(
         count++;
     }
 
-    *handle += count;
+    handle_32 += count;
     return count;
 }
 

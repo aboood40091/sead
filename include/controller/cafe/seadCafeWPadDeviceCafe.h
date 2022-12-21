@@ -1,6 +1,7 @@
 #ifndef SEAD_CAFE_W_PAD_DEVICE_CAFE_H_
 #define SEAD_CAFE_W_PAD_DEVICE_CAFE_H_
 
+#include <container/seadSafeArray.h>
 #include <controller/seadControlDevice.h>
 #include <prim/seadMemUtil.h>
 
@@ -40,18 +41,13 @@ public:
 
     const KPadInfo& getKPadInfo(s32 channel) const
     {
-        // TODO: SafeArray operator[]
-        if (channel < WPAD_MAX_CONTROLLERS)
-            return mKPadInfos[channel];
-
-        else
-            return mKPadInfos[0];
+        return mKPadInfos[channel];
     }
 
 private:
     KPADUnifiedWpadStatus mUniRingBufs[WPAD_MAX_CONTROLLERS * KPAD_MAX_READ_BUFS];
     u8 _1114[4];
-    KPadInfo mKPadInfos[WPAD_MAX_CONTROLLERS]; // SafeArray<KPadInfo, WPAD_MAX_CONTROLLERS>
+    SafeArray<KPadInfo, WPAD_MAX_CONTROLLERS> mKPadInfos;
     s32 mFreezeCounter;
     u8 _4d3c[4];
 };

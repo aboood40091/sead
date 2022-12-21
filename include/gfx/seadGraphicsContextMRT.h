@@ -1,6 +1,7 @@
 #ifndef SEAD_GRAPHICS_CONTEXT_MRT_H_
 #define SEAD_GRAPHICS_CONTEXT_MRT_H_
 
+#include <container/seadSafeArray.h>
 #include <gfx/seadColor.h>
 #include <gfx/seadGraphics.h>
 #include <prim/seadBitFlag.h>
@@ -49,7 +50,7 @@ public:
     Graphics::DepthFunc mDepthFunc;
     Graphics::CullingMode mCullingMode;
     sead::BitFlag32 mBlendEnableMask;
-    BlendExpression mBlendExpression[8]; // sead::UnsafeArray<BlendExpression, 8>
+    sead::SafeArray<BlendExpression, 8> mBlendExpression;
     Color4f mBlendConstantColor;
     bool mAlphaTestEnable;
     Graphics::AlphaFunc mAlphaTestFunc;

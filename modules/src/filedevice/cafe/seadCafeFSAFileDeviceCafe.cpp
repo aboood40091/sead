@@ -436,14 +436,14 @@ CafeFSAFileDevice::getFileHandleInner_(
     FileHandle* handle
 )
 {
-    return reinterpret_cast<FileHandleInner*>(&getHandleBaseHandleBuffer_(handle)[0]);
+    return reinterpret_cast<FileHandleInner*>(getHandleBaseHandleBuffer_(handle).getBufferPtr());
 }
 CafeFSAFileDevice::DirHandleInner*
 CafeFSAFileDevice::getDirHandleInner_(
     DirectoryHandle* handle
 )
 {
-    return reinterpret_cast<DirHandleInner*>(&getHandleBaseHandleBuffer_(handle)[0]);
+    return reinterpret_cast<DirHandleInner*>(getHandleBaseHandleBuffer_(handle).getBufferPtr());
 }
 
 CafeContentFileDevice::CafeContentFileDevice()
