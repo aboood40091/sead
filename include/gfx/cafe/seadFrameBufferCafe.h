@@ -10,6 +10,13 @@ class FrameBufferCafe : public FrameBuffer
     SEAD_RTTI_OVERRIDE(FrameBufferCafe, FrameBuffer)
 
 public:
+    FrameBufferCafe(GX2ColorBuffer* color_buffer, GX2DepthBuffer* depth_buffer)
+        : FrameBuffer()
+        , mColorBuffer(color_buffer)
+        , mDepthBuffer(depth_buffer)
+    {
+    }
+
     FrameBufferCafe(const Vector2f& virtual_size, const BoundBox2f& physical_area, GX2ColorBuffer* color_buffer, GX2DepthBuffer* depth_buffer)
         : FrameBuffer(virtual_size, physical_area)
         , mColorBuffer(color_buffer)
@@ -63,6 +70,10 @@ public:
 public:
     DisplayBufferCafe(ScanOutTarget target, Resolution resolution);
 
+    ScanOutTarget getScanOutTarget() const { return mScanOutTarget; }
+    Resolution getResolution() const { return mResolution; }
+
+private:
     virtual void initializeImpl_(sead::Heap* heap);
 
 private:

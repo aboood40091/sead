@@ -13,6 +13,12 @@ class LogicalFrameBuffer
     SEAD_RTTI_BASE(LogicalFrameBuffer)
 
 public:
+    LogicalFrameBuffer()
+        : mVirtualSize(1.0f, 1.0f)
+        , mPhysicalArea(0.0f, 0.0f, 1.0f, 1.0f)
+    {
+    }
+
     LogicalFrameBuffer(const Vector2f& virtual_size, const BoundBox2f& physical_area)
         : mVirtualSize(virtual_size)
         , mPhysicalArea(physical_area)
@@ -80,6 +86,11 @@ class FrameBuffer : public LogicalFrameBuffer
     SEAD_RTTI_OVERRIDE(FrameBuffer, LogicalFrameBuffer)
 
 public:
+    FrameBuffer()
+        : LogicalFrameBuffer()
+    {
+    }
+
     FrameBuffer(const Vector2f& virtual_size, const BoundBox2f& physical_area)
         : LogicalFrameBuffer(virtual_size, physical_area)
     {
