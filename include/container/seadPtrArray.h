@@ -42,8 +42,17 @@ public:
     void shuffle(Random* random);
 
 protected:
-    void* at(s32 n) const;
-    void* unsafeAt(s32 n) const;
+    void* at(s32 n) const
+    {
+        if (u32(mPtrNum) <= u32(n))
+        {
+            // SEAD_ASSERT_MSG(false, "index exceeded [%d/%d]", n, mPtrNum);
+            return NULL;
+        }
+        return mPtrs[n];
+    }
+
+    void* unsafeAt(s32 n) const { return mPtrs[n]; }
     void* front() const { return mPtrs[0]; }
     void* back() const { return mPtrs[mPtrNum - 1]; }
 
@@ -59,14 +68,24 @@ protected:
         ++mPtrNum;
     }
 
-    void pushFront(void* ptr);
+    void pushFront(void* ptr) { insert(0, ptr); }
     void* popBack();
     void* popFront();
     void replace(s32 pos, void* ptr);
     void* find(const void* ptr, CompareCallbackImpl cmp) const;
     s32 search(const void* ptr, CompareCallbackImpl cmp) const;
     bool equal(const PtrArrayImpl& o, CompareCallbackImpl cmp) const;
-    s32 indexOf(const void* ptr) const;
+
+    s32 indexOf(const void* ptr) const
+    {
+        for (s32 i = 0; i < mPtrNum; ++i)
+        {
+            if (mPtrs[i] == ptr)
+                return i;
+        }
+        return -1;
+    }
+
     void createVacancy(s32 pos, s32 num);
     void insert(s32 pos, void* ptr);
     void insertArray(s32 pos, void* array, s32 array_length, s32 elem_size);
@@ -98,26 +117,26 @@ public:
     {
     }
 
-    T* at(s32 n) const;
-    T* unsafeAt(s32 n) const;
-    T* operator[](s32 n) const;
+    T* at(s32 n) const { return static_cast<T*>(PtrArrayImpl::at(n)); }
+    T* unsafeAt(s32 n) const { return static_cast<T*>(PtrArrayImpl::unsafeAt(n)); }
+    T* operator[](s32 n) const { return at(n); }
     T* front() const { return static_cast<T*>(PtrArrayImpl::front()); }
     T* back() const { return static_cast<T*>(PtrArrayImpl::back()); }
     void pushBack(T* ptr) { PtrArrayImpl::pushBack((void*)ptr); }
-    void pushFront(T* ptr);
-    T* popBack();
-    T* popFront();
-    void insert(s32 pos, T* ptr);
-    void insert(s32, T*, s32);
-    void replace(s32 pos, T* ptr);
-    s32 indexOf(const T* ptr) const;
+    void pushFront(T* ptr) { PtrArrayImpl::pushFront((void*)ptr); }
+    T* popBack() { return static_cast<T*>(PtrArrayImpl::popBack()); }
+    T* popFront() { return static_cast<T*>(PtrArrayImpl::popFront()); }
+    void insert(s32 pos, T* ptr) { PtrArrayImpl::insert(pos, (void*)ptr); }
+    void insert(s32 pos, T* array, s32 array_length) { PtrArrayImpl::insertArray(pos, (void*)ptr, array_length, sizeof(T)); }
+    void replace(s32 pos, T* ptr) { PtrArrayImpl::replace(pos, (void*)ptr); }
+    s32 indexOf(const T* ptr) const { return PtrArrayImpl::indexOf(ptr); }
     void* getWork() const { return mPtrs; }
-    void sort();
+    void sort() { sort(compareT); }
     void sort(CompareCallback cmp) { PtrArrayImpl::sort((CompareCallbackImpl)cmp); }
-    void heapSort();
-    void heapSort(CompareCallback cmp);
-    bool equal(const PtrArray<T>* o, CompareCallback cmp) const;
-    s32 compare(const PtrArray<T>* o, CompareCallback cmp) const;
+    void heapSort() { heapSort(compareT); }
+    void heapSort(CompareCallback cmp) { PtrArrayImpl::heapSort((CompareCallbackImpl)cmp); }
+    bool equal(const PtrArray<T>* o, CompareCallback cmp) const { return PtrArrayImpl::equal(*o, (CompareCallbackImpl)cmp); }
+    s32 compare(const PtrArray<T>* o, CompareCallback cmp) const { return PtrArrayImpl::compare(*o, (CompareCallbackImpl)cmp); }
     T* find(const T* ptr) const;
     T* find(const T* ptr, CompareCallback cmp) const;
     s32 search(const T* ptr) const;
