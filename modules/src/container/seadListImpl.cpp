@@ -2,25 +2,37 @@
 
 namespace sead {
 
+void ListNode::insertBack_(ListNode* n)
+{
+    // SEAD_ASSERT_MSG(!n->isLinked(), "node is already linked.");
+
+    ListNode* next = mNext;
+
+    mNext = n;
+    n->mPrev = this;
+    n->mNext = next;
+
+    if (next)
+        next->mPrev = n;
+}
+
 void ListNode::insertFront_(ListNode* n)
 {
-    //SEAD_ASSERT_MSG(n->mNext == NULL && n->mPrev == NULL, "node is already linked.");
+    // SEAD_ASSERT_MSG(!n->isLinked(), "node is already linked.");
 
     ListNode* prev = mPrev;
 
-    this->mPrev = n;
+    mPrev = n;
     n->mPrev = prev;
     n->mNext = this;
 
-    if (prev == NULL)
-        return;
-
-    prev->mNext = n;
+    if (prev)
+        prev->mNext = n;
 }
 
 void ListNode::erase_()
 {
-    //SEAD_ASSERT_MSG(n->mNext != NULL || n->mPrev != NULL, "node is not linked.");
+    // SEAD_ASSERT_MSG(n->isLinked(), "node is not linked.");
 
     ListNode* prev = mPrev;
     if (prev != NULL)
