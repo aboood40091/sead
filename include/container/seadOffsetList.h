@@ -23,25 +23,55 @@ public:
 
     void pushBack(T* obj)
     {
-        //SEAD_ASSRT(mOffset >= 0);
+        // SEAD_ASSRT(mOffset >= 0);
         ListImpl::pushBack(objToListNode(obj));
     }
 
-    void pushFront(T* obj);
+    void pushFront(T* obj)
+    {
+        // SEAD_ASSRT(mOffset >= 0);
+        ListImpl::pushFront(objToListNode(obj));
+    }
+
     T* popBack();
     T* popFront();
-    void insertBefore(const T* basis, T* obj);
-    void insertAfter(const T* basis, T* obj);
+
+    void insertBefore(const T* basis, T* obj)
+    {
+        ListImpl::insertBefore(objToListNode(basis), objToListNode(obj));
+    }
+
+    void insertAfter(const T* basis, T* obj)
+    {
+        ListImpl::insertAfter(objToListNode(basis), objToListNode(obj));
+    }
 
     void erase(T* obj)
     {
         ListImpl::erase(objToListNode(obj));
     }
 
-    T* front() const;
-    T* back() const;
-    T* prev(const T* obj) const;
-    T* next(const T* obj) const;
+    T* front() const { return listNodeToObjWithNullCheck(ListImpl::front()); }
+    T* back() const { return listNodeToObjWithNullCheck(ListImpl::back()); }
+
+    T* prev(const T* obj) const
+    {
+        ListNode* node = objToListNode(obj)->prev();
+        if (node == &mStartEnd)
+            return NULL;
+
+        return listNodeToObj(node);
+    }
+
+    T* next(const T* obj) const
+    {
+        ListNode* node = objToListNode(obj)->next();
+        if (node == &mStartEnd)
+            return NULL;
+
+        return listNodeToObj(node);
+    }
+
     T* nth(s32 index) const;
     s32 indexOf(const T* obj) const;
     bool isNodeLinked(const T* obj) const;
@@ -154,7 +184,10 @@ protected:
         return reinterpret_cast<T*>((uintptr_t)node - mOffset);
     }
 
-    T* listNodeToObjWithNullCheck(const ListNode* node) const;
+    T* listNodeToObjWithNullCheck(const ListNode* node) const
+    {
+        return node ? listNodeToObj(node) : NULL;
+    }
 
 protected:
     s32 mOffset;

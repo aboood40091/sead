@@ -23,7 +23,7 @@ private:
 public:
     ListNode* next() const { return mNext; }
     ListNode* prev() const { return mPrev; }
-    bool isLinked() const { return mNext != NULL && mPrev != NULL; }
+    bool isLinked() const { return mNext || mPrev; }
 
 private:
     void init_();
@@ -75,11 +75,26 @@ protected:
         mCount += 1;
     }
 
-    void pushFront(ListNode* n);
+    void pushFront(ListNode* n)
+    {
+        mStartEnd.insertBack_(n);
+        mCount += 1;
+    }
+
     ListNode* popBack();
     ListNode* popFront();
-    void insertBefore(ListNode* basis, ListNode* n);
-    void insertAfter(ListNode* basis, ListNode* n);
+
+    void insertBefore(ListNode* basis, ListNode* n)
+    {
+        basis->insertFront_(n);
+        mCount += 1;
+    }
+
+    void insertAfter(ListNode* basis, ListNode* n)
+    {
+        basis->insertBack_(n);
+        mCount += 1;
+    }
 
     void erase(ListNode* n)
     {
@@ -87,8 +102,9 @@ protected:
         mCount -= 1;
     }
 
-    ListNode* front() const;
-    ListNode* back() const;
+    ListNode* front() const { return mCount > 0 ? mStartEnd.mNext : NULL; }
+    ListNode* back() const { return mCount > 0 ? mStartEnd.mPrev : NULL; }
+
     ListNode* nth(s32 index) const;
     s32 indexOf(const ListNode* n) const;
     void swap(ListNode* n1, ListNode* n2);
