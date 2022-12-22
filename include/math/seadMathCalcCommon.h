@@ -188,23 +188,9 @@ public:
     static s32 roundDownN(T val, s32 multNumber);
     static s32 roundDownPow2(T val, s32 base);
 
-    static T clampMax(T val, T max_)
-    {
-        return min(val, max_);
-    }
-
-    static T clampMin(T val, T min_)
-    {
-        return max(val, min_);
-    }
-
-    static T clamp2(T min_, T val, T max_)
-    {
-        if (val < min_) return min_;
-        if (val > max_) return max_;
-
-        return val;
-    }
+    static T clampMax(T val, T max_);
+    static T clampMin(T val, T min_);
+    static T clamp2(T min_, T val, T max_);
 
     static T gcd(T m, T n);
     static T lcm(T m, T n);
