@@ -46,7 +46,7 @@ public:
 
     virtual u32 getLoadDataAlignment() { return 0x80; }
     virtual void doCreate_(u8* buf, u32, Heap*);
-    virtual void* getFileImpl_(const SafeString& file_path, FileInfo* file_info = NULL) = 0;
+    virtual void* getFileImpl_(const SafeString& file_path, FileInfo* file_info = nullptr) = 0;
     virtual void* getFileFastImpl_(s32 entry_id, FileInfo* file_info) = 0;
     virtual s32 convertPathToEntryIDImpl_(const SafeString& file_path) = 0;
     virtual bool setCurrentDirectoryImpl_(const SafeString&) = 0;
@@ -57,7 +57,7 @@ public:
 
     Resource* load(ResourceMgr::LoadArg& arg);
 
-    void* getFile(const SafeString& file_path, u32* length = NULL)
+    void* getFile(const SafeString& file_path, u32* length = nullptr)
     {
         FileInfo file_info;
         void* data = getFileImpl_(file_path, &file_info);

@@ -4,7 +4,7 @@ namespace sead {
 
 PatternRumbleAddon::PatternRumbleAddon(Controller* controller)
     : ControllerAddon(controller)
-    , mPattern(NULL)
+    , mPattern(nullptr)
     , mPatternIdx(0)
     , mPatternDuration(0)
 {
@@ -13,7 +13,7 @@ PatternRumbleAddon::PatternRumbleAddon(Controller* controller)
 
 bool PatternRumbleAddon::isPatternEnable() const
 {
-    return mPattern != NULL;
+    return mPattern != nullptr;
 }
 
 void PatternRumbleAddon::startPattern(const char* pattern, u32 duration)
@@ -27,7 +27,7 @@ void PatternRumbleAddon::startPattern(const char* pattern, u32 duration)
 
 void PatternRumbleAddon::stopPattern()
 {
-    mPattern = NULL;
+    mPattern = nullptr;
     mPatternIdx = 1;
     mPatternDuration = 0;
 }
@@ -44,7 +44,7 @@ bool PatternRumbleAddon::calc()
             {
                 if (mPatternDuration == 1)
                 {
-                    mPattern = NULL;
+                    mPattern = nullptr;
                     mPatternDuration = 0;
                     stopRumbleImpl_();
                     return false;

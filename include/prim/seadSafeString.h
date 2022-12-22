@@ -142,7 +142,7 @@ public:
         if (size <= 0)
         {
             //SEAD_ASSERT_MSG(false, "Invalied buffer size(%d).\n", size);
-            mStringTop = NULL;
+            mStringTop = nullptr;
             mBufferSize = 0;
             return;
         }
@@ -159,7 +159,7 @@ public:
         if (pos >= original->getBufferSize() || pos < 0)
         {
             //SEAD_ASSERT_MSG(false, "pos(%d) out of bounds[0,%d)", pos, original->getBufferSize());
-            mStringTop = NULL;
+            mStringTop = nullptr;
             mBufferSize = 0;
             return;
         }

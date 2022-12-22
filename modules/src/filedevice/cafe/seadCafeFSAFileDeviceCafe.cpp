@@ -18,7 +18,7 @@ CafeFSAFileDevice::CafeFSAFileDevice(
                      FS_RET_ALREADY_OPEN)
     , mFSCloseRetFlag(FS_RET_NO_ERROR)
     , mFSReadRetFlag(FS_RET_NO_ERROR)
-    , mFSClient(NULL)
+    , mFSClient(nullptr)
 {
 }
 
@@ -63,7 +63,7 @@ CafeFSAFileDevice::doOpen_(
     if (mLastRawError = status, status != FS_STATUS_OK)
     {
         handle_inner->mHandle = 0;
-        return NULL;
+        return nullptr;
     }
 
     return this;
@@ -105,7 +105,7 @@ CafeFSAFileDevice::doRead_(
         mLastRawError = FS_STATUS_OK;
         handle_inner->mPosition += result;
 
-        if (read_size != NULL)
+        if (read_size != nullptr)
             *read_size = result;
 
         return true;
@@ -135,7 +135,7 @@ CafeFSAFileDevice::doWrite_(
         mLastRawError = FS_STATUS_OK;
         handle_inner->mPosition += result;
 
-        if (write_size != NULL)
+        if (write_size != nullptr)
             *write_size = result;
 
         return true;
@@ -320,7 +320,7 @@ CafeFSAFileDevice::doOpenDirectory_(
                                                                                          FS_RET_NOT_DIR | FS_RET_NOT_FOUND | FS_RET_ALREADY_OPEN);
 
     if (mLastRawError = status, status != FS_STATUS_OK)
-        return NULL;
+        return nullptr;
 
     return this;
 }
@@ -362,7 +362,7 @@ CafeFSAFileDevice::doReadDirectory_(
         FSStatus status = FSReadDir(client, &block, handle_inner->mHandle, &dir_entry, FS_RET_NO_ERROR);
         if (mLastRawError = status, status != FS_STATUS_OK)
         {
-            if (read_num != NULL)
+            if (read_num != nullptr)
                 *read_num = i;
 
             if (status == FS_STATUS_END)
@@ -375,7 +375,7 @@ CafeFSAFileDevice::doReadDirectory_(
         entry[i].is_directory = (dir_entry.stat.flag & FS_STAT_FLAG_IS_DIRECTORY) != 0;
     }
 
-    if (read_num != NULL)
+    if (read_num != nullptr)
         *read_num = num;
 
     return true;
@@ -426,7 +426,7 @@ CafeFSAFileDevice::formatPathForFSA_(
 FSClient*
 CafeFSAFileDevice::getUsableFSClient_() const
 {
-    if (mFSClient == NULL)
+    if (mFSClient == nullptr)
         return FileDeviceMgr::instance()->getFSClient_();
 
     return mFSClient;

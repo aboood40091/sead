@@ -38,7 +38,7 @@ static_assert(sizeof(HeapArray) == 0x18, "sead::HeapArray size mismatch");
 struct HeapPolicy
 {
     HeapPolicy()
-        : parent(NULL)
+        : parent(nullptr)
         , size(0)
         , create_slack(0)
         , adjust_slack(0)

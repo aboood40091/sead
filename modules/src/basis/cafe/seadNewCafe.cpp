@@ -13,14 +13,14 @@ void* operator new(size_t size)
     if (sead::HeapMgr::isInitialized())
     {
         sead::Heap* heap = sead::HeapMgr::instance()->getCurrentHeap();
-        if (heap == NULL)
+        if (heap == nullptr)
         {
             //SEAD_ASSERT_MSG(false, "Current heap is null. Cannot alloc.");
-            return NULL;
+            return nullptr;
         }
 
         void* ret = heap->tryAlloc(size, alignment);
-        //SEAD_ASSERT_MSG(ret != NULL, "alloc failed. size: %u, allocatable size: %u, alignment: %d, heap: %s",
+        //SEAD_ASSERT_MSG(ret != nullptr, "alloc failed. size: %u, allocatable size: %u, alignment: %d, heap: %s",
         //                size, heap->getMaxAllocatableSize(alignment), alignment, heap->getName().cstr());
         return ret;
     }
@@ -36,14 +36,14 @@ void* operator new[](size_t size)
     if (sead::HeapMgr::isInitialized())
     {
         sead::Heap* heap = sead::HeapMgr::instance()->getCurrentHeap();
-        if (heap == NULL)
+        if (heap == nullptr)
         {
             //SEAD_ASSERT_MSG(false, "Current heap is null. Cannot alloc.");
-            return NULL;
+            return nullptr;
         }
 
         void* ret = heap->tryAlloc(size, alignment);
-        //SEAD_ASSERT_MSG(ret != NULL, "alloc failed. size: %u, allocatable size: %u, alignment: %d, heap: %s",
+        //SEAD_ASSERT_MSG(ret != nullptr, "alloc failed. size: %u, allocatable size: %u, alignment: %d, heap: %s",
         //                size, heap->getMaxAllocatableSize(alignment), alignment, heap->getName().cstr());
         return ret;
     }
@@ -54,12 +54,12 @@ void* operator new[](size_t size)
 
 void operator delete(void* ptr)
 {
-    if (ptr != NULL)
+    if (ptr != nullptr)
     {
         if (sead::HeapMgr::isInitialized())
         {
             sead::Heap* heap = sead::HeapMgr::instance()->findContainHeap(ptr);
-            if (heap == NULL)
+            if (heap == nullptr)
             {
                 //SEAD_ASSERT_MSG(false, "delete bad pointer [0x%p]", ptr);
                 return;
@@ -75,12 +75,12 @@ void operator delete(void* ptr)
 
 void operator delete[](void* ptr)
 {
-    if (ptr != NULL)
+    if (ptr != nullptr)
     {
         if (sead::HeapMgr::isInitialized())
         {
             sead::Heap* heap = sead::HeapMgr::instance()->findContainHeap(ptr);
-            if (heap == NULL)
+            if (heap == nullptr)
             {
                 //SEAD_ASSERT_MSG(false, "delete bad pointer [0x%p]", ptr);
                 return;
@@ -96,36 +96,36 @@ void operator delete[](void* ptr)
 
 void* operator new(size_t size, sead::Heap* heap, s32 alignment)
 {
-    if (heap == NULL)
+    if (heap == nullptr)
     {
         heap = sead::HeapMgr::instance()->getCurrentHeap();
-        if (heap == NULL)
+        if (heap == nullptr)
         {
             //SEAD_ASSERT_MSG(false, "Current heap is null. Cannot alloc.");
-            return NULL;
+            return nullptr;
         }
     }
 
     void* ret = heap->tryAlloc(size, alignment);
-    //SEAD_ASSERT_MSG(ret != NULL, "alloc failed. size: %u, allocatable size: %u, alignment: %d, heap: %s",
+    //SEAD_ASSERT_MSG(ret != nullptr, "alloc failed. size: %u, allocatable size: %u, alignment: %d, heap: %s",
     //                size, heap->getMaxAllocatableSize(alignment), alignment, heap->getName().cstr());
     return ret;
 }
 
 void* operator new[](size_t size, sead::Heap* heap, s32 alignment)
 {
-    if (heap == NULL)
+    if (heap == nullptr)
     {
         heap = sead::HeapMgr::instance()->getCurrentHeap();
-        if (heap == NULL)
+        if (heap == nullptr)
         {
             //SEAD_ASSERT_MSG(false, "Current heap is null. Cannot alloc.");
-            return NULL;
+            return nullptr;
         }
     }
 
     void* ret = heap->tryAlloc(size, alignment);
-    //SEAD_ASSERT_MSG(ret != NULL, "alloc failed. size: %u, allocatable size: %u, alignment: %d, heap: %s",
+    //SEAD_ASSERT_MSG(ret != nullptr, "alloc failed. size: %u, allocatable size: %u, alignment: %d, heap: %s",
     //                size, heap->getMaxAllocatableSize(alignment), alignment, heap->getName().cstr());
     return ret;
 }

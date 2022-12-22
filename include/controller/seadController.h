@@ -108,7 +108,7 @@ T Controller::getAddonAs() const
             return addon;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 } // namespace sead

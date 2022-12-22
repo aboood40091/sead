@@ -15,7 +15,7 @@ class TextureCafeGX2 : public Texture
 public:
     TextureCafeGX2()
         : Texture()
-        , mGX2Texture(NULL)
+        , mGX2Texture(nullptr)
     {
     }
 

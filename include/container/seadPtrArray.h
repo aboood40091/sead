@@ -17,7 +17,7 @@ public:
     PtrArrayImpl()
         : mPtrNum(0)
         , mPtrNumMax(0)
-        , mPtrs(NULL)
+        , mPtrs(nullptr)
     {
     }
 
@@ -25,7 +25,7 @@ public:
     void allocBuffer(s32 ptrNumMax, Heap* heap, s32 alignment = 4);
     bool tryAllocBuffer(s32 ptrNumMax, Heap* heap, s32 alignment = 4);
     void freeBuffer();
-    bool isBufferReady() const { return mPtrs != NULL; }
+    bool isBufferReady() const { return mPtrs != nullptr; }
     bool isEmpty() const { return mPtrNum == 0; }
     bool isFull() const { return mPtrNum >= mPtrNumMax; }
     s32 size() const { return mPtrNum; }
@@ -47,7 +47,7 @@ protected:
         if (u32(mPtrNum) <= u32(n))
         {
             // SEAD_ASSERT_MSG(false, "index exceeded [%d/%d]", n, mPtrNum);
-            return NULL;
+            return nullptr;
         }
         return mPtrs[n];
     }

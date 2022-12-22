@@ -47,7 +47,7 @@ inline bool
 IsDerivedTypes(const Type* ptr)
 {
     const RuntimeTypeInfo::Interface* typeInfo = DerivedType::getRuntimeTypeInfoStatic();
-    return ptr != NULL && ptr->checkDerivedRuntimeTypeInfo(typeInfo);
+    return ptr != nullptr && ptr->checkDerivedRuntimeTypeInfo(typeInfo);
 }
 
 template<typename DerivedType, typename Type>
@@ -57,7 +57,7 @@ DynamicCast(Type* ptr)
     if (IsDerivedTypes<DerivedType, Type>(ptr))
         return static_cast<DerivedType*>(ptr);
 
-    return NULL;
+    return nullptr;
 }
 
 } // namespace sead

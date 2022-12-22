@@ -25,13 +25,13 @@ public:
     struct CreateArg
     {
         CreateArg()
-            : buffer(NULL)
+            : buffer(nullptr)
             , file_size(0)
             , buffer_size(0)
             , need_unload(false)
-            , factory(NULL)
+            , factory(nullptr)
             , ext()
-            , heap(NULL)
+            , heap(nullptr)
             , alignment(0x20)
         {
         }
@@ -53,14 +53,14 @@ public:
     {
         LoadArg()
             : path()
-            , instance_heap(NULL)
-            , load_data_heap(NULL)
+            , instance_heap(nullptr)
+            , load_data_heap(nullptr)
             , instance_alignment(0x20)
             , load_data_alignment(0)
-            , load_data_buffer(NULL)
+            , load_data_buffer(nullptr)
             , load_data_buffer_size(0)
-            , factory(NULL)
-            , device(NULL)
+            , factory(nullptr)
+            , device(nullptr)
             , div_size(0)
         {
         }

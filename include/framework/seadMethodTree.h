@@ -36,8 +36,8 @@ public:
         , IDisposer()
         , mCriticalSection(cs)
         , mPauseFlag(0)
-        , mPauseEventDelegate(NULL)
-        , mUserID(NULL)
+        , mPauseEventDelegate(nullptr)
+        , mUserID(nullptr)
     {
         new (mDelegateHolder) Delegate<aaaaaaaaaaa>();
         mPauseFlag = BitFlag32(0);

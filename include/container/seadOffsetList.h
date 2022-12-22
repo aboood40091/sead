@@ -58,7 +58,7 @@ public:
     {
         ListNode* node = objToListNode(obj)->prev();
         if (node == &mStartEnd)
-            return NULL;
+            return nullptr;
 
         return listNodeToObj(node);
     }
@@ -67,7 +67,7 @@ public:
     {
         ListNode* node = objToListNode(obj)->next();
         if (node == &mStartEnd)
-            return NULL;
+            return nullptr;
 
         return listNodeToObj(node);
     }
@@ -186,7 +186,7 @@ protected:
 
     T* listNodeToObjWithNullCheck(const ListNode* node) const
     {
-        return node ? listNodeToObj(node) : NULL;
+        return node ? listNodeToObj(node) : nullptr;
     }
 
 protected:

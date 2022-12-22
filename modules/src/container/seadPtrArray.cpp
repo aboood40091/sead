@@ -7,7 +7,7 @@ void PtrArrayImpl::setBuffer(s32 ptrNumMax, void* buf)
 {
     if (ptrNumMax > 0)
     {
-        if (buf != NULL)
+        if (buf != nullptr)
         {
             mPtrNumMax = ptrNumMax;
             mPtrs = static_cast<void**>(buf);
@@ -31,10 +31,10 @@ void PtrArrayImpl::allocBuffer(s32 ptrNumMax, Heap* heap, s32 alignment)
 
 void PtrArrayImpl::freeBuffer()
 {
-    if (mPtrs != NULL)
+    if (mPtrs != nullptr)
     {
         delete[] mPtrs;
-        mPtrs = NULL;
+        mPtrs = nullptr;
         mPtrNum = 0;
         mPtrNumMax = 0;
     }

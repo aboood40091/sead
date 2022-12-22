@@ -15,7 +15,7 @@ Resource::~Resource()
 
 DirectResource::DirectResource()
     : Resource()
-    , mRawData(NULL)
+    , mRawData(nullptr)
     , mRawSize(0)
     , mBufferSize(0)
     , mSettingFlag()
@@ -30,7 +30,7 @@ DirectResource::~DirectResource()
 
 void DirectResource::create(u8* buffer, u32 bufferSize, u32 allocSize, bool allocated, Heap* heap)
 {
-    if (mRawData != NULL)
+    if (mRawData != nullptr)
     {
         //SEAD_ASSERT_MSG(false, "read twice");
         return;
@@ -46,17 +46,17 @@ void DirectResource::create(u8* buffer, u32 bufferSize, u32 allocSize, bool allo
 
 ResourceFactory::~ResourceFactory()
 {
-    if (ResourceMgr::instance() != NULL)
+    if (ResourceMgr::instance() != nullptr)
         ResourceMgr::instance()->unregisterFactory(this);
 }
 
 Resource* DirectResourceFactoryBase::create(const ResourceMgr::CreateArg& createArg)
 {
     DirectResource* resource = newResource_(createArg.heap, createArg.alignment);
-    if (resource == NULL)
+    if (resource == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "resource new failed.");
-        return NULL;
+        return nullptr;
     }
 
     uintptr_t bufferPtr = reinterpret_cast<uintptr_t>(createArg.buffer);
@@ -65,7 +65,7 @@ Resource* DirectResourceFactoryBase::create(const ResourceMgr::CreateArg& create
     {
         //SEAD_ASSERT_MSG(false, "buffer alignment invalid: %p, %d", createArg.buffer, alignment);
         delete resource;
-        return NULL;
+        return nullptr;
     }
 
     resource->create(createArg.buffer, createArg.file_size, createArg.buffer_size, createArg.need_unload, createArg.heap);
@@ -75,10 +75,10 @@ Resource* DirectResourceFactoryBase::create(const ResourceMgr::CreateArg& create
 Resource* DirectResourceFactoryBase::tryCreate(const ResourceMgr::LoadArg& loadArg)
 {
     DirectResource* resource = newResource_(loadArg.instance_heap, loadArg.instance_alignment);
-    if (resource == NULL)
+    if (resource == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "resource new failed.");
-        return NULL;
+        return nullptr;
     }
 
     FileDevice::LoadArg fileLoadArg;
@@ -96,16 +96,16 @@ Resource* DirectResourceFactoryBase::tryCreate(const ResourceMgr::LoadArg& loadA
     else
         fileLoadArg.alignment = ((loadArg.instance_alignment < 0)? -1: 1) * resource->getLoadDataAlignment();
 
-    if (loadArg.device != NULL)
+    if (loadArg.device != nullptr)
         data = loadArg.device->tryLoad(fileLoadArg);
 
     else
         data = FileDeviceMgr::instance()->tryLoad(fileLoadArg);
 
-    if (data == NULL)
+    if (data == nullptr)
     {
         delete resource;
-        return NULL;
+        return nullptr;
     }
 
     resource->create(data, fileLoadArg.read_size, fileLoadArg.roundup_size, fileLoadArg.need_unload, loadArg.instance_heap);
@@ -118,10 +118,10 @@ DirectResourceFactoryBase::tryCreateWithDecomp(
 )
 {
     DirectResource* resource = newResource_(loadArg.instance_heap, loadArg.instance_alignment);
-    if (resource == NULL)
+    if (resource == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "resource new failed.");
-        return NULL;
+        return nullptr;
     }
 
     u32 outSize = 0;

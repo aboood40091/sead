@@ -21,7 +21,7 @@ public:
 
     virtual ~Decompressor()
     {
-        if (ResourceMgr::instance() != NULL)
+        if (ResourceMgr::instance() != nullptr)
             ResourceMgr::instance()->unregisterDecompressor(this);
     }
 

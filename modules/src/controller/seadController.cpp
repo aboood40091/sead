@@ -49,7 +49,7 @@ ControllerAddon* Controller::getAddon(ControllerDefine::AddonId id) const
             return &addon;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool Controller::isIdle_()

@@ -57,10 +57,10 @@ namespace sead {
 
 SharcArchiveRes::SharcArchiveRes()
     : ArchiveRes()
-    , mArchiveBlockHeader(NULL)
-    , mFATBlockHeader(NULL)
-    , mFNTBlock(NULL)
-    , mDataBlock(NULL)
+    , mArchiveBlockHeader(nullptr)
+    , mFATBlockHeader(nullptr)
+    , mFNTBlock(nullptr)
+    , mDataBlock(nullptr)
 #ifdef cafe
     , mEndianType(Endian::cBig)
 #else
@@ -81,7 +81,7 @@ SharcArchiveRes::getFileImpl_(
 {
     s32 id = convertPathToEntryIDImpl_(file_path);
     if (id < 0)
-        return NULL;
+        return nullptr;
 
     return getFileFastImpl_(id, file_info);
 }
@@ -92,15 +92,15 @@ SharcArchiveRes::getFileFastImpl_(
 )
 {
     if (entry_id < 0 || entry_id >= mFATEntrys.getSize())
-        return NULL;
+        return nullptr;
 
     u32 start = mFATEntrys.unsafeGet(entry_id)->data_start_offset;
 
-    if (file_info != NULL)
+    if (file_info != nullptr)
     {
         u32 end = mFATEntrys.unsafeGet(entry_id)->data_end_offset;
         if (start > end)
-            return NULL;
+            return nullptr;
 
         u32 length = end - start;
 
@@ -211,7 +211,7 @@ SharcArchiveRes::readDirectoryImpl_(
 bool
 SharcArchiveRes::prepareArchive_(const void* archive)
 {
-    if (archive == NULL)
+    if (archive == nullptr)
         return false;
 
     const u8* archive_ = reinterpret_cast<const u8*>(archive);

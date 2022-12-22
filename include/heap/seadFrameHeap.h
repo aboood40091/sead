@@ -31,7 +31,7 @@ public:
     virtual bool isAdjustable() const;
 
 public:
-    static FrameHeap* tryCreate(u32 size, const SafeString& name, Heap* parent = NULL, HeapDirection direction = cHeapDirection_Forward, bool enable_lock = false);
+    static FrameHeap* tryCreate(u32 size, const SafeString& name, Heap* parent = nullptr, HeapDirection direction = cHeapDirection_Forward, bool enable_lock = false);
 
 protected:
     class State

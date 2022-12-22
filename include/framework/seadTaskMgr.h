@@ -26,8 +26,8 @@ public:
             , prepare_stack_size(0x8000)
             , prepare_priority(-1)
             , roottask_create_arg(roottask_arg)
-            , heap(NULL)
-            , parent_framework(NULL)
+            , heap(nullptr)
+            , parent_framework(nullptr)
         {
         }
 
@@ -157,7 +157,7 @@ static_assert(sizeof(TaskMgr) == 0x1A8, "sead::TaskMgr size mismatch");
 #define SEAD_TASK_SET_SINGLETON_INSTANCE(CLASS)                                                                  \
     void CLASS::setInstance_(sead::TaskBase* instance)                                                           \
     {                                                                                                            \
-        if (CLASS::sInstance == NULL)                                                                            \
+        if (CLASS::sInstance == nullptr)                                                                         \
         {                                                                                                        \
             CLASS::sInstance = static_cast<CLASS*>(instance);                                                    \
             static_cast<CLASS*>(instance)->mSingletonDisposer_.mIsSetAsSingleton_ = true;                        \
@@ -171,15 +171,15 @@ static_assert(sizeof(TaskMgr) == 0x1A8, "sead::TaskMgr size mismatch");
 #define SEAD_TASK_DELETE_SINGLETON_INSTANCE(CLASS)                                                  \
     void CLASS::deleteInstance()                                                                    \
     {                                                                                               \
-        if (CLASS::sInstance != NULL)                                                               \
+        if (CLASS::sInstance != nullptr)                                                            \
         {                                                                                           \
             CLASS::sInstance->mTaskMgr->destroyTaskSync(CLASS::sInstance);                          \
-            CLASS::sInstance = NULL;                                                                \
+            CLASS::sInstance = nullptr;                                                             \
         }                                                                                           \
     }
 
 #define SEAD_TASK_SINGLETON_DISPOSER_IMPL(CLASS)                                      \
-    CLASS* CLASS::sInstance = NULL;                                                   \
+    CLASS* CLASS::sInstance = nullptr;                                                \
                                                                                       \
     SEAD_TASK_SET_SINGLETON_INSTANCE(CLASS)                                           \
     SEAD_TASK_DELETE_SINGLETON_INSTANCE(CLASS)                                        \
@@ -188,7 +188,7 @@ static_assert(sizeof(TaskMgr) == 0x1A8, "sead::TaskMgr size mismatch");
     {                                                                                 \
         if (mIsSetAsSingleton_)                                                       \
         {                                                                             \
-            CLASS::sInstance = NULL;                                                  \
+            CLASS::sInstance = nullptr;                                               \
         }                                                                             \
     }
 

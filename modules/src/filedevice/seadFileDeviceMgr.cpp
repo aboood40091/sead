@@ -17,8 +17,8 @@ SEAD_SINGLETON_DISPOSER_IMPL(FileDeviceMgr)
 
 FileDeviceMgr::FileDeviceMgr()
     : mDeviceList()
-    , mMainFileDevice(NULL)
-    , mDefaultFileDevice(NULL)
+    , mMainFileDevice(nullptr)
+    , mDefaultFileDevice(nullptr)
 {
     if (!HeapMgr::isInitialized())
     {
@@ -34,8 +34,8 @@ FileDeviceMgr::FileDeviceMgr()
 
     FSStateChangeParams changeParams = {
         .userCallback = stateChangeCallback_,
-        .userContext  = NULL,
-        .ioMsgQueue   = NULL
+        .userContext  = nullptr,
+        .ioMsgQueue   = nullptr
     };
 
     FSSetStateChangeNotification(&mFSClient, &changeParams);
@@ -57,10 +57,10 @@ FileDeviceMgr::FileDeviceMgr()
 
 FileDeviceMgr::~FileDeviceMgr()
 {
-    if (mMainFileDevice != NULL)
+    if (mMainFileDevice != nullptr)
     {
         delete mMainFileDevice;
-        mMainFileDevice = NULL;
+        mMainFileDevice = nullptr;
     }
 
 #ifdef cafe
@@ -78,7 +78,7 @@ void FileDeviceMgr::traceFilePath(const SafeString& path) const
     FixedSafeString<cNoDrivePathBufferSize> no_drive_path;
     FileDevice* device = findDeviceFromPath(path, &no_drive_path);
 
-    if (device == NULL)
+    if (device == nullptr)
     {
         //SEAD_WARNING(false, "FileDevice not found: %s\n", path.cstr());
         return;
@@ -92,7 +92,7 @@ void FileDeviceMgr::traceDirectoryPath(const SafeString& path) const
     FixedSafeString<cNoDrivePathBufferSize> no_drive_path;
     FileDevice* device = findDeviceFromPath(path, &no_drive_path);
 
-    if (device == NULL)
+    if (device == nullptr)
     {
         //SEAD_WARNING(false, "FileDevice not found: %s\n", path.cstr());
         return;
@@ -106,7 +106,7 @@ void FileDeviceMgr::resolveFilePath(BufferedSafeString* out, const SafeString& p
     FixedSafeString<cNoDrivePathBufferSize> no_drive_path;
     FileDevice* device = findDeviceFromPath(path, &no_drive_path);
 
-    if (device == NULL)
+    if (device == nullptr)
     {
         //SEAD_WARNING(false, "FileDevice not found: %s\n", path.cstr());
         return;
@@ -120,7 +120,7 @@ void FileDeviceMgr::resolveDirectoryPath(BufferedSafeString* out, const SafeStri
     FixedSafeString<cNoDrivePathBufferSize> no_drive_path;
     FileDevice* device = findDeviceFromPath(path, &no_drive_path);
 
-    if (device == NULL)
+    if (device == nullptr)
     {
         //SEAD_WARNING(false, "FileDevice not found: %s\n", path.cstr());
         return;
@@ -139,11 +139,11 @@ void FileDeviceMgr::mount(FileDevice* device, const SafeString& drive_name)
 
 void FileDeviceMgr::unmount(FileDevice* device)
 {
-    if (device->mList != NULL)
+    if (device->mList != nullptr)
         mDeviceList.erase(device);
 
     if (device == mDefaultFileDevice)
-        mDefaultFileDevice = NULL;
+        mDefaultFileDevice = nullptr;
 }
 
 FileDevice*
@@ -163,15 +163,15 @@ FileDeviceMgr::findDeviceFromPath(
     }
     else
     {
-        if (mDefaultFileDevice == NULL)
+        if (mDefaultFileDevice == nullptr)
         {
             //SEAD_ASSERT_MSG(false, "drive name not found and default file device is null");
-            return NULL;
+            return nullptr;
         }
         device = mDefaultFileDevice;
     }
 
-    if (no_drive_path != NULL)
+    if (no_drive_path != nullptr)
         Path::getPathExceptDrive(no_drive_path, path);
 
     return device;
@@ -184,7 +184,7 @@ FileDeviceMgr::findDevice(const SafeString& drive) const
         if ((*it)->mDriveName.isEqual(drive))
             return (*it);
 
-    return NULL;
+    return nullptr;
 }
 
 FileDevice* FileDeviceMgr::tryOpen(FileHandle* handle, const SafeString& filename, FileDevice::FileOpenFlag flag, u32 div_num)
@@ -192,8 +192,8 @@ FileDevice* FileDeviceMgr::tryOpen(FileHandle* handle, const SafeString& filenam
     FixedSafeString<cNoDrivePathBufferSize> no_drive_path;
     FileDevice* device = findDeviceFromPath(filename, &no_drive_path);
 
-    if (device == NULL)
-        return NULL;
+    if (device == nullptr)
+        return nullptr;
 
     return device->tryOpen(handle, no_drive_path, flag, div_num);
 }
@@ -205,8 +205,8 @@ u8* FileDeviceMgr::tryLoad(FileDevice::LoadArg& arg)
     FixedSafeString<cNoDrivePathBufferSize> no_drive_path;
     FileDevice* device = findDeviceFromPath(arg.path, &no_drive_path);
 
-    if (device == NULL)
-        return NULL;
+    if (device == nullptr)
+        return nullptr;
 
     FileDevice::LoadArg arg_(arg);
     arg_.path = no_drive_path.cstr();

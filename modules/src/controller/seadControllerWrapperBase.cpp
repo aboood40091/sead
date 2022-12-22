@@ -6,7 +6,7 @@ namespace sead {
 ControllerWrapperBase::ControllerWrapperBase()
     : ControllerBase(Controller::cPadIdx_Max, -1, -1, Controller::cPadIdx_Touch)
     , IDisposer()
-    , mController(NULL)
+    , mController(nullptr)
     , mIsEnable(true)
     , mListNode()
 {
@@ -35,7 +35,7 @@ void ControllerWrapperBase::unregister()
      if (mController)
      {
          mController->mWrappers.erase(this);
-         mController = NULL;
+         mController = nullptr;
      }
 }
 

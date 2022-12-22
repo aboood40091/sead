@@ -243,7 +243,7 @@ void PrimitiveRendererCafe::drawQuadImpl(
     const Matrix34f& model_mtx, const Color4f& colorL, const Color4f& colorR
 )
 {
-    drawTriangles_(model_mtx, colorL, colorR, mQuadVertexBuf, 4, mQuadIndexBuf, 6, NULL);
+    drawTriangles_(model_mtx, colorL, colorR, mQuadVertexBuf, 4, mQuadIndexBuf, 6, nullptr);
 }
 
 void PrimitiveRendererCafe::drawQuadImpl(
@@ -266,7 +266,7 @@ void PrimitiveRendererCafe::drawCubeImpl(
     const Matrix34f& model_mtx, const Color4f& c0, const Color4f& c1
 )
 {
-    drawTriangles_(model_mtx, c0, c1, mCubeVertexBuf, 8, mCubeIndexBuf, 36, NULL);
+    drawTriangles_(model_mtx, c0, c1, mCubeVertexBuf, 8, mCubeIndexBuf, 36, nullptr);
 }
 
 void PrimitiveRendererCafe::drawWireCubeImpl(
@@ -287,28 +287,28 @@ void PrimitiveRendererCafe::drawSphere4x8Impl(
     const Matrix34f& model_mtx, const Color4f& north, const Color4f& south
 )
 {
-    drawTriangles_(model_mtx, north, south, mSphereSVertexBuf, 34, mSphereSIndexBuf, 192, NULL);
+    drawTriangles_(model_mtx, north, south, mSphereSVertexBuf, 34, mSphereSIndexBuf, 192, nullptr);
 }
 
 void PrimitiveRendererCafe::drawSphere8x16Impl(
     const Matrix34f& model_mtx, const Color4f& north, const Color4f& south
 )
 {
-    drawTriangles_(model_mtx, north, south, mSphereLVertexBuf, 130, mSphereLIndexBuf, 768, NULL);
+    drawTriangles_(model_mtx, north, south, mSphereLVertexBuf, 130, mSphereLIndexBuf, 768, nullptr);
 }
 
 void PrimitiveRendererCafe::drawDisk16Impl(
     const Matrix34f& model_mtx, const Color4f& center, const Color4f& edge
 )
 {
-    drawTriangles_(model_mtx, center, edge, mDiskSVertexBuf, 17, mDiskSIndexBuf, 48, NULL);
+    drawTriangles_(model_mtx, center, edge, mDiskSVertexBuf, 17, mDiskSIndexBuf, 48, nullptr);
 }
 
 void PrimitiveRendererCafe::drawDisk32Impl(
     const Matrix34f& model_mtx, const Color4f& center, const Color4f& edge
 )
 {
-    drawTriangles_(model_mtx, center, edge, mDiskLVertexBuf, 33, mDiskLIndexBuf, 96, NULL);
+    drawTriangles_(model_mtx, center, edge, mDiskLVertexBuf, 33, mDiskLIndexBuf, 96, nullptr);
 }
 
 void PrimitiveRendererCafe::drawCircle16Impl(
@@ -329,14 +329,14 @@ void PrimitiveRendererCafe::drawCylinder16Impl(
     const Matrix34f& model_mtx, const Color4f& top, const Color4f& btm
 )
 {
-    drawTriangles_(model_mtx, top, btm, mCylinderSVertexBuf, 34, mCylinderSIndexBuf, 192, NULL);
+    drawTriangles_(model_mtx, top, btm, mCylinderSVertexBuf, 34, mCylinderSIndexBuf, 192, nullptr);
 }
 
 void PrimitiveRendererCafe::drawCylinder32Impl(
     const Matrix34f& model_mtx, const Color4f& top, const Color4f& btm
 )
 {
-    drawTriangles_(model_mtx, top, btm, mCylinderLVertexBuf, 66, mCylinderLIndexBuf, 384, NULL);
+    drawTriangles_(model_mtx, top, btm, mCylinderLVertexBuf, 66, mCylinderLIndexBuf, 384, nullptr);
 }
 
 void PrimitiveRendererCafe::drawTriangles_(
@@ -349,7 +349,7 @@ void PrimitiveRendererCafe::drawTriangles_(
     GX2SetVertexUniformReg(mParamColor0Offset, 4, &c0);
     GX2SetVertexUniformReg(mParamColor1Offset, 4, &c1);
 
-    if (tex != NULL)
+    if (tex != nullptr)
     {
         GX2SetPixelUniformReg(mParamRateOffset, 4, &Vector4f::ex);
         GX2SetPixelTexture(tex, mParamTexLocation);

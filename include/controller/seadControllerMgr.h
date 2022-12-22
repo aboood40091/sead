@@ -94,7 +94,7 @@ T ControllerMgr::getControllerByOrderAs(s32 index) const
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 template <typename T>
@@ -107,7 +107,7 @@ T ControllerMgr::getControlDeviceAs() const
             return device;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 template <typename T>
@@ -117,7 +117,7 @@ T ControllerMgr::getControllerAddonAs(s32 index) const
     if (controller)
         return controller->getAddonAs<T>();
 
-    return NULL;
+    return nullptr;
 }
 
 } // namespace sead

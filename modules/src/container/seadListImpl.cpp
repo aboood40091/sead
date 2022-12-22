@@ -35,15 +35,15 @@ void ListNode::erase_()
     // SEAD_ASSERT_MSG(n->isLinked(), "node is not linked.");
 
     ListNode* prev = mPrev;
-    if (prev != NULL)
+    if (prev != nullptr)
         prev->mNext = mNext;
 
     ListNode* next = mNext;
-    if (next != NULL)
+    if (next != nullptr)
         next->mPrev = mPrev;
 
-    mNext = NULL;
-    mPrev = NULL;
+    mNext = nullptr;
+    mPrev = nullptr;
 }
 
 } // namespace sead

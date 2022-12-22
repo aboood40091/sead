@@ -9,7 +9,7 @@ namespace sead {
 
 MainFileDevice::MainFileDevice(Heap* heap)
     : FileDevice("main")
-    , mFileDevice(NULL)
+    , mFileDevice(nullptr)
 {
 #ifdef cafe
     mFileDevice = new(heap, 4) CafeContentFileDevice();
@@ -22,10 +22,10 @@ MainFileDevice::MainFileDevice(Heap* heap)
 
 MainFileDevice::~MainFileDevice()
 {
-    if (mFileDevice != NULL)
+    if (mFileDevice != nullptr)
     {
         delete mFileDevice;
-        mFileDevice = NULL;
+        mFileDevice = nullptr;
     }
 }
 

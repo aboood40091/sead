@@ -27,7 +27,7 @@ bool TaskMgr::changeTaskState_(TaskBase* task, TaskBase::State state)
             task->mState = TaskBase::cPrepare;
             appendToList_(mPrepareList, task);
 
-            if (mPrepareThread != NULL)
+            if (mPrepareThread != nullptr)
             {
                 if (mPrepareThread->sendMessage(1, 1))
                 {
@@ -66,7 +66,7 @@ bool TaskMgr::changeTaskState_(TaskBase* task, TaskBase::State state)
         task->mTaskListNode.erase();
         appendToList_(mActiveList, task);
 
-        if (ResourceMgr::instance() != NULL)
+        if (ResourceMgr::instance() != nullptr)
             ResourceMgr::instance()->postCreate();
 
         task->enterCommon();
@@ -130,7 +130,7 @@ void TaskMgr::doDestroyTask_(TaskBase* task)
     mCriticalSection.lock();
 
     TreeNode* node = task->child();
-    while (node != NULL)
+    while (node != nullptr)
     {
         doDestroyTask_(static_cast<TTreeNode<TaskBase*>*>(node)->val());
         node = task->child();
@@ -144,7 +144,7 @@ void TaskMgr::doDestroyTask_(TaskBase* task)
         for (s32 i = 0; i < HeapMgr::getRootHeapNum(); i++)
         {
             Heap* heap = heapArray.mHeaps[i];
-            if (heap != NULL)
+            if (heap != nullptr)
                 heap->destroy();
         }
     }
@@ -154,17 +154,17 @@ void TaskMgr::doDestroyTask_(TaskBase* task)
 
 void TaskMgr::finalize()
 {
-    if (mPrepareThread != NULL)
+    if (mPrepareThread != nullptr)
     {
         mPrepareThread->quitAndDestroySingleThread(false);
         delete mPrepareThread;
-        mPrepareThread = NULL;
+        mPrepareThread = nullptr;
     }
 
-    if (mRootTask != NULL)
+    if (mRootTask != nullptr)
     {
         destroyTaskSync(mRootTask);
-        mRootTask = NULL;
+        mRootTask = nullptr;
     }
 
     for (s32 i = 0; i < HeapMgr::getRootHeapNum(); i++)
@@ -173,7 +173,7 @@ void TaskMgr::finalize()
         if (heap)
         {
             heap->destroy();
-            mHeapArray.mHeaps[i] = NULL;
+            mHeapArray.mHeaps[i] = nullptr;
         }
     }
 }

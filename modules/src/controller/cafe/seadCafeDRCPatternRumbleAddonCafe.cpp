@@ -47,7 +47,7 @@ bool CafeDRCPatternRumbleAddon::calc()
             {
                 if (mPatternDuration == 1)
                 {
-                    mPattern = NULL;
+                    mPattern = nullptr;
                     mPatternDuration = 0;
 
                     return false;

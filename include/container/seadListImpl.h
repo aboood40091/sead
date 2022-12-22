@@ -11,8 +11,8 @@ class ListNode
 {
 public:
     ListNode()
-        : mPrev(NULL)
-        , mNext(NULL)
+        : mPrev(nullptr)
+        , mNext(nullptr)
     {
     }
 
@@ -102,8 +102,8 @@ protected:
         mCount -= 1;
     }
 
-    ListNode* front() const { return mCount > 0 ? mStartEnd.mNext : NULL; }
-    ListNode* back() const { return mCount > 0 ? mStartEnd.mPrev : NULL; }
+    ListNode* front() const { return mCount > 0 ? mStartEnd.mNext : nullptr; }
+    ListNode* back() const { return mCount > 0 ? mStartEnd.mPrev : nullptr; }
 
     ListNode* nth(s32 index) const;
     s32 indexOf(const ListNode* n) const;

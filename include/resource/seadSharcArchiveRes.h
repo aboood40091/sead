@@ -59,7 +59,7 @@ public:
     SharcArchiveRes();
     virtual ~SharcArchiveRes();
 
-    virtual void* getFileImpl_(const SafeString& file_path, FileInfo* file_info=NULL);
+    virtual void* getFileImpl_(const SafeString& file_path, FileInfo* file_info = nullptr);
     virtual void* getFileFastImpl_(s32 entry_id, FileInfo* file_info);
     virtual s32 convertPathToEntryIDImpl_(const SafeString& file_path);
     virtual bool setCurrentDirectoryImpl_(const SafeString&);

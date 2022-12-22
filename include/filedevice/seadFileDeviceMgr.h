@@ -30,7 +30,7 @@ public:
     FileDevice* open(FileHandle* handle, const SafeString& filename, FileDevice::FileOpenFlag flag, u32 div_num)
     {
         FileDevice* device = tryOpen(handle, filename, flag, div_num);
-        //SEAD_ASSERT_MSG(device != NULL, "open failed. [%s]", filename.cstr());
+        //SEAD_ASSERT_MSG(device != nullptr, "open failed. [%s]", filename.cstr());
         return device;
     }
 
@@ -41,7 +41,7 @@ public:
     FileDevice* openDirectory(DirectoryHandle* handle, const SafeString& dirname)
     {
         FileDevice* device = tryOpenDirectory(handle, dirname);
-        //SEAD_ASSERT_MSG(device != NULL, "open directory failed. [%s]", dirname.cstr());
+        //SEAD_ASSERT_MSG(device != nullptr, "open directory failed. [%s]", dirname.cstr());
         return device;
     }
 
@@ -50,7 +50,7 @@ public:
     u8* load(FileDevice::LoadArg& arg)
     {
         u8* ret = tryLoad(arg);
-        //SEAD_ASSERT_MSG(ret != NULL, "load failed. [%s]", arg.path.cstr());
+        //SEAD_ASSERT_MSG(ret != nullptr, "load failed. [%s]", arg.path.cstr());
         return ret;
     }
 

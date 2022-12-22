@@ -3,7 +3,7 @@
 
 namespace sead {
 
-Graphics* Graphics::sInstance = NULL;
+Graphics* Graphics::sInstance = nullptr;
 
 Graphics::DevicePosture Graphics::sDefaultDevicePosture = Graphics::cDevicePosture_Same;
 f32 Graphics::sDefaultDeviceZScale = 1.0f;
@@ -34,7 +34,7 @@ void Graphics::unlockDrawContext()
     // SEAD_ASSERT(mContextRefCounter > 0);
     if (--mContextRefCounter == 0)
     {
-        mContextHolderThread = NULL;
+        mContextHolderThread = nullptr;
         unlockDrawContextImpl();
         mContextCriticalSection.unlock();
     }

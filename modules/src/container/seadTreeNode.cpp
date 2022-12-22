@@ -9,14 +9,14 @@ TreeNode::TreeNode()
 
 void TreeNode::clearLinks()
 {
-    mParent = mChild = mNext = mPrev = NULL;
+    mParent = mChild = mNext = mPrev = nullptr;
 }
 
 void TreeNode::pushBackChild(TreeNode* n)
 {
     n->detachSubTree();
 
-    if (mChild != NULL)
+    if (mChild != nullptr)
     {
         mChild->pushBackSibling(n);
         return;
@@ -31,7 +31,7 @@ void TreeNode::pushBackSibling(TreeNode* n)
     n->detachSubTree();
 
     TreeNode* node = this;
-    while (node->mNext != NULL) { node = node->mNext; }
+    while (node->mNext != nullptr) { node = node->mNext; }
 
     node->mNext = n;
     n->mPrev = node;
@@ -43,7 +43,7 @@ void TreeNode::pushFrontChild(TreeNode* n)
 {
     n->detachSubTree();
 
-    if (mChild != NULL)
+    if (mChild != nullptr)
     {
         n->mNext = mChild;
         mChild->mPrev = n;
@@ -63,11 +63,11 @@ void TreeNode::insertBeforeSelf(TreeNode* n)
     n->mPrev = prev;
     n->mNext = this;
 
-    if (prev != NULL)
+    if (prev != nullptr)
     {
         prev->mNext = n;
     }
-    else if (mParent != NULL)
+    else if (mParent != nullptr)
     {
         mParent->mChild = n;
     }
@@ -85,7 +85,7 @@ void TreeNode::insertAfterSelf(TreeNode* n)
     n->mPrev = this;
     n->mNext = next;
 
-    if (next != NULL)
+    if (next != nullptr)
     {
         next->mPrev = n;
     }
@@ -102,28 +102,28 @@ void TreeNode::detachAll()
 
 void TreeNode::detachSubTree()
 {
-    if (mPrev != NULL)
+    if (mPrev != nullptr)
     {
         mPrev->mNext = mNext;
-        if (mNext != NULL)
+        if (mNext != nullptr)
         {
             mNext->mPrev = mPrev;
-            mNext = NULL;
+            mNext = nullptr;
         }
-        mPrev = NULL;
-        mParent = NULL;
+        mPrev = nullptr;
+        mParent = nullptr;
     }
     else
     {
-        if (mParent != NULL)
+        if (mParent != nullptr)
         {
             mParent->mChild = mNext;
-            mParent = NULL;
+            mParent = nullptr;
         }
-        if (mNext != NULL)
+        if (mNext != nullptr)
         {
             mNext->mPrev = mPrev;
-            mNext = NULL;
+            mNext = nullptr;
         }
     }
 }
@@ -132,7 +132,7 @@ TreeNode* TreeNode::findRoot()
 {
     TreeNode* node = this;
     TreeNode* p = node->mParent;
-    while (p != NULL)
+    while (p != nullptr)
     {
         //SEAD_ASSERT(p != this);
         node = p;
@@ -146,7 +146,7 @@ const TreeNode* TreeNode::findRoot() const
 {
     const TreeNode* node = this;
     const TreeNode* p = node->mParent;
-    while (p != NULL)
+    while (p != nullptr)
     {
         //SEAD_ASSERT(p != this);
         node = p;
@@ -161,7 +161,7 @@ s32 TreeNode::countChildren() const
     s32 i = 0;
 
     TreeNode* node = mChild;
-    while (node != NULL)
+    while (node != nullptr)
     {
         i++;
         node = node->mNext;
@@ -173,7 +173,7 @@ s32 TreeNode::countChildren() const
 void TreeNode::clearChildLinksRecursively_()
 {
     TreeNode* node = mChild;
-    while (node != NULL)
+    while (node != nullptr)
     {
         TreeNode* n = node;
         node = node->mNext;

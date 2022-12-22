@@ -12,12 +12,12 @@ namespace sead {
 
 IDisposer::IDisposer()
     : mListNode()
-    , mDisposerHeap(NULL)
+    , mDisposerHeap(nullptr)
 {
     if (sead::HeapMgr::isInitialized())
     {
         mDisposerHeap = sead::HeapMgr::instance()->findContainHeap(this);
-        if (mDisposerHeap != NULL)
+        if (mDisposerHeap != nullptr)
             mDisposerHeap->appendDisposer_(this);
     }
 }
@@ -30,7 +30,7 @@ IDisposer::~IDisposer()
     }
     else
     {
-        if (mDisposerHeap != NULL)
+        if (mDisposerHeap != nullptr)
             mDisposerHeap->removeDisposer_(this);
 
         *(uintptr_t*)&mDisposerHeap = cDestructedFlag;

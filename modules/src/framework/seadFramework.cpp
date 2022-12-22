@@ -6,37 +6,37 @@
 namespace sead {
 
 Framework::CreateSystemTaskArg::CreateSystemTaskArg()
-    : hostio_parameter(NULL)
+    : hostio_parameter(nullptr)
     , infloop_detection_span()
 {
 }
 
 Framework::Framework()
     : mReserveReset(false)
-    , mResetParameter(NULL)
+    , mResetParameter(nullptr)
     , mResetEvent()
-    , mTaskMgr(NULL)
-    , mMethodTreeMgr(NULL)
-    , mMethodTreeMgrHeap(NULL)
+    , mTaskMgr(nullptr)
+    , mMethodTreeMgr(nullptr)
+    , mMethodTreeMgrHeap(nullptr)
 {
 }
 
 Framework::~Framework()
 {
-    if (mTaskMgr != NULL)
+    if (mTaskMgr != nullptr)
     {
         mTaskMgr->finalize();
         delete mTaskMgr;
-        mTaskMgr = NULL;
+        mTaskMgr = nullptr;
     }
 
-    if (mMethodTreeMgr != NULL)
+    if (mMethodTreeMgr != nullptr)
     {
         delete mMethodTreeMgr;
-        mMethodTreeMgr = NULL;
+        mMethodTreeMgr = nullptr;
     }
 
-    if (mMethodTreeMgrHeap != NULL)
+    if (mMethodTreeMgrHeap != nullptr)
         mMethodTreeMgrHeap->destroy();
 }
 

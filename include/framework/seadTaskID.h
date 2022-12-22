@@ -13,9 +13,9 @@ class TaskParameter;
 struct TaskConstructArg
 {
     TaskConstructArg()
-        : heap_array(NULL)
-        , mgr(NULL)
-        , param(NULL)
+        : heap_array(nullptr)
+        , mgr(nullptr)
+        , param(nullptr)
     {
     }
 

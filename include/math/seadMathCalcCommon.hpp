@@ -257,8 +257,8 @@ MathCalcCommon<f32>::sinCosIdx(f32* p_sin, f32* p_cos, u32 idx)
     f32 rest = static_cast<f32>(idx & 0xffffff) / 0x1000000;
     const SinCosSample& sample = cSinCosTbl[index];
 
-    /*if (p_sin != NULL)*/ *p_sin = sample.sin_val + sample.sin_delta * rest;
-    /*if (p_cos != NULL)*/ *p_cos = sample.cos_val + sample.cos_delta * rest;
+    /*if (p_sin != nullptr)*/ *p_sin = sample.sin_val + sample.sin_delta * rest;
+    /*if (p_cos != nullptr)*/ *p_cos = sample.cos_val + sample.cos_delta * rest;
 }
 
 template <typename T>

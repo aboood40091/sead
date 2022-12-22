@@ -39,7 +39,7 @@ public:
     static void initialize(Arena* arena);
     static void destroy();
     //void initHostIO();
-    static bool isInitialized() { return sInstancePtr != NULL; }
+    static bool isInitialized() { return sInstancePtr != nullptr; }
     static HeapMgr* instance() { return sInstancePtr; }
     Heap* findContainHeap(const void* ptr) const;
     Heap* getCurrentHeap() const;
@@ -48,7 +48,7 @@ public:
     static void addRootHeap(Heap* heap);
     static const Arena* getArena();
     static IndependentHeaps* getIndependentHeaps();
-    static bool isContainedInAnyHeap(const void* ptr) { return sInstancePtr->findContainHeap(ptr) != NULL; }
+    static bool isContainedInAnyHeap(const void* ptr) { return sInstancePtr->findContainHeap(ptr) != nullptr; }
     //void setDebugFillHeapCreate(u8);
     //void setDebugFillAlloc(u8);
     //void setDebugFillFree(u8);

@@ -14,28 +14,28 @@ MethodTreeNode::attachMutexRec_(
     {
         MethodTreeNode* child = static_cast<MethodTreeNode*>(node->mChild);
         node->mCriticalSection = m;
-        if (child != NULL && child->mData != NULL)
+        if (child != nullptr && child->mData != nullptr)
             child->mData->attachMutexRec_(m);
     }
-    while (node->mNext != NULL && (node = static_cast<MethodTreeNode*>(node->mNext)->mData, node != NULL));
+    while (node->mNext != nullptr && (node = static_cast<MethodTreeNode*>(node->mNext)->mData, node != nullptr));
 }
 
 void MethodTreeNode::detachAll()
 {
     CriticalSection* cs = mCriticalSection;
-    attachMutexRec_(NULL);
+    attachMutexRec_(nullptr);
     mCriticalSection = cs;
 
     lock_();
     TreeNode::detachAll();
     unlock_();
 
-    mCriticalSection = NULL;
+    mCriticalSection = nullptr;
 }
 
 void MethodTreeNode::lock_()
 {
-    if (mCriticalSection == NULL)
+    if (mCriticalSection == nullptr)
         return;
 
     mCriticalSection->lock();
@@ -43,7 +43,7 @@ void MethodTreeNode::lock_()
 
 void MethodTreeNode::unlock_()
 {
-    if (mCriticalSection == NULL)
+    if (mCriticalSection == nullptr)
         return;
 
     mCriticalSection->unlock();

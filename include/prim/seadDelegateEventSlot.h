@@ -28,7 +28,7 @@ public:
         Slot(U*, void (U::*)(T)); /*
             : IDisposer()
             , mNode()
-            , mDelegatePtr(NULL)
+            , mDelegatePtr(nullptr)
             , mConnectedToDelegateEvent(false)
         {
             mDelegatePtr = new (mDelegate) Delegate1<U, T>();

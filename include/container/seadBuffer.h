@@ -16,13 +16,13 @@ private:
 public:
     Buffer()
         : mSize(0)
-        , mBuffer(NULL)
+        , mBuffer(nullptr)
     {
     }
 
     Buffer(s32 size, T* bufferptr)
     {
-        if (size > 0 && bufferptr != NULL)
+        if (size > 0 && bufferptr != nullptr)
         {
             mSize = size;
             mBuffer = bufferptr;
@@ -31,7 +31,7 @@ public:
         {
             // SEAD_ASSERT_MSG(false, "illegal param: size[%d] bufferptr[0x%x]", size, bufferptr);
             size = 0;
-            bufferptr = NULL;
+            bufferptr = nullptr;
         }
     }
 
@@ -168,7 +168,7 @@ public:
 
         if (size > 0)
         {
-            if (heap == NULL) heap = HeapMgr::instance()->getCurrentHeap();
+            if (heap == nullptr) heap = HeapMgr::instance()->getCurrentHeap();
             T* buffer = static_cast<T*>(heap->alloc(size * sizeof(T), alignment));
 
             for (s32 i = 0; i < size; i++)
@@ -206,7 +206,7 @@ public:
 
         if (size > 0)
         {
-            if (heap == NULL) heap = HeapMgr::instance()->getCurrentHeap();
+            if (heap == nullptr) heap = HeapMgr::instance()->getCurrentHeap();
             T* buffer = static_cast<T*>(heap->alloc(size * sizeof(T), alignment));
 
             for (s32 i = 0; i < size; i++)
@@ -230,7 +230,7 @@ public:
             Heap* heap = HeapMgr::instance()->findContainHeap(mBuffer);
             heap->free(mBuffer);
 
-            mBuffer = NULL;
+            mBuffer = nullptr;
             mSize = 0;
         }
     }
@@ -239,7 +239,7 @@ public:
     {
         if (size > 0)
         {
-            if (bufferptr != NULL)
+            if (bufferptr != nullptr)
             {
                 mSize = size;
                 mBuffer = bufferptr;
@@ -255,7 +255,7 @@ public:
         }
     }
 
-    bool isBufferReady() const { return mBuffer != NULL; }
+    bool isBufferReady() const { return mBuffer != nullptr; }
 
     T& operator()(s32);
     const T& operator()(s32) const;
@@ -295,7 +295,7 @@ public:
         else
         {
             //SEAD_ASSERT_MSG(false, "index exceeded [%d/%d]", x, mSize);
-            return NULL;
+            return nullptr;
         }
     }
 
@@ -308,7 +308,7 @@ public:
         else
         {
             //SEAD_ASSERT_MSG(false, "index exceeded [%d/%d]", x, mSize);
-            return NULL;
+            return nullptr;
         }
     }
 

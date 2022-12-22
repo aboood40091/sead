@@ -121,7 +121,7 @@ namespace sead {
 
 SZSDecompressor::DecompContext::DecompContext()
 {
-    initialize(NULL);
+    initialize(nullptr);
 }
 
 SZSDecompressor::DecompContext::DecompContext(void* dst)
@@ -146,10 +146,10 @@ SZSDecompressor::DecompContext::initialize(void* dst)
 SZSDecompressor::SZSDecompressor(u32 work_size, u8* work_buffer)
     : Decompressor("szs")
 {
-    if (work_buffer == NULL)
+    if (work_buffer == nullptr)
     {
         mWorkSize = Mathu::roundUpPow2(work_size, FileDevice::cBufferMinAlignment);
-        mWorkBuffer = NULL;
+        mWorkBuffer = nullptr;
     }
 
     else
@@ -170,28 +170,28 @@ SZSDecompressor::tryDecompFromDevice(
 )
 {
     Heap* heap = arg.load_data_heap;
-    if (heap == NULL)
+    if (heap == nullptr)
         heap = HeapMgr::instance()->getCurrentHeap();
 
     FileHandle handle;
     FileDevice* device;
 
-    if (arg.device != NULL)
+    if (arg.device != nullptr)
         device = arg.device->tryOpen(&handle, arg.path, FileDevice::cFileOpenFlag_ReadOnly, arg.div_size);
     else
         device = FileDeviceMgr::instance()->tryOpen(&handle, arg.path, FileDevice::cFileOpenFlag_ReadOnly, arg.div_size);
 
-    if (device == NULL)
-        return NULL;
+    if (device == nullptr)
+        return nullptr;
 
     u8* work = mWorkBuffer;
-    if (work == NULL)
+    if (work == nullptr)
         work = new(heap, -FileDevice::cBufferMinAlignment) u8[mWorkSize];
 
-    if (work == NULL)
+    if (work == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "cannot alloc work buf");
-        return NULL;
+        return nullptr;
     }
 
     u32 bytesRead = handle.read(work, mWorkSize);
@@ -199,10 +199,10 @@ SZSDecompressor::tryDecompFromDevice(
     {
         //SEAD_ASSERT_MSG(false, "Invalid header size.");
 
-        if (mWorkBuffer == NULL)
+        if (mWorkBuffer == nullptr)
             delete[] work;
 
-        return NULL;
+        return nullptr;
     }
 
     u32 decomp_size = getDecompSize(work);
@@ -218,12 +218,12 @@ SZSDecompressor::tryDecompFromDevice(
     u8* dst = arg.load_data_buffer;
     bool need_delete = false;
 
-    if (dst == NULL)
+    if (dst == nullptr)
     {
         DirectResource* directResource = DynamicCast<DirectResource, Resource>(res);
         s32 alignment = 0;
 
-        if (directResource != NULL)
+        if (directResource != nullptr)
         {
             if (arg.load_data_alignment != 0)
             {
@@ -247,14 +247,14 @@ SZSDecompressor::tryDecompFromDevice(
 
         dst = new(heap, alignment) u8[buffer_size];
 
-        if (dst == NULL)
+        if (dst == nullptr)
         {
             //SEAD_ASSERT_MSG(false, "cannot alloc dst buf");
 
-            if (mWorkBuffer == NULL)
+            if (mWorkBuffer == nullptr)
                 delete[] work;
 
-            return NULL;
+            return nullptr;
         }
         else
         {
@@ -278,10 +278,10 @@ SZSDecompressor::tryDecompFromDevice(
             if (need_delete)
                 delete[] dst;
 
-            if (mWorkBuffer == NULL)
+            if (mWorkBuffer == nullptr)
                 delete[] work;
 
-            return NULL;
+            return nullptr;
         }
     }
     else
@@ -302,26 +302,26 @@ SZSDecompressor::tryDecompFromDevice(
                 if (need_delete)
                     delete[] dst;
 
-                if (mWorkBuffer == NULL)
+                if (mWorkBuffer == nullptr)
                     delete[] work;
 
-                return NULL;
+                return nullptr;
             }
 
             bytesRead = handle.read(work, mWorkSize);
         }
     }
 
-    if (mWorkBuffer == NULL)
+    if (mWorkBuffer == nullptr)
         delete[] work;
 
-    if (out_size != NULL)
+    if (out_size != nullptr)
         *out_size = decomp_size;
 
-    if (out_buffer_size != NULL)
+    if (out_buffer_size != nullptr)
         *out_buffer_size = buffer_size;
 
-    if (out_need_delete != NULL)
+    if (out_need_delete != nullptr)
         *out_need_delete = need_delete;
 
     return dst;
@@ -330,7 +330,7 @@ SZSDecompressor::tryDecompFromDevice(
 void
 SZSDecompressor::setWorkSize(u32 work_size)
 {
-    if (mWorkBuffer == NULL)
+    if (mWorkBuffer == nullptr)
         mWorkSize = Mathu::roundUpPow2(work_size, FileDevice::cBufferMinAlignment);
 
     else

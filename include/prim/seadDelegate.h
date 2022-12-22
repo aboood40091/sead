@@ -26,8 +26,8 @@ class DelegateBase : public Base
 {
 public:
     DelegateBase()
-        : mObject(NULL)
-        , mMethod(NULL)
+        : mObject(nullptr)
+        , mMethod(nullptr)
     {
     }
 

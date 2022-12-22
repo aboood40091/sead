@@ -18,10 +18,10 @@ void setQuadVertex(Vertex* vtx, u16* idx)
         1, 2, 3
     };
 
-    if (vtx != NULL)
+    if (vtx != nullptr)
         MemUtil::copy(vtx, cVtx, sizeof(cVtx));
 
-    if (idx != NULL)
+    if (idx != nullptr)
         MemUtil::copy(idx, cIdx, sizeof(cIdx));
 }
 
@@ -36,10 +36,10 @@ void setLineVertex(Vertex* vtx, u16* idx)
         0, 1
     };
 
-    if (vtx != NULL)
+    if (vtx != nullptr)
         MemUtil::copy(vtx, cVtx, sizeof(cVtx));
 
-    if (idx != NULL)
+    if (idx != nullptr)
         MemUtil::copy(idx, cIdx, sizeof(cIdx));
 }
 
@@ -68,16 +68,16 @@ void setCubeVertex(Vertex* vtx, u16* idx)
         6, 2, 5, 6
     };
 
-    if (vtx != NULL)
+    if (vtx != nullptr)
         MemUtil::copy(vtx, cVtx, sizeof(cVtx));
 
-    if (idx != NULL)
+    if (idx != nullptr)
         MemUtil::copy(idx, cIdx, sizeof(cIdx));
 }
 
 void setWireCubeVertex(Vertex* vtx, u16* idx)
 {
-    setCubeVertex(vtx, NULL);
+    setCubeVertex(vtx, nullptr);
 
     static const u16 cIdx[17] = {
         0, 1, 2,
@@ -89,13 +89,13 @@ void setWireCubeVertex(Vertex* vtx, u16* idx)
 
     };
 
-    if (idx != NULL)
+    if (idx != nullptr)
         MemUtil::copy(idx, cIdx, sizeof(cIdx));
 }
 
 void setSphereVertex(Vertex* vtx, u16* idx, s32 sizeX, s32 sizeY)
 {
-    if (vtx != NULL)
+    if (vtx != nullptr)
     {
         for (s32 y = 0; y < sizeY; y++)
         {
@@ -137,7 +137,7 @@ void setSphereVertex(Vertex* vtx, u16* idx, s32 sizeX, s32 sizeY)
         }
     }
 
-    if (idx != NULL)
+    if (idx != nullptr)
     {
         for (s32 i = 0; i < sizeX; i++)
         {
@@ -175,7 +175,7 @@ void setSphereVertex(Vertex* vtx, u16* idx, s32 sizeX, s32 sizeY)
 
 void setDiskVertex(Vertex* vtx, u16* idx, s32 divNum)
 {
-    if (vtx != NULL)
+    if (vtx != nullptr)
     {
         for (s32 i = 0; i < divNum; i++)
         {
@@ -198,7 +198,7 @@ void setDiskVertex(Vertex* vtx, u16* idx, s32 divNum)
         }
     }
 
-    if (idx != NULL)
+    if (idx != nullptr)
         for (s32 i = 0; i < divNum; i++)
         {
             idx[i * 3 + 0] = i;
@@ -209,7 +209,7 @@ void setDiskVertex(Vertex* vtx, u16* idx, s32 divNum)
 
 void setCylinderVertex(Vertex* vtx, u16* idx, s32 divNum)
 {
-    if (vtx != NULL)
+    if (vtx != nullptr)
     {
         for (s32 i = 0; i < divNum; i++)
         {
@@ -249,7 +249,7 @@ void setCylinderVertex(Vertex* vtx, u16* idx, s32 divNum)
         }
     }
 
-    if (idx != NULL)
+    if (idx != nullptr)
     {
         for (s32 i = 0; i < divNum; i++)
         {

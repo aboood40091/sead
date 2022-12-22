@@ -14,15 +14,15 @@ class TListNode : public ListNode
 public:
     TListNode()
         : ListNode()
-        , mData(NULL)
-        , mList(NULL)
+        , mData(nullptr)
+        , mList(nullptr)
     {
     }
 
     TListNode(T data)
         : ListNode()
         , mData(data)
-        , mList(NULL)
+        , mList(nullptr)
     {
     }
 
@@ -32,7 +32,7 @@ public:
     void erase()
     {
         TList<T>* list = mList;
-        if (list != NULL)
+        if (list)
             list->erase(this);
     }
 
@@ -72,7 +72,7 @@ public:
 
     void erase(TListNode<T>* obj)
     {
-        obj->mList = NULL;
+        obj->mList = nullptr;
         ListImpl::erase(obj);
     }
 

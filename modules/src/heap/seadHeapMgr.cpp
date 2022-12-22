@@ -4,10 +4,10 @@
 
 namespace sead {
 
-HeapMgr* HeapMgr::sInstancePtr = NULL;
+HeapMgr* HeapMgr::sInstancePtr = nullptr;
 HeapMgr HeapMgr::sInstance;
 
-Arena* HeapMgr::sArena = NULL;
+Arena* HeapMgr::sArena = nullptr;
 Arena HeapMgr::sDefaultArena;
 
 CriticalSection HeapMgr::sHeapTreeLockCS;
@@ -16,7 +16,7 @@ HeapMgr::RootHeaps HeapMgr::sRootHeaps;
 HeapMgr::IndependentHeaps HeapMgr::sIndependentHeaps;
 
 HeapMgr::HeapMgr()
-    : mAllocFailedCallback(NULL)
+    : mAllocFailedCallback(nullptr)
 {
 }
 
@@ -33,7 +33,7 @@ HeapMgr::findContainHeap(const void* ptr) const
     for (RootHeaps::iterator it = sRootHeaps.begin(); it != sRootHeaps.end(); ++it)
     {
         Heap* heap = it->findContainHeap_(ptr);
-        if (heap != NULL)
+        if (heap != nullptr)
         {
             sHeapTreeLockCS.unlock();
             return heap;
@@ -43,7 +43,7 @@ HeapMgr::findContainHeap(const void* ptr) const
     for (IndependentHeaps::iterator it = sIndependentHeaps.begin(); it != sIndependentHeaps.end(); ++it)
     {
         Heap* heap = it->findContainHeap_(ptr);
-        if (heap != NULL)
+        if (heap != nullptr)
         {
             sHeapTreeLockCS.unlock();
             return heap;
@@ -51,7 +51,7 @@ HeapMgr::findContainHeap(const void* ptr) const
     }
 
     sHeapTreeLockCS.unlock();
-    return NULL;
+    return nullptr;
 }
 
 Heap*

@@ -12,7 +12,7 @@ ResourceMgr::ResourceMgr()
     : mFactoryList()
     , mPostCreateResourceList()
     , mDecompList()
-    , mNullResourceFactory(NULL)
+    , mNullResourceFactory(nullptr)
 {
     if (!HeapMgr::isInitialized())
     {
@@ -26,11 +26,11 @@ ResourceMgr::ResourceMgr()
 
 ResourceMgr::~ResourceMgr()
 {
-    if (mNullResourceFactory == NULL)
+    if (mNullResourceFactory == nullptr)
         return;
 
     delete mNullResourceFactory;
-    mNullResourceFactory = NULL;
+    mNullResourceFactory = nullptr;
 }
 
 void ResourceMgr::registerFactory(ResourceFactory* factory, const SafeString& name)
@@ -50,7 +50,7 @@ void ResourceMgr::registerDecompressor(Decompressor* decompressor, const SafeStr
 
 void ResourceMgr::unregisterFactory(ResourceFactory* factory)
 {
-    if (factory->mList == NULL)
+    if (factory->mList == nullptr)
         return;
 
     mFactoryList.erase(factory);
@@ -58,7 +58,7 @@ void ResourceMgr::unregisterFactory(ResourceFactory* factory)
 
 void ResourceMgr::unregisterDecompressor(Decompressor* decompressor)
 {
-    if (decompressor->mList == NULL)
+    if (decompressor->mList == nullptr)
         return;
 
     mDecompList.erase(decompressor);

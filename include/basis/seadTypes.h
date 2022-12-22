@@ -3,10 +3,15 @@
 
 #ifdef cafe
 
+#include <cstddef>
 #include <types.h>
 
 typedef u32 uintptr_t;
 typedef s32  intptr_t;
+
+#ifndef nullptr
+#define nullptr NULL
+#endif // nullptr
 
 #ifndef static_assert
 

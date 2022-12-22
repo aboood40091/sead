@@ -10,7 +10,7 @@ namespace sead {
 
 u32 FileHandle::read(u8* buf, u32 size)
 {
-    if (mDevice != NULL)
+    if (mDevice != nullptr)
         return mDevice->read(this, buf, size);
 
     //SEAD_ASSERT_MSG(false, "handle not opened");
@@ -19,7 +19,7 @@ u32 FileHandle::read(u8* buf, u32 size)
 
 u32 FileHandle::write(const u8* buf, u32 size)
 {
-    if (mDevice != NULL)
+    if (mDevice != nullptr)
         return mDevice->write(this, buf, size);
 
     //SEAD_ASSERT_MSG(false, "handle not opened");
@@ -28,7 +28,7 @@ u32 FileHandle::write(const u8* buf, u32 size)
 
 FileDevice::~FileDevice()
 {
-    if (FileDeviceMgr::instance() != NULL)
+    if (FileDeviceMgr::instance() != nullptr)
         FileDeviceMgr::instance()->unmount(this);
 }
 
@@ -42,19 +42,19 @@ FileDevice::isMatchDevice_(
 
 u8* FileDevice::doLoad_(LoadArg& arg)
 {
-    if (arg.buffer != NULL && arg.buffer_size == 0)
+    if (arg.buffer != nullptr && arg.buffer_size == 0)
     {
         //SEAD_WARNING(false, "arg.buffer is specified, but arg.buffer_size is zero\n");
-        return NULL;
+        return nullptr;
     }
 
     FileHandle handle;
-    if (tryOpen(&handle, arg.path, FileDevice::cFileOpenFlag_ReadOnly, arg.div_size) == NULL)
-        return NULL;
+    if (tryOpen(&handle, arg.path, FileDevice::cFileOpenFlag_ReadOnly, arg.div_size) == nullptr)
+        return nullptr;
 
     u32 file_size = 0;
     if (!tryGetFileSize(&file_size, &handle))
-        return NULL;
+        return nullptr;
 
     //SEAD_ASSERT(file_size != 0);
 
@@ -65,13 +65,13 @@ u8* FileDevice::doLoad_(LoadArg& arg)
     else if (buffer_size < file_size)
     {
         //SEAD_WARNING(false, "arg.buffer_size[%u] is smaller than file size[%u]\n", buffer_size, file_size);
-        return NULL;
+        return nullptr;
     }
 
     u8* buffer = arg.buffer;
     bool need_unload = false;
 
-    if (buffer == NULL)
+    if (buffer == nullptr)
     {
         buffer = new (arg.heap, Mathi::sign(arg.alignment) * Mathi::max(Mathi::abs(arg.alignment), FileDevice::cBufferMinAlignment)) u8[buffer_size];
         need_unload = true;
@@ -83,7 +83,7 @@ u8* FileDevice::doLoad_(LoadArg& arg)
         if (need_unload)
             delete[] buffer;
 
-        return NULL;
+        return nullptr;
     }
 
     if (!tryClose(&handle))
@@ -91,7 +91,7 @@ u8* FileDevice::doLoad_(LoadArg& arg)
         if (need_unload)
             delete[] buffer;
 
-        return NULL;
+        return nullptr;
     }
 
     arg.read_size = read_size;
@@ -133,7 +133,7 @@ u8* FileDevice::tryLoad(LoadArg& arg)
     //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
 
     if (!mPermission)
-        return NULL;
+        return nullptr;
 
     return doLoad_(arg);
 }
@@ -147,18 +147,18 @@ FileDevice::tryOpen(
     //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
 
     if (!mPermission)
-        return NULL;
+        return nullptr;
 
-    if (handle == NULL)
+    if (handle == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "handle is null");
-        return NULL;
+        return nullptr;
     }
 
     setFileHandleDivSize_(handle, div_size);
     FileDevice* device = doOpen_(handle, filename, flag);
     setHandleBaseFileDevice_(handle, device);
-    if (device != NULL)
+    if (device != nullptr)
         setHandleBaseOriginalFileDevice_(handle, this);
 
     return device;
@@ -172,7 +172,7 @@ FileDevice::tryClose(FileHandle* handle)
     if (!mPermission)
         return false;
 
-    if (handle == NULL)
+    if (handle == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "handle is null");
         return false;
@@ -187,8 +187,8 @@ FileDevice::tryClose(FileHandle* handle)
     bool success = doClose_(handle);
     if (success)
     {
-        setHandleBaseFileDevice_(handle, NULL);
-        setHandleBaseOriginalFileDevice_(handle, NULL);
+        setHandleBaseFileDevice_(handle, nullptr);
+        setHandleBaseOriginalFileDevice_(handle, nullptr);
     }
 
     return success;
@@ -205,7 +205,7 @@ FileDevice::tryRead(
     if (!mPermission)
         return false;
 
-    if (handle == NULL)
+    if (handle == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "handle is null");
         return false;
@@ -217,7 +217,7 @@ FileDevice::tryRead(
         return false;
     }
 
-    if (buf == NULL)
+    if (buf == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "buf is null");
         return false;
@@ -226,7 +226,7 @@ FileDevice::tryRead(
     if (handle->mDivSize == 0)
     {
         bool success = doRead_(read_size, handle, buf, size);
-        //SEAD_ASSERT_MSG(read_size == NULL || *read_size <= size, "buffer overflow");
+        //SEAD_ASSERT_MSG(read_size == nullptr || *read_size <= size, "buffer overflow");
         return success;
     }
 
@@ -239,7 +239,7 @@ FileDevice::tryRead(
 
         if (!doRead_(&tmp_read_size, handle, buf, buf_size))
         {
-            if (read_size != NULL)
+            if (read_size != nullptr)
                 *read_size = total_read_size;
 
             return false;
@@ -254,7 +254,7 @@ FileDevice::tryRead(
     }
     while (size != 0);
 
-    if (read_size != NULL)
+    if (read_size != nullptr)
         *read_size = total_read_size;
 
     return true;
@@ -271,13 +271,13 @@ FileDevice::tryWrite(
     if (!mPermission)
         return false;
 
-    if (handle == NULL)
+    if (handle == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "handle is null");
         return false;
     }
 
-    if (buf == NULL)
+    if (buf == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "buf is null");
         return false;
@@ -303,7 +303,7 @@ FileDevice::trySeek(
     if (!mPermission)
         return false;
 
-    if (handle == NULL)
+    if (handle == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "handle is null");
         return false;
@@ -328,7 +328,7 @@ FileDevice::tryGetCurrentSeekPos(
     if (!mPermission)
         return false;
 
-    if (handle == NULL)
+    if (handle == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "handle is null");
         return false;
@@ -340,7 +340,7 @@ FileDevice::tryGetCurrentSeekPos(
         return false;
     }
 
-    if (pos == NULL)
+    if (pos == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "pos is null");
         return false;
@@ -359,7 +359,7 @@ FileDevice::tryGetFileSize(
     if (!mPermission)
         return false;
 
-    if (size == NULL)
+    if (size == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "size is null");
         return false;
@@ -378,13 +378,13 @@ FileDevice::tryGetFileSize(
     if (!mPermission)
         return false;
 
-    if (handle == NULL)
+    if (handle == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "handle is null");
         return false;
     }
 
-    if (size == NULL)
+    if (size == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "size is null");
         return false;
@@ -403,7 +403,7 @@ FileDevice::tryIsExistFile(
     if (!mPermission)
         return false;
 
-    if (is_exist == NULL)
+    if (is_exist == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "is_exist is null");
         return false;
@@ -422,7 +422,7 @@ FileDevice::tryIsExistDirectory(
     if (!mPermission)
         return false;
 
-    if (is_exist == NULL)
+    if (is_exist == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "is_exist is null");
         return false;
@@ -439,17 +439,17 @@ FileDevice::tryOpenDirectory(
     //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
 
     if (!mPermission)
-        return NULL;
+        return nullptr;
 
-    if (handle == NULL)
+    if (handle == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "handle is null");
-        return NULL;
+        return nullptr;
     }
 
     FileDevice* device = doOpenDirectory_(handle, dirname);
     setHandleBaseFileDevice_(handle, device);
-    if (device != NULL)
+    if (device != nullptr)
         setHandleBaseOriginalFileDevice_(handle, this);
 
     return device;
@@ -463,7 +463,7 @@ FileDevice::tryCloseDirectory(DirectoryHandle* handle)
     if (!mPermission)
         return false;
 
-    if (handle == NULL)
+    if (handle == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "handle is null");
         return false;
@@ -478,8 +478,8 @@ FileDevice::tryCloseDirectory(DirectoryHandle* handle)
     bool success = doCloseDirectory_(handle);
     if (success)
     {
-        setHandleBaseFileDevice_(handle, NULL);
-        setHandleBaseOriginalFileDevice_(handle, NULL);
+        setHandleBaseFileDevice_(handle, nullptr);
+        setHandleBaseOriginalFileDevice_(handle, nullptr);
     }
 
     return success;
@@ -496,7 +496,7 @@ FileDevice::tryReadDirectory(
     if (!mPermission)
         return false;
 
-    if (handle == NULL)
+    if (handle == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "handle is null");
         return false;
@@ -511,7 +511,7 @@ FileDevice::tryReadDirectory(
     u32 tmp_read_num = 0;
     bool success = doReadDirectory_(&tmp_read_num, handle, entry, num);
 
-    if (read_num != NULL)
+    if (read_num != nullptr)
         *read_num = tmp_read_num;
 
     if (tmp_read_num > num)

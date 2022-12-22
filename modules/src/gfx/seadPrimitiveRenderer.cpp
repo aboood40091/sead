@@ -14,7 +14,7 @@ SEAD_SINGLETON_DISPOSER_IMPL(PrimitiveRenderer)
 
 PrimitiveRenderer::PrimitiveRenderer()
     : IDisposer()
-    , mRendererImpl(NULL)
+    , mRendererImpl(nullptr)
     , mModelMtx(Matrix34f::ident)
 {
 }

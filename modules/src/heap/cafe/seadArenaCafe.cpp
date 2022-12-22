@@ -5,7 +5,7 @@
 namespace sead {
 
 Arena::Arena()
-    : mStart(NULL)
+    : mStart(nullptr)
     , mSize(0)
 {
 }

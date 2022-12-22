@@ -33,13 +33,13 @@ void ControllerMgr::prepare()
     Parameter* parameter = DynamicCast<Parameter>(mParameter);
     if (parameter)
     {
-        initialize(parameter->controllerMax, NULL);
+        initialize(parameter->controllerMax, nullptr);
         if (parameter->proc)
             parameter->proc->invoke(this);
     }
     else
     {
-        initializeDefault(NULL);
+        initializeDefault(nullptr);
     }
 }
 
@@ -213,7 +213,7 @@ Controller* ControllerMgr::getControllerByOrder(ControllerDefine::ControllerId i
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 ControlDevice* ControllerMgr::getControlDevice(ControllerDefine::DeviceId id) const
@@ -225,7 +225,7 @@ ControlDevice* ControllerMgr::getControlDevice(ControllerDefine::DeviceId id) co
             return &device;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 ControllerAddon* ControllerMgr::getControllerAddon(s32 index, ControllerDefine::AddonId id) const
@@ -234,7 +234,7 @@ ControllerAddon* ControllerMgr::getControllerAddon(s32 index, ControllerDefine::
     if (controller)
         return controller->getAddon(id);
 
-    return NULL;
+    return nullptr;
 }
 
 s32 ControllerMgr::findControllerPort(const Controller* controller) const

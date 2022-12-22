@@ -18,8 +18,8 @@ public:
     void pushFrontChild(TreeNode* n);
     void insertBeforeSelf(TreeNode* n);
     void insertAfterSelf(TreeNode* n);
-    bool isRoot() const { return mParent == NULL; }
-    bool isLeaf() const { return mChild == NULL; }
+    bool isRoot() const { return mParent == nullptr; }
+    bool isLeaf() const { return mChild == nullptr; }
     const TreeNode* findRoot() const;
     TreeNode* findRoot();
     s32 countChildren() const;
@@ -43,7 +43,7 @@ class TTreeNode : public TreeNode
 public:
     TTreeNode()
         : TreeNode()
-        , mData(NULL)
+        , mData(nullptr)
     {
     }
 

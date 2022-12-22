@@ -6,7 +6,7 @@ namespace sead {
 void Heap::appendDisposer_(IDisposer* o)
 {
     // sead::ConditionalScopedLock<sead::CriticalSection>*
-    CriticalSection* cs = NULL;
+    CriticalSection* cs = nullptr;
     if (mFlag.isOnBit(0))
     {
         cs = &mCS;
@@ -15,14 +15,14 @@ void Heap::appendDisposer_(IDisposer* o)
 
     mDisposerList.pushBack(o);
 
-    if (cs != NULL)
+    if (cs != nullptr)
         cs->unlock();
 }
 
 void Heap::removeDisposer_(IDisposer* o)
 {
     // sead::ConditionalScopedLock<sead::CriticalSection>*
-    CriticalSection* cs = NULL;
+    CriticalSection* cs = nullptr;
     if (mFlag.isOnBit(0))
     {
         cs = &mCS;
@@ -31,7 +31,7 @@ void Heap::removeDisposer_(IDisposer* o)
 
     mDisposerList.erase(o);
 
-    if (cs != NULL)
+    if (cs != nullptr)
         cs->unlock();
 }
 
@@ -43,11 +43,11 @@ Heap::findContainHeap_(const void* ptr)
     if (!isInclude(ptr))
     {
         HeapMgr::getHeapTreeLockCS_()->unlock();
-        return NULL;
+        return nullptr;
     }
 
     // sead::ConditionalScopedLock<sead::CriticalSection>*
-    CriticalSection* cs = NULL;
+    CriticalSection* cs = nullptr;
     if (mFlag.isOnBit(0))
     {
         cs = &mCS;
@@ -59,7 +59,7 @@ Heap::findContainHeap_(const void* ptr)
         if (it->isInclude(ptr))
         {
             Heap* heap = it->findContainHeap_(ptr);
-            if (cs != NULL)
+            if (cs != nullptr)
                 cs->unlock();
 
             HeapMgr::getHeapTreeLockCS_()->unlock();
@@ -67,7 +67,7 @@ Heap::findContainHeap_(const void* ptr)
         }
     }
 
-    if (cs != NULL)
+    if (cs != nullptr)
         cs->unlock();
 
     HeapMgr::getHeapTreeLockCS_()->unlock();
