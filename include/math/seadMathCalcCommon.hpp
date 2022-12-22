@@ -512,8 +512,8 @@ template <typename T>
 inline T
 MathCalcCommon<T>::clamp2(T min_, T val, T max_)
 {
-    if (val < min_) return min_;
-    if (val > max_) return max_;
+    if      (val < min_) val = min_;
+    else if (val > max_) val = max_;
 
     return val;
 }
