@@ -33,8 +33,8 @@ public:
         ListImpl::pushFront(objToListNode(obj));
     }
 
-    T* popBack();
-    T* popFront();
+    T* popBack() { return listNodeToObjWithNullCheck(ListImpl::popBack()); }
+    T* popFront() { return listNodeToObjWithNullCheck(ListImpl::popFront()); }
 
     void insertBefore(const T* basis, T* obj)
     {
