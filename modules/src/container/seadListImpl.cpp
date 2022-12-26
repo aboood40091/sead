@@ -46,4 +46,22 @@ void ListNode::erase_()
     mPrev = nullptr;
 }
 
+ListNode* ListImpl::popBack()
+{
+    ListNode* n = back();
+    if (n != nullptr)
+       erase(n);
+
+    return n;
+}
+
+ListNode* ListImpl::popFront()
+{
+    ListNode* n = front();
+    if (n != nullptr)
+       erase(n);
+
+    return n;
+}
+
 } // namespace sead
