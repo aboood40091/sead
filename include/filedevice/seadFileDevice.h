@@ -22,7 +22,6 @@ public:
         : IDisposer()
         , mDevice(nullptr)
         , mOriginalDevice(nullptr)
-        , mHandleBuffer()
     {
     }
 
