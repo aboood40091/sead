@@ -182,7 +182,6 @@ public:
 
     reverseConstIterator toReverseConstIterator(s32) const;
 
-private:
     T mBuffer[N];
 };
 
@@ -249,7 +248,6 @@ public:
 
     reverseConstIterator toReverseConstIterator(s32) const;
 
-private:
     T mBuffer[N];
 };
 
