@@ -14,6 +14,7 @@ public:
 public:
     static void add(Base& o, const Base& a, const Base& b);
     static void sub(Base& o, const Base& a, const Base& b);
+    static void div(Base& o, const Base& a, const Base& b);
 
     static bool isEqual(const Base& a, const Base& b);
 

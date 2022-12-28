@@ -41,6 +41,8 @@ public:
 
     T length() const;
 
+    void add(const Self& a);
+    void div(const Self& a);
     void set(const Self& v);
     void set(T x_, T y_);
 
