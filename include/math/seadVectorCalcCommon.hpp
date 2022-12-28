@@ -38,6 +38,14 @@ Vector2CalcCommon<T>::sub(Base& o, const Base& a, const Base& b)
 }
 
 template <typename T>
+inline void
+Vector2CalcCommon<T>::div(Base& o, const Base& a, const Base& b)
+{
+    o.x = a.x / b.x;
+    o.y = a.y / b.y;
+}
+
+template <typename T>
 inline bool
 Vector2CalcCommon<T>::isEqual(const Base& a, const Base& b)
 {

@@ -86,6 +86,20 @@ Vector2<T>::length() const
 
 template <typename T>
 inline void
+Vector2<T>::add(const Self& a)
+{
+    Vector2CalcCommon<T>::add(*this, *this, a);
+}
+
+template <typename T>
+inline void
+Vector2<T>::div(const Self& a)
+{
+    Vector2CalcCommon<T>::div(*this, *this, a);
+}
+
+template <typename T>
+inline void
 Vector2<T>::set(const Self& v)
 {
     Vector2CalcCommon<T>::set(*this, v);
