@@ -76,6 +76,30 @@ void Viewport::getOnFrameBufferPos(Vector2f* dst, const LogicalFrameBuffer& fb) 
     dst->add(fb.getPhysicalArea().getMin());
 }
 
+void Viewport::getOnFrameBufferSize(Vector2f* dst, const LogicalFrameBuffer& fb) const
+{
+    dst->set(getSizeX(), getSizeY());
+
+    switch (mDevicePos)
+    {
+    case Graphics::cDevicePosture_Same:
+    case Graphics::cDevicePosture_FlipX:
+    case Graphics::cDevicePosture_FlipY:
+    case Graphics::cDevicePosture_FlipXY:
+        break;
+    case Graphics::cDevicePosture_RotateRight:
+    case Graphics::cDevicePosture_RotateLeft:
+        dst->set(dst->y, dst->x);
+        break;
+    default:
+        // SEAD_ASSERT_MSG(false, "Undefined DevicePosture(%d)", s32(mDevicePos));
+    }
+
+    dst->div(fb.getVirtualSize());
+    dst->x *= fb.getPhysicalArea().getSizeX();
+    dst->y *= fb.getPhysicalArea().getSizeY();
+}
+
 void Viewport::apply(const LogicalFrameBuffer& frame_buffer) const
 {
     sead::Vector2f real_pos;
