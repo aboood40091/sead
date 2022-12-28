@@ -155,7 +155,7 @@ private:
     Graphics(const Graphics&);
     const Graphics& operator=(const Graphics&);
 
-public:
+protected:
     virtual void initializeImpl();
     virtual void setViewportImpl(f32 x, f32 y, f32 w, f32 h);
     virtual void setScissorImpl(f32 x, f32 y, f32 w, f32 h);
@@ -184,10 +184,26 @@ public:
     virtual void setPolygonModeImpl(PolygonMode front, PolygonMode back);
     virtual void setPolygonOffsetEnableImpl(bool fill_front_enable, bool fill_back_enable, bool point_line_enable);
 
+public:
+    void setViewportRealPosition(f32 x, f32 y, f32 w, f32 h)
+    {
+        setViewportImpl(x, y, w, h);
+    }
+
+    void setScissorRealPosition(f32 x, f32 y, f32 w, f32 h)
+    {
+        setScissorImpl(x, y, w, h);
+    }
+
     void setDepthEnable(bool test_enable, bool write_enable)
     {
         setDepthTestEnableImpl(test_enable);
         setDepthWriteEnableImpl(write_enable);
+    }
+
+    void setBlendEnable(bool enable)
+    {
+        setBlendEnableImpl(enable);
     }
 
     void setBlendFactor(BlendFactor src_factor, BlendFactor dst_factor)

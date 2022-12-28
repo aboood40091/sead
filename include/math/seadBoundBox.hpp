@@ -38,10 +38,8 @@ template <typename T>
 inline void
 BoundBox2<T>::setUndef()
 {
-    const T& max = MathCalcCommon<T>::maxNumber();
-    mMin.set(max, max);
-    const T& min = MathCalcCommon<T>::minNumber();
-    mMax.set(min, min);
+    mMin.set(MathCalcCommon<T>::maxNumber(), MathCalcCommon<T>::maxNumber());
+    mMax.set(MathCalcCommon<T>::minNumber(), MathCalcCommon<T>::minNumber());
 }
 
 template <typename T>
@@ -192,10 +190,8 @@ template <typename T>
 inline void
 BoundBox3<T>::setUndef()
 {
-    const T& max = MathCalcCommon<T>::maxNumber();
-    mMin.set(max, max, max);
-    const T& min = MathCalcCommon<T>::minNumber();
-    mMax.set(min, min, min);
+    mMin.set(MathCalcCommon<T>::maxNumber(), MathCalcCommon<T>::maxNumber(), MathCalcCommon<T>::maxNumber());
+    mMax.set(MathCalcCommon<T>::minNumber(), MathCalcCommon<T>::minNumber(), MathCalcCommon<T>::minNumber());
 }
 
 template <typename T>
