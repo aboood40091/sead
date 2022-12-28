@@ -18,6 +18,8 @@ public:
     {
     }
 
+    void setByFrameBuffer(const LogicalFrameBuffer& frame_buffer);
+
     void apply(const LogicalFrameBuffer& frame_buffer) const;
     // ...
 
