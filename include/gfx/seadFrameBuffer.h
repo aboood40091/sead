@@ -112,8 +112,11 @@ public:
 
     virtual void clear(u32 clr_flag, const Color4f& color, f32 depth, u32 stencil) const = 0;
     virtual void clearMRT(u32 target, const Color4f& color) const;
+
+protected:
     virtual void bindImpl_() const = 0;
 
+public:
     void bind() const;
 };
 #ifdef cafe
