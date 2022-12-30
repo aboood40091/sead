@@ -180,12 +180,19 @@ public:
     void makeT(T x, T y, T z);
     void toQuat(Quat& q) const;
 
+    void scaleAllElements(T s);
+    void scaleBases(T sx, T sy, T sz);
+
+    void multScaleLocal(const Vec3& s);
+    void setMultScaleLocal(const Self& n, const Vec3& s);
+
+    void multTranslationLocal(const Vec3& t);
+    void setMultTranslationLocal(const Self& n, const Vec3& t);
+
     void getBase(Vec3& o, s32 axis) const;
     void getRow(Vec4& o, s32 row) const;
     void getTranslation(Vec3& o) const;
 
-    void scaleAllElements(T s);
-    void scaleBases(T sx, T sy, T sz);
     void setBase(s32 axis, const Vec3& v);
     void setRow(s32 row, const Vec4& v);
     void setTranslation(const Vec3& t);
@@ -248,11 +255,12 @@ public:
     void makeRzxyIdx(u32 xr, u32 yr, u32 zr);
     void toQuat(Quat& q) const;
 
+    void scaleAllElements(T s);
+    void scaleBases(T sx, T sy, T sz, T sw);
+
     void getCol(Vec4& o, s32 axis) const;
     void getRow(Vec4& o, s32 row) const;
 
-    void scaleAllElements(T s);
-    void scaleBases(T sx, T sy, T sz, T sw);
     void setCol(s32 axis, const Vec4& v);
     void setRow(s32 row, const Vec4& v);
 

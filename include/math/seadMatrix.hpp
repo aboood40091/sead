@@ -533,6 +533,34 @@ Matrix34<T>::toQuat(Quat& q) const
 
 template <typename T>
 inline void
+Matrix34<T>::multScaleLocal(const Vec3& s)
+{
+    Matrix34CalcCommon<T>::multScaleLocal(*this, *this, s);
+}
+
+template <typename T>
+inline void
+Matrix34<T>::setMultScaleLocal(const Self& n, const Vec3& s)
+{
+    Matrix34CalcCommon<T>::multScaleLocal(*this, n, s);
+}
+
+template <typename T>
+inline void
+Matrix34<T>::multTranslationLocal(const Vec3& t)
+{
+    Matrix34CalcCommon<T>::multTranslationLocal(*this, *this, t);
+}
+
+template <typename T>
+inline void
+Matrix34<T>::setMultTranslationLocal(const Self& n, const Vec3& t)
+{
+    Matrix34CalcCommon<T>::multTranslationLocal(*this, n, t);
+}
+
+template <typename T>
+inline void
 Matrix34<T>::getBase(Vec3& o, s32 axis) const
 {
     Matrix34CalcCommon<T>::getBase(o, *this, axis);
