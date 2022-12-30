@@ -104,12 +104,16 @@ public:
     static void makeT(Base& o, const Vec3& t);
     static void toQuat(Quat& q, const Base& n);
 
+    static void scaleAllElements(Base& n, T s);
+    static void scaleBases(Base& n, T sx, T sy, T sz);
+
+    static void multScaleLocal(Base& o, const Base& n, const Vec3& s);
+    static void multTranslationLocal(Base& o, const Base& n, const Vec3& t);
+
     static void getBase(Vec3& v, const Base& n, s32 axis);
     static void getRow(Vec4& v, const Base& n, s32 row);
     static void getTranslation(Vec3& v, const Base& n);
 
-    static void scaleAllElements(Base& n, T s);
-    static void scaleBases(Base& n, T sx, T sy, T sz);
     static void setBase(Base& n, s32 axis, const Vec3& v);
     static void setRow(Base& n, const Vec4& v, s32 row);
     static void setTranslation(Base& n, const Vec3& v);
@@ -148,11 +152,12 @@ public:
     static void makeRzxyIdx(Base& o, u32 xr, u32 yr, u32 zr);
     static void toQuat(Quat& q, const Base& n);
 
+    static void scaleAllElements(Base& n, T s);
+    static void scaleBases(Base& n, T sx, T sy, T sz, T sw);
+
     static void getCol(Vec4& v, const Base& n, s32 axis);
     static void getRow(Vec4& v, const Base& n, s32 row);
 
-    static void scaleAllElements(Base& n, T s);
-    static void scaleBases(Base& n, T sx, T sy, T sz, T sw);
     static void setCol(Base& n, s32 axis, const Vec4& v);
     static void setRow(Base& n, const Vec4& v, s32 row);
 };
