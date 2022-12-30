@@ -294,6 +294,15 @@ Vector4<T>::Vector4(T x_, T y_, T z_, T w_)
 }
 
 template <typename T>
+inline Vector4<T>
+Vector4<T>::operator*(T t) const
+{
+    Self o;
+    Vector4CalcCommon<T>::multScalar(o, *this, t);
+    return o;
+}
+
+template <typename T>
 inline Vector4<T>&
 Vector4<T>::operator=(const Self& v)
 {
