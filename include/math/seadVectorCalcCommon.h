@@ -71,6 +71,8 @@ public:
 
     static void lerp(Base& o, const Base& a, const Base& b, f32 ratio);
 
+    static void multScalar(Base& o, const Base& v, T t);
+
     static void set(Base& o, const Base& v);
     static void set(Base& v, T x, T y, T z, T w);
 };

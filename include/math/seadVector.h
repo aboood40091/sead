@@ -139,6 +139,8 @@ public:
 
     Vector4(T x_, T y_, T z_, T w_);
 
+    Self operator*(T t) const;
+
     Self& operator=(const Self& v);
 
     bool operator==(const Self& v) const;
