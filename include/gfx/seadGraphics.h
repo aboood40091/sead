@@ -5,7 +5,7 @@
 #include <thread/seadCriticalSection.h>
 
 #ifdef cafe
-#include <cafe.h>
+#include <cafe/gx2.h>
 #endif // cafe
 
 namespace sead {
@@ -27,6 +27,9 @@ public:
         cDevicePosture_FlipXY           = 3,
         cDevicePosture_Invalid          = 4
     };
+
+public:
+    static const u32 cRenderTarget_Num = 8;
 
 public:
     static DevicePosture getDefaultDevicePosture() { return sDefaultDevicePosture; }
@@ -146,6 +149,7 @@ public:
 
 public:
     static Graphics* instance() { return sInstance; }
+    static void setInstance(Graphics* impl) { sInstance = impl; }
 
 public:
     Graphics();

@@ -49,8 +49,8 @@ public:
     bool mDepthWriteEnable;
     Graphics::DepthFunc mDepthFunc;
     Graphics::CullingMode mCullingMode;
-    sead::BitFlag32 mBlendEnableMask;
-    sead::SafeArray<BlendExpression, 8> mBlendExpression;
+    BitFlag32 mBlendEnableMask;
+    SafeArray<BlendExpression, Graphics::cRenderTarget_Num> mBlendExpression;
     Color4f mBlendConstantColor;
     bool mAlphaTestEnable;
     Graphics::AlphaFunc mAlphaTestFunc;
