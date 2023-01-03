@@ -1,6 +1,7 @@
 #ifndef SEAD_SHARC_ARCHIVE_RES_H_
 #define SEAD_SHARC_ARCHIVE_RES_H_
 
+#include <container/seadBuffer.h>
 #include <filedevice/seadFileDevice.h>
 #include <prim/seadEndian.h>
 #include <prim/seadSafeString.h>
