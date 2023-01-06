@@ -1,21 +1,12 @@
 #ifndef SEAD_PRIMITIVE_RENDERER_CAFE_H_
 #define SEAD_PRIMITIVE_RENDERER_CAFE_H_
 
+#include <gfx/seadPrimitiveRendererBase.h>
+#include <gfx/seadPrimitiveRendererUtil.h>
+
 #include <cafe.h>
 
-#include <gfx/seadPrimitiveRenderer.h>
-#include <gfx/seadPrimitiveRendererUtil.h>
-#include <math/seadMatrix.h>
-#include <math/seadVector.h>
-#include <prim/seadSafeString.h>
-
 namespace sead {
-
-class Heap;
-class Camera;
-class Projection;
-struct Color4f;
-class Texture;
 
 class PrimitiveRendererCafe : public PrimitiveRendererBase
 {
