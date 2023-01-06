@@ -1,3 +1,3 @@
-[submodule "packages\\nw_ptcl\\library\\addins\\Eft"]
-	path = packages\\nw_ptcl\\library\\addins\\Eft
-	url = https://github.com/nw4f/Eft.git
+[submodule "packages/nw_ptcl/library/addins/Eft"]
+	path = packages/nw_ptcl/library/addins/Eft
+	url = https://github.com/nw4f/Eft
