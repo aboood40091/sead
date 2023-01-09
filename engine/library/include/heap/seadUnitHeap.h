@@ -1,17 +1,10 @@
 #ifndef SEAD_UNIT_HEAP_H_
 #define SEAD_UNIT_HEAP_H_
 
+#include <container/seadFreeList.h>
 #include <heap/seadHeap.h>
 
 namespace sead {
-
-// TODO
-class FreeList
-{
-public:
-    void* mFree;
-    void* mWork;
-};
 
 class UnitHeap : public Heap
 {

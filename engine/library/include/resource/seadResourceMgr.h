@@ -80,6 +80,10 @@ public:
     static_assert(sizeof(LoadArg) == 0x2C, "sead::ResourceMgr::LoadArg size mismatch");
 #endif // cafe
 
+    typedef TList<ResourceFactory*> FactoryList;
+    typedef TList<Resource*> ResourceList;
+    typedef TList<Decompressor*> DecompressorList;
+
 public:
     ResourceMgr();
     ~ResourceMgr();
@@ -92,10 +96,10 @@ public:
     void unregisterFactory(ResourceFactory* factory);
     void unregisterDecompressor(Decompressor* decompressor);
 
-    typedef TList<ResourceFactory*> FactoryList;
-    typedef TList<Resource*> ResourceList;
-    typedef TList<Decompressor*> DecompressorList;
+    /* ResourcePtr */ Resource* tryLoadWithoutDecomp(const LoadArg& arg);
+    /* ResourcePtr */ Resource* tryLoad(const LoadArg& arg, const SafeString&, Decompressor*);
 
+private:
     FactoryList mFactoryList;
     ResourceList mPostCreateResourceList;
     DecompressorList mDecompList;
