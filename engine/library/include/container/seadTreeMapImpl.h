@@ -26,6 +26,7 @@ public:
 
     void insert(TreeMapNode<Key>*);
     TreeMapNode<Key>* insert(TreeMapNode<Key>*, TreeMapNode<Key>*);
+    TreeMapNode<Key>* find(const Key& key) const { return find(mRoot, key); }
     TreeMapNode<Key>* find(TreeMapNode<Key>*, const Key&) const;
     static TreeMapNode<Key>* rotateLeft(TreeMapNode<Key>*);
     static TreeMapNode<Key>* rotateRight(TreeMapNode<Key>*);
@@ -33,7 +34,7 @@ public:
     static bool isRed(TreeMapNode<Key>*);
 
 protected:
-    TreeMapNode<Key> *mRoot;
+    TreeMapNode<Key>* mRoot;
 };
 
 } // namespace sead

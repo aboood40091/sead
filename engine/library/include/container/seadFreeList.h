@@ -16,6 +16,18 @@ public:
     void* get();
     void cleanup();
 
+    void* work() { return mWork; }
+    const void* work() const { return mWork; }
+
+    void* free() { return mFree; }
+    const void* free() const { return mFree; }
+
+    void free(void* ptr)
+    {
+        *static_cast<void**>(ptr) = mFree;
+        mFree = ptr;
+    }
+
 private:
     void* mFree;
     void* mWork;
