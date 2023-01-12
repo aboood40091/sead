@@ -85,7 +85,13 @@ public:
 
     void insert(const SafeString& key, const Value& value)
     {
-        if (mSize >= mNodeMax)
+        if (mSize < mNodeMax)
+        {
+            Node* node = new (mFreeList.get()) Node(key, value, this);
+            mSize++;
+            TreeMapImpl<SafeString>::insert(node);
+        }
+        else
         {
             Value* p_value = find(key);
             if (p_value != nullptr)
@@ -94,12 +100,6 @@ public:
             {
                 // SEAD_ASSERT_MSG(false, "map is full.");
             }
-        }
-        else
-        {
-            Node* node = new (mFreeList.get()) Node(key, value, this);
-            mSize++;
-            TreeMapImpl<SafeString>::insert(node);
         }
     }
 
