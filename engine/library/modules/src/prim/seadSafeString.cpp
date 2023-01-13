@@ -1,6 +1,8 @@
 #include <prim/seadSafeString.h>
 #include <prim/seadStringUtil.h>
 
+#include <cstdio>
+
 namespace {
 
 static const char16 cEmptyStringChar16[1] = L"";
@@ -30,13 +32,25 @@ const SafeStringBase<char16> SafeStringBase<char16>::cEmptyString(cEmptyStringCh
 template <>
 s32 BufferedSafeStringBase<char>::formatImpl_(char* dst, s32 dst_size, const char* format_string, va_list varg)
 {
-    return StringUtil::vsnprintf(dst, dst_size, format_string, varg);
+    s32 ret = std::vsnprintf(dst, dst_size, format_string, varg);
+    if (ret < 0 || ret >= dst_size)
+    {
+        dst[dst_size - 1] = '\0';
+        ret = dst_size - 1;
+    }
+    return ret;
 }
 
 template <>
 s32 BufferedSafeStringBase<char16>::formatImpl_(char16* dst, s32 dst_size, const char16* format_string, va_list varg)
 {
-    return StringUtil::vsnw16printf(dst, dst_size, format_string, varg);
+    s32 ret = StringUtil::vsw16printf(dst, dst_size, format_string, varg);
+    if (ret < 0 || ret >= dst_size)
+    {
+        dst[dst_size - 1] = L'\0';
+        ret = dst_size - 1;
+    }
+    return ret;
 }
 
 template <>
