@@ -14,19 +14,13 @@ private:
     enum DelegateType
     {
         cDelegateType_Dummy         = 0,
-        cDelegateType_SeadDelegate1 = 1,
-        cDelegateType_SeadDelegate  = 2
+        cDelegateType_AnyDelegate1  = 1,
+        cDelegateType_AnyDelegate0  = 2
     };
 
     class Dummy
     {
     };
-
-    template <typename T>
-    struct MethodPtr1 { typedef void (T::*Type)(const RenderInfo&); };
-
-    template <typename T>
-    struct MethodPtr { typedef void (T::*Type)(); };
 
 public:
     DrawMethod()
@@ -35,24 +29,24 @@ public:
         , mDelegateType(cDelegateType_Dummy)
         , mPriority(0)
     {
-        new (mDelegateData) sead::Delegate<Dummy>();
+        new (&mDelegateHolder) sead::Delegate<Dummy>();
     }
 
     virtual ~DrawMethod();
 
     template <typename T>
-    void bind(T* obj, MethodPtr1<T>::Type method, const sead::SafeString& name)
+    void bind(T* obj, sead::Delegate1<T, const RenderInfo&>::MethodPtr method, const sead::SafeString& name)
     {
-        new (mDelegateData) sead::Delegate1<T, const RenderInfo&>(obj, method);
-        mDelegateType = cDelegateType_SeadDelegate1;
+        new (&mDelegateHolder) sead::Delegate1<T, const RenderInfo&>(obj, method);
+        mDelegateType = cDelegateType_AnyDelegate1;
         setName(name);
     }
 
     template <typename T>
-    void bind(T* obj, MethodPtr<T>::Type method, const sead::SafeString& name)
+    void bind(T* obj, sead::Delegate<T>::MethodPtr method, const sead::SafeString& name)
     {
-        new (mDelegateData) sead::Delegate<T>(obj, method);
-        mDelegateType = cDelegateType_SeadDelegate;
+        new (&mDelegateHolder) sead::Delegate<T>(obj, method);
+        mDelegateType = cDelegateType_AnyDelegate0;
         setName(name);
     }
 
@@ -68,7 +62,12 @@ public:
 
     void invoke(const RenderInfo& render_info)
     {
-        return reinterpret_cast<sead::Delegate1<Dummy, const RenderInfo&>*>(mDelegateData)->invoke(render_info);
+        return reinterpret_cast<sead::Delegate1<Dummy, const RenderInfo&>*>(&mDelegateHolder)->invoke(render_info);
+    }
+
+    void operator() (const RenderInfo& render_info)
+    {
+        return invoke(render_info);
     }
 
     static s32 compare(const DrawMethod* a, const DrawMethod* b);
@@ -76,8 +75,11 @@ public:
 private:
     DelegateType mDelegateType;
     u32 mPriority;
-    u32 mDelegateData[8];   // Nintendo: "32 bytes... must be enough :)"
+    struct
+    {
+        u32 data_[8];       // Nintendo: "32 bytes... must be enough :)"
                             // (Note: they didn't change it for Switch, which results in misalignment)
+    } mDelegateHolder;
 };
 static_assert(sizeof(DrawMethod) == 0x40, "agl::lyr::DrawMethod size mismatch");
 
