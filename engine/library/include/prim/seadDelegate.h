@@ -63,6 +63,20 @@ public:
     typedef R (T::*MethodPtr)();
 };
 
+template <typename T, typename R>
+class DelegateTraitsConst
+{
+public:
+    typedef R (T::*MethodPtr)() const;
+};
+
+template <typename R>
+class DelegateTraits<void, R>
+{
+public:
+    typedef R (*MethodPtr)();
+};
+
 class IDelegate
 {
 public:
@@ -117,11 +131,80 @@ public:
     }
 };
 
+template <>
+class Delegate<void> : public DelegateBase< void, typename DelegateTraits<void, void>::MethodPtr, IDelegate >
+{
+public:
+    typedef Delegate<void> self;
+    typedef typename DelegateTraits<void, void>::MethodPtr MethodPtr;
+
+public:
+    Delegate()
+        : DelegateBase< void, MethodPtr, IDelegate >()
+    {
+    }
+
+    Delegate(MethodPtr m)
+        : DelegateBase< void, MethodPtr, IDelegate >(nullptr, m)
+    {
+    }
+
+    virtual void invoke()
+    {
+        if (mMethod)
+            (mMethod)();
+    }
+
+    void invoke() const
+    {
+        if (mMethod)
+            (mMethod)();
+    }
+
+    void operator() () const
+    {
+        invoke();
+    }
+
+    virtual IDelegate* clone(Heap* heap) const
+    {
+        return new (heap) self(*this);
+    }
+};
+
+class StaticDelegate : public Delegate<void>
+{
+public:
+    StaticDelegate()
+        : Delegate<void>()
+    {
+    }
+
+    StaticDelegate(typename Delegate<void>::MethodPtr method)
+        : Delegate<void>(method)
+    {
+    }
+};
+
 template <typename T, typename A, typename R>
 class DelegateTraits1
 {
 public:
     typedef R (T::*MethodPtr)(A);
+};
+
+template <typename T, typename A, typename R>
+class DelegateTraits1Const
+{
+public:
+    typedef R (T::*MethodPtr)(A) const;
+};
+
+template <typename A, typename R>
+class DelegateTraits1<void, A, R>
+{
+public:
+    typedef R (*MethodPtr)(A);
 };
 
 template <typename A>
@@ -168,6 +251,56 @@ public:
     void operator() (A a) const
     {
         invoke(a);
+    }
+};
+
+template <typename A>
+class Delegate1<void, A> : public DelegateBase< void, typename DelegateTraits1<void, A, void>::MethodPtr, IDelegate1<A> >
+{
+public:
+    typedef typename DelegateTraits1<void, A, void>::MethodPtr MethodPtr;
+
+public:
+    Delegate1()
+        : DelegateBase< void, MethodPtr, IDelegate1<A> >()
+    {
+    }
+
+    Delegate1(MethodPtr m)
+        : DelegateBase< void, MethodPtr, IDelegate1<A> >(nullptr, m)
+    {
+    }
+
+    virtual void invoke(A a)
+    {
+        if (mMethod)
+            (mMethod)(a);
+    }
+
+    void invoke(A a) const
+    {
+        if (mMethod)
+            (mMethod)(a);
+    }
+
+    void operator() (A a) const
+    {
+        invoke(a);
+    }
+};
+
+template<typename A>
+class StaticDelegate1 : public Delegate1<void, A>
+{
+public:
+    StaticDelegate1()
+        : Delegate1<void, A>()
+    {
+    }
+
+    StaticDelegate1(typename Delegate1<void, A>::MethodPtr method)
+        : Delegate1<void, A>(method)
+    {
     }
 };
 
