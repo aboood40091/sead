@@ -193,9 +193,9 @@ Delegate<T> DelegateCreator(T* o, void (T::*m)())
 }
 
 inline
-StaticDelegate FunctionDelegateCreator(void (*m)())
+Delegate<void> FunctionDelegateCreator(void (*m)())
 {
-    return StaticDelegate(m);
+    return Delegate<void>(m);
 }
 
 template <typename T, typename A, typename R>
@@ -323,9 +323,9 @@ Delegate1<T, A> DelegateCreator(T* o, void (T::*m)(A))
 }
 
 template <typename A>
-StaticDelegate1<A> FunctionDelegateCreator(void (*m)(A))
+Delegate1<void, A> FunctionDelegateCreator(void (*m)(A))
 {
-    return StaticDelegate1<A>(m);
+    return Delegate1<void, A>(m);
 }
 
 } // namespace sead
