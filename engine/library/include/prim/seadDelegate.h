@@ -180,11 +180,23 @@ public:
     {
     }
 
-    StaticDelegate(typename Delegate<void>::MethodPtr method)
-        : Delegate<void>(method)
+    StaticDelegate(typename Delegate<void>::MethodPtr m)
+        : Delegate<void>(m)
     {
     }
 };
+
+template <typename T>
+Delegate<T> DelegateCreator(T* o, void (T::*m)())
+{
+    return Delegate<T>(o, m);
+}
+
+inline
+StaticDelegate FunctionDelegateCreator(void (*m)())
+{
+    return StaticDelegate(m);
+}
 
 template <typename T, typename A, typename R>
 class DelegateTraits1
@@ -303,6 +315,18 @@ public:
     {
     }
 };
+
+template <typename T, typename A>
+Delegate1<T, A> DelegateCreator(T* o, void (T::*m)(A))
+{
+    return Delegate1<T, A>(o, m);
+}
+
+template <typename A>
+StaticDelegate1<A> FunctionDelegateCreator(void (*m)(A))
+{
+    return StaticDelegate1<A>(m);
+}
 
 } // namespace sead
 
