@@ -5,45 +5,6 @@
 
 namespace sead {
 
-template <typename T, typename R>
-class DelegateTraits
-{
-public:
-    typedef R (T::*MethodPtr)();
-};
-
-template <typename T, typename A, typename R>
-class DelegateTraits1
-{
-public:
-    typedef R (T::*MethodPtr)(A);
-};
-
-class IDelegate
-{
-public:
-    virtual void invoke() = 0;
-
-    void operator() ()
-    {
-        return invoke();
-    }
-
-    virtual IDelegate* clone(Heap*) const = 0;
-};
-
-template <typename A>
-class IDelegate1
-{
-public:
-    virtual void invoke(A a) = 0;
-
-    void operator() (A a)
-    {
-        return Invoke(a);
-    }
-};
-
 template <typename T, typename METHODPTR, typename IDELEGATE>
 class DelegateBase : public IDELEGATE
 {
@@ -95,6 +56,26 @@ public:
     }
 };
 
+template <typename T, typename R>
+class DelegateTraits
+{
+public:
+    typedef R (T::*MethodPtr)();
+};
+
+class IDelegate
+{
+public:
+    virtual void invoke() = 0;
+
+    void operator() ()
+    {
+        return invoke();
+    }
+
+    virtual IDelegate* clone(Heap*) const = 0;
+};
+
 template <typename T>
 class Delegate : public DelegateBase< T, typename DelegateTraits<T, void>::MethodPtr, IDelegate >
 {
@@ -133,6 +114,25 @@ public:
     virtual IDelegate* clone(Heap* heap) const
     {
         return new (heap) self(*this);
+    }
+};
+
+template <typename T, typename A, typename R>
+class DelegateTraits1
+{
+public:
+    typedef R (T::*MethodPtr)(A);
+};
+
+template <typename A>
+class IDelegate1
+{
+public:
+    virtual void invoke(A a) = 0;
+
+    void operator() (A a)
+    {
+        return Invoke(a);
     }
 };
 
