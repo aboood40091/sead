@@ -89,4 +89,42 @@ s32 BufferedSafeStringBase<char16>::format(const char16* format_string, ...)
     return ret;
 }
 
+template <>
+s32 BufferedSafeStringBase<char>::appendWithFormatV(const char* format_string, va_list varg)
+{
+    char* mutable_string_top = getMutableStringTop_();
+    s32 length = calcLength();
+    s32 ret = formatImpl_(mutable_string_top + length, getBufferSize() - length, format_string, varg);
+    return length + ret;
+}
+
+template <>
+s32 BufferedSafeStringBase<char16>::appendWithFormatV(const char16* format_string, va_list varg)
+{
+    char16* mutable_string_top = getMutableStringTop_();
+    s32 length = calcLength();
+    s32 ret = formatImpl_(mutable_string_top + length, getBufferSize() - length, format_string, varg);
+    return length + ret;
+}
+
+template <>
+s32 BufferedSafeStringBase<char>::appendWithFormat(const char* format_string, ...)
+{
+    va_list va;
+    va_start(va, format_string);
+    s32 ret = appendWithFormatV(format_string, va);
+    va_end(va);
+    return ret;
+}
+
+template <>
+s32 BufferedSafeStringBase<char16>::appendWithFormat(const char16* format_string, ...)
+{
+    va_list va;
+    va_start(va, format_string);
+    s32 ret = appendWithFormatV(format_string, va);
+    va_end(va);
+    return ret;
+}
+
 } // namespace sead
