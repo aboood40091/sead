@@ -187,13 +187,14 @@ public:
 };
 
 template <typename T>
-Delegate<T> DelegateCreator(T* o, void (T::*m)())
+inline Delegate<T>
+DelegateCreator(T* obj, void (T::*m)())
 {
-    return Delegate<T>(o, m);
+    return Delegate<T>(obj, m);
 }
 
-inline
-Delegate<void> FunctionDelegateCreator(void (*m)())
+inline Delegate<void>
+FunctionDelegateCreator(void (*m)())
 {
     return Delegate<void>(m);
 }
@@ -227,7 +228,7 @@ public:
 
     void operator() (A a)
     {
-        return Invoke(a);
+        return invoke(a);
     }
 };
 
@@ -317,15 +318,149 @@ public:
 };
 
 template <typename T, typename A>
-Delegate1<T, A> DelegateCreator(T* o, void (T::*m)(A))
+inline Delegate1<T, A>
+DelegateCreator(T* obj, void (T::*m)(A))
 {
-    return Delegate1<T, A>(o, m);
+    return Delegate1<T, A>(obj, m);
 }
 
 template <typename A>
-Delegate1<void, A> FunctionDelegateCreator(void (*m)(A))
+inline Delegate1<void, A>
+FunctionDelegateCreator(void (*m)(A))
 {
     return Delegate1<void, A>(m);
+}
+
+template <typename T, typename A1, typename A2, typename R>
+class DelegateTraits2
+{
+public:
+    typedef R (T::*MethodPtr)(A1, A2);
+};
+
+template <typename T, typename A1, typename A2, typename R>
+class DelegateTraits2Const
+{
+public:
+    typedef R (T::*MethodPtr)(A1, A2) const;
+};
+
+template <typename A1, typename A2, typename R>
+class DelegateTraits2<void, A1, A2, R>
+{
+public:
+    typedef R (*MethodPtr)(A1, A2);
+};
+
+template <typename A1, typename A2>
+class IDelegate2
+{
+public:
+    virtual void invoke(A1 a1, A2 a2) = 0;
+
+    void operator() (A1 a1, A2 a2)
+    {
+        return invoke(a1, a2);
+    }
+};
+
+template <typename T, typename A1, typename A2>
+class Delegate2 : public DelegateBase< T, typename DelegateTraits2<T, A1, A2, void>::MethodPtr, IDelegate2<A1, A2> >
+{
+public:
+    typedef typename DelegateTraits2<T, A1, A2, void>::MethodPtr MethodPtr;
+
+public:
+    Delegate2()
+        : DelegateBase< T, MethodPtr, IDelegate2<A1, A2> >()
+    {
+    }
+
+    Delegate2(T* o, MethodPtr m)
+        : DelegateBase< T, MethodPtr, IDelegate2<A1, A2> >(o, m)
+    {
+    }
+
+    virtual void invoke(A1 a1, A2 a2)
+    {
+        if (mObject && mMethod)
+            (mObject->*mMethod)(a1, a2);
+    }
+
+    void invoke(A1 a1, A2 a2) const
+    {
+        if (mObject && mMethod)
+            (mObject->*mMethod)(a1, a2);
+    }
+
+    void operator() (A1 a1, A2 a2) const
+    {
+        invoke(a1, a2);
+    }
+};
+
+template <typename A1, typename A2>
+class Delegate2<void, A1, A2> : public DelegateBase< void, typename DelegateTraits2<void, A1, A2, void>::MethodPtr, IDelegate2<A1, A2> >
+{
+public:
+    typedef typename DelegateTraits2<void, A1, A2, void>::MethodPtr MethodPtr;
+
+public:
+    Delegate2()
+        : DelegateBase< void, MethodPtr, IDelegate2<A1, A2> >()
+    {
+    }
+
+    Delegate2(MethodPtr m)
+        : DelegateBase< void, MethodPtr, IDelegate2<A1, A2> >(nullptr, m)
+    {
+    }
+
+    virtual void invoke(A1 a1, A2 a2)
+    {
+        if (mMethod)
+            (mMethod)(a1, a2);
+    }
+
+    void invoke(A1 a1, A2 a2) const
+    {
+        if (mMethod)
+            (mMethod)(a1, a2);
+    }
+
+    void operator() (A1 a1, A2 a2) const
+    {
+        invoke(a1, a2);
+    }
+};
+
+template<typename A1, typename A2>
+class StaticDelegate2 : public Delegate2<void, A1, A2>
+{
+public:
+    StaticDelegate2()
+        : Delegate2<void, A1, A2>()
+    {
+    }
+
+    StaticDelegate2(typename Delegate2<void, A1, A2>::MethodPtr method)
+        : Delegate2<void, A1, A2>(method)
+    {
+    }
+};
+
+template <typename T, typename A1, typename A2>
+inline Delegate2<T, A1, A2>
+DelegateCreator(T* obj, void (T::*m)(A1, A2))
+{
+    return Delegate2<T, A1, A2>(obj, m);
+}
+
+template <typename A1, typename A2>
+inline Delegate2<void, A1, A2>
+FunctionDelegateCreator(void (*m)(A1, A2))
+{
+    return Delegate2<void, A1, A2>(m);
 }
 
 } // namespace sead
