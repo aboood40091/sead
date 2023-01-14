@@ -3,6 +3,7 @@
 
 #include <container/seadTreeMapImpl.h>
 #include <container/seadFreeList.h>
+#include <prim/seadDelegate.h>
 #include <prim/seadSafeString.h>
 
 namespace sead {
@@ -27,16 +28,43 @@ public:
 
         virtual void erase_()
         {
-            mMap->mFreeList.free(this);
-            mMap->mSize--;
+            mMap->eraseNode(this);
+        }
+
+        SafeString& key()
+        {
+            return mKey_;
+        }
+
+        Value& value()
+        {
+            return mValue;
         }
 
     private:
         Value mValue;
         StrTreeMap<KeyStrN, Value>* mMap;
         char mKeyStr[KeyStrN + 1];
+    };
 
-        friend class StrTreeMap<KeyStrN, Value>;
+public:
+    template <typename T> // T = {*}Delegate2<..., SafeString&, Value&>
+    class ForEachConstContext
+    {
+    public:
+        ForEachConstContext(const T& afun)
+            : fun(afun)
+        {
+        }
+
+        void call(TreeMapNode<SafeString>* n)
+        {
+            Node* node = static_cast<Node*>(n);
+            fun(node->key(), node->value());
+        }
+
+    private:
+        const T& fun;
     };
 
 public:
@@ -48,44 +76,86 @@ public:
 
     void setBuffer(s32 node_max, void* buf)
     {
-        mNodeMax = node_max;
-        mFreeList.init(buf, sizeof(Node), node_max);
-    }
-
-    void allocBuffer(s32 node_max, Heap* heap, s32 alignment = sizeof(void*))
-    {
-        // SEAD_ASSERT(mFreeList.work() == nullptr);
-        if (node_max <= 0)
+        if (node_max > 0)
+        {
+            if (buf != nullptr)
+            {
+                mNodeMax = node_max;
+                mFreeList.init(buf, sizeof(Node), node_max);
+            }
+            else
+            {
+                // SEAD_ASSERT_MSG(false, "buf is null");
+            }
+        }
+        else
         {
             // SEAD_ASSERT_MSG(false, "node_max[%d] must be larger than zero", node_max);
-            // AllocFailAssert(heap, node_max * sizeof(Node), alignment);
         }
+    }
 
-        void* buf = new (heap, alignment) u8[node_max * sizeof(Node)];
-        if (buf)
+    void allocBuffer(s32 node_max, Heap* heap, s32 alignment = 4)
+    {
+        // SEAD_ASSERT(mFreeList.work() == nullptr);
+        if (node_max > 0)
+        {
+            void* buf = new (heap, alignment) u8[node_max * sizeof(Node)]; // NewArray<u8>(node_max * sizeof(Node), heap, alignment)
             setBuffer(node_max, buf);
+        }
+        else
+        {
+            // SEAD_ASSERT_MSG(false, "node_max[%d] must be larger than zero", node_max);
+        }
     }
 
     void freeBuffer()
     {
-        u8* buf = static_cast<u8*>(mFreeList.work());
-        if (buf != nullptr)
+        if (isBufferReady())
         {
-            delete[] buf;
+            clear();
+            delete[] static_cast<u8*>(mFreeList.work()); // DeleteArray<u8>(mFreeList.work())
             mNodeMax = 0;
             mFreeList.cleanup();
         }
     }
 
+    bool isBufferReady() const
+    {
+        return mFreeList.work() != nullptr;
+    }
+
+    bool isEmpty() const
+    {
+        return mSize == 0;
+    }
+
+    bool isFull() const
+    {
+        return mSize >= mNodeMax;
+    }
+
+    s32 size() const
+    {
+        return mSize;
+    }
+
+    s32 maxSize() const
+    {
+        return mNodeMax;
+    }
+
     Value* find(const SafeString& key) const
     {
         Node* node = static_cast<Node*>(TreeMapImpl<SafeString>::find(key));
-        return node ? &node->mValue : nullptr;
+        if (node != nullptr)
+            return &node->value();
+
+        return nullptr;
     }
 
     void insert(const SafeString& key, const Value& value)
     {
-        if (mSize < mNodeMax)
+        if (!isFull())
         {
             Node* node = new (mFreeList.get()) Node(key, value, this);
             mSize++;
@@ -95,7 +165,7 @@ public:
         {
             Value* p_value = find(key);
             if (p_value != nullptr)
-                *p_value = value;
+                new (p_value) Value(value); // ???
             else
             {
                 // SEAD_ASSERT_MSG(false, "map is full.");
@@ -103,14 +173,48 @@ public:
         }
     }
 
-    void clear();
+    void clear()
+    {
+        TreeMapImpl<SafeString>::forEach(
+            DelegateCreator<
+                StrTreeMap<KeyStrN, Value>,
+                TreeMapNode<SafeString>*
+            >(
+                this,
+                &StrTreeMap<KeyStrN, Value>::eraseNodeForClear
+            )
+        );
+        mSize = 0;
+        mRoot = nullptr;
+        mFreeList.init(mFreeList.work(), sizeof(Node), mNodeMax);
+    }
 
     void eraseNode(Node* node)
     {
-        node->erase_();
+        mFreeList.put(node);
+        mSize--;
     }
 
-    void eraseNodeForClear(TreeMapNode<SafeString>* n);
+    void eraseNodeForClear(TreeMapNode<SafeString>* n)
+    {
+        static_cast<Node*>(n)->value(); // ... ?
+    }
+
+    template <typename T> // T = {*}Delegate2<..., SafeString&, Value&>
+    void forEach(const T& fun) const
+    {
+        ForEachConstContext<T> context(fun);
+
+        TreeMapImpl<SafeString>::forEach(
+            DelegateCreator<
+                ForEachConstContext<T>,
+                TreeMapNode<SafeString>*
+            >(
+                &context,
+                &ForEachConstContext<T>::call
+            )
+        );
+    }
 
 protected:
     FreeList mFreeList;
@@ -130,7 +234,7 @@ public:
 
 protected:
     void setBuffer(s32 node_max, void* buf);
-    void allocBuffer(s32 node_max, Heap* heap, s32 alignment = sizeof(void*));
+    void allocBuffer(s32 node_max, Heap* heap, s32 alignment = 4);
     void freeBuffer();
 
 protected:
