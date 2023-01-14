@@ -82,4 +82,10 @@ protected:
 
 } // namespace sead
 
+#ifdef __cplusplus
+
+#include <container/seadTreeMapImpl.hpp>
+
+#endif // __cplusplus
+
 #endif // SEAD_TREE_MAP_IMPL_H_
