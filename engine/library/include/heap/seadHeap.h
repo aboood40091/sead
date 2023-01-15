@@ -55,7 +55,7 @@ public:
     virtual u32 getEndAddress() const = 0;
     virtual u32 getSize() const = 0;
     virtual u32 getFreeSize() const = 0;
-    virtual u32 getMaxAllocatableSize(s32 alignment) const = 0;
+    virtual u32 getMaxAllocatableSize(s32 alignment = 4) const = 0;
     Heap* getParent() const { return mParent; }
     virtual bool isInclude(const void* ptr) const = 0;
     HeapDirection getDirection() const { return mDirection; }

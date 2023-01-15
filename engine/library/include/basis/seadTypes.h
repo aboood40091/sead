@@ -6,8 +6,12 @@
 #include <cstddef>
 #include <types.h>
 
-typedef u32 uintptr_t;
-typedef s32  intptr_t;
+typedef u32 uintptr;
+typedef s32 sintptr;
+typedef s64 d_sintptr;
+
+typedef uintptr uintptr_t;
+typedef sintptr  intptr_t;
 
 #ifndef nullptr
 #define nullptr NULL

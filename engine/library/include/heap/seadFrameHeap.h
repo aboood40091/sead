@@ -24,7 +24,7 @@ public:
     virtual u32 getEndAddress() const;
     virtual u32 getSize() const;
     virtual u32 getFreeSize() const;
-    virtual u32 getMaxAllocatableSize(int) const;
+    virtual u32 getMaxAllocatableSize(s32 alignment = 4) const;
     virtual bool isInclude(const void*) const;
     virtual bool isFreeable() const;
     virtual bool isResizable() const;
@@ -32,6 +32,9 @@ public:
 
 public:
     static FrameHeap* tryCreate(u32 size, const SafeString& name, Heap* parent = nullptr, HeapDirection direction = cHeapDirection_Forward, bool enable_lock = false);
+
+protected:
+    void initialize_();
 
 protected:
     class State
