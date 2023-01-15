@@ -41,33 +41,22 @@ public:
     static void initialize(u32 size);
     static void initialize(Arena* arena);
     static void destroy();
+
   //void initHostIO();
+
     static bool isInitialized() { return sInstancePtr != nullptr; }
     static HeapMgr* instance() { return sInstancePtr; }
+
     Heap* findContainHeap(const void* ptr) const;
     Heap* getCurrentHeap() const;
+
     static Heap* getRootHeap(s32 n);
     static s32 getRootHeapNum() { return sRootHeaps.size(); }
     static void addRootHeap(Heap* heap);
     static const Arena* getArena();
     static IndependentHeaps* getIndependentHeaps();
     static bool isContainedInAnyHeap(const void* ptr) { return sInstancePtr->findContainHeap(ptr) != nullptr; }
-  //void setDebugFillHeapCreate(u8);
-  //void setDebugFillAlloc(u8);
-  //void setDebugFillFree(u8);
-  //void setDebugFillHeapDestroy(u8);
-  //u8 getDebugFillHeapCreate() const;
-  //u8 getDebugFillAlloc() const;
-  //u8 getDebugFillFree() const;
-  //u8 getDebugFillHeapDestroy() const;
-  //void setEnableDebugFillHeapCreate(bool);
-  //bool isEnableDebugFillHeapCreate();
-  //void setEnableDebugFillAlloc(bool);
-  //bool isEnableDebugFillAlloc();
-  //void setEnableDebugFillFree(bool);
-  //bool isEnableDebugFillFree();
-  //void setEnableDebugFillHeapDestroy(bool);
-  //bool isEnableDebugFillHeapDestroy();
+
   //IAllocCallback* setAllocCallback(IAllocCallback*);
   //IAllocCallback* getAllocCallback();
     IAllocFailedCallback* setAllocFailedCallback(IAllocFailedCallback* callback);
@@ -78,13 +67,15 @@ public:
   //ICreateCallback* getCreateCallback();
   //IDestroyCallback* setDestroyCallback(IDestroyCallback*);
   //IDestroyCallback* getDestroyCallback();
-  //void callCreateCallback_(Heap*);
+    void callCreateCallback_(Heap*) { }
   //void callDestroyCallback_(Heap*);
   //void callFreeCallback_(const FreeCallbackArg&);
+
     static CriticalSection* getHeapTreeLockCS_() { return &sHeapTreeLockCS; }
 
 protected:
     Heap* setCurrentHeap_(Heap* heap);
+
     static void createRootHeap_();
     static void initializeImpl_();
 
