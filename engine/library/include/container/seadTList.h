@@ -129,7 +129,7 @@ public:
 
         friend bool operator!=(const iterator& it1, const iterator& it2)
         {
-            return !(it1 == it2);
+            return it1.mPtr != it2.mPtr;
         }
 
     protected:
