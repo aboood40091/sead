@@ -131,8 +131,8 @@ void FileDeviceMgr::resolveDirectoryPath(BufferedSafeString* out, const SafeStri
 
 void FileDeviceMgr::mount(FileDevice* device, const SafeString& drive_name)
 {
-    if (!drive_name.isEqual(SafeString::cEmptyString))
-        device->mDriveName.copy(drive_name);
+    if (drive_name != SafeString::cEmptyString)
+        device->setDriveName(drive_name);
 
     mDeviceList.pushBack(device);
 }
@@ -180,8 +180,8 @@ FileDeviceMgr::findDeviceFromPath(
 FileDevice*
 FileDeviceMgr::findDevice(const SafeString& drive) const
 {
-    for (FileDeviceMgr::DeviceList::iterator it = mDeviceList.begin(); it != mDeviceList.end(); ++it)
-        if ((*it)->mDriveName.isEqual(drive))
+    for (DeviceList::iterator it = mDeviceList.begin(); it != mDeviceList.end(); ++it)
+        if ((*it)->getDriveName() == drive)
             return (*it);
 
     return nullptr;
@@ -200,7 +200,7 @@ FileDevice* FileDeviceMgr::tryOpen(FileHandle* handle, const SafeString& filenam
 
 u8* FileDeviceMgr::tryLoad(FileDevice::LoadArg& arg)
 {
-    //SEAD_ASSERT_MSG(!arg.path.isEqual(SafeString::cEmptyString), "path is null");
+    //SEAD_ASSERT_MSG(arg.path != SafeString::cEmptyString, "path is null");
 
     FixedSafeString<cNoDrivePathBufferSize> no_drive_path;
     FileDevice* device = findDeviceFromPath(arg.path, &no_drive_path);
