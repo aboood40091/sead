@@ -168,26 +168,26 @@ public:
 
     iterator toIterator(s32 x)
     {
-        if (isRangeValid(x))
+        if (static_cast<u32>(x) <= static_cast<u32>(mSize))
         {
             return iterator(this, x);
         }
         else
         {
-            // SEAD_ASSERT_MSG(false, "range over [0,%d] : %d", size(), x);
+            // SEAD_ASSERT_MSG(false, "range over [0,%d] : %d", mSize, x);
             return end();
         }
     }
 
     constIterator toIterator(s32 x) const
     {
-        if (isRangeValid(x))
+        if (static_cast<u32>(x) <= static_cast<u32>(mSize))
         {
             return constIterator(this, x);
         }
         else
         {
-            // SEAD_ASSERT_MSG(false, "range over [0,%d] : %d", size(), x);
+            // SEAD_ASSERT_MSG(false, "range over [0,%d] : %d", mSize, x);
             return end();
         }
     }
@@ -198,13 +198,13 @@ public:
 
     constIterator toConstIterator(s32 x) const
     {
-        if (isRangeValid(x))
+        if (static_cast<u32>(x) <= static_cast<u32>(mSize))
         {
             return constIterator(this, x);
         }
         else
         {
-            // SEAD_ASSERT_MSG(false, "range over [0,%d] : %d", size(), x);
+            // SEAD_ASSERT_MSG(false, "range over [0,%d] : %d", mSize, x);
             return constEnd();
         }
     }
