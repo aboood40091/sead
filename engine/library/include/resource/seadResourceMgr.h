@@ -10,6 +10,28 @@
 namespace sead {
 
 class Resource;
+
+class ResourcePtr
+{
+public:
+    ResourcePtr(Resource* ptr)
+        : mPtr(ptr)
+    {
+    }
+
+    operator Resource*() { return mPtr; }
+    operator const Resource*() const { return mPtr; }
+
+    Resource& operator*() { return *mPtr; }
+    Resource* operator->() { return mPtr; }
+
+    const Resource& operator*() const { return *mPtr; }
+    const Resource* operator->() const { return mPtr; }
+
+private:
+    Resource* mPtr;
+};
+
 class DirectResource;
 class ResourceFactory;
 class Decompressor;
@@ -96,8 +118,8 @@ public:
     void unregisterFactory(ResourceFactory* factory);
     void unregisterDecompressor(Decompressor* decompressor);
 
-    /* ResourcePtr */ Resource* tryLoadWithoutDecomp(const LoadArg& arg);
-    /* ResourcePtr */ Resource* tryLoad(const LoadArg& arg, const SafeString&, Decompressor*);
+    ResourcePtr tryLoadWithoutDecomp(const LoadArg& arg);
+    ResourcePtr tryLoad(const LoadArg& arg, const SafeString& convert_ext, Decompressor* decomp);
 
 private:
     FactoryList mFactoryList;
