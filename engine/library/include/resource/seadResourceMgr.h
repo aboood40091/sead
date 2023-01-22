@@ -121,6 +121,9 @@ public:
     ResourcePtr tryLoadWithoutDecomp(const LoadArg& arg);
     ResourcePtr tryLoad(const LoadArg& arg, const SafeString& convert_ext, Decompressor* decomp);
 
+    ResourceFactory* findFactory(const SafeString& ext);
+    Decompressor* findDecompressor(const SafeString& ext);
+
 private:
     FactoryList mFactoryList;
     ResourceList mPostCreateResourceList;

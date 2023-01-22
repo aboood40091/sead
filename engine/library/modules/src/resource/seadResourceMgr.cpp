@@ -1,3 +1,4 @@
+#include <filedevice/seadPath.h>
 #include <heap/seadHeap.h>
 #include <heap/seadHeapMgr.h>
 #include <prim/seadSafeString.h>
@@ -62,6 +63,63 @@ void ResourceMgr::unregisterDecompressor(Decompressor* decompressor)
         return;
 
     mDecompList.erase(decompressor);
+}
+
+ResourcePtr ResourceMgr::tryLoadWithoutDecomp(const LoadArg& arg)
+{
+    ResourceFactory* factory;
+    if (arg.factory != nullptr)
+        factory = arg.factory;
+
+    else
+    {
+        FixedSafeString<32> ext;
+        if (!Path::getExt(&ext, arg.path))
+            factory = mNullResourceFactory;
+
+        else
+        {
+            factory = findFactory(ext);
+            // SEAD_ASSERT(factory);
+        }
+    }
+    return factory->tryCreate(arg);
+}
+
+ResourcePtr ResourceMgr::tryLoad(const LoadArg& arg, const SafeString& convert_ext, Decompressor* decomp)
+{
+    SafeString factory_ext;
+    FixedSafeString<32> ext;
+
+    if (decomp == nullptr)
+    {
+        if (!Path::getExt(&ext, arg.path))
+        {
+            // SEAD_ASSERT_MSG(false, "no file extention");
+            return nullptr;
+        }
+        decomp = findDecompressor(ext);
+    }
+
+    if (decomp != nullptr)
+        factory_ext = convert_ext;
+    else
+        factory_ext = ext;
+
+    ResourceFactory* factory;
+    if (arg.factory != nullptr)
+        factory = arg.factory;
+
+    else
+    {
+        factory = findFactory(factory_ext);
+        // SEAD_ASSERT(factory);
+    }
+
+    if (decomp != nullptr)
+        return factory->tryCreateWithDecomp(arg, decomp);
+    else
+        return factory->tryCreate(arg);
 }
 
 } // namespace sead
