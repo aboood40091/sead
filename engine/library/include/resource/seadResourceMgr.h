@@ -32,12 +32,8 @@ private:
     Resource* mPtr;
 };
 
-class DirectResource;
 class ResourceFactory;
 class Decompressor;
-
-template <typename T>
-class DirectResourceFactory;
 
 class ResourceMgr
 {
