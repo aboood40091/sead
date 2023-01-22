@@ -43,52 +43,52 @@ public:
     {
     public:
         explicit iterator()
-            : mPtr(nullptr)
+            : mPtr(nullptr) // mIndex(0)
             , mBuffer(nullptr)
         {
         }
 
         explicit iterator(Buffer* buffer)
-            : mPtr(buffer->mBuffer)
+            : mPtr(buffer->mBuffer) // mIndex(0)
             , mBuffer(buffer->mBuffer)
         {
         }
 
         iterator(Buffer* buffer, s32 index)
-            : mPtr(&buffer->mBuffer[index])
+            : mPtr(&buffer->mBuffer[index]) // mIndex(index)
             , mBuffer(buffer->mBuffer)
         {
         }
 
         iterator& operator++()
         {
-            mPtr++;
+            mPtr++; // mIndex++;
             return *this;
         }
 
         iterator& operator--()
         {
-            mPtr--;
+            mPtr--; // mIndex--;
             return *this;
         }
 
         friend bool operator==(const iterator& lhs, const iterator& rhs)
         {
-            return lhs.mPtr == rhs.mPtr;
+            return lhs.mPtr == rhs.mPtr; // lhs.mIndex == rhs.mIndex;
         }
 
         friend bool operator!=(const iterator& lhs, const iterator& rhs)
         {
-            return lhs.mPtr != rhs.mPtr;
+            return lhs.mPtr != rhs.mPtr; // lhs.mIndex != rhs.mIndex;
         }
 
-        T& operator*() const { return *mPtr; }
-        T* operator->() const { return mPtr; }
+        T& operator*() const { return *mPtr; } // mBuffer[mIndex];
+        T* operator->() const { return mPtr; } // &(mBuffer[mIndex]);
 
-        s32 getIndex() const { return (uintptr(mPtr) - uintptr(mBuffer)) / sizeof(T); }
+        s32 getIndex() const { return (uintptr(mPtr) - uintptr(mBuffer)) / sizeof(T); } // mIndex;
 
     private:
-        T* mPtr;
+        T* mPtr; // int mIndex;
         T* mBuffer;
 
         friend class constIterator;
@@ -98,58 +98,58 @@ public:
     {
     public:
         explicit constIterator()
-            : mPtr(nullptr)
+            : mPtr(nullptr) // mIndex(0)
             , mBuffer(nullptr)
         {
         }
 
         explicit constIterator(const Buffer* buffer)
-            : mPtr(buffer->mBuffer)
+            : mPtr(buffer->mBuffer) // mIndex(0)
             , mBuffer(buffer->mBuffer)
         {
         }
 
         constIterator(const Buffer* buffer, s32 index)
-            : mPtr(&buffer->mBuffer[index])
+            : mPtr(&buffer->mBuffer[index]) // mIndex(index)
             , mBuffer(buffer->mBuffer)
         {
         }
 
         explicit constIterator(iterator it)
-            : mPtr(it.mPtr)
+            : mPtr(it.mPtr) // mIndex(it.mIndex)
             , mBuffer(it.mBuffer)
         {
         }
 
         constIterator& operator++()
         {
-            mPtr++;
+            mPtr++; // mIndex++;
             return *this;
         }
 
         constIterator& operator--()
         {
-            mPtr--;
+            mPtr--; // mIndex--;
             return *this;
         }
 
         friend bool operator==(const constIterator& lhs, const constIterator& rhs)
         {
-            return lhs.mPtr == rhs.mPtr;
+            return lhs.mPtr == rhs.mPtr; // lhs.mIndex == rhs.mIndex;
         }
 
         friend bool operator!=(const constIterator& lhs, const constIterator& rhs)
         {
-            return lhs.mPtr != rhs.mPtr;
+            return lhs.mPtr != rhs.mPtr; // lhs.mIndex != rhs.mIndex;
         }
 
-        const T& operator*() const { return *mPtr; }
-        const T* operator->() const { return mPtr; }
+        const T& operator*() const { return *mPtr; } // mBuffer[mIndex];
+        const T* operator->() const { return mPtr; } // &(mBuffer[mIndex]);
 
-        s32 getIndex() const { return (uintptr(mPtr) - uintptr(mBuffer)) / sizeof(T); }
+        s32 getIndex() const { return (uintptr(mPtr) - uintptr(mBuffer)) / sizeof(T); } // mIndex;
 
     private:
-        const T* mPtr;
+        const T* mPtr; // int mIndex;
         const T* mBuffer;
     };
 
