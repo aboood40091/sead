@@ -36,23 +36,28 @@ public:
     }
 
 public:
+    class iterator;
+    class constIterator;
+
     class iterator
     {
     public:
-        explicit iterator(T* buffer, s32 index = 0)
-            : mPtr(buffer + index)
-            , mStart(buffer)
+        explicit iterator()
+            : mPtr(nullptr)
+            , mBuffer(nullptr)
         {
         }
 
-        bool operator==(const iterator& rhs) const
+        explicit iterator(Buffer* buffer)
+            : mPtr(buffer->mBuffer)
+            , mBuffer(buffer->mBuffer)
         {
-            return mPtr == rhs.mPtr;
         }
 
-        bool operator!=(const iterator& rhs) const
+        iterator(Buffer* buffer, s32 index)
+            : mPtr(&buffer->mBuffer[index])
+            , mBuffer(buffer->mBuffer)
         {
-            return mPtr != rhs.mPtr;
         }
 
         iterator& operator++()
@@ -61,33 +66,59 @@ public:
             return *this;
         }
 
+        iterator& operator--()
+        {
+            mPtr--;
+            return *this;
+        }
+
+        friend bool operator==(const iterator& lhs, const iterator& rhs)
+        {
+            return lhs.mPtr == rhs.mPtr;
+        }
+
+        friend bool operator!=(const iterator& lhs, const iterator& rhs)
+        {
+            return lhs.mPtr != rhs.mPtr;
+        }
+
         T& operator*() const { return *mPtr; }
         T* operator->() const { return mPtr; }
 
-        s32 getIndex() const { return ((uintptr_t)mPtr - (uintptr_t)mStart) / sizeof(T); }
+        s32 getIndex() const { return (uintptr(mPtr) - uintptr(mBuffer)) / sizeof(T); }
 
     private:
         T* mPtr;
-        T* mStart;
+        T* mBuffer;
+
+        friend class constIterator;
     };
 
     class constIterator
     {
     public:
-        explicit constIterator(const T* buffer, s32 index = 0)
-            : mPtr(buffer + index)
-            , mStart(buffer)
+        explicit constIterator()
+            : mPtr(nullptr)
+            , mBuffer(nullptr)
         {
         }
 
-        bool operator==(const constIterator& rhs) const
+        explicit constIterator(const Buffer* buffer)
+            : mPtr(buffer->mBuffer)
+            , mBuffer(buffer->mBuffer)
         {
-            return mPtr == rhs.mPtr;
         }
 
-        bool operator!=(const constIterator& rhs) const
+        constIterator(const Buffer* buffer, s32 index)
+            : mPtr(&buffer->mBuffer[index])
+            , mBuffer(buffer->mBuffer)
         {
-            return mPtr != rhs.mPtr;
+        }
+
+        explicit constIterator(iterator it)
+            : mPtr(it.mPtr)
+            , mBuffer(it.mBuffer)
+        {
         }
 
         constIterator& operator++()
@@ -96,14 +127,30 @@ public:
             return *this;
         }
 
+        constIterator& operator--()
+        {
+            mPtr--;
+            return *this;
+        }
+
+        friend bool operator==(const constIterator& lhs, const constIterator& rhs)
+        {
+            return lhs.mPtr == rhs.mPtr;
+        }
+
+        friend bool operator!=(const constIterator& lhs, const constIterator& rhs)
+        {
+            return lhs.mPtr != rhs.mPtr;
+        }
+
         const T& operator*() const { return *mPtr; }
         const T* operator->() const { return mPtr; }
 
-        s32 getIndex() const { return ((uintptr_t)mPtr - (uintptr_t)mStart) / sizeof(T); }
+        s32 getIndex() const { return (uintptr(mPtr) - uintptr(mBuffer)) / sizeof(T); }
 
     private:
         const T* mPtr;
-        const T* mStart;
+        const T* mBuffer;
     };
 
     // TODO
@@ -113,18 +160,18 @@ public:
     class reverseConstIterator { };
 
 public:
-    iterator begin() { return iterator(mBuffer); }
-    constIterator begin() const { return constIterator(mBuffer); }
+    iterator begin() { return iterator(this); }
+    constIterator begin() const { return constIterator(this); }
 
-    iterator end() { return iterator(mBuffer, mSize); }
-    constIterator end() const { return constIterator(mBuffer, mSize); }
+    iterator end() { return iterator(this, mSize); }
+    constIterator end() const { return constIterator(this, mSize); }
 
     iterator toIterator(s32);
     constIterator toIterator(s32) const;
 
-    constIterator constBegin() const { return constIterator(mBuffer); }
+    constIterator constBegin() const { return constIterator(this); }
 
-    constIterator constEnd() const { return constIterator(mBuffer, mSize); }
+    constIterator constEnd() const { return constIterator(this, mSize); }
 
     constIterator toConstIterator(s32) const;
 
@@ -158,8 +205,10 @@ public:
 
             setBuffer(size, buffer);
         }
-
-        // SEAD_ASSERT_MSG(false, "size[%d] must be larger than zero", size);
+        else
+        {
+            // SEAD_ASSERT_MSG(false, "size[%d] must be larger than zero", size);
+        }
     }
 
     void allocBuffer(s32 size, Heap* heap, s32 alignment = 4)
@@ -176,8 +225,10 @@ public:
 
             setBuffer(size, buffer);
         }
-
-        // SEAD_ASSERT_MSG(false, "size[%d] must be larger than zero", size);
+        else
+        {
+            // SEAD_ASSERT_MSG(false, "size[%d] must be larger than zero", size);
+        }
     }
 
     bool tryAllocBuffer(s32 size, s32 alignment = 4)
@@ -195,9 +246,11 @@ public:
             setBuffer(size, buffer);
             return true;
         }
-
-        // SEAD_ASSERT_MSG(false, "size[%d] must be larger than zero", size);
-        return false;
+        else
+        {
+            // SEAD_ASSERT_MSG(false, "size[%d] must be larger than zero", size);
+            return false;
+        }
     }
 
     bool tryAllocBuffer(s32 size, Heap* heap, s32 alignment = 4)
@@ -215,9 +268,11 @@ public:
             setBuffer(size, buffer);
             return true;
         }
-
-        // SEAD_ASSERT_MSG(false, "size[%d] must be larger than zero", size);
-        return false;
+        else
+        {
+            // SEAD_ASSERT_MSG(false, "size[%d] must be larger than zero", size);
+            return false;
+        }
     }
 
     void freeBuffer()
