@@ -166,14 +166,48 @@ public:
     iterator end() { return iterator(this, mSize); }
     constIterator end() const { return constIterator(this, mSize); }
 
-    iterator toIterator(s32);
-    constIterator toIterator(s32) const;
+    iterator toIterator(s32 x)
+    {
+        if (isRangeValid(x))
+        {
+            return iterator(this, x);
+        }
+        else
+        {
+            // SEAD_ASSERT_MSG(false, "range over [0,%d] : %d", size(), x);
+            return end();
+        }
+    }
+
+    constIterator toIterator(s32 x) const
+    {
+        if (isRangeValid(x))
+        {
+            return constIterator(this, x);
+        }
+        else
+        {
+            // SEAD_ASSERT_MSG(false, "range over [0,%d] : %d", size(), x);
+            return end();
+        }
+    }
 
     constIterator constBegin() const { return constIterator(this); }
 
     constIterator constEnd() const { return constIterator(this, mSize); }
 
-    constIterator toConstIterator(s32) const;
+    constIterator toConstIterator(s32 x) const
+    {
+        if (isRangeValid(x))
+        {
+            return constIterator(this, x);
+        }
+        else
+        {
+            // SEAD_ASSERT_MSG(false, "range over [0,%d] : %d", size(), x);
+            return constEnd();
+        }
+    }
 
     reverseIterator reverseBegin();
     reverseConstIterator reverseBegin() const;
