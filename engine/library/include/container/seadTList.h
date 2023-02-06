@@ -122,6 +122,11 @@ public:
             return &mPtr->mData;
         }
 
+        TListNode<T>& getNode() const // TODO: Investigate the proper way to do this
+        {
+            return *mPtr;
+        }
+
         friend bool operator==(const iterator& it1, const iterator& it2)
         {
             return it1.mPtr == it2.mPtr;
