@@ -278,9 +278,13 @@ ResShaderSymbolArray ResBinaryShaderProgram::getResShaderSymbolArray(ShaderSymbo
 
 bool ResShaderArchive::setUp()
 {
-    if (modifyEndian())
+    // SEAD_ASSERT(isValid());
+
+    if (!isEndianResolved())
     {
-        ModifyEndianU32(true, ptr(), sizeof(DataType));
+        ModifyEndianU32(modifyEndian(), ptr(), sizeof(DataType));
+
+        verify();
 
         ResShaderProgramArray prog_arr = getResShaderProgramArray();
         prog_arr.modifyEndianArray(modifyEndian());
@@ -302,7 +306,11 @@ bool ResShaderArchive::setUp()
                 modifyEndianResSymbolArray(modifyEndian(), prog.getResShaderSymbolArray(ShaderSymbolType(type)), ShaderSymbolType(type));
         }
 
-        ref().mEndian = 1 - ref().mEndian;
+        setEndianResolved();
+    }
+    else
+    {
+        verify();
     }
 
     return true;
@@ -310,10 +318,16 @@ bool ResShaderArchive::setUp()
 
 bool ResBinaryShaderArchive::setUp(bool le_resolve_pointers)
 {
-    if (modifyEndian())
-        ModifyEndianU32(true, ptr(), sizeof(DataType));
+    // SEAD_ASSERT(isValid());
 
-    if (!modifyEndian())
+    bool endian_resolved = isEndianResolved();
+
+    if (!endian_resolved)
+        ModifyEndianU32(modifyEndian(), ptr(), sizeof(DataType));
+
+    verify();
+
+    if (endian_resolved)
     {
         if (ref().mResolved == 0)
         {
@@ -354,7 +368,7 @@ bool ResBinaryShaderArchive::setUp(bool le_resolve_pointers)
         if (le_resolve_pointers)
             ref().mResolved = 1;
 
-        ref().mEndian = 1 - ref().mEndian;
+        setEndianResolved();
     }
 
     return true;
