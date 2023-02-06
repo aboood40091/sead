@@ -14,14 +14,14 @@ public:
 
 public:
     ResCommon()
-         : mpData(nullptr)
-     {
-     }
+        : mpData(nullptr)
+    {
+    }
 
-     ResCommon(const void* data)
-         : mpData(static_cast<const DataType*>(data))
-     {
-     }
+    ResCommon(const void* data)
+        : mpData(static_cast<const DataType*>(data))
+    {
+    }
 
     bool isValid() const
     {
@@ -82,6 +82,23 @@ private:
         class_name(const void* data)                            \
             : ResCommon<typename class_name::DataType>(data)    \
         {                                                       \
+        }
+
+#define AGL_RES_FILE_HEADER()                                                   \
+    public:                                                                     \
+        bool modifyEndian() const                                               \
+        {                                                                       \
+            return ref().mEndian & DataType::cEndianCheckBit;                   \
+        }                                                                       \
+                                                                                \
+        bool isEndianResolved() const                                           \
+        {                                                                       \
+            return !modifyEndian();                                             \
+        }                                                                       \
+                                                                                \
+        void setEndianResolved()                                                \
+        {                                                                       \
+            ref().mEndian = 1 - ref().mEndian;                                  \
         }
 
 template <typename DataType>

@@ -352,13 +352,10 @@ static_assert(sizeof(ResParameterArchiveData) == 0x18, "agl::ResParameterArchive
 
 class ResParameterArchive : public ResCommon<ResParameterArchiveData>
 {
-public:
-    ResParameterArchive(const void* data);
+    AGL_RES_FILE_HEADER()
 
-    bool modifyEndian() const
-    {
-        return ptr()->mEndian & DataType::cEndianCheckBit;
-    }
+public:
+    ResParameterArchive(const void* p_data);
 
     const char* getName() const
     {

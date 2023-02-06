@@ -38,13 +38,9 @@ static_assert(sizeof(ResShaderArchiveData) == 0x14, "agl::ResShaderArchiveData s
 class ResShaderArchive : public ResCommon<ResShaderArchiveData>
 {
     AGL_RES_COMMON(ResShaderArchive)
+    AGL_RES_FILE_HEADER()
 
 public:
-    bool modifyEndian() const
-    {
-        return ref().mEndian & DataType::cEndianCheckBit;
-    }
-
     const char* getName() const
     {
         const DataType* const data = ptr();
@@ -108,13 +104,9 @@ static_assert(sizeof(ResBinaryShaderArchiveData) == 0x18, "agl::ResBinaryShaderA
 class ResBinaryShaderArchive : public ResCommon<ResBinaryShaderArchiveData>
 {
     AGL_RES_COMMON(ResBinaryShaderArchive)
+    AGL_RES_FILE_HEADER()
 
 public:
-    bool modifyEndian() const
-    {
-        return ref().mEndian & DataType::cEndianCheckBit;
-    }
-
     const char* getName() const
     {
         const DataType* const data = ptr();
