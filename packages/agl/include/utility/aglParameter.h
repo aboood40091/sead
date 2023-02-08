@@ -29,10 +29,10 @@ public:
 
         // Unused in NSMBU
         cType_string64  = 8,    // sead::FixedSafeString<64>
-        cType_curve1    = 9,    // I'll tell you when I find out
-        cType_curve2    = 10,   // ...
-        cType_curve3    = 11,   // ...
-        cType_curve4    = 12    // ...
+        cType_curve1    = 9,    // agl::utl::ParameterCurve1
+        cType_curve2    = 10,   // agl::utl::ParameterCurve2
+        cType_curve3    = 11,   // agl::utl::ParameterCurve3
+        cType_curve4    = 12    // agl::utl::ParameterCurve4
     };
 
 public:
