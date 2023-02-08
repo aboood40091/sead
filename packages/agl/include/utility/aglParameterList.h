@@ -28,6 +28,8 @@ protected:
 
     void setParameterListName_(const sead::SafeString& name);
 
+    void applyResParameterList_(ResParameterList list, bool lerp = false, f32 t = 1.0f);
+
 protected:
     sead::OffsetList<IParameterList> mChildList;
     sead::OffsetList<IParameterObj> mChildObj;

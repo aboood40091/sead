@@ -28,4 +28,9 @@ void IParameterList::addObj(IParameterObj* child, const sead::SafeString& name)
     mChildObj.pushBack(child);
 }
 
+void IParameterList::applyResParameterList(ResParameterList list)
+{
+    applyResParameterList_(list);
+}
+
 } }
