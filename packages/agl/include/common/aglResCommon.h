@@ -4,7 +4,7 @@
 
 namespace agl {
 
-void ModifyEndianU32(bool is_le, void* ptr, size_t size);
+void ModifyEndianU32(bool is_le, void* p_data, size_t size);
 
 template <typename _DataType>
 class ResCommon
