@@ -1,6 +1,42 @@
+#include <utility/aglParameter.h>
 #include <utility/aglResParameter.h>
 
 namespace agl { namespace utl {
+
+void ResParameterObj::modifyEndianObj(bool is_le)
+{
+    ModifyEndianU32(is_le, ptr(), sizeof(ResParameterObjData));
+
+    for (iterator itr = begin(), itr_end = end(); itr != itr_end; ++itr)
+    {
+        ResParameter parameter(&(*itr));
+        ModifyEndianU32(is_le, parameter.ptr(), sizeof(ResParameterData));
+
+        u32 type = parameter.ref().mType;
+
+        switch (type)
+        {
+        case ParameterBase::cType_bool:
+        case ParameterBase::cType_string32:
+        case ParameterBase::cType_string64:
+            break;
+        case ParameterBase::cType_f32:
+        case ParameterBase::cType_int:
+        case ParameterBase::cType_vec2:
+        case ParameterBase::cType_vec3:
+        case ParameterBase::cType_vec4:
+        case ParameterBase::cType_color:
+        case ParameterBase::cType_curve1:
+        case ParameterBase::cType_curve2:
+        case ParameterBase::cType_curve3:
+        case ParameterBase::cType_curve4:
+            ModifyEndianU32(is_le, const_cast<void*>(parameter.getValue()), parameter.ref().mSize - sizeof(ResParameterData));
+            break;
+        default:
+            // SEAD_ASSERT_MSG(false, "illigal type:%d", type);
+        }
+    }
+}
 
 void ResParameterList::modifyEndianList(bool is_le)
 {

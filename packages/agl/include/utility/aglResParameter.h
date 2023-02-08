@@ -115,9 +115,11 @@ public:
 public:
     iterator begin() { return iterator(0, (ResParameterData*)(ptr() + 1)); }
     constIterator begin() const { return constIterator(0, (ResParameterData*)(ptr() + 1)); }
+    constIterator constBegin() const { return constIterator(0, (ResParameterData*)(ptr() + 1)); }
 
     iterator end() { return iterator(getNum(), nullptr); }
     constIterator end() const { return constIterator(getNum(), nullptr); }
+    constIterator constEnd() const { return constIterator(getNum(), nullptr); }
 
 public:
     u32 getParameterObjNameHash() const

@@ -25,7 +25,14 @@ public:
         cType_vec3      = 4, // sead::Vector3f
         cType_vec4      = 5, // sead::Vector4f
         cType_color     = 6, // sead::Color4f
-        cType_string32  = 7  // sead::FixedSafeString<32>
+        cType_string32  = 7, // sead::FixedSafeString<32>
+
+        // Unused in NSMBU
+        cType_string64  = 8, // sead::FixedSafeString<64>
+        cType_curve1    = 9, // I'll tell you when I find out
+        cType_curve2    = 10,// ...
+        cType_curve3    = 11,// ...
+        cType_curve4    = 12 // ...
     };
 
 public:
