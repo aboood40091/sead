@@ -16,6 +16,8 @@ public:
 
     void addObj(IParameterObj* child, const sead::SafeString& name);
 
+    void applyResParameterList(ResParameterList list);
+
 protected:
     virtual bool preWrite_() const { return true; }
     virtual void postWrite_() const { }
