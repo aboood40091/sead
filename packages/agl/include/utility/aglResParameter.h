@@ -42,75 +42,8 @@ class ResParameterObj : public ResCommon<ResParameterObjData>
     AGL_RES_COMMON(ResParameterObj)
 
 public:
-    class iterator
-    {
-    public:
-        iterator(s32 index, ResParameterData* elem)
-            : mIndex(index)
-            , mElem(elem)
-        {
-        }
-
-        friend bool operator==(const iterator& lhs, const iterator& rhs)
-        {
-            return lhs.mIndex == rhs.mIndex;
-        }
-
-        friend bool operator!=(const iterator& lhs, const iterator& rhs)
-        {
-            return lhs.mIndex != rhs.mIndex;
-        }
-
-        iterator& operator++()
-        {
-            ++mIndex;
-            mElem = (ResParameterData*)((uintptr_t)mElem + mElem->mSize);
-            return *this;
-        }
-
-        ResParameterData& operator*() const { return *mElem; }
-        ResParameterData* operator->() const { return mElem; }
-        s32 getIndex() const { return mIndex; }
-
-    private:
-        s32 mIndex;
-        ResParameterData* mElem;
-    };
-
-    class constIterator
-    {
-    public:
-        constIterator(s32 index, const ResParameterData* elem)
-            : mIndex(index)
-            , mElem(elem)
-        {
-        }
-
-        friend bool operator==(const constIterator& lhs, const constIterator& rhs)
-        {
-            return lhs.mIndex == rhs.mIndex;
-        }
-
-        friend bool operator!=(const constIterator& lhs, const constIterator& rhs)
-        {
-            return lhs.mIndex != rhs.mIndex;
-        }
-
-        constIterator& operator++()
-        {
-            ++mIndex;
-            mElem = (const ResParameterData*)((uintptr_t)mElem + mElem->mSize);
-            return *this;
-        }
-
-        const ResParameterData& operator*() const { return *mElem; }
-        const ResParameterData* operator->() const { return mElem; }
-        s32 getIndex() const { return mIndex; }
-
-    private:
-        s32 mIndex;
-        const ResParameterData* mElem;
-    };
+    typedef ResArray<ResParameter>::iterator iterator;
+    typedef ResArray<ResParameter>::constIterator constIterator;
 
 public:
     iterator begin() { return iterator(0, (ResParameterData*)(ptr() + 1)); }
@@ -132,17 +65,17 @@ public:
         return ptr()->mNum;
     }
 
-    ResParameter getResParameter(s32 n) const
+    ResParameter getResParameter(u32 index) const
     {
         // SEAD_ASSERT(0 <= index && index < getNum());
 
-        constIterator it = begin();
-        constIterator it_end = constIterator(n, nullptr);
+        constIterator itr = begin();
+        constIterator itr_end = constIterator(index, nullptr);
 
-        while (it != it_end)
-            ++it;
+        while (itr != itr_end)
+            ++itr;
 
-        return &(*it);
+        return &(*itr);
     }
 
     inline s32 searchIndex(u32 name_hash) const; // TODO
@@ -164,112 +97,28 @@ class ResParameterList : public ResCommon<ResParameterListData>
     AGL_RES_COMMON(ResParameterList)
 
 public:
-    template <typename ElemDataType>
-    class iterator
-    {
-    public:
-        iterator(s32 index, ElemDataType* elem)
-            : mIndex(index)
-            , mElem(elem)
-        {
-        }
+    typedef ResArray<ResParameterList>::iterator listIterator;
+    typedef ResArray<ResParameterList>::constIterator listConstIterator;
 
-        friend bool operator==(const iterator& lhs, const iterator& rhs)
-        {
-            return lhs.mIndex == rhs.mIndex;
-        }
-
-        friend bool operator!=(const iterator& lhs, const iterator& rhs)
-        {
-            return lhs.mIndex != rhs.mIndex;
-        }
-
-        iterator& operator++()
-        {
-            ++mIndex;
-            mElem = (ElemDataType*)((uintptr_t)mElem + mElem->mSize);
-            return *this;
-        }
-
-        ElemDataType& operator*() const { return *mElem; }
-        ElemDataType* operator->() const { return mElem; }
-        s32 getIndex() const { return mIndex; }
-
-    private:
-        s32 mIndex;
-        ElemDataType* mElem;
-    };
-
-    template <typename ElemDataType>
-    class constIterator
-    {
-    public:
-        constIterator(s32 index, const ElemDataType* elem)
-            : mIndex(index)
-            , mElem(elem)
-        {
-        }
-
-        friend bool operator==(const constIterator& lhs, const constIterator& rhs)
-        {
-            return lhs.mIndex == rhs.mIndex;
-        }
-
-        friend bool operator!=(const constIterator& lhs, const constIterator& rhs)
-        {
-            return lhs.mIndex != rhs.mIndex;
-        }
-
-        constIterator& operator++()
-        {
-            ++mIndex;
-            mElem = (const ElemDataType*)((uintptr_t)mElem + mElem->mSize);
-            return *this;
-        }
-
-        const ElemDataType& operator*() const { return *mElem; }
-        const ElemDataType* operator->() const { return mElem; }
-        s32 getIndex() const { return mIndex; }
-
-    private:
-        s32 mIndex;
-        const ElemDataType* mElem;
-    };
+    typedef ResArray<ResParameterObj>::iterator objIterator;
+    typedef ResArray<ResParameterObj>::constIterator objConstIterator;
 
 public:
-    template <typename ElemDataType>
-    iterator<ElemDataType> begin();
-    template <typename ElemDataType>
-    constIterator<ElemDataType> begin() const;
+    listIterator listBegin() { return listIterator(0, getResParameterListBasePtr_()); }
+    listConstIterator listBegin() const { return listConstIterator(0, getResParameterListBasePtr_()); }
+    listConstIterator listConstBegin() const { return listConstIterator(0, getResParameterListBasePtr_()); }
 
-    template <typename ElemDataType>
-    iterator<ElemDataType> end();
-    template <typename ElemDataType>
-    constIterator<ElemDataType> end() const;
+    listIterator listEnd() { return listIterator(getResParameterListNum(), nullptr); }
+    listConstIterator listEnd() const { return listConstIterator(getResParameterListNum(), nullptr); }
+    listConstIterator listConstEnd() const { return listConstIterator(getResParameterListNum(), nullptr); }
 
-public:
-    typedef iterator<ResParameterListData> listIterator;
-    typedef constIterator<ResParameterListData> listConstIterator;
+    objIterator objBegin() { return objIterator(0, getResParameterObjBasePtr_()); }
+    objConstIterator objBegin() const { return objConstIterator(0, getResParameterObjBasePtr_()); }
+    objConstIterator objConstBegin() const { return objConstIterator(0, getResParameterObjBasePtr_()); }
 
-    listIterator listBegin();
-    listConstIterator listBegin() const;
-    listConstIterator listConstBegin() const;
-
-    listIterator listEnd();
-    listConstIterator listEnd() const;
-    listConstIterator listConstEnd() const;
-
-public:
-    typedef iterator<ResParameterObjData> objIterator;
-    typedef constIterator<ResParameterObjData> objConstIterator;
-
-    objIterator objBegin();
-    objConstIterator objBegin() const;
-    objConstIterator objConstBegin() const;
-
-    objIterator objEnd();
-    objConstIterator objEnd() const;
-    objConstIterator objConstEnd() const;
+    objIterator objEnd() { return objIterator(getResParameterObjNum(), nullptr); }
+    objConstIterator objEnd() const { return objConstIterator(getResParameterObjNum(), nullptr); }
+    objConstIterator objConstEnd() const { return objConstIterator(getResParameterObjNum(), nullptr); }
 
 public:
     u32 getParameterListNameHash() const
@@ -287,8 +136,8 @@ public:
         return ptr()->mResParameterObjNum;
     }
 
-    inline ResParameterList getResParameterList(s32 n) const;
-    inline ResParameterObj getResParameterObj(s32 n) const;
+    inline ResParameterList getResParameterList(u32 index) const;
+    inline ResParameterObj getResParameterObj(u32 index) const;
 
     inline s32 searchListIndex(u32 name_hash) const; // TODO
     inline s32 searchObjIndex(u32 name_hash) const; // TODO
@@ -300,66 +149,30 @@ private:
     inline ResParameterObjData* getResParameterObjBasePtr_() const;
 };
 
-template <>
-inline ResParameterList::iterator<ResParameterListData> ResParameterList::begin<ResParameterListData>() { return iterator<ResParameterListData>(0, getResParameterListBasePtr_()); }
-template <>
-inline ResParameterList::constIterator<ResParameterListData> ResParameterList::begin<ResParameterListData>() const { return constIterator<ResParameterListData>(0, getResParameterListBasePtr_()); }
-
-template <>
-inline ResParameterList::iterator<ResParameterListData> ResParameterList::end<ResParameterListData>() { return iterator<ResParameterListData>(getResParameterListNum(), nullptr); }
-template <>
-inline ResParameterList::constIterator<ResParameterListData> ResParameterList::end<ResParameterListData>() const { return constIterator<ResParameterListData>(getResParameterListNum(), nullptr); }
-
-template <>
-inline ResParameterList::iterator<ResParameterObjData> ResParameterList::begin<ResParameterObjData>() { return iterator<ResParameterObjData>(0, getResParameterObjBasePtr_()); }
-template <>
-inline ResParameterList::constIterator<ResParameterObjData> ResParameterList::begin<ResParameterObjData>() const { return constIterator<ResParameterObjData>(0, getResParameterObjBasePtr_()); }
-
-template <>
-inline ResParameterList::iterator<ResParameterObjData> ResParameterList::end<ResParameterObjData>() { return iterator<ResParameterObjData>(getResParameterObjNum(), nullptr); }
-template <>
-inline ResParameterList::constIterator<ResParameterObjData> ResParameterList::end<ResParameterObjData>() const { return constIterator<ResParameterObjData>(getResParameterObjNum(), nullptr); }
-
-inline ResParameterList::listIterator ResParameterList::listBegin() { return begin<ResParameterListData>(); }
-inline ResParameterList::listConstIterator ResParameterList::listBegin() const { return begin<ResParameterListData>(); }
-inline ResParameterList::listConstIterator ResParameterList::listConstBegin() const { return begin<ResParameterListData>(); }
-
-inline ResParameterList::listIterator ResParameterList::listEnd() { return end<ResParameterListData>(); }
-inline ResParameterList::listConstIterator ResParameterList::listEnd() const { return end<ResParameterListData>(); }
-inline ResParameterList::listConstIterator ResParameterList::listConstEnd() const { return end<ResParameterListData>(); }
-
-inline ResParameterList::objIterator ResParameterList::objBegin() { return begin<ResParameterObjData>(); }
-inline ResParameterList::objConstIterator ResParameterList::objBegin() const { return begin<ResParameterObjData>(); }
-inline ResParameterList::objConstIterator ResParameterList::objConstBegin() const { return begin<ResParameterObjData>(); }
-
-inline ResParameterList::objIterator ResParameterList::objEnd() { return end<ResParameterObjData>(); }
-inline ResParameterList::objConstIterator ResParameterList::objEnd() const { return end<ResParameterObjData>(); }
-inline ResParameterList::objConstIterator ResParameterList::objConstEnd() const { return end<ResParameterObjData>(); }
-
-inline ResParameterList ResParameterList::getResParameterList(s32 n) const
+inline ResParameterList ResParameterList::getResParameterList(u32 index) const
 {
     // SEAD_ASSERT(0 <= index && index < getResParameterListNum());
 
-    constIterator<ResParameterListData> it = begin<ResParameterListData>();
-    constIterator<ResParameterListData> it_end = constIterator<ResParameterListData>(n, nullptr);
+    listConstIterator itr = listConstBegin();
+    listConstIterator itr_end = listConstIterator(index, nullptr);
 
-    while (it != it_end)
-        ++it;
+    while (itr != itr_end)
+        ++itr;
 
-    return &(*it);
+    return &(*itr);
 }
 
-inline ResParameterObj ResParameterList::getResParameterObj(s32 n) const
+inline ResParameterObj ResParameterList::getResParameterObj(u32 index) const
 {
     // SEAD_ASSERT(0 <= index && index < getResParameterObjNum());
 
-    constIterator<ResParameterObjData> it = begin<ResParameterObjData>();
-    constIterator<ResParameterObjData> it_end = constIterator<ResParameterObjData>(n, nullptr);
+    objConstIterator itr = objConstBegin();
+    objConstIterator itr_end = objConstIterator(index, nullptr);
 
-    while (it != it_end)
-        ++it;
+    while (itr != itr_end)
+        ++itr;
 
-    return &(*it);
+    return &(*itr);
 }
 
 inline ResParameterListData* ResParameterList::getResParameterListBasePtr_() const
@@ -369,13 +182,13 @@ inline ResParameterListData* ResParameterList::getResParameterListBasePtr_() con
 
 inline ResParameterObjData* ResParameterList::getResParameterObjBasePtr_() const
 {
-    constIterator<ResParameterListData> it = begin<ResParameterListData>();
-    constIterator<ResParameterListData> it_end = end<ResParameterListData>();
+    listConstIterator itr = listConstBegin();
+    listConstIterator itr_end = listConstEnd();
 
-    while (it != it_end)
-        ++it;
+    while (itr != itr_end)
+        ++itr;
 
-    return (ResParameterObjData*)(&(*it));
+    return (ResParameterObjData*)(&(*itr));
 }
 
 struct ResParameterArchiveData
