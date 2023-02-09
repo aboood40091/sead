@@ -3,6 +3,19 @@
 
 namespace agl { namespace utl {
 
+ResParameter ResParameterObj::getResParameter(u32 index) const
+{
+    // SEAD_ASSERT(0 <= index && index < getNum());
+
+    constIterator itr = begin();
+    constIterator itr_end = constIterator(index, nullptr);
+
+    while (itr != itr_end)
+        ++itr;
+
+    return &(*itr);
+}
+
 void ResParameterObj::modifyEndianObj(bool is_le)
 {
     ModifyEndianU32(is_le, ptr(), sizeof(ResParameterObjData));
@@ -36,6 +49,32 @@ void ResParameterObj::modifyEndianObj(bool is_le)
             // SEAD_ASSERT_MSG(false, "illigal type:%d", type);
         }
     }
+}
+
+ResParameterList ResParameterList::getResParameterList(u32 index) const
+{
+    // SEAD_ASSERT(0 <= index && index < getResParameterListNum());
+
+    listConstIterator itr = listConstBegin();
+    listConstIterator itr_end = listConstIterator(index, nullptr);
+
+    while (itr != itr_end)
+        ++itr;
+
+    return &(*itr);
+}
+
+ResParameterObj ResParameterList::getResParameterObj(u32 index) const
+{
+    // SEAD_ASSERT(0 <= index && index < getResParameterObjNum());
+
+    objConstIterator itr = objConstBegin();
+    objConstIterator itr_end = objConstIterator(index, nullptr);
+
+    while (itr != itr_end)
+        ++itr;
+
+    return &(*itr);
 }
 
 void ResParameterList::modifyEndianList(bool is_le)

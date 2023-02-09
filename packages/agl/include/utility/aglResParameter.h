@@ -65,18 +65,7 @@ public:
         return ptr()->mNum;
     }
 
-    ResParameter getResParameter(u32 index) const
-    {
-        // SEAD_ASSERT(0 <= index && index < getNum());
-
-        constIterator itr = begin();
-        constIterator itr_end = constIterator(index, nullptr);
-
-        while (itr != itr_end)
-            ++itr;
-
-        return &(*itr);
-    }
+    ResParameter getResParameter(u32 index) const;
 
     inline s32 searchIndex(u32 name_hash) const; // TODO
 
@@ -136,8 +125,8 @@ public:
         return ptr()->mResParameterObjNum;
     }
 
-    inline ResParameterList getResParameterList(u32 index) const;
-    inline ResParameterObj getResParameterObj(u32 index) const;
+    ResParameterList getResParameterList(u32 index) const;
+    ResParameterObj getResParameterObj(u32 index) const;
 
     inline s32 searchListIndex(u32 name_hash) const; // TODO
     inline s32 searchObjIndex(u32 name_hash) const; // TODO
@@ -145,51 +134,22 @@ public:
     void modifyEndianList(bool is_le);
 
 private:
-    inline ResParameterListData* getResParameterListBasePtr_() const;
-    inline ResParameterObjData* getResParameterObjBasePtr_() const;
+    ResParameterListData* getResParameterListBasePtr_() const
+    {
+        return (ResParameterListData*)(ptr() + 1);
+    }
+
+    ResParameterObjData* getResParameterObjBasePtr_() const
+    {
+        listConstIterator itr = listConstBegin();
+        listConstIterator itr_end = listConstEnd();
+
+        while (itr != itr_end)
+            ++itr;
+
+        return (ResParameterObjData*)(&(*itr));
+    }
 };
-
-inline ResParameterList ResParameterList::getResParameterList(u32 index) const
-{
-    // SEAD_ASSERT(0 <= index && index < getResParameterListNum());
-
-    listConstIterator itr = listConstBegin();
-    listConstIterator itr_end = listConstIterator(index, nullptr);
-
-    while (itr != itr_end)
-        ++itr;
-
-    return &(*itr);
-}
-
-inline ResParameterObj ResParameterList::getResParameterObj(u32 index) const
-{
-    // SEAD_ASSERT(0 <= index && index < getResParameterObjNum());
-
-    objConstIterator itr = objConstBegin();
-    objConstIterator itr_end = objConstIterator(index, nullptr);
-
-    while (itr != itr_end)
-        ++itr;
-
-    return &(*itr);
-}
-
-inline ResParameterListData* ResParameterList::getResParameterListBasePtr_() const
-{
-    return (ResParameterListData*)(ptr() + 1);
-}
-
-inline ResParameterObjData* ResParameterList::getResParameterObjBasePtr_() const
-{
-    listConstIterator itr = listConstBegin();
-    listConstIterator itr_end = listConstEnd();
-
-    while (itr != itr_end)
-        ++itr;
-
-    return (ResParameterObjData*)(&(*itr));
-}
 
 struct ResParameterArchiveData
 {
