@@ -196,9 +196,11 @@ public:
 public:
     iterator begin() { return iterator(0, (ElemDataType*)(Base::ptr() + 1)); }
     constIterator begin() const { return constIterator(0, (const ElemDataType*)(Base::ptr() + 1)); }
+    constIterator constBegin() const { return constIterator(0, (const ElemDataType*)(Base::ptr() + 1)); }
 
     iterator end() { return iterator(getNum(), nullptr); }
     constIterator end() const { return constIterator(getNum(), nullptr); }
+    constIterator constEnd() const { return constIterator(getNum(), nullptr); }
 
 public:
     u32 getNum() const
@@ -210,13 +212,13 @@ public:
     {
         // SEAD_ASSERT(0 <= n && n <= static_cast< int >( this->getNum() ));
 
-        constIterator it = begin();
-        constIterator it_end = constIterator(n, nullptr);
+        constIterator itr = constBegin();
+        constIterator itr_end = constIterator(n, nullptr);
 
-        while (it != it_end)
-            ++it;
+        while (itr != itr_end)
+            ++itr;
 
-        return &(*it);
+        return &(*itr);
     }
 
     void modifyEndianArray(bool is_le)
