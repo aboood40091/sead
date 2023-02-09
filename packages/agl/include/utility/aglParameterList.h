@@ -7,7 +7,6 @@
 namespace agl { namespace utl {
 
 class IParameterObj;
-class ParameterBase;
 
 class IParameterList
 {
@@ -24,7 +23,7 @@ protected:
     virtual bool preRead_() { return true; }
     virtual void postRead_() { }
     virtual bool isApply_(ResParameterList list) const { return list.getParameterListNameHash() == mNameHash; }
-    virtual void callbackNotAppliable_(IParameterObj*, ParameterBase*, ResParameterObj) { }
+    virtual void callbackNotAppliable_(IParameterObj*, ResParameter) { }
 
     void setParameterListName_(const sead::SafeString& name);
 
@@ -38,6 +37,8 @@ protected:
     u32 mNameHash;
     u32 _70;
     sead::ListNode mListNode;
+
+    friend class IParameterObj;
 };
 static_assert(sizeof(IParameterList) == 0x80, "agl::utl::IParameterList size mismatch");
 

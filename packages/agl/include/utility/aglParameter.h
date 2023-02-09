@@ -12,6 +12,7 @@ class Heap;
 namespace agl { namespace utl {
 
 class IParameterObj;
+class ResParameter;
 
 class ParameterBase
 {
@@ -39,6 +40,9 @@ public:
     ParameterBase();
     virtual ~ParameterBase() { }
 
+    void applyResource(ResParameter res);
+    void applyResource(ResParameter res, f32 t);
+
     virtual bool copy(const ParameterBase& parameter);
     virtual void copyUnsafe(const ParameterBase& parameter);
     virtual bool copyLerp(const ParameterBase& parameter_a, const ParameterBase& parameter_b, f32 t);
@@ -56,10 +60,13 @@ public:
     virtual size_t size() const = 0;
     virtual void clone(sead::Heap*, IParameterObj*) const = 0;
 
+protected:
     virtual void postApplyResource_(const void*, size_t) { }
 
+public:
     void initializeListNode(const sead::SafeString& name, const sead::SafeString& label, const sead::SafeString& meta, IParameterObj* p_obj);
 
+    u32 getNameHash() const { return mHash; }
     static u32 calcHash(const sead::SafeString& s);
 
 protected:
