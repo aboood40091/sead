@@ -16,6 +16,8 @@ public:
 
     void pushBackListNode(ParameterBase* p_node);
 
+    void applyResParameterObj_(ResParameterObj obj, bool lerp, f32 t, IParameterList* p_list);
+
 protected:
     virtual bool preWrite_() const { return true; }
     virtual void postWrite_() const { }
