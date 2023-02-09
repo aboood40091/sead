@@ -132,12 +132,15 @@ public:
         {
         }
 
-        bool operator==(const iterator& rhs) const
+        friend bool operator==(const iterator& lhs, const iterator& rhs)
         {
-            return mIndex == rhs.mIndex;
+            return lhs.mIndex == rhs.mIndex;
         }
 
-        bool operator!=(const iterator& rhs) const { return !operator==(rhs); }
+        friend bool operator!=(const iterator& lhs, const iterator& rhs)
+        {
+            return lhs.mIndex != rhs.mIndex;
+        }
 
         iterator& operator++()
         {
@@ -164,12 +167,15 @@ public:
         {
         }
 
-        bool operator==(const constIterator& rhs) const
+        friend bool operator==(const constIterator& lhs, const constIterator& rhs)
         {
-            return mIndex == rhs.mIndex;
+            return lhs.mIndex == rhs.mIndex;
         }
 
-        bool operator!=(const constIterator& rhs) const { return !operator==(rhs); }
+        friend bool operator!=(const constIterator& lhs, const constIterator& rhs)
+        {
+            return lhs.mIndex != rhs.mIndex;
+        }
 
         constIterator& operator++()
         {
