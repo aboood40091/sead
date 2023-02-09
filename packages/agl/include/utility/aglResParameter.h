@@ -142,9 +142,7 @@ private:
     ResParameterObjData* getResParameterObjBasePtr_() const
     {
         listConstIterator itr = listConstBegin();
-        listConstIterator itr_end = listConstEnd();
-
-        while (itr != itr_end)
+        while (static_cast<u32>(itr.getIndex()) < getResParameterListNum())
             ++itr;
 
         return (ResParameterObjData*)(&(*itr));
