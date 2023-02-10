@@ -77,6 +77,14 @@ Vector2CalcCommon<T>::lerp(Base& o, const Base& a, const Base& b, f32 ratio)
 
 template <typename T>
 inline void
+Vector2CalcCommon<T>::multScalar(Base& o, const Base& v, T t)
+{
+    o.x = v.x * t;
+    o.y = v.y * t;
+}
+
+template <typename T>
+inline void
 Vector2CalcCommon<T>::set(Base& o, const Base& v)
 {
     o.x = v.x;
@@ -308,6 +316,16 @@ Vector3CalcCommon<T>::set(Base& v, T x, T y, T z)
     v.x = x;
     v.y = y;
     v.z = z;
+}
+
+template <typename T>
+inline void
+Vector4CalcCommon<T>::add(Base& o, const Base& a, const Base& b)
+{
+    o.x = a.x + b.x;
+    o.y = a.y + b.y;
+    o.z = a.z + b.z;
+    o.w = a.w + b.w;
 }
 
 template <typename T>
