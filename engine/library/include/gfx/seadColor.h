@@ -48,7 +48,10 @@ struct Color4f
             f32 b;
             f32 a;
         };
-        f32 c[4];
+        struct
+        {
+            f32 c[4];
+        };
     };
 
     static const f32 cElementMax;

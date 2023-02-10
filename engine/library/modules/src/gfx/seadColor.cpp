@@ -21,6 +21,31 @@ void Color4f::setLerp(const Color4f& from, const Color4f& to, f32 ratio)
     b = Mathf::lerp(from.b, to.b, ratio);
 }
 
+Color4f& Color4f::operator+=(const Color4f& rhs)
+{
+    r += rhs.r;
+    g += rhs.g;
+    b += rhs.b;
+    a += rhs.a;
+    return *this;
+}
+
+Color4f& Color4f::operator*=(const Color4f& rhs)
+{
+    r *= rhs.r;
+    g *= rhs.g;
+    b *= rhs.b;
+    a *= rhs.a;
+    return *this;
+}
+
+Color4f operator*(const Color4f& lhs, const Color4f& rhs)
+{
+    Color4f tmp = lhs;
+    tmp *= rhs;
+    return tmp;
+}
+
 bool operator==(const Color4f& lhs, const Color4f& rhs)
 {
     return lhs.r == rhs.r &&
