@@ -27,6 +27,7 @@ public:
 
     Vector2(T x_, T y_);
 
+    Self operator*(T t) const;
     Self operator+(const Self& v) const;
     Self operator-(const Self& v) const;
 
@@ -43,6 +44,7 @@ public:
 
     void add(const Self& a);
     void div(const Self& a);
+    void multScalar(T t);
     void set(const Self& v);
     void set(T x_, T y_);
 
@@ -141,6 +143,7 @@ public:
 
     Self operator*(T t) const;
 
+    Self& operator+=(const Self& v);
     Self& operator=(const Self& v);
 
     bool operator==(const Self& v) const;
@@ -150,6 +153,7 @@ public:
 
     T length() const;
 
+    void multScalar(T t);
     void set(const Self& v);
     void set(T x_, T y_, T z_, T w_);
 

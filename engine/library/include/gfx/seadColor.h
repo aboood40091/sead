@@ -31,7 +31,13 @@ struct Color4f
         a = _a;
     }
 
-    void setLerp(const sead::Color4f& from, const sead::Color4f& to, f32 ratio);
+    void setLerp(const Color4f& from, const Color4f& to, f32 ratio);
+
+    Color4f& operator+=(const Color4f& rhs);
+    Color4f& operator*=(const Color4f& rhs);
+
+    friend Color4f operator*(const Color4f& lhs, const Color4f& rhs);
+    friend bool operator==(const Color4f& lhs, const Color4f& rhs);
 
     union
     {
@@ -57,8 +63,6 @@ struct Color4f
 #ifdef cafe
 static_assert(sizeof(Color4f) == 0x10, "sead::Color4f size mismatch");
 #endif // cafe
-
-bool operator==(const Color4f& lhs, const Color4f& rhs);
 
 }  // namespace sead
 

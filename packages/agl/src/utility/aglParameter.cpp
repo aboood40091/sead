@@ -19,6 +19,65 @@ void ParameterBase::applyResource(ResParameter res)
     postApplyResource_(res.getValue(), res.ptr()->mSize - sizeof(ResParameterData));
 }
 
+void ParameterBase::applyResource(ResParameter res, f32 t)
+{
+    switch (getParameterType())
+    {
+    case cType_bool:
+        *static_cast<bool*>(ptr()) = *static_cast<const u8*>(res.getValue()) != 0; // Same issue as function above
+        break;
+    case cType_f32:
+        {
+            f32 temp;
+            sead::MemUtil::copy(&temp, res.getValue(), size());
+            *static_cast<f32*>(ptr()) += temp * t;
+        }
+        break;
+    case cType_vec2:
+        {
+            sead::Vector2f temp;
+            sead::MemUtil::copy(&temp, res.getValue(), size());
+            *static_cast<sead::Vector2f*>(ptr()) += temp * t;
+        }
+        break;
+    case cType_vec3:
+        {
+            sead::Vector3f temp;
+            sead::MemUtil::copy(&temp, res.getValue(), size());
+            *static_cast<sead::Vector3f*>(ptr()) += temp * t;
+        }
+        break;
+    case cType_vec4:
+        {
+            sead::Vector4f temp;
+            sead::MemUtil::copy(&temp, res.getValue(), size());
+            *static_cast<sead::Vector4f*>(ptr()) += temp * t;
+        }
+        break;
+    case cType_color:
+        {
+            sead::Color4f temp;
+            sead::MemUtil::copy(&temp, res.getValue(), size());
+            *static_cast<sead::Color4f*>(ptr()) += temp * sead::Color4f(t, t, t, t);
+        }
+        break;
+    case cType_int:
+    case cType_string32:
+    case cType_string64:
+        sead::MemUtil::copy(ptr(), res.getValue(), size());
+        break;
+    case cType_curve1:
+    case cType_curve2:
+    case cType_curve3:
+    case cType_curve4:
+        break;
+    default:
+        // SEAD_ASSERT_MSG(false, "%d", s32(getParameterType()));
+    }
+
+    postApplyResource_(res.getValue(), res.ptr()->mSize - sizeof(ResParameterData));
+}
+
 bool ParameterBase::copy(const ParameterBase& parameter)
 {
     if (getParameterType() != parameter.getParameterType() ||
