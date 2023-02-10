@@ -9,6 +9,16 @@ ParameterBase::ParameterBase()
     initializeListNode("default", "parameter", "", nullptr);
 }
 
+void ParameterBase::applyResource(ResParameter res)
+{
+    if (getParameterType() != cType_bool)
+        sead::MemUtil::copy(ptr(), res.getValue(), size());
+    else
+        *static_cast<bool*>(ptr()) = *static_cast<const u8*>(res.getValue()) != 0; // Literally only this line doesn't match
+
+    postApplyResource_(res.getValue(), res.ptr()->mSize - sizeof(ResParameterData));
+}
+
 bool ParameterBase::copy(const ParameterBase& parameter)
 {
     if (getParameterType() != parameter.getParameterType() ||
