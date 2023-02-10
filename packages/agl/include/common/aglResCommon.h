@@ -145,7 +145,7 @@ public:
         iterator& operator++()
         {
             ++mIndex;
-            mElem = (ElemDataType*)((uintptr_t)mElem + mElem->mSize);
+            mElem = (ElemDataType*)((uintptr_t)mElem + Type(mElem).ref().mSize);
             return *this;
         }
 
@@ -180,7 +180,7 @@ public:
         constIterator& operator++()
         {
             ++mIndex;
-            mElem = (const ElemDataType*)((uintptr_t)mElem + mElem->mSize);
+            mElem = (const ElemDataType*)((uintptr_t)mElem + Type(mElem).ref().mSize);
             return *this;
         }
 

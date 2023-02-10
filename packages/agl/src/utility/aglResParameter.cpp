@@ -25,7 +25,7 @@ void ResParameterObj::modifyEndianObj(bool is_le)
         ResParameter parameter(&(*itr));
         ModifyEndianU32(is_le, parameter.ptr(), sizeof(ResParameterData));
 
-        u32 type = parameter.ref().mType;
+        u32 type = parameter.ptr()->mType;
 
         switch (type)
         {
@@ -43,7 +43,7 @@ void ResParameterObj::modifyEndianObj(bool is_le)
         case ParameterBase::cType_curve2:
         case ParameterBase::cType_curve3:
         case ParameterBase::cType_curve4:
-            ModifyEndianU32(is_le, const_cast<void*>(parameter.getValue()), parameter.ref().mSize - sizeof(ResParameterData));
+            ModifyEndianU32(is_le, const_cast<void*>(parameter.getValue()), parameter.ptr()->mSize - sizeof(ResParameterData));
             break;
         default:
             // SEAD_ASSERT_MSG(false, "illigal type:%d", type);
