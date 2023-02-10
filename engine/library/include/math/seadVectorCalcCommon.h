@@ -23,6 +23,8 @@ public:
 
     static void lerp(Base& o, const Base& a, const Base& b, f32 ratio);
 
+    static void multScalar(Base& o, const Base& v, T t);
+
     static void set(Base& o, const Base& v);
     static void set(Base& v, T x, T y);
 };
@@ -64,6 +66,8 @@ public:
     typedef typename Policies<T>::Vec4Base Base;
 
 public:
+    static void add(Base& o, const Base& a, const Base& b);
+
     static bool isEqual(const Base& a, const Base& b);
 
     static T squaredLength(const Base& v);

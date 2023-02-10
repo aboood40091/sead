@@ -13,6 +13,15 @@ Vector2<T>::Vector2(T x_, T y_)
 
 template <typename T>
 inline Vector2<T>
+Vector2<T>::operator*(T t) const
+{
+    Self o;
+    Vector2CalcCommon<T>::multScalar(o, *this, t);
+    return o;
+}
+
+template <typename T>
+inline Vector2<T>
 Vector2<T>::operator+(const Self& v) const
 {
 
@@ -96,6 +105,13 @@ inline void
 Vector2<T>::div(const Self& a)
 {
     Vector2CalcCommon<T>::div(*this, *this, a);
+}
+
+template <typename T>
+inline void
+Vector2<T>::multScalar(T t)
+{
+    Vector2CalcCommon<T>::multScalar(*this, *this, t);
 }
 
 template <typename T>
@@ -304,6 +320,14 @@ Vector4<T>::operator*(T t) const
 
 template <typename T>
 inline Vector4<T>&
+Vector4<T>::operator+=(const Self& v)
+{
+    Vector4CalcCommon<T>::add(*this, *this, v);
+    return *this;
+}
+
+template <typename T>
+inline Vector4<T>&
 Vector4<T>::operator=(const Self& v)
 {
     Vector4CalcCommon<T>::set(*this, v);
@@ -339,6 +363,13 @@ inline T
 Vector4<T>::length() const
 {
     return Vector4CalcCommon<T>::length(*this);
+}
+
+template <typename T>
+inline void
+Vector4<T>::multScalar(T t)
+{
+    Vector4CalcCommon<T>::multScalar(*this, *this, t);
 }
 
 template <typename T>
