@@ -115,6 +115,7 @@ bool ParameterBase::copyLerp(const ParameterBase& parameter_a, const ParameterBa
     case cType_bool:
     case cType_int:
     case cType_string32:
+    case cType_string64:
         copyUnsafe(parameter_a);
         break;
     case cType_f32:
@@ -132,6 +133,13 @@ bool ParameterBase::copyLerp(const ParameterBase& parameter_a, const ParameterBa
     case cType_color:
         copyLerp_<sead::Color4f>(parameter_a, parameter_b, t);
         break;
+    case cType_curve1:
+    case cType_curve2:
+    case cType_curve3:
+    case cType_curve4:
+        break;
+    default:
+        // SEAD_ASSERT_MSG(false, "%d", s32(getParameterType()));
     }
     return true;
 }
