@@ -58,7 +58,7 @@ protected:
     virtual bool prepareArchive_(const void* archive) = 0;
 
 public:
-    Resource* load(ResourceMgr::LoadArg& arg);
+    ResourcePtr load(ResourceMgr::LoadArg& arg);
 
     u8* getFile(const SafeString& file_path, FileInfo* file_info = nullptr)
     {
