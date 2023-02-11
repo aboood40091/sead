@@ -426,6 +426,9 @@ public:
 
     virtual ~DirectoryHandle()
     {
+        FileDevice* device = mOriginalDevice;
+        if (device != nullptr)
+            device->tryCloseDirectory(this);
     }
 
     bool close();
