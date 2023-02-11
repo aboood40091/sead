@@ -122,8 +122,8 @@ public:
 
     static T max(T a, T b)
     {
-        if (a < b) return b;
-        else       return a;
+        if (a > b) return a;
+        else       return b;
     }
 
     static T min(T a, T b)
