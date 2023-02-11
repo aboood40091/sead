@@ -14,6 +14,11 @@ class SharcArchiveRes : public ArchiveRes
     SEAD_RTTI_OVERRIDE(SharcArchiveRes, ArchiveRes)
 
 public:
+    static const u32 cArchiveVersion = 0x100;
+    static const u32 cArchiveEntryMax = 0x3fff;
+    static const u32 cFileNameTableAlign = 4;
+
+public:
     struct ArchiveBlockHeader
     {
         char signature[4];
@@ -60,19 +65,17 @@ public:
     SharcArchiveRes();
     virtual ~SharcArchiveRes();
 
-    virtual void* getFileImpl_(const SafeString& file_path, FileInfo* file_info = nullptr);
+protected:
+    virtual void* getFileImpl_(const SafeString& file_path, FileInfo* file_info);
     virtual void* getFileFastImpl_(s32 entry_id, FileInfo* file_info);
     virtual s32 convertPathToEntryIDImpl_(const SafeString& file_path);
-    virtual bool setCurrentDirectoryImpl_(const SafeString&);
-    virtual bool openDirectoryImpl_(SafeArray<u8, 32>* handle, const SafeString&);
-    virtual bool closeDirectoryImpl_(SafeArray<u8, 32>* handle);
-    virtual u32 readDirectoryImpl_(SafeArray<u8, 32>* handle, DirectoryEntry* entry, u32 num);
+    virtual bool setCurrentDirectoryImpl_(const SafeString& file_path);
+    virtual bool openDirectoryImpl_(HandleBuffer* handle_buffer, const SafeString& dir_path);
+    virtual bool closeDirectoryImpl_(HandleBuffer* handle_buffer);
+    virtual u32 readDirectoryImpl_(HandleBuffer* handle_buffer, DirectoryEntry* entry, u32 num);
     virtual bool prepareArchive_(const void* archive);
 
-    static const u32 cArchiveVersion = 0x100;
-    static const u32 cArchiveEntryMax = 0x3fff;
-    static const u32 cFileNameTableAlign = 4;
-
+protected:
     const ArchiveBlockHeader* mArchiveBlockHeader;
     const FATBlockHeader* mFATBlockHeader;
     const char* mFNTBlock;
