@@ -9,7 +9,7 @@ class IParameterIO : public IParameterList
 {
 public:
     IParameterIO();
-    IParameterIO(const sead::SafeString& name, u32 = 0);
+    IParameterIO(const sead::SafeString& type, u32 version = 0);
     virtual ~IParameterIO() { }
 
 public:
@@ -27,8 +27,8 @@ public:
     }
 
 protected:
-    sead::FixedSafeString<64> _80;
-    u32 _cc;
+    sead::FixedSafeString<64> mType;
+    u32 mVersion;
     void* mpDelegate; // sead delegate
     sead::FixedSafeString<256> _d4;
 };

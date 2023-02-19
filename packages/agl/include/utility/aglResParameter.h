@@ -159,9 +159,9 @@ struct ResParameterArchiveData
     u32 mVersion;
     u32 mEndian;
     u32 mFileSize;
-    u32 _10;
-    u32 mNameLen;
-    // char mName[];
+    u32 mTypeVersion;
+    u32 mTypeLen;
+    // char mType[];
 
 public:
     static u32 getVersion();
@@ -184,7 +184,7 @@ class ResParameterArchive : public ResCommon<ResParameterArchiveData>
 public:
     ResParameterArchive(const void* p_data);
 
-    const char* getName() const
+    const char* getType() const
     {
         const DataType* const data = ptr();
         return (const char*)(data + 1);
@@ -193,7 +193,7 @@ public:
     ResParameterList getResParameterList() const
     {
         const DataType* const data = ptr();
-        return (const ResParameterListData*)((uintptr_t)(data + 1) + data->mNameLen);
+        return (const ResParameterListData*)((uintptr_t)(data + 1) + data->mTypeLen);
     }
 };
 

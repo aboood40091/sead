@@ -3,13 +3,13 @@
 
 namespace agl { namespace utl {
 
-IParameterIO::IParameterIO(const sead::SafeString& param_1, u32 param_2)
+IParameterIO::IParameterIO(const sead::SafeString& type, u32 version)
     : IParameterList()
     , mpDelegate(nullptr)
     , _d4(sead::SafeString::cEmptyString)
 {
-    _80 = param_1;
-    _cc = param_2;
+    mType = type;
+    mVersion = version;
     setParameterListName_("param_root");
 }
 
@@ -26,7 +26,7 @@ void IParameterIO::applyResParameterArchive(ResParameterArchive arc)
     {
         // SEAD_ASSERT(arc.isValid());
 
-        if (_cc != arc.ref()._10)
+        if (mVersion != arc.ref().mTypeVersion)
             callbackInvalidVersion_(arc);
 
         applyResParameterList(arc.getResParameterList());
