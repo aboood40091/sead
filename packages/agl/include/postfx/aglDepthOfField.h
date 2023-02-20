@@ -257,7 +257,7 @@ private:
     ShaderProgram* mpCurrentProgramVignetting;
     const TextureData* mpIndirectTextureData;
     TextureSampler mIndirectTextureSampler;
-    sead::Vector4f mIndirectTexParam;
+    mutable sead::Vector4f mIndirectTexParam;
     sead::Vector3f mIndirectTexMtx0;
     sead::Vector3f mIndirectTexMtx1;
     sead::SafeArray<VignettingShape, 2> mVignettingShape;

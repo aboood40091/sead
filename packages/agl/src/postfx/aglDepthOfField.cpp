@@ -744,7 +744,7 @@ ShaderMode DepthOfField::drawDepthMipMap_(const DrawArg& arg, ShaderMode mode) c
         param.x = 1.0f / arg.near;
         param.y = (1.0f - arg.near / arg.far) / arg.near;
         param.z = 1.0f / far_range;
-        param.w = -far_start * param.z;
+        param.w = -(far_start * param.z);
 
         p_program_near_mask->getUniformLocation(cUniform_NearFarParam).setUniform(sizeof(sead::Vector4f), &param);
 
@@ -884,6 +884,150 @@ ShaderMode DepthOfField::drawVignetting_(const DrawArg& arg, ShaderMode mode) co
     drawKick_(arg);
 
     return mode;
+}
+
+void DepthOfField::uniformComposeParam_(const DrawArg& arg, const ShaderProgram* program) const
+{
+    const f32& arg_far = arg.far;
+    const f32& arg_near = arg.near;
+
+    f32 w_inv = 1.0f / arg.width;
+    f32 h_inv = 1.0f / arg.height;
+
+    f32 end   = sead::Mathf::min(*mEnd, *mStart);
+    f32 start = sead::Mathf::max(*mStart, *mEnd);
+
+    if (start == end)
+        end += sead::Mathf::epsilon();
+
+    sead::Vector4f param;
+
+    param.x = *mLevel;              // cMipLevelMax0
+    param.y = *mLevel;              // cMipLevelMax1
+    param.z = *mLevel;              // cMipLevelMax2
+    param.w = 1.0f - *mSaturateMin; // cSaturate
+
+    program->getUniformLocation(cUniform_Param0).setUniform(sizeof(sead::Vector4f), &param);
+
+    param.x = w_inv * _1f4;
+    param.y = h_inv * _1f4;
+    param.z = w_inv;
+    param.w = h_inv;
+
+    program->getUniformLocation(cUniform_TexParam).setUniform(sizeof(sead::Vector4f), &param);
+
+    f32 range = end - start;
+
+    sead::Vector4f near_far_param;
+    sead::Vector4f mul_param;
+    sead::Vector4f add_param;
+
+    if (arg.view_depth)
+    {
+        f32 z = arg_far - arg_near;
+        mul_param.x = 1.0f / (range / z);
+        add_param.x = -(((start - arg_near) / z) * mul_param.x);
+    }
+    else
+    {
+        mul_param.x = 1.0f / range;
+        add_param.x = -(start * mul_param.x);
+    }
+
+    f32 v0 = arg_far - arg_near;
+    f32 v1 = arg_far + arg_near;
+
+    f32 near_far_param_z = (arg_near * start * v1 - 2 * arg_near * arg_near * arg_far) / arg_near * start * v0;
+    f32 near_far_param_w = 0.0f;
+
+    if (*mNearEnable)
+    {
+        f32 far_end   = sead::Mathf::min(*mFarEnd, *mFarStart);
+        f32 far_start = sead::Mathf::max(*mFarStart, *mFarEnd);
+
+        if (far_start == far_end)
+            far_end += sead::Mathf::epsilon();
+
+        f32 far_range = far_end - far_start;
+        if (arg.view_depth)
+        {
+            f32 z = arg_far - arg_near;
+            far_range = far_range               / z;
+            far_start = (far_start - arg_near)  / z;
+        }
+        else
+        {
+            mul_param.y = 1.0f / far_range;
+            add_param.y = -(far_start * mul_param.y);
+        }
+
+        f32 v2 = arg_far - arg_near;
+        f32 v3 = arg_far + arg_near;
+
+        near_far_param_w = (arg_near * far_start * v3 - 2 * arg_near * arg_near * arg_far) / arg_near * far_start * v2;
+    }
+
+    near_far_param.x = 1.0f / arg_near;
+    near_far_param.y = (1.0f - arg_near / arg_far) / arg_near;
+    near_far_param.z = near_far_param_z;
+    near_far_param.w = near_far_param_w;
+
+    program->getUniformLocation(cUniform_NearFarParam).setUniform(sizeof(sead::Vector4f), &near_far_param);
+
+    if (*mEnableColorControl)
+    {
+        f32 color_ctrl_depth_0_end   = sead::Mathf::min(mColorCtrlDepth->y, mColorCtrlDepth->x);
+        f32 color_ctrl_depth_0_start = sead::Mathf::max(mColorCtrlDepth->x, mColorCtrlDepth->y);
+
+        if (color_ctrl_depth_0_start == color_ctrl_depth_0_end)
+            color_ctrl_depth_0_end += sead::Mathf::epsilon();
+
+        f32 color_ctrl_depth_1_end   = sead::Mathf::min(mColorCtrlDepth->w, mColorCtrlDepth->z);
+        f32 color_ctrl_depth_1_start = sead::Mathf::max(mColorCtrlDepth->z, mColorCtrlDepth->w);
+
+        if (color_ctrl_depth_1_start == color_ctrl_depth_1_end)
+            color_ctrl_depth_1_end += sead::Mathf::epsilon();
+
+        f32 color_ctrl_depth_0_range = color_ctrl_depth_0_end - color_ctrl_depth_0_start;
+        f32 color_ctrl_depth_1_range = color_ctrl_depth_1_end - color_ctrl_depth_1_start;
+
+        if (arg.view_depth)
+        {
+            f32 z = arg_far - arg_near;
+            color_ctrl_depth_0_range = color_ctrl_depth_0_range               / z;
+            color_ctrl_depth_1_range = color_ctrl_depth_1_range               / z;
+            color_ctrl_depth_0_start = (color_ctrl_depth_0_start - arg_near)  / z;
+            color_ctrl_depth_1_start = (color_ctrl_depth_1_start - arg_near)  / z;
+        }
+
+        mul_param.z = 1.0f / color_ctrl_depth_0_range;
+        mul_param.w = 1.0f / color_ctrl_depth_1_range;
+        add_param.z = -(color_ctrl_depth_0_start * mul_param.z);
+        add_param.w = -(color_ctrl_depth_1_start * mul_param.w);
+    }
+
+    program->getUniformLocation(cUniform_MulParam).setUniform(sizeof(sead::Vector4f), &mul_param);
+    program->getUniformLocation(cUniform_AddParam).setUniform(sizeof(sead::Vector4f), &add_param);
+
+    program->getUniformLocation(cUniform_FarMulColor).setUniform(sizeof(sead::Color4f), &(*mFarMulColor));
+
+    arg.p_ctx->mColorTextureSampler.activate(program->getSamplerLocation(cSampler_TexMipMap));
+
+    if (enableDepthBlur_())
+        arg.p_ctx->mDepthTextureSampler.activate(program->getSamplerLocation(cSampler_TexMipMapDepth));
+
+    arg.p_ctx->mDepthTargetTextureSampler.activate(program->getSamplerLocation(cSampler_TexDepth));
+
+    if (mpIndirectTextureData != nullptr)
+    {
+        mIndirectTextureSampler.activate(program->getSamplerLocation(cSampler_TexIndirect));
+
+        mIndirectTexParam.z = 1.0f / (w_inv * arg.height); // Aspect ratio?
+        program->getUniformLocation(cUniform_IndirectTexParam).setUniform(sizeof(sead::Vector4f), &mIndirectTexParam);
+
+        program->getUniformLocation(cUniform_IndirectTexMtx0).setUniform(sizeof(sead::Vector4f), &mIndirectTexMtx0); // Passing Vec3f to Vec4f... whoops!
+        program->getUniformLocation(cUniform_IndirectTexMtx1).setUniform(sizeof(sead::Vector4f), &mIndirectTexMtx1); // ^^^
+    }
 }
 
 void DepthOfField::setIndirectTextureData(const TextureData* p_texture_data)
