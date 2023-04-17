@@ -1,7 +1,9 @@
 #pragma once
 
+#include <common/aglTextureEnum.h>
 #include <container/seadBuffer.h>
 #include <container/seadPtrArray.h>
+#include <container/seadSafeArray.h>
 #include <heap/seadDisposer.h>
 #include <layer/aglLayerEnum.h>
 #include <math/seadVector.h>
@@ -30,25 +32,30 @@ public:
     Renderer();
     virtual ~Renderer();
 
+    bool draw(DisplayType display_type) const;
+
     void removeDrawMethod(const DrawMethod* p_draw_method);
 
     Layer* getLayer(s32 index) const { return mLayer[index]; }
 
-private:
+protected:
+    void initLayer_(Layer* layer, s32 layer_index, const sead::SafeString& name, DisplayType display_type, sead::Heap* heap);
+
+protected:
     u32 _10;
-    u32 mMultiSampleType; // agl::MultiSampleType
-    u32 mRenderDisplay[cDisplayType_Max][0x6C4 / sizeof(u32)]; // agl::lyr::RenderDisplay[cDisplayType_Max]
-    RenderBuffer* mRenderBuffer[cDisplayType_Max];
+    MultiSampleType mMultiSampleType;
+    sead::UnsafeArray<u32[0x6C4 / sizeof(u32)], cDisplayType_Max> mRenderDisplay; // sead::UnsafeArray<agl::lyr::RenderDisplay, cDisplayType_Max>
+    sead::UnsafeArray<RenderBuffer*, cDisplayType_Max> mRenderBuffer;
     sead::Buffer<Layer*> mLayer;
     mutable sead::BitFlag16 mFlag;
     f32 _db4;
     u8 _db8[16];
     sead::CriticalSection mCriticalSection;
-    u32 mJobQueue[2][0x64 / sizeof(u32)]; // sead::FixedSizeJQ[2]
-    sead::PtrArrayImpl mRenderDisplayJob[cDisplayType_Max]; // sead::PtrArray<agl::lyr::RenderDisplay::Job>[cDisplayType_Max]
+    sead::UnsafeArray<u32[0x64 / sizeof(u32)], 2> mJobQueue; // sead::UnsafeArray<sead::FixedSizeJQ, 2>
+    sead::UnsafeArray<sead::PtrArrayImpl, cDisplayType_Max> mRenderDisplayJob; // sead::UnsafeArray<sead::PtrArray<agl::lyr::RenderDisplay::Job>, cDisplayType_Max>
     u32 _ee4;
     u32 _ee8;
-    s32 _eeC;
+    s32 _eec;
     sead::Controller* mpDebugController;
     f32 _ef4;
     sead::Vector2f _ef8;
