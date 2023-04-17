@@ -168,10 +168,16 @@ public:
 };
 
 typedef Vector2<s32> Vector2i;
+typedef Vector3<s32> Vector3i;
+typedef Vector4<s32> Vector4i;
 
 typedef Vector2<f32> Vector2f;
 typedef Vector3<f32> Vector3f;
 typedef Vector4<f32> Vector4f;
+
+typedef Vector2<u32> Vector2u;
+typedef Vector3<u32> Vector3u;
+typedef Vector4<u32> Vector4u;
 
 #ifdef cafe
 static_assert(sizeof(Vector2f) == 8, "sead::Vector2<T> size mismatch");
