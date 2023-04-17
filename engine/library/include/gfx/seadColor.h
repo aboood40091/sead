@@ -58,10 +58,14 @@ struct Color4f
     static const f32 cElementMin;
 
     static const Color4f cBlack;
+    static const Color4f cGray;
     static const Color4f cWhite;
     static const Color4f cRed;
     static const Color4f cGreen;
     static const Color4f cBlue;
+    static const Color4f cYellow;
+    static const Color4f cMagenta;
+    static const Color4f cCyan;
 };
 #ifdef cafe
 static_assert(sizeof(Color4f) == 0x10, "sead::Color4f size mismatch");
