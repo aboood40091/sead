@@ -1,7 +1,7 @@
 #pragma once
 
+#include <geom/seadSphere.h>
 #include <math/seadBoundBox.h>
-#include <math/seadSphere.h>
 #include <prim/seadBitFlag.h>
 
 namespace agl { namespace sdw {
