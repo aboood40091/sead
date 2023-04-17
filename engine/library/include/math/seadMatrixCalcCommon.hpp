@@ -127,6 +127,21 @@ void Matrix22CalcCommon<T>::transposeTo(Base& o, const Base& n)
 }
 
 template <typename T>
+void Matrix22CalcCommon<T>::makeRIdx(Base& o, u32 r)
+{
+    T sinV;
+    T cosV;
+
+    MathCalcCommon<T>::sinCosIdx(&sinV, &cosV, r);
+
+    o.m[0][0] =  cosV;
+    o.m[0][1] = -sinV;
+
+    o.m[1][0] =  sinV;
+    o.m[1][1] =  cosV;
+}
+
+template <typename T>
 void Matrix33CalcCommon<T>::makeIdentity(Base& o)
 {
     o.m[0][0] = 1;

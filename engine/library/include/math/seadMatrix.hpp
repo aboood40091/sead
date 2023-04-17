@@ -90,6 +90,13 @@ Matrix22<T>::transpose()
 }
 
 template <typename T>
+inline void
+Matrix22<T>::makeRIdx(u32 r)
+{
+    Matrix22CalcCommon<T>::makeRIdx(*this, r);
+}
+
+template <typename T>
 inline
 Matrix33<T>::Matrix33(
     T a00, T a01, T a02,

@@ -21,6 +21,8 @@ public:
     static void multiply(Base& o, const Base& a, const Base& b);
     static void transpose(Base& o);
     static void transposeTo(Base& o, const Base& n);
+
+    static void makeRIdx(Base& o, u32 r);
 };
 
 template <typename T>

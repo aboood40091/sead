@@ -52,6 +52,8 @@ public:
     void setTranspose(const Self& n);
     void transpose();
 
+    void makeRIdx(u32 r);
+
     static const Matrix22 zero;
     static const Matrix22 ident;
 };
