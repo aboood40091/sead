@@ -1,7 +1,11 @@
 #ifndef SEAD_PTCL_SYSTEM_H_
 #define SEAD_PTCL_SYSTEM_H_
 
-#include <heap/seadHeap.h>
+#include <ptcl/seadPtclData.h>
+#include <ptcl/seadCallback.h>
+
+#include <ptcl/seadHeap.h>
+#include <ptcl/seadPtclEditorInterface.h>
 #include <time/seadTickTime.h>
 
 #include <nw/effect.h>
@@ -17,40 +21,6 @@ public:
 } }
 
 namespace sead { namespace ptcl {
-
-enum
-{
-    cEftMaxGroup = nw::eft::EFT_GROUP_MAX
-};
-
-class Heap : public nw::eft::Heap
-{
-public:
-    explicit Heap(::sead::Heap* heap)
-        : mpHeap(heap)
-    {
-    }
-
-    virtual void* Alloc(u32 size, s32 alignment)
-    {
-        return mpHeap->alloc(size, alignment);
-    }
-
-    virtual void Free(void* ptr)
-    {
-        mpHeap->free(ptr);
-    }
-
-private:
-    ::sead::Heap* mpHeap;
-};
-static_assert(sizeof(Heap) == 8, "sead::ptcl::Heap size mismatch");
-
-class PtclEditorInterface
-{
-    u32 _0[0xE58 / sizeof(u32)];
-};
-static_assert(sizeof(PtclEditorInterface) == 0xE58, "sead::ptcl::PtclEditorInterface size mismatch");
 
 class PtclSystem : public nw::eft::System
 {
