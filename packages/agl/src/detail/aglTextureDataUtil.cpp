@@ -1,5 +1,3 @@
-#pragma once
-
 #include <common/aglTextureData.h>
 #include <detail/aglTextureDataUtil.h>
 

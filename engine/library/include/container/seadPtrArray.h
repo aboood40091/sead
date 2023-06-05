@@ -127,7 +127,7 @@ public:
     T* popBack() { return static_cast<T*>(PtrArrayImpl::popBack()); }
     T* popFront() { return static_cast<T*>(PtrArrayImpl::popFront()); }
     void insert(s32 pos, T* ptr) { PtrArrayImpl::insert(pos, (void*)ptr); }
-    void insert(s32 pos, T* array, s32 array_length) { PtrArrayImpl::insertArray(pos, (void*)ptr, array_length, sizeof(T)); }
+    void insert(s32 pos, T* array, s32 array_length) { PtrArrayImpl::insertArray(pos, (void*)array, array_length, sizeof(T)); }
     void replace(s32 pos, T* ptr) { PtrArrayImpl::replace(pos, (void*)ptr); }
     s32 indexOf(const T* ptr) const { return PtrArrayImpl::indexOf(ptr); }
     void* getWork() const { return mPtrs; }

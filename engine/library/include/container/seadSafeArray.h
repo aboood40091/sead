@@ -213,10 +213,10 @@ public:
     }
 
 public:
-    typedef SafeArray<T, N>::iterator iterator;
-    typedef SafeArray<T, N>::constIterator constIterator;
-    typedef SafeArray<T, N>::reverseIterator reverseIterator;
-    typedef SafeArray<T, N>::reverseConstIterator reverseConstIterator;
+    typedef typename SafeArray<T, N>::iterator iterator;
+    typedef typename SafeArray<T, N>::constIterator constIterator;
+    typedef typename SafeArray<T, N>::reverseIterator reverseIterator;
+    typedef typename SafeArray<T, N>::reverseConstIterator reverseConstIterator;
 
 public:
     iterator begin() { return iterator(mBuffer); }

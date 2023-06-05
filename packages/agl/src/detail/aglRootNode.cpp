@@ -1,5 +1,3 @@
-#pragma once
-
 #include <detail/aglPrivateResource.h>
 #include <detail/aglRootNode.h>
 
