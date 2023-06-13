@@ -44,6 +44,8 @@ public:
     PrimitiveShape();
     ~PrimitiveShape();
 
+    void initialize(sead::Heap* heap);
+
     const IndexStream& getIdxStreamQuadTriangle(DrawType draw_type = cDrawType_Triangle) const
     {
         if (draw_type == cDrawType_Triangle)
@@ -52,6 +54,19 @@ public:
         else // if (draw_type == cDrawType_Line)
             return mIdxStreamLineQuadTriangle;
     }
+
+private:
+    void setUpStreamQuad_(sead::Heap* heap);
+    void setUpStreamQuadTriangle_(sead::Heap* heap);
+    void setUpStreamCube_(sead::Heap* heap);
+    void setUpStreamCircle_(u32, sead::Heap* heap);
+    void setUpStreamSphere_(u32, u32, sead::Heap* heap);
+    void setUpStreamHemisphere_(u32, u32, sead::Heap* heap);
+    void setUpStreamCylinder_(u32, u32, sead::Heap* heap);
+    void setUpStreamCone_(u32, u32, sead::Heap* heap);
+    void setUpStreamTorus_(u32, u32, sead::Heap* heap, f32, f32, s32, s32);
+
+    static void setUpStreams_(VertexBuffer* p_vtx_buffer);
 
 private:
     // Quad
