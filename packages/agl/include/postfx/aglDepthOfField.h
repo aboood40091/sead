@@ -28,14 +28,20 @@ class DepthOfField : public utl::IParameterIO, public sead::hostio::Node
     {
         bool mIsInitialized;
         s32 mIndex;
-        TextureSampler mColorTargetTextureSampler;
-        TextureSampler mDepthTargetTextureSampler;
-        RenderBuffer mRenderBuffer;
-        RenderTargetColor mColorTarget;
-        TextureData* mpColorTextureData; // for "blur_mipmap"
-        TextureSampler mColorTextureSampler;
-        TextureData* mpDepthTextureData; // for "depth_mipmap"
-        TextureSampler mDepthTextureSampler;
+
+        // In
+        TextureSampler      mColorTargetTextureSampler;
+        TextureSampler      mDepthTargetTextureSampler;
+
+        // Render utility
+        RenderBuffer        mRenderBuffer;
+        RenderTargetColor   mColorTarget;
+
+        // Out
+        TextureData*        mpColorTextureData;     // for "blur_mipmap"
+        TextureSampler      mColorTextureSampler;
+        TextureData*        mpDepthTextureData;     // for "depth_mipmap"
+        TextureSampler      mDepthTextureSampler;
     };
     static_assert(sizeof(Context) == 0x834, "agl::pfx::DepthOfField::Context size mismatch");
 

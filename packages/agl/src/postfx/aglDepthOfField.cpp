@@ -1,4 +1,3 @@
-#include <container/seadSafeArray.h>
 #include <detail/aglRootNode.h>
 #include <detail/aglShaderHolder.h>
 #include <gfx/seadGraphicsContext.h>
@@ -207,9 +206,9 @@ void DepthOfField::assignShaderProgram_()
 
         const ShaderProgram& program_depth_mask = detail::ShaderHolder::instance()->getShader(detail::ShaderHolder::cShader_DOFDepthMask);
 
-        s32 depth_mask_variation_idx = program_depth_mask.getVariationMacroValueVariationNum(MACRO_DOF_DEPTH_MASK_DOF_FAR)      * (dof_far_idx != 0) +
+        s32 depth_mask_variation_idx = program_depth_mask.getVariationMacroValueVariationNum(MACRO_DOF_DEPTH_MASK_DOF_FAR)      * s32(dof_far_idx != 0) +
                                        program_depth_mask.getVariationMacroValueVariationNum(MACRO_DOF_DEPTH_MASK_DOF_NEAR)     * dof_near_idx +
-                                       program_depth_mask.getVariationMacroValueVariationNum(MACRO_DOF_DEPTH_MASK_VIGNETTING)   * *mEnableVignettingBlur;
+                                       program_depth_mask.getVariationMacroValueVariationNum(MACRO_DOF_DEPTH_MASK_VIGNETTING)   * s32(*mEnableVignettingBlur);
 
         mpCurrentProgramDepthMask[0] = program_depth_mask.getVariation(depth_mask_variation_idx);
         mpCurrentProgramDepthMask[1] = program_depth_mask.getVariation(depth_mask_variation_idx | 1);
@@ -227,12 +226,14 @@ void DepthOfField::assignShaderProgram_()
     {
         ShaderProgram& program_vignetting = detail::ShaderHolder::instance()->getShader(detail::ShaderHolder::cShader_DOFVignetting);
 
+        VignettingBlendType vignetting_blend = getVignettingBlendType();
+
         bool vignetting_color_is_black = mVignettingColor->r == 0.0f &&
                                          mVignettingColor->g == 0.0f &&
                                          mVignettingColor->b == 0.0f;
 
         s32 vignetting_blend_idx;
-        switch (getVignettingBlendType())
+        switch (vignetting_blend)
         {
         default:                            vignetting_blend_idx = 0; break;
         case cVignettingBlendType_Mult:     vignetting_blend_idx = 1; break;
@@ -260,7 +261,7 @@ void DepthOfField::initVertex_(sead::Heap* heap)
 
         p_shape->mVertex.allocBuffer(4 * num, heap); // They forgot to align the data lol
 
-        u32 vtx_index = 0;
+        s32 vtx_index = 0;
 
         for (u32 j = 0; j < 4; j++)
         {
@@ -370,7 +371,7 @@ void DepthOfField::initIndex_(sead::Heap* heap)
 
         p_shape->mIndex.allocBuffer(3 * num * 6, heap); // They forgot to align the data lol
 
-        u32 idx_index = 0;
+        s32 idx_index = 0;
 
         for (u32 j = 0; j < 3; j++)
         {
@@ -724,8 +725,6 @@ ShaderMode DepthOfField::drawDepthMipMap_(const DrawArg& arg, ShaderMode mode) c
 
         mode = p_program_near_mask->activate(mode);
 
-        // TODO: Not 100% certain about this
-
         f32 far_end   = sead::Mathf::min(*mFarEnd, *mFarStart);
         f32 far_start = sead::Mathf::max(*mFarStart, *mFarEnd);
 
@@ -894,8 +893,8 @@ void DepthOfField::uniformComposeParam_(const DrawArg& arg, const ShaderProgram*
     f32 w_inv = 1.0f / arg.width;
     f32 h_inv = 1.0f / arg.height;
 
-    f32 end   = sead::Mathf::min(*mEnd, *mStart);
-    f32 start = sead::Mathf::max(*mStart, *mEnd);
+    f32 end   = sead::Mathf::max(*mEnd, *mStart);
+    f32 start = sead::Mathf::min(*mStart, *mEnd);
 
     if (start == end)
         end += sead::Mathf::epsilon();
@@ -937,7 +936,7 @@ void DepthOfField::uniformComposeParam_(const DrawArg& arg, const ShaderProgram*
     f32 v0 = arg_far - arg_near;
     f32 v1 = arg_far + arg_near;
 
-    f32 near_far_param_z = (arg_near * start * v1 - 2 * arg_near * arg_near * arg_far) / arg_near * start * v0;
+    f32 near_far_param_z = (arg_near * start * v1 - 2 * arg_near * arg_near * arg_far) / (arg_near * start * v0);
     f32 near_far_param_w = 0.0f;
 
     if (*mNearEnable)
@@ -951,9 +950,8 @@ void DepthOfField::uniformComposeParam_(const DrawArg& arg, const ShaderProgram*
         f32 far_range = far_end - far_start;
         if (arg.view_depth)
         {
-            f32 z = arg_far - arg_near;
-            far_range = far_range               / z;
-            far_start = (far_start - arg_near)  / z;
+            mul_param.y = 1.0f / (far_range / v0);
+            add_param.y = -(((far_start - arg_near) / v0) * mul_param.y);
         }
         else
         {
@@ -964,7 +962,7 @@ void DepthOfField::uniformComposeParam_(const DrawArg& arg, const ShaderProgram*
         f32 v2 = arg_far - arg_near;
         f32 v3 = arg_far + arg_near;
 
-        near_far_param_w = (arg_near * far_start * v3 - 2 * arg_near * arg_near * arg_far) / arg_near * far_start * v2;
+        near_far_param_w = (arg_near * far_start * v3 - 2 * arg_near * arg_near * arg_far) / (arg_near * far_start * v2);
     }
 
     near_far_param.x = 1.0f / arg_near;
@@ -976,8 +974,8 @@ void DepthOfField::uniformComposeParam_(const DrawArg& arg, const ShaderProgram*
 
     if (*mEnableColorControl)
     {
-        f32 color_ctrl_depth_0_end   = sead::Mathf::min(mColorCtrlDepth->y, mColorCtrlDepth->x);
-        f32 color_ctrl_depth_0_start = sead::Mathf::max(mColorCtrlDepth->x, mColorCtrlDepth->y);
+        f32 color_ctrl_depth_0_end   = sead::Mathf::max(mColorCtrlDepth->y, mColorCtrlDepth->x);
+        f32 color_ctrl_depth_0_start = sead::Mathf::min(mColorCtrlDepth->x, mColorCtrlDepth->y);
 
         if (color_ctrl_depth_0_start == color_ctrl_depth_0_end)
             color_ctrl_depth_0_end += sead::Mathf::epsilon();
@@ -1103,10 +1101,10 @@ DepthOfField::DrawArg::DrawArg(Context& ctx, const RenderBuffer& render_buffer, 
 
 DepthOfField::TempVignetting::TempVignetting(DepthOfField* p_dof, const sead::SafeString& param_name)
     : utl::IParameterObj()
-    , mType (0,                           "type",  "形状",    this)
-    , mRange(sead::Vector2f(0.25f, 1.0f), "range", "変化幅",  this)
-    , mScale(sead::Vector2f(1.0f, 1.0f),  "scale", "スケール",  this)
-    , mTrans(sead::Vector2f(0.0f, 0.0f),  "trans", "オフセット", this)
+    , mType (0,                             "type",  "形状",    this)
+    , mRange(sead::Vector2f(0.25f,  1.0f),  "range", "変化幅",  this)
+    , mScale(sead::Vector2f(1.0f,   1.0f),  "scale", "スケール",  this)
+    , mTrans(sead::Vector2f(0.0f,   0.0f),  "trans", "オフセット", this)
 {
     p_dof->addObj(this, param_name);
 }
