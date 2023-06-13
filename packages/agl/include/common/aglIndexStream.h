@@ -56,6 +56,9 @@ public:
     void draw() const;
     void draw(u32 start, u32 count) const;
 
+    void drawInstanced(u32 instance_num) const;
+    void drawInstanced(u32 start, u32 count, u32 instance_num) const;
+
     void drawInstanced(u32 instance_num, u32 base_vertex) const;
     void drawInstanced(u32 start, u32 count, u32 instance_num, u32 base_vertex) const;
 
