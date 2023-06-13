@@ -5,19 +5,9 @@ namespace agl {
 inline void
 TextureSampler::applyTextureData(const TextureData& texture_data)
 {
-    if (!mIsTextureSet                                                           ||
-        mTextureData.getSurface().dim      != texture_data.getSurface().dim      ||
-        mTextureData.getSurface().width    != texture_data.getSurface().width    ||
-        mTextureData.getSurface().height   != texture_data.getSurface().height   ||
-        mTextureData.getSurface().depth    != texture_data.getSurface().depth    ||
-        mTextureData.getSurface().numMips  != texture_data.getSurface().numMips  ||
-        mTextureData.getSurface().format   != texture_data.getSurface().format   ||
-        mTextureData.getSurface().swizzle  != texture_data.getSurface().swizzle  ||
-        mTextureData.getSurface().tileMode != texture_data.getSurface().tileMode ||
-        mTextureData.getSurface().aa       != texture_data.getSurface().aa)
-    {
+    if (!mIsTextureSet || mTextureData != texture_data)
         applyTextureData_(texture_data);
-    }
+
     else
     {
         void* image_ptr = texture_data.getImagePtr();

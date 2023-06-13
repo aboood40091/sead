@@ -13,18 +13,9 @@ void RenderTarget<T>::applyTextureData(const TextureData& texture_data)
 template <typename T>
 void RenderTarget<T>::applyTextureData(const TextureData& texture_data, u32 mip_level, u32 slice)
 {
-    if (mTextureData.getSurface().dim      != texture_data.getSurface().dim      ||
-        mTextureData.getSurface().width    != texture_data.getSurface().width    ||
-        mTextureData.getSurface().height   != texture_data.getSurface().height   ||
-        mTextureData.getSurface().depth    != texture_data.getSurface().depth    ||
-        mTextureData.getSurface().numMips  != texture_data.getSurface().numMips  ||
-        mTextureData.getSurface().format   != texture_data.getSurface().format   ||
-        mTextureData.getSurface().swizzle  != texture_data.getSurface().swizzle  ||
-        mTextureData.getSurface().tileMode != texture_data.getSurface().tileMode ||
-        mTextureData.getSurface().aa       != texture_data.getSurface().aa)
-    {
+    if (mTextureData != texture_data)
         applyTextureData_(texture_data, mip_level, slice);
-    }
+
     else
     {
         void* image_ptr = texture_data.getImagePtr();
@@ -101,35 +92,31 @@ RenderTargetColor::copyToDisplayBuffer(GX2ScanTarget scan_target) const
 }
 
 inline void
-RenderTargetColor::initRegs() const
-{
-    if (mUpdateRegs)
-    {
-        initRegs_();
-        mUpdateRegs = false;
-    }
-}
-
-inline void
 RenderTargetColor::expandAuxBuffer() const
 {
     if (!mpAuxBuffer)
         return;
 
-    initRegs();
+    if (mUpdateRegs)
+    {
+        initRegs_();
+        mUpdateRegs = false;
+    }
 
     GX2ExpandAAColorBuffer(&mInnerBuffer);
     driver::GX2Resource::instance()->restoreContextState();
 }
 
 inline void
-RenderTargetDepth::initRegs() const
+RenderTargetColor::bind(s32 target_index) const
 {
     if (mUpdateRegs)
     {
         initRegs_();
         mUpdateRegs = false;
     }
+
+    GX2SetColorBuffer(&mInnerBuffer, GX2RenderTarget(target_index));
 }
 
 inline void
@@ -138,10 +125,26 @@ RenderTargetDepth::expandHiZBuffer() const
     if (!mpHiZBuffer)
         return;
 
-    initRegs();
+    if (mUpdateRegs)
+    {
+        initRegs_();
+        mUpdateRegs = false;
+    }
 
     GX2ExpandDepthBuffer(&mInnerBuffer);
     driver::GX2Resource::instance()->restoreContextState();
+}
+
+inline void
+RenderTargetDepth::bind() const
+{
+    if (mUpdateRegs)
+    {
+        initRegs_();
+        mUpdateRegs = false;
+    }
+
+    GX2SetDepthBuffer(&mInnerBuffer);
 }
 
 }

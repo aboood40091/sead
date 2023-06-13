@@ -49,15 +49,15 @@ void RenderBuffer::clear(u32 target_index, u32 clr_flag, const sead::Color4f& co
     if (target_index == 0)
     {
         if (mDepthTarget)
-            GX2SetClearDepthStencil(&mDepthTarget->getInnerBuffer(), depth, stencil);
+            GX2SetClearDepthStencil(&mDepthTarget->mInnerBuffer, depth, stencil);
 
         if (clr_flag & 1)
         {
             if ((clr_flag & 2) && (clr_flag & 4))
             {
                 GX2ClearBuffersEx(
-                    &mColorTarget[0]->getInnerBuffer(),
-                    &mDepthTarget->getInnerBuffer(),
+                    &mColorTarget[0]->mInnerBuffer,
+                    &mDepthTarget->mInnerBuffer,
                     color.r, color.g, color.b, color.a,
                     depth, stencil, GX2_CLEAR_BOTH
                 );
@@ -65,8 +65,8 @@ void RenderBuffer::clear(u32 target_index, u32 clr_flag, const sead::Color4f& co
             else if (clr_flag & 2)
             {
                 GX2ClearBuffersEx(
-                    &mColorTarget[0]->getInnerBuffer(),
-                    &mDepthTarget->getInnerBuffer(),
+                    &mColorTarget[0]->mInnerBuffer,
+                    &mDepthTarget->mInnerBuffer,
                     color.r, color.g, color.b, color.a,
                     depth, stencil, GX2_CLEAR_DEPTH
                 );
@@ -74,8 +74,8 @@ void RenderBuffer::clear(u32 target_index, u32 clr_flag, const sead::Color4f& co
             else if (clr_flag & 4)
             {
                 GX2ClearBuffersEx(
-                    &mColorTarget[0]->getInnerBuffer(),
-                    &mDepthTarget->getInnerBuffer(),
+                    &mColorTarget[0]->mInnerBuffer,
+                    &mDepthTarget->mInnerBuffer,
                     color.r, color.g, color.b, color.a,
                     depth, stencil, GX2_CLEAR_STENCIL
                 );
@@ -83,7 +83,7 @@ void RenderBuffer::clear(u32 target_index, u32 clr_flag, const sead::Color4f& co
             else
             {
                 GX2ClearColor(
-                    &mColorTarget[0]->getInnerBuffer(),
+                    &mColorTarget[0]->mInnerBuffer,
                     color.r, color.g, color.b, color.a
                 );
             }
@@ -92,15 +92,15 @@ void RenderBuffer::clear(u32 target_index, u32 clr_flag, const sead::Color4f& co
         {
             if ((clr_flag & 2) && (clr_flag & 4))
             {
-                GX2ClearDepthStencilEx(&mDepthTarget->getInnerBuffer(), depth, stencil, GX2_CLEAR_BOTH);
+                GX2ClearDepthStencilEx(&mDepthTarget->mInnerBuffer, depth, stencil, GX2_CLEAR_BOTH);
             }
             else if (clr_flag & 2)
             {
-                GX2ClearDepthStencilEx(&mDepthTarget->getInnerBuffer(), depth, stencil, GX2_CLEAR_DEPTH);
+                GX2ClearDepthStencilEx(&mDepthTarget->mInnerBuffer, depth, stencil, GX2_CLEAR_DEPTH);
             }
             else if (clr_flag & 4)
             {
-                GX2ClearDepthStencilEx(&mDepthTarget->getInnerBuffer(), depth, stencil, GX2_CLEAR_STENCIL);
+                GX2ClearDepthStencilEx(&mDepthTarget->mInnerBuffer, depth, stencil, GX2_CLEAR_STENCIL);
             }
         }
     }
@@ -109,7 +109,7 @@ void RenderBuffer::clear(u32 target_index, u32 clr_flag, const sead::Color4f& co
         if (clr_flag & 1)
         {
             GX2ClearColor(
-                &getRenderTargetColor(target_index)->getInnerBuffer(),
+                &getRenderTargetColor(target_index)->mInnerBuffer,
                 color.r, color.g, color.b, color.a
             );
         }
@@ -126,17 +126,11 @@ void RenderBuffer::bindImpl_() const
     {
         const RenderTargetColor* const p_color_target = *it;
         if (p_color_target)
-        {
-            p_color_target->initRegs();
-            GX2SetColorBuffer(&p_color_target->getInnerBuffer(), GX2RenderTarget(it.getIndex()));
-        }
+            p_color_target->bind(it.getIndex());
     }
 
     if (mDepthTarget)
-    {
-        mDepthTarget->initRegs();
-        GX2SetDepthBuffer(&mDepthTarget->getInnerBuffer());
-    }
+        mDepthTarget->bind();
 }
 
 void RenderBuffer::setRenderTargetColorNullAll()

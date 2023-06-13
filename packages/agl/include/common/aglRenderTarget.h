@@ -59,6 +59,8 @@ protected:
 };
 static_assert(sizeof(RenderTarget<void>) == 0xA8);
 
+class RenderBuffer;
+
 class RenderTargetColor : public RenderTarget<RenderTargetColor>
 {
     void onApplyTextureData_();
@@ -71,14 +73,16 @@ public:
     u32 getAuxBufferSize()  const { return mAuxBufferSize;  }
     u32 getAuxBufferAlign() const { return mAuxBufferAlign; }
 
-    GX2ColorBuffer& getInnerBuffer() const { return mInnerBuffer; }
+    void setAuxBuffer(void* buffer) { mpAuxBuffer = buffer; }
 
     void copyToDisplayBuffer(const sead::DisplayBufferCafe* display_buffer) const;
     void copyToDisplayBuffer(GX2ScanTarget scan_target) const;
-    void initRegs() const;
+
     void expandAuxBuffer() const;
 
     void invalidateGPUCache() const;
+
+    void bind(s32 target_index) const;
 
 private:
     void initRegs_() const;
@@ -89,6 +93,8 @@ protected:
     u32 mAuxBufferAlign;
     void* mpAuxBuffer;
     mutable GX2ColorBuffer mInnerBuffer;
+
+    friend class RenderBuffer;
 };
 static_assert(sizeof(RenderTargetColor) == 0x154, "agl::RenderTargetColor size mismatch");
 
@@ -104,12 +110,13 @@ public:
     u32 getHiZBufferSize()  const { return mHiZBufferSize;  }
     u32 getHiZBufferAlign() const { return mHiZBufferAlign; }
 
-    GX2DepthBuffer& getInnerBuffer() const { return mInnerBuffer; }
+    void setHiZBuffer(void* buffer) { mpHiZBuffer = buffer; }
 
-    void initRegs() const;
     void expandHiZBuffer() const;
 
     void invalidateGPUCache() const;
+
+    void bind() const;
 
 private:
     void initRegs_() const;
@@ -119,6 +126,8 @@ protected:
     u32 mHiZBufferAlign;
     void* mpHiZBuffer;
     mutable GX2DepthBuffer mInnerBuffer;
+
+    friend class RenderBuffer;
 };
 static_assert(sizeof(RenderTargetDepth) == 0x160, "agl::RenderTargetDepth size mismatch");
 

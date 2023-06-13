@@ -13,6 +13,9 @@ public:
     TextureData();
     virtual ~TextureData() { }
 
+    bool operator==(const TextureData& rhs) const;
+    bool operator!=(const TextureData& rhs) const { return !(*this == rhs); }
+
     TextureFormat getTextureFormat() const { return mFormat; }
     TextureType getTextureType() const { return TextureType(mSurface.dim); }
 
@@ -35,7 +38,6 @@ public:
 
     u32 getAlignment() const { return mSurface.alignment; }
 
-    GX2Surface& getSurface() { return mSurface; }
     const GX2Surface& getSurface() const { return mSurface; }
 
     TextureCompSel getComponentR() const { return mCompR; }
@@ -84,6 +86,8 @@ public:
     u32 getMipLevelNum() const { return mSurface.numMips; }
     void setMipLevelNum(u32 mip_level_num);
 
+    void setSurfaceSwizzle(u32 swizzle) { GX2SetSurfaceSwizzle(&mSurface, swizzle); }
+
     void invalidateGPUCache() const;
 
 private:
@@ -106,5 +110,21 @@ private:
     TextureCompSel mCompA;
 };
 static_assert(sizeof(TextureData) == 0x9C, "agl::TextureData size mismatch");
+
+inline bool
+TextureData::operator==(const TextureData& rhs) const
+{
+    return (
+        mSurface.dim        == rhs.mSurface.dim         &&
+        mSurface.width      == rhs.mSurface.width       &&
+        mSurface.height     == rhs.mSurface.height      &&
+        mSurface.depth      == rhs.mSurface.depth       &&
+        mSurface.numMips    == rhs.mSurface.numMips     &&
+        mSurface.format     == rhs.mSurface.format      &&
+        mSurface.swizzle    == rhs.mSurface.swizzle     &&
+        mSurface.tileMode   == rhs.mSurface.tileMode    &&
+        mSurface.aa         == rhs.mSurface.aa
+    );
+}
 
 }
