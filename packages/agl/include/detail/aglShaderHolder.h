@@ -5,6 +5,12 @@
 #include <container/seadSafeArray.h>
 #include <heap/seadDisposer.h>
 
+namespace sead {
+
+class ArchiveRes;
+
+}
+
 namespace agl { namespace detail {
 
 class ShaderHolder
@@ -112,18 +118,25 @@ public:
     };
     static_assert(cShader_Num == 94);
 
-    enum ShaderArchiveType
+    enum ArchiveType
     {
-        cArchive_Common = 0,
-        cArchive_Technique,
-        cArchive_SimpleModel,
-        cArchive_Num
+        cArchiveType_Common = 0,
+        cArchiveType_Technique,
+        cArchiveType_SimpleModel,
+        cArchiveType_Num
     };
-    static_assert(cArchive_Num == 3);
+    static_assert(cArchiveType_Num == 3);
 
 public:
     ShaderHolder();
     virtual ~ShaderHolder();
+
+    void setCreateDisplayLists(bool create)
+    {
+        mCreateDisplayLists = create;
+    }
+
+    void initialize(sead::ArchiveRes* p_arc, sead::Heap* heap);
 
     ShaderProgram& getShader(ShaderType shader)
     {
@@ -131,14 +144,14 @@ public:
         return *mProgram[shader];
     }
 
-    ShaderProgramArchive& getArchive(ShaderArchiveType archive)
+    ShaderProgramArchive& getArchive(ArchiveType archive)
     {
         return mProgramArchive[archive];
     }
 
 private:
     sead::FixedPtrArray<ShaderProgram, cShader_Num> mProgram;
-    sead::UnsafeArray<ShaderProgramArchive, cArchive_Num> mProgramArchive;
+    sead::UnsafeArray<ShaderProgramArchive, cArchiveType_Num> mProgramArchive;
     bool mCreateDisplayLists;
 };
 static_assert(sizeof(ShaderHolder) == 0x280, "agl::detail::ShaderHolder size mismatch");
