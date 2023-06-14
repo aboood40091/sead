@@ -6,6 +6,7 @@
 namespace agl { namespace lyr {
 
 class DrawMethod;
+class RenderInfo;
 
 class RenderStep
 {
@@ -13,10 +14,12 @@ public:
     RenderStep();
     virtual ~RenderStep() {}
 
+    void draw(const RenderInfo& render_info) const;
+
     bool pushBack(DrawMethod* p_method);
     s32 remove(const DrawMethod* p_method);
 
-private:
+protected:
     sead::FixedPtrArray<DrawMethod, 256> mpDrawMethod;
     sead::BitFlag32 mFlag; // & 1: render
 };
