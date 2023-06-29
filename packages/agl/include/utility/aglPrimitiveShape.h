@@ -9,6 +9,8 @@
 
 namespace agl { namespace utl {
 
+class VertexAttributeHolder;
+
 class PrimitiveShape
 {
     SEAD_SINGLETON_DISPOSER(PrimitiveShape)
@@ -134,6 +136,8 @@ private:
     VertexBuffer                                                                            mVtxBufferTorus;
     sead::UnsafeArray<IndexStream,                                          cQuality_Num>   mIdxStreamTorus;
     sead::UnsafeArray<IndexStream,                                          cQuality_Num>   mIdxStreamLineTorus;
+
+    friend class VertexAttributeHolder;
 };
 static_assert(sizeof(PrimitiveShape) == 0x172C, "agl::utl::PrimitiveShape size mismatch");
 
