@@ -13,7 +13,7 @@ class ArchiveRes;
 
 namespace agl { namespace detail {
 
-class ShaderHolder
+class ShaderHolder : public sead::hostio::Node
 {
     SEAD_SINGLETON_DISPOSER(ShaderHolder)
 
