@@ -136,6 +136,114 @@ const Shader* ShaderProgram::getShader(ShaderType type) const
     }
 }
 
+void ShaderProgram::createAttribute(s32 num, sead::Heap* heap)
+{
+    // SEAD_ASSERT(mAttributeLocation.size() == 0);
+    // SEAD_ASSERT(getVariation_() == nullptr || getVariation_()->mpOriginal == this);
+
+    mAttributeLocation.allocBuffer(num, heap);
+
+    if (getVariation_())
+    {
+        for (sead::Buffer<ShaderProgram>::iterator it = getVariation_()->mProgram.begin(), it_end = getVariation_()->mProgram.end(); it != it_end; ++it)
+            it->mAttributeLocation.allocBuffer(num, heap);
+    }
+}
+
+void ShaderProgram::setAttributeName(s32 index, const sead::SafeString& name)
+{
+    // SEAD_ASSERT(getVariation_() == nullptr || getVariation_()->mpOriginal == this);
+
+    mAttributeLocation[index].setName(name);
+
+    if (getVariation_())
+    {
+        for (sead::Buffer<ShaderProgram>::iterator it = getVariation_()->mProgram.begin(), it_end = getVariation_()->mProgram.end(); it != it_end; ++it)
+            it->mAttributeLocation[index].setName(name);
+    }
+}
+
+void ShaderProgram::createUniform(s32 num, sead::Heap* heap)
+{
+    // SEAD_ASSERT(mUniformLocation.size() == 0);
+    // SEAD_ASSERT(getVariation_() == nullptr || getVariation_()->mpOriginal == this);
+
+    mUniformLocation.allocBuffer(num, heap);
+
+    if (getVariation_())
+    {
+        for (sead::Buffer<ShaderProgram>::iterator it = getVariation_()->mProgram.begin(), it_end = getVariation_()->mProgram.end(); it != it_end; ++it)
+            it->mUniformLocation.allocBuffer(num, heap);
+    }
+}
+
+void ShaderProgram::setUniformName(s32 index, const sead::SafeString& name)
+{
+    // SEAD_ASSERT(getVariation_() == nullptr || getVariation_()->mpOriginal == this);
+
+    mUniformLocation[index].setName(name);
+
+    if (getVariation_())
+    {
+        for (sead::Buffer<ShaderProgram>::iterator it = getVariation_()->mProgram.begin(), it_end = getVariation_()->mProgram.end(); it != it_end; ++it)
+            it->mUniformLocation[index].setName(name);
+    }
+}
+
+void ShaderProgram::createUniformBlock(s32 num, sead::Heap* heap)
+{
+    // SEAD_ASSERT(mUniformBlockLocation.size() == 0);
+    // SEAD_ASSERT(getVariation_() == nullptr || getVariation_()->mpOriginal == this);
+
+    mUniformBlockLocation.allocBuffer(num, heap);
+
+    if (getVariation_())
+    {
+        for (sead::Buffer<ShaderProgram>::iterator it = getVariation_()->mProgram.begin(), it_end = getVariation_()->mProgram.end(); it != it_end; ++it)
+            it->mUniformBlockLocation.allocBuffer(num, heap);
+    }
+}
+
+void ShaderProgram::setUniformBlockName(s32 index, const sead::SafeString& name)
+{
+    // SEAD_ASSERT(getVariation_() == nullptr || getVariation_()->mpOriginal == this);
+
+    mUniformBlockLocation[index].setName(name);
+
+    if (getVariation_())
+    {
+        for (sead::Buffer<ShaderProgram>::iterator it = getVariation_()->mProgram.begin(), it_end = getVariation_()->mProgram.end(); it != it_end; ++it)
+            it->mUniformBlockLocation[index].setName(name);
+    }
+}
+
+void ShaderProgram::createSamplerLocation(s32 num, sead::Heap* heap)
+{
+    // SEAD_ASSERT(mSamplerLocation.size() == 0);
+    // SEAD_ASSERT(getVariation_() == nullptr || getVariation_()->mpOriginal == this);
+
+    mSamplerLocation.allocBuffer(num, heap);
+
+    if (getVariation_())
+    {
+        for (sead::Buffer<ShaderProgram>::iterator it = getVariation_()->mProgram.begin(), it_end = getVariation_()->mProgram.end(); it != it_end; ++it)
+            it->mSamplerLocation.allocBuffer(num, heap);
+    }
+}
+
+void ShaderProgram::setSamplerLocationName(s32 index, const sead::SafeString& name)
+{
+    // SEAD_ASSERT(getVariation_() == nullptr || getVariation_()->mpOriginal == this);
+
+    mSamplerLocation[index].setName(name);
+
+    if (getVariation_())
+    {
+        for (sead::Buffer<ShaderProgram>::iterator it = getVariation_()->mProgram.begin(), it_end = getVariation_()->mProgram.end(); it != it_end; ++it)
+            it->mSamplerLocation[index].setName(name);
+    }
+}
+
 u32 ShaderProgram::setUpAllVariation()
 {
     u32 ret;
@@ -612,7 +720,8 @@ void ShaderProgram::VariationBuffer::create(sead::Heap* heap)
         variation_num *= it->mValue.size();
     }
 
-    mProgram.allocBuffer(variation_num - 1, heap);
+    if (variation_num - 1 > 0)
+        mProgram.allocBuffer(variation_num - 1, heap);
 }
 
 s32 ShaderProgram::VariationBuffer::getMacroAndValueArray(s32 index, const char** macro_array, const char** value_array) const

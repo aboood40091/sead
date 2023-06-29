@@ -111,6 +111,18 @@ public:
     }
 #endif // cafe
 
+    void createAttribute(s32 num, sead::Heap* heap = nullptr);
+    void setAttributeName(s32 index, const sead::SafeString& name);
+
+    void createUniform(s32 num, sead::Heap* heap = nullptr);
+    void setUniformName(s32 index, const sead::SafeString& name);
+
+    void createUniformBlock(s32 num, sead::Heap* heap = nullptr);
+    void setUniformBlockName(s32 index, const sead::SafeString& name);
+
+    void createSamplerLocation(s32 num, sead::Heap* heap = nullptr);
+    void setSamplerLocationName(s32 index, const sead::SafeString& name);
+
     u32 setUpAllVariation(); // I don't know the actual return type
     void reserveSetUpAllVariation();
 
@@ -132,26 +144,16 @@ public:
 
     s32 getVariationMacroValueVariationNum(s32 macro_index) const;
 
-    bool getCompileEnable() const
+    u32 update() const // Shrug
     {
-        return mFlag.isOn(1);
+        return validate_();
     }
 
-    void setCompileEnable(bool enable)
-    {
-        mFlag.change(1, enable);
-    }
-
-    void update() const // Shrug
-    {
-        validate_();
-    }
-
-    void updateVariation(s32 index) // I don't know the actual name
+    u32 updateVariation(s32 index) // I don't know the actual name
     {
         ShaderProgram* program = getVariation(index);
         program->mFlag.set(8 | 2);
-        program->validate_();
+        return program->update();
     }
 
     const AttributeLocation& getAttributeLocation(s32 index) const { return mAttributeLocation[index]; }
