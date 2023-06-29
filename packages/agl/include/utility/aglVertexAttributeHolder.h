@@ -13,13 +13,24 @@ class VertexAttributeHolder
 public:
     enum VertexAttributeType
     {
-        cAttribute_QuadTriangle = 7,
-        cAttribute_Num = 9
+        cAttribute_Cube,
+        cAttribute_Cube2,
+        cAttribute_Cone,
+        cAttribute_Cylinder,
+        cAttribute_Sphere,
+        cAttribute_Sphere2,
+        cAttribute_Quad,
+        cAttribute_QuadTriangle,
+        cAttribute_Circle,
+        cAttribute_Num
     };
+    static_assert(cAttribute_Num == 9);
 
 public:
     VertexAttributeHolder();
     virtual ~VertexAttributeHolder();
+
+    void initialize(sead::Heap* heap);
 
     const VertexAttribute& getVertexAttribute(VertexAttributeType type) const
     {
