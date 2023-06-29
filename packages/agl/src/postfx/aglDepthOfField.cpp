@@ -1028,6 +1028,80 @@ void DepthOfField::uniformComposeParam_(const DrawArg& arg, const ShaderProgram*
     }
 }
 
+void DepthOfField::uniformVignettingParam_(const DrawArg& arg, const ShaderProgram* program) const
+{
+    bool compose_depth_of_field = arg.pass == 2 && enableDepthOfField_();
+    bool vignetting_differnt_shape = arg.pass == 3 && enableDifferntShape_();
+
+    const TempVignetting& temp_vignetting =
+        vignetting_differnt_shape
+            ? mTempVignetting1
+            : mTempVignetting0;
+
+    sead::Vector2f vignetting_scale = *temp_vignetting.mScale;
+    vignetting_scale.x = sead::Mathf::max(0.001f, vignetting_scale.x);
+    vignetting_scale.y = sead::Mathf::max(0.001f, vignetting_scale.y);
+
+    f32 radius_scale_1 = 1 - temp_vignetting.mRange->x;
+    radius_scale_1 = sead::Mathf::clamp2(0.0f, radius_scale_1, 1.0f);
+
+    f32 radius_scale_3_div = sead::Mathf::min(vignetting_scale.x, vignetting_scale.y);
+    f32 radius_scale_3_add = sead::Mathf::max(sead::Mathf::abs(temp_vignetting.mTrans->x), sead::Mathf::abs(temp_vignetting.mTrans->y));
+    f32 radius_scale_3_mul = 1.0f / radius_scale_3_div;
+
+    f32 radius_scale_0;
+    if (compose_depth_of_field)
+        radius_scale_0 = 0.0f;
+    else
+        radius_scale_0 = radius_scale_1;
+
+    f32 radius_scale_2 = (1 - radius_scale_1) * temp_vignetting.mRange->y;
+    f32 radius_scale_3 = 1.1f * radius_scale_3_mul + radius_scale_3_add;
+
+    sead::Vector4f vignetting_radius(
+        radius_scale_0,
+        radius_scale_1,
+        radius_scale_2,
+        radius_scale_3
+    );
+
+    program->getUniformLocation(cUniform_VignettingRadius).setUniform(sizeof(sead::Vector4f), &vignetting_radius);
+
+    f32 param_0_scale = 1.0f;
+    f32 param_1_scale = 1.0f;
+
+    if (*temp_vignetting.mType == 0)
+    {
+        f32 diagonal_length = sead::Mathf::sqrt(sead::Mathi::square(arg.width) + sead::Mathi::square(arg.height));
+        param_0_scale = diagonal_length / arg.width;    // sec
+        param_1_scale = diagonal_length / arg.height;   // csc
+    }
+
+    f32 param_0 = param_0_scale * vignetting_scale.x;
+    f32 param_1 = param_1_scale * vignetting_scale.y;
+    f32 param_2 = sead::Mathf::clamp2(0.0f, *mVignettingBlur, 1.0f);
+
+    sead::Vector4f vignetting_param(
+        param_0,
+        param_1,
+        param_2,
+        0.0f
+    );
+
+    program->getUniformLocation(cUniform_VignettingParam).setUniform(sizeof(sead::Vector4f), &vignetting_param);
+
+    program->getUniformLocation(cUniform_VignettingColor).setUniform(sizeof(sead::Color4f), &(*mVignettingColor));
+
+    sead::Vector4f vignetting_trans(
+        temp_vignetting.mTrans->x,
+        temp_vignetting.mTrans->y,
+        0.0f,
+        0.0f
+    );
+
+    program->getUniformLocation(cUniform_VignettingTrans).setUniform(sizeof(sead::Vector4f), &vignetting_trans);
+}
+
 void DepthOfField::setIndirectTextureData(const TextureData* p_texture_data)
 {
     mpIndirectTextureData = p_texture_data;
