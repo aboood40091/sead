@@ -36,9 +36,9 @@ public:
 
     struct Vertex
     {
-        sead::Vector3f pos;
-        sead::Vector3f nrm;
-        sead::Vector2f tex;
+        f32 pos[3];
+        f32 nrm[3];
+        f32 tex[2];
     };
     static_assert(sizeof(Vertex) == 0x20, "agl::utl::PrimitiveShape::Vertex size mismatch");
 

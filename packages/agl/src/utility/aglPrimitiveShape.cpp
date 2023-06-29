@@ -72,47 +72,47 @@ void PrimitiveShape::setUpStreamQuad_(sead::Heap* heap)
     {
         sead::UnsafeArray<Vertex, cVtxNum> vertices;
 
-        vertices[0].pos.x = -0.5f;
-        vertices[0].pos.y =  0.5f;
-        vertices[0].pos.z =  0.0f;
-        vertices[0].nrm.x =  0.0f;
-        vertices[0].nrm.y =  0.0f;
-        vertices[0].nrm.z =  1.0f;
-        vertices[0].tex.x =  0.0f;
-        vertices[0].tex.y =  0.0f;
+        vertices[0].pos[0] = -0.5f;
+        vertices[0].pos[1] =  0.5f;
+        vertices[0].pos[2] =  0.0f;
+        vertices[0].nrm[0] =  0.0f;
+        vertices[0].nrm[1] =  0.0f;
+        vertices[0].nrm[2] =  1.0f;
+        vertices[0].tex[0] =  0.0f;
+        vertices[0].tex[1] =  0.0f;
 
-        vertices[1].pos.x =  0.5f;
-        vertices[1].pos.y =  0.5f;
-        vertices[1].pos.z =  0.0f;
-        vertices[1].nrm.x =  0.0f;
-        vertices[1].nrm.y =  0.0f;
-        vertices[1].nrm.z =  1.0f;
-        vertices[1].tex.x =  1.0f;
-        vertices[1].tex.y =  0.0f;
+        vertices[1].pos[0] =  0.5f;
+        vertices[1].pos[1] =  0.5f;
+        vertices[1].pos[2] =  0.0f;
+        vertices[1].nrm[0] =  0.0f;
+        vertices[1].nrm[1] =  0.0f;
+        vertices[1].nrm[2] =  1.0f;
+        vertices[1].tex[0] =  1.0f;
+        vertices[1].tex[1] =  0.0f;
 
-        vertices[2].pos.x = -0.5f;
-        vertices[2].pos.y = -0.5f;
-        vertices[2].pos.z =  0.0f;
-        vertices[2].nrm.x =  0.0f;
-        vertices[2].nrm.y =  0.0f;
-        vertices[2].nrm.z =  1.0f;
-        vertices[2].tex.x =  0.0f;
-        vertices[2].tex.y =  1.0f;
+        vertices[2].pos[0] = -0.5f;
+        vertices[2].pos[1] = -0.5f;
+        vertices[2].pos[2] =  0.0f;
+        vertices[2].nrm[0] =  0.0f;
+        vertices[2].nrm[1] =  0.0f;
+        vertices[2].nrm[2] =  1.0f;
+        vertices[2].tex[0] =  0.0f;
+        vertices[2].tex[1] =  1.0f;
 
-        vertices[3].pos.x =  0.5f;
-        vertices[3].pos.y = -0.5f;
-        vertices[3].pos.z =  0.0f;
-        vertices[3].nrm.x =  0.0f;
-        vertices[3].nrm.y =  0.0f;
-        vertices[3].nrm.z =  1.0f;
-        vertices[3].tex.x =  1.0f;
-        vertices[3].tex.y =  1.0f;
+        vertices[3].pos[0] =  0.5f;
+        vertices[3].pos[1] = -0.5f;
+        vertices[3].pos[2] =  0.0f;
+        vertices[3].nrm[0] =  0.0f;
+        vertices[3].nrm[1] =  0.0f;
+        vertices[3].nrm[2] =  1.0f;
+        vertices[3].tex[0] =  1.0f;
+        vertices[3].tex[1] =  1.0f;
 
         for (u32 i = 0; i < cVtxNum; i++)
         {
-            mVtxQuad[i].pos = vertices[i].pos;
-            mVtxQuad[i].nrm = vertices[i].nrm;
-            mVtxQuad[i].tex = vertices[i].tex;
+            *(sead::Vector3f*)mVtxQuad[i].pos = *(sead::Vector3f*)vertices[i].pos;
+            *(sead::Vector3f*)mVtxQuad[i].nrm = *(sead::Vector3f*)vertices[i].nrm;
+            *(sead::Vector2f*)mVtxQuad[i].tex = *(sead::Vector2f*)vertices[i].tex;
         }
     }
     mVtxBufferQuad.setUpBuffer(mVtxQuad.getBufferPtr(), sizeof(Vertex), cVtxNum * sizeof(Vertex));
@@ -161,38 +161,38 @@ void PrimitiveShape::setUpStreamQuadTriangle_(sead::Heap* heap)
     {
         sead::UnsafeArray<Vertex, cVtxNum> vertices;
 
-        vertices[0].pos.x = -0.5f;
-        vertices[0].pos.y =  0.5f;
-        vertices[0].pos.z =  0.0f;
-        vertices[0].nrm.x =  0.0f;
-        vertices[0].nrm.y =  0.0f;
-        vertices[0].nrm.z =  1.0f;
-        vertices[0].tex.x =  0.0f;
-        vertices[0].tex.y =  0.0f;
+        vertices[0].pos[0] = -0.5f;
+        vertices[0].pos[1] =  0.5f;
+        vertices[0].pos[2] =  0.0f;
+        vertices[0].nrm[0] =  0.0f;
+        vertices[0].nrm[1] =  0.0f;
+        vertices[0].nrm[2] =  1.0f;
+        vertices[0].tex[0] =  0.0f;
+        vertices[0].tex[1] =  0.0f;
 
-        vertices[1].pos.x =  1.5f;
-        vertices[1].pos.y =  0.5f;
-        vertices[1].pos.z =  0.0f;
-        vertices[1].nrm.x =  0.0f;
-        vertices[1].nrm.y =  0.0f;
-        vertices[1].nrm.z =  1.0f;
-        vertices[1].tex.x =  2.0f;
-        vertices[1].tex.y =  0.0f;
+        vertices[1].pos[0] =  1.5f;
+        vertices[1].pos[1] =  0.5f;
+        vertices[1].pos[2] =  0.0f;
+        vertices[1].nrm[0] =  0.0f;
+        vertices[1].nrm[1] =  0.0f;
+        vertices[1].nrm[2] =  1.0f;
+        vertices[1].tex[0] =  2.0f;
+        vertices[1].tex[1] =  0.0f;
 
-        vertices[2].pos.x = -0.5f;
-        vertices[2].pos.y = -1.5f;
-        vertices[2].pos.z =  0.0f;
-        vertices[2].nrm.x =  0.0f;
-        vertices[2].nrm.y =  0.0f;
-        vertices[2].nrm.z =  1.0f;
-        vertices[2].tex.x =  0.0f;
-        vertices[2].tex.y =  2.0f;
+        vertices[2].pos[0] = -0.5f;
+        vertices[2].pos[1] = -1.5f;
+        vertices[2].pos[2] =  0.0f;
+        vertices[2].nrm[0] =  0.0f;
+        vertices[2].nrm[1] =  0.0f;
+        vertices[2].nrm[2] =  1.0f;
+        vertices[2].tex[0] =  0.0f;
+        vertices[2].tex[1] =  2.0f;
 
         for (u32 i = 0; i < cVtxNum; i++)
         {
-            mVtxQuadTriangle[i].pos = vertices[i].pos;
-            mVtxQuadTriangle[i].nrm = vertices[i].nrm;
-            mVtxQuadTriangle[i].tex = vertices[i].tex;
+            *(sead::Vector3f*)mVtxQuadTriangle[i].pos = *(sead::Vector3f*)vertices[i].pos;
+            *(sead::Vector3f*)mVtxQuadTriangle[i].nrm = *(sead::Vector3f*)vertices[i].nrm;
+            *(sead::Vector2f*)mVtxQuadTriangle[i].tex = *(sead::Vector2f*)vertices[i].tex;
         }
     }
     mVtxBufferQuadTriangle.setUpBuffer(mVtxQuadTriangle.getBufferPtr(), sizeof(Vertex), cVtxNum * sizeof(Vertex));
