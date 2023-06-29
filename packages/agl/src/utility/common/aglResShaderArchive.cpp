@@ -374,4 +374,14 @@ bool ResBinaryShaderArchive::setUp(bool le_resolve_pointers)
     return true;
 }
 
+const char* ResShaderArchiveData::getExtension()
+{
+    return "sharc";
+}
+
+const char* ResBinaryShaderArchiveData::getExtension()
+{
+    return "sharcfb";
+}
+
 }
