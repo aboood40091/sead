@@ -32,6 +32,12 @@ public:
     PrimitiveTexture();
     virtual ~PrimitiveTexture();
 
+    void initialize(sead::Heap* heap);
+
+private:
+    void initializeMipLevelTexture_(sead::Heap* heap);
+
+public:
     TextureSampler& getTextureSampler(TextureSamplerType sampler) { return mTextureSampler[sampler]; }
     const TextureSampler& getTextureSampler(TextureSamplerType sampler) const { return mTextureSampler[sampler]; }
 
