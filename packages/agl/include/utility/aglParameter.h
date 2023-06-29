@@ -27,13 +27,11 @@ public:
         cType_vec4      = 5,    // sead::Vector4f
         cType_color     = 6,    // sead::Color4f
         cType_string32  = 7,    // sead::FixedSafeString<32>
-
-        // Unused in NSMBU
-        cType_string64  = 8,    // sead::FixedSafeString<64>
+        cType_string64  = 8,    // sead::FixedSafeString<64>    (Unused in NSMBU)
         cType_curve1    = 9,    // agl::utl::ParameterCurve1
-        cType_curve2    = 10,   // agl::utl::ParameterCurve2
-        cType_curve3    = 11,   // agl::utl::ParameterCurve3
-        cType_curve4    = 12    // agl::utl::ParameterCurve4
+        cType_curve2    = 10,   // agl::utl::ParameterCurve2    (Unused in NSMBU)
+        cType_curve3    = 11,   // agl::utl::ParameterCurve3    (Unused in NSMBU)
+        cType_curve4    = 12    // agl::utl::ParameterCurve4    (Unused in NSMBU)
     };
 
 public:

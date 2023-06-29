@@ -163,7 +163,7 @@ const char* ResShaderVariation::getID() const
 {
     const char* value = getName() + ref().mNameLen;
 
-    for (s32 i = 0, index = ref().mValueNum; ; i++)
+    for (s32 i = 0, index = static_cast<s32>(ref().mValueNum); ; i++)
     {
         while (*value == '\0')
             value++;

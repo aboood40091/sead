@@ -44,7 +44,7 @@ void createShaderProgram(
             it.getIndex(),
             variation.getName(),
             variation.getID(),
-            variation.ref().mValueNum,
+            static_cast<s32>(variation.ref().mValueNum),
             heap
         );
 

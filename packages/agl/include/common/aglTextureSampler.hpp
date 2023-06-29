@@ -130,9 +130,16 @@ TextureSampler::setMipParam(f32 lod_min, f32 lod_max, f32 lod_bias)
 }
 
 inline void
-TextureSampler::setDepthComp(sead::Graphics::DepthFunc func)
+TextureSampler::setDepthCompareEnable(bool enable)
 {
-    mDepthComp = func;
+    mDepthCompareEnable = enable;
+    mFlag.setBit(4);
+}
+
+inline void
+TextureSampler::setDepthCompareFunc(sead::Graphics::DepthFunc func)
+{
+    mDepthCompareFunc = func;
     mFlag.setBit(4);
 }
 

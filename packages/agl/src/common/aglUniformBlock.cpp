@@ -161,9 +161,9 @@ bool UniformBlock::setUniform(const void* p_data, const UniformBlockLocation& lo
     if (!location.isValid())
         return false;
 
+#ifdef cafe
     const u8* ptr = (const u8*)p_data + offset;
 
-#ifdef cafe
     if (location.getVertexLocation() != -1)
         GX2SetVertexUniformBlock(location.getVertexLocation(), size, ptr);
 

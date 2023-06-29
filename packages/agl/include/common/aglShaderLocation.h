@@ -131,16 +131,19 @@ class AttributeLocation : public sead::INamable
 public:
     AttributeLocation()
         : sead::INamable("Undefined")
+        , mVS() // Nintendo mistakingly didn't set this to -1
     {
     }
 
     explicit AttributeLocation(const sead::SafeString& name)
         : sead::INamable(name)
+        , mVS() // I don't actually know if this is set here
     {
     }
 
     AttributeLocation(const sead::SafeString& name, const ShaderProgram& program)
         : sead::INamable(name)
+      //, mVS() // Set by search()
     {
         search(program);
     }

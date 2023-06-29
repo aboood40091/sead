@@ -261,7 +261,7 @@ sead::HeapSafeString* ShaderTextUtil::createRawText(const sead::SafeString& text
                     i_source++;
                 }
                 if (!found)
-                    return p_text;
+                    break;
             }
 
             const char* p_source_text = source_text[i_source];

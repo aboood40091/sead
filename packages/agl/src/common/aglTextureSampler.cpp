@@ -22,8 +22,8 @@ TextureSampler::TextureSampler()
     , mCompA(cTextureCompSel_A)
     , mIsTextureSet(false)
     , _e9(0)
-    , _ea(0)
-    , mDepthComp(sead::Graphics::cDepthFunc_Never)
+    , mDepthCompareEnable(false)
+    , mDepthCompareFunc(sead::Graphics::cDepthFunc_Never)
 {
     GX2InitSampler(&mGX2Sampler,
                    GX2_TEX_CLAMP_CLAMP,
@@ -125,7 +125,7 @@ void TextureSampler::initMipParam_() const
 
 void TextureSampler::initDepthComp_() const
 {
-    GX2InitSamplerDepthCompare(&mGX2Sampler, (GX2CompareFunction)mDepthComp);
+    GX2InitSamplerDepthCompare(&mGX2Sampler, (GX2CompareFunction)mDepthCompareFunc);
 }
 
 void TextureSampler::initBorderColor_() const

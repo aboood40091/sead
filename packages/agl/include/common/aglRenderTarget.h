@@ -73,7 +73,8 @@ public:
     u32 getAuxBufferSize()  const { return mAuxBufferSize;  }
     u32 getAuxBufferAlign() const { return mAuxBufferAlign; }
 
-    void setAuxBuffer(void* buffer) { mpAuxBuffer = buffer; }
+    // TODO
+  //void setAuxBuffer(void* buffer) { mpAuxBuffer = buffer; }
 
     void copyToDisplayBuffer(const sead::DisplayBufferCafe* display_buffer) const;
     void copyToDisplayBuffer(GX2ScanTarget scan_target) const;
@@ -110,7 +111,8 @@ public:
     u32 getHiZBufferSize()  const { return mHiZBufferSize;  }
     u32 getHiZBufferAlign() const { return mHiZBufferAlign; }
 
-    void setHiZBuffer(void* buffer) { mpHiZBuffer = buffer; }
+    // TODO
+  //void setHiZBuffer(void* buffer) { mpHiZBuffer = buffer; }
 
     void expandHiZBuffer() const;
 

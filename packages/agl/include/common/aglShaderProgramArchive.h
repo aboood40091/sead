@@ -89,6 +89,11 @@ public:
 
     void destroy();
 
+    bool isValid() const
+    {
+        return mResBinary.isValid() || mResText.isValid();
+    }
+
     sead::SafeString getName() const
     {
         if (mResBinary.isValid())
@@ -124,6 +129,11 @@ public:
             return mProgram.unsafeGet(index);
 
         return nullptr;
+    }
+
+    const ShaderProgram* searchShaderProgram(s32 index) const
+    {
+        return mProgram.get(index);
     }
 
     void updateCompileInfo();

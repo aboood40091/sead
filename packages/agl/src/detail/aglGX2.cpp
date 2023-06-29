@@ -130,6 +130,16 @@ void GX2Resource::setShaderMode(ShaderMode mode, const ShaderOptimizeInfo& info)
 #endif // cafe
 }
 
+void GX2Resource::setGeometryShaderRingBuffer() const
+{
+#ifdef cafe
+    GX2SetGeometryShaderInputRingBuffer(mGeometryShaderInputRingBuffer, mGeometryShaderInputRingBufferSize);
+    GX2SetGeometryShaderOutputRingBuffer(mGeometryShaderOutputRingBuffer, mGeometryShaderOutputRingBufferSize);
+#endif // cafe
+}
+
+#ifdef cafe
+
 namespace {
 
 inline void GetContextStateDisplayList(GX2ContextState* state, void** pp_dl, u32* p_size)
@@ -144,16 +154,11 @@ inline void GetContextStateDisplayList(GX2ContextState* state, void** pp_dl, u32
 
 }
 
-void GX2Resource::setGeometryShaderRingBuffer() const
-{
-#ifdef cafe
-    GX2SetGeometryShaderInputRingBuffer(mGeometryShaderInputRingBuffer, mGeometryShaderInputRingBufferSize);
-    GX2SetGeometryShaderOutputRingBuffer(mGeometryShaderOutputRingBuffer, mGeometryShaderOutputRingBufferSize);
 #endif // cafe
-}
 
 void GX2Resource::restoreContextState()
 {
+#ifdef cafe
     if (mStateShadowEnable)
     {
         GX2ContextState* state = sead::GraphicsCafe::instance()->getGX2ContextState();
@@ -174,6 +179,7 @@ void GX2Resource::restoreContextState()
     {
         GX2SetContextState(nullptr);
     }
+#endif // cafe
 }
 
 } }

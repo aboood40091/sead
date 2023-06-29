@@ -8,8 +8,11 @@ struct ResShaderSourceData
 {
     u32 mSize;
     u32 mNameLen;
-    u32 mTextLen; // Text Length
-    u32 _c;       // Text Length... 2
+    u32 mTextLen;
+    u32 mRawTextLen;    // If file includes other files, this is the length of text after
+                        // resolving all includes + macros auto defined by AGL.
+                        // Otherwise, it's the same as the previous field.
+                        // (Unused)
     // char mName[];
 };
 static_assert(sizeof(ResShaderSourceData) == 0x10, "agl::ResShaderSourceData size mismatch");

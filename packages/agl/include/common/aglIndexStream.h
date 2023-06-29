@@ -40,8 +40,6 @@ public:
         setPrimitiveType(primitive_type);
     }
 
-    const void* getBufferPtr() const { return mpBuffer; }
-
     const void* getBufferPtr(u32 start) const
     {
         u32 offset = mFormat == cIndexStreamFormat_u16

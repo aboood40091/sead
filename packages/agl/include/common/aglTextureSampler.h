@@ -50,16 +50,14 @@ public:
 
     void setMipParam(f32 lod_min, f32 lod_max, f32 lod_bias);
 
-    void setDepthComp(sead::Graphics::DepthFunc func);
+    void setDepthCompareEnable(bool enable);
+    void setDepthCompareFunc(sead::Graphics::DepthFunc func);
 
     void setBorderColor(f32 r, f32 g, f32 b, f32 a);
     void setBorderColor(const sead::Color4f& color);
 
     void setUnk1(u8 v) { _e9 = v; }
     u8 getUnk1() const { return _e9; }
-
-    void setUnk2(u8 v) { _ea = v; }
-    u8 setUnk2() const { return _ea; }
 
     bool activate(const SamplerLocation& location, s32 = -1) const;
 
@@ -95,8 +93,8 @@ private:
     TextureCompSel mCompA;
     bool mIsTextureSet;
     u8 _e9;
-    u8 _ea;
-    sead::Graphics::DepthFunc mDepthComp;
+    bool mDepthCompareEnable;
+    sead::Graphics::DepthFunc mDepthCompareFunc;
     mutable GX2Sampler mGX2Sampler;
     mutable GX2Texture mGX2Texture;
     mutable bool mHasBorder;
