@@ -12,13 +12,33 @@ class StreamSrc;
 class Stream
 {
 public:
+    enum Modes
+    {
+        cBinary = 0,
+        cText   = 1,
+        cModeNum
+    };
+
+public:
     Stream();
     virtual ~Stream() { }
 
+    void skip(u32 size);
+    void skip(u32 size, u32 count);
+
+    bool isEOF();
+
+    void setBinaryEndian(Endian::Types types);
+    void setMode(Modes mode);
+    void setUserFormat(StreamFormat* format);
+
 protected:
-    StreamFormat* mFormat;
-    StreamSrc* mSrcStream;
-    Endian::Types mSrcEndian;
+    StreamFormat*   mFormat;
+    StreamSrc*      mSrcStream;
+    Endian::Types   mSrcEndian;
+
+private:
+    static StreamFormat* const BASIC_STREAM_FORMAT[cModeNum];
 };
 
 class ReadStream : public Stream
