@@ -15,7 +15,7 @@ static inline void swap32(void* ptr, size_t size)
 
     for (u32 i = 0; i < count; i++)
     {
-        *ptr_u32 = sead::Endian::swap(*ptr_u32);
+        *ptr_u32 = sead::Endian::swapU32(*ptr_u32);
         ptr_u32++;
     }
 }

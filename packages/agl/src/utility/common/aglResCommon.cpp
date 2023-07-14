@@ -13,7 +13,7 @@ void ModifyEndianU32(bool is_le, void* p_data, size_t size)
 
     for (u32 i = 0; i < count; i++)
     {
-        *p_data_u32 = sead::Endian::toHost(sead::Endian::Types(is_le), *p_data_u32);
+        *p_data_u32 = sead::Endian::toHostU32(sead::Endian::Types(is_le), *p_data_u32);
         p_data_u32++;
     }
 }

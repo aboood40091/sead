@@ -342,13 +342,13 @@ SZSDecompressor::setWorkSize(u32 work_size)
 u32
 SZSDecompressor::getDecompAlignment(const void* header)
 {
-    return Endian::toHost(Endian::cBig, *(u32*)(header + 8));
+    return Endian::toHostU32(Endian::cBig, *(u32*)(header + 8));
 }
 
 u32
 SZSDecompressor::getDecompSize(const void* header)
 {
-    return Endian::toHost(Endian::cBig, *(u32*)(header + 4));
+    return Endian::toHostU32(Endian::cBig, *(u32*)(header + 4));
 }
 
 s32
@@ -522,7 +522,7 @@ SZSDecompressor::decomp(void* dst, u32 dst_size, const void* src, u32 src_size)
     //SEAD_ASSERT_MSG((dst_size & 0x20-1u) == 0, "dst_size[%u] must be multiple of 32.", dst_size);
 
     u32 magic = *static_cast<const u32*>(src);
-    magic = Endian::toHost(Endian::cBig, magic);
+    magic = Endian::toHostU32(Endian::cBig, magic);
     if (magic != 0x59617A30) // Yaz0
         return -1;
 
