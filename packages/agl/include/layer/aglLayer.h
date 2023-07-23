@@ -40,6 +40,16 @@ public:
 
     s32 removeDrawMethod(const DrawMethod* p_draw_method);
 
+    void setCamera(sead::Camera* p_camera)
+    {
+        mpCamera = p_camera;
+    }
+
+    void setProjection(sead::Projection* p_projection)
+    {
+        mpProjection = p_projection;
+    }
+
     // ...
 
 protected:
