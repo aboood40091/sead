@@ -90,6 +90,21 @@ private:
 static_assert(sizeof(LookAtCamera) == 0x58, "sead::LookAtCamera size mismatch");
 #endif // cafe
 
+class OrthoProjection;
+
+class OrthoCamera : public LookAtCamera
+{
+public:
+    OrthoCamera();
+    OrthoCamera(const Vector2f& center, f32 distance);
+    OrthoCamera(const OrthoProjection& proj);
+    virtual ~OrthoCamera();
+
+    void setByOrthoProjection(const OrthoProjection& proj);
+
+    void setRotation(f32 rad);
+};
+
 } // namespace sead
 
 #endif // SEAD_CAMERA_H_
