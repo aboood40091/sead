@@ -92,17 +92,19 @@ public:
     {
     public:
         iterator(T* ptr, s32 offset)
-            : mPtr(ptr), mOffset(offset)
+            : mPtr(ptr)
+            , mOffset(offset)
         {
         }
 
         iterator& operator++()
         {
-            ListNode* node = reinterpret_cast<ListNode*>((uintptr_t)mPtr + mOffset)->next();
-            mPtr = reinterpret_cast<T*>((uintptr_t)node - mOffset);
+            ListNode* next = reinterpret_cast<ListNode*>((uintptr_t)mPtr + mOffset)->next();
+            mPtr = reinterpret_cast<T*>((uintptr_t)next - mOffset);
             return *this;
         }
 
+    public:
         T& operator*() const
         {
             return *mPtr;
@@ -120,7 +122,7 @@ public:
 
         friend bool operator!=(const iterator& it1, const iterator& it2)
         {
-            return !(it1 == it2);
+            return it1.mPtr != it2.mPtr;
         }
 
     protected:
@@ -131,8 +133,49 @@ public:
     // TODO
     class constIterator { };
 
-    // TODO
-    class robustIterator { };
+    class robustIterator
+    {
+    public:
+        robustIterator(T* ptr, s32 offset)
+            : mPtr(ptr)
+            , mNext(reinterpret_cast<ListNode*>((uintptr_t)ptr + offset)->next())
+            , mOffset(offset)
+        {
+        }
+
+        robustIterator& operator++()
+        {
+            mPtr = reinterpret_cast<T*>((uintptr_t)mNext - mOffset);
+            mNext = mNext->next();
+            return *this;
+        }
+
+    public:
+        T& operator*() const
+        {
+            return *mPtr;
+        }
+
+        T* operator->() const
+        {
+            return mPtr;
+        }
+
+        friend bool operator==(const robustIterator& it1, const robustIterator& it2)
+        {
+            return it1.mPtr == it2.mPtr;
+        }
+
+        friend bool operator!=(const robustIterator& it1, const robustIterator& it2)
+        {
+            return it1.mPtr != it2.mPtr;
+        }
+
+    protected:
+        T* mPtr;
+        ListNode* mNext;
+        s32 mOffset;
+    };
 
     // TODO
     class reverseIterator { };
@@ -151,24 +194,41 @@ public:
 
     iterator end() const
     {
-        return iterator(listNodeToObj(const_cast<ListNode*>(&mStartEnd)), mOffset);
+        return iterator(listNodeToObj(&mStartEnd), mOffset);
     }
 
     iterator toIterator(T*) const;
+
     constIterator constBegin() const;
     constIterator constEnd() const;
+
     constIterator toConstIterator(const T*) const;
-    robustIterator robustBegin();
-    robustIterator robustEnd();
+
+    robustIterator robustBegin()
+    {
+        return robustIterator(listNodeToObj(mStartEnd.next()), mOffset);
+    }
+
+    robustIterator robustEnd()
+    {
+        return robustIterator(listNodeToObj(&mStartEnd), mOffset);
+    }
+
     robustIterator toRobustIterator(T*);
+
     reverseIterator reverseBegin() const;
     reverseIterator reverseEnd() const;
+
     reverseIterator toReverseIterator(T*) const;
+
     reverseConstIterator reverseConstBegin() const;
     reverseConstIterator reverseConstEnd() const;
+
     reverseConstIterator toReverseConstIterator(const T*) const;
+
     reverseRobustIterator reverseRobustBegin();
     reverseRobustIterator reverseRobustEnd();
+
     reverseRobustIterator toReverseRobustIterator(T*);
 
 protected:
