@@ -31,6 +31,10 @@ public:
     virtual bool isResizable() const;
     virtual bool isAdjustable() const;
 
+public:
+    static UnitHeap* tryCreate(u32 size, const SafeString& name, u32 block_size, s32 alignment = 4, Heap* parent = nullptr, bool enable_lock = false);
+    static UnitHeap* tryCreateWithBlockNum(u32 block_size, u32 num, const SafeString& name, s32 alignment = 4, Heap* parent = nullptr, bool enable_lock = false);
+
 protected:
     u32 mBlockSize;
     void* mAreaStart;
