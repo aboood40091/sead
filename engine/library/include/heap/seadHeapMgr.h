@@ -10,6 +10,7 @@
 
 namespace sead {
 
+class CurrentHeapSetter;
 class Heap;
 
 template <typename A>
@@ -76,6 +77,8 @@ public:
 protected:
     Heap* setCurrentHeap_(Heap* heap);
 
+    friend class CurrentHeapSetter;
+
     static void createRootHeap_();
     static void initializeImpl_();
 
@@ -97,6 +100,30 @@ protected:
 #ifdef cafe
 static_assert(sizeof(HeapMgr) == 8, "sead::HeapMgr size mismatch");
 #endif // cafe
+
+class CurrentHeapSetter
+{
+public:
+    CurrentHeapSetter(Heap* heap)
+        : mPrevHeap(nullptr)
+    {
+        if (heap == nullptr)
+            mPrevHeap = reinterpret_cast<Heap*>(1);
+
+        else
+            mPrevHeap = HeapMgr::instance()->setCurrentHeap_(heap);
+    }
+
+    ~CurrentHeapSetter()
+    {
+        if (mPrevHeap != reinterpret_cast<Heap*>(1))
+            static_cast<void>(HeapMgr::instance()->setCurrentHeap_(mPrevHeap));
+    }
+
+private:
+    Heap* mPrevHeap;
+};
+static_assert(sizeof(CurrentHeapSetter) == 4, "sead::CurrentHeapSetter size mismatch");
 
 } // namespace sead
 
