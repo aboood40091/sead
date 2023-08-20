@@ -18,8 +18,16 @@ public:
     }
 
     void initOffset(s32 offset) { mOffset = offset; }
-    void clear();
-    void unsafeClear();
+
+    void clear()
+    {
+        ListImpl::clear();
+    }
+
+    void unsafeClear()
+    {
+        ListImpl::unsafeClear();
+    }
 
     void pushBack(T* obj)
     {
