@@ -51,7 +51,7 @@ public:
     Heap* findContainHeap(const void* ptr) const;
     Heap* getCurrentHeap() const;
 
-    static Heap* getRootHeap(s32 n);
+    static Heap* getRootHeap(s32 n) { return sRootHeaps.at(n); }
     static s32 getRootHeapNum() { return sRootHeaps.size(); }
     static void addRootHeap(Heap* heap);
     static const Arena* getArena();
