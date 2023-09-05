@@ -48,6 +48,20 @@ public:
     };
 
 public:
+    TaskClassID()
+        : mType(cInvalid)
+    {
+    }
+
+    TaskClassID(TaskFactory f)
+        : mType(cFactory)
+    {
+        mID.mFactory = f;
+    }
+
+    TaskBase* create(const TaskConstructArg& arg);
+
+private:
     Type mType;
     union
     {
@@ -68,6 +82,12 @@ public:
 #ifdef cafe
 static_assert(sizeof(TaskUserID) == 4, "sead::TaskUserID size mismatch");
 #endif // cafe
+
+template <typename T>
+TaskBase* TTaskFactory(const TaskConstructArg& arg)
+{
+    return new (arg.heap_array->getPrimaryHeap()) T(arg);
+}
 
 } // namespace sead
 
