@@ -24,6 +24,16 @@ public:
         return mHeaps[0];
     }
 
+    Heap* getHeap(s32 idx)
+    {
+        return const_cast<const HeapArray*>(this)->getHeap(idx);
+    }
+
+    Heap* getPrimaryHeap()
+    {
+        return mHeaps[mPrimaryIndex];
+    }
+
 private:
     Heap* mHeaps[4];
     bool mAdjusted[4];
