@@ -78,11 +78,20 @@ public:
     virtual LogicalFrameBuffer* getMethodLogicalFrameBuffer(s32) const;
     virtual bool setProcessPriority(ProcessPriority);
     virtual void reserveReset(void*);
+
+protected:
     virtual void initRun_(Heap*);
     virtual void runImpl_();
     virtual MethodTreeMgr* createMethodTreeMgr_(Heap*) = 0;
     virtual void procReset_();
 
+public:
+    MethodTreeMgr* getMethodTreeMgr()
+    {
+        return mMethodTreeMgr;
+    }
+
+protected:
     typedef DelegateEvent<void*> ResetEvent;
 
     bool mReserveReset;

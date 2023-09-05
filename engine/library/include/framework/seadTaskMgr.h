@@ -50,6 +50,11 @@ public:
     static TaskMgr* initialize(const InitializeArg& arg);
     void finalize();
 
+    Framework* getFramework() const
+    {
+        return mParentFramework;
+    }
+
 private:
     void doInit_();
     void beginCreateRootTask_();

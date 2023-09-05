@@ -115,13 +115,13 @@ bool TaskMgr::changeTaskState_(TaskBase* task, TaskBase::State state)
 
 void TaskMgr::destroyTaskSync(TaskBase* task)
 {
-    bool b = mParentFramework->mMethodTreeMgr->mCS.tryLock();
+    bool b = getFramework()->getMethodTreeMgr()->getTreeCriticalSection()->tryLock();
     //SEAD_ASSERT(b);
 
     if (b)
     {
         doDestroyTask_(task);
-        mParentFramework->mMethodTreeMgr->mCS.unlock();
+        getFramework()->getMethodTreeMgr()->getTreeCriticalSection()->unlock();
     }
 }
 
