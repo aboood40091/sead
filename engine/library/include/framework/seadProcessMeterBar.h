@@ -19,8 +19,8 @@ public:
     } */;
 
 public:
-    ProcessMeterBarBase(/* Section* buffer, s32 section_num, const SafeString& name, const Color4f& color */)
-        : INamable("")
+    ProcessMeterBarBase(/* Section* buffer, s32 section_num, */ const SafeString& name /*, const Color4f& color */)
+        : INamable(name)
     {
     }
 
@@ -45,7 +45,7 @@ public:
 
 public:
     MultiProcessMeterBar(/* const SafeString& name, const Color4f& color */)
-        : ProcessMeterBarBase(/* mBuffer, N, name, color */)
+        : ProcessMeterBarBase(/* mBuffer, N, name */ "" /*, color */)
     {
     }
 
