@@ -4,7 +4,7 @@
 //#include <framework/seadMethodTreeMgr.h>
 #include <framework/seadTaskBase.h>
 //#include <framework/seadTaskMgr.h>
-//#include <gfx/seadFrameBuffer.h>
+#include <gfx/seadFrameBuffer.h>
 //#include <heap/seadArena.h>
 //#include <heap/seadHeap.h>
 #include <hostio/seadHostIOMgr.h>
@@ -16,9 +16,7 @@ namespace sead {
 
 class Arena;
 
-class FrameBuffer;
 class Heap;
-class LogicalFrameBuffer;
 class MethodTreeMgr;
 class TaskMgr;
 
@@ -74,14 +72,14 @@ public:
 
     virtual void run(Heap*, const TaskBase::CreateArg&, const RunArg&);
     virtual void createSystemTasks(TaskBase*, const CreateSystemTaskArg&);
-    virtual FrameBuffer* getMethodFrameBuffer(s32) const = 0;
-    virtual LogicalFrameBuffer* getMethodLogicalFrameBuffer(s32) const;
-    virtual bool setProcessPriority(ProcessPriority);
-    virtual void reserveReset(void*);
+    virtual FrameBuffer* getMethodFrameBuffer(s32 method_type) const = 0;
+    virtual LogicalFrameBuffer* getMethodLogicalFrameBuffer(s32 method_type) const { return getMethodFrameBuffer(method_type); }
+    virtual bool setProcessPriority(ProcessPriority) { return false; }
+    virtual void reserveReset(void* param) { mResetParameter = param; mReserveReset = true; }
 
 protected:
-    virtual void initRun_(Heap*);
-    virtual void runImpl_();
+    virtual void initRun_(Heap*) { }
+    virtual void runImpl_() { }
     virtual MethodTreeMgr* createMethodTreeMgr_(Heap*) = 0;
     virtual void procReset_();
 
