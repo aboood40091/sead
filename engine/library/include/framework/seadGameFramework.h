@@ -27,8 +27,8 @@ public:
     virtual void createSeadMenuMgr(TaskBase*);
     virtual void createInfLoopChecker(TaskBase*, const TickSpan&);
     virtual f32 calcFps() = 0;
-    virtual void saveScreenShot(const SafeString&);
-    virtual bool isScreenShotBusy();
+    virtual void saveScreenShot(const SafeString&) { }
+    virtual bool isScreenShotBusy() { return false; }
 
 protected:
     virtual void waitStartDisplayLoop_();
