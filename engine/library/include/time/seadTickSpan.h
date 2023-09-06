@@ -51,11 +51,8 @@ public:
 
     void setSeconds(s64 sec)
     {
-        //SEAD_ASSERT(LLONG_MIN / cFrequency <= mSpan && mSpan < LLONG_MAX / cFrequency);
         mSpan = sec * cFrequency;
     }
-
-    //void setFrameRatio(f32, f32);
 
     const TickSpan& operator+=(TickSpan rhs)
     {

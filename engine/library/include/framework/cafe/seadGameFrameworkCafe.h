@@ -48,9 +48,13 @@ protected:
     virtual MethodTreeMgr* createMethodTreeMgr_(Heap*);
 
 public:
-    virtual f32 calcFps();
+    virtual f32 calcFps()
+    {
+        TickSpan sec_span = TickSpan::makeFromSeconds(1);
+        return static_cast<f32>(sec_span.toS64()) / static_cast<f32>(mFrameSpan.toS64());
+    }
 
-    virtual void setCaption(const SafeString&);
+    virtual void setCaption(const SafeString&) { }
 
 protected:
     virtual void mainLoop_();
@@ -73,20 +77,20 @@ protected:
     BitFlag32 _6c;
     TickSpan mFrameSpan;
     TickTime mLastFrameBegin;
-    FrameBuffer* mpDefaultFrameBuffer;
-    FrameBuffer* mpDefaultFrameBufferDRC;
+    FrameBuffer* mDefaultFrameBuffer;
+    FrameBuffer* mDefaultFrameBufferDRC;
     LogicalFrameBuffer mLogicalFrameBuffer;
     LogicalFrameBuffer mLogicalFrameBufferDRC;
     u32 _c0;
-    void* mpCommandBuffer;
+    void* mCommandBuffer;
     GX2ColorBuffer mColorBuffer;
     GX2ColorBuffer mColorBufferDRC;
     GX2DepthBuffer mDepthBuffer;
     GX2DepthBuffer mDepthBufferDRC;
-    DisplayBuffer* mpDisplayBuffer;
-    DisplayBuffer* mpDisplayBufferDRC;
-    FrameBuffer* mpFrameBuffer;
-    FrameBuffer* mpFrameBufferDRC;
+    DisplayBuffer* mDisplayBuffer;
+    DisplayBuffer* mDisplayBufferDRC;
+    FrameBuffer* mFrameBuffer;
+    FrameBuffer* mFrameBufferDRC;
     s32 mCurrentDisplaybuffer;
     u8 _36c;
     void* _370;
