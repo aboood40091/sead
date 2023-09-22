@@ -44,6 +44,11 @@ public:
         return mKPadInfos[channel];
     }
 
+    void setFreezeCounter(s32 value)
+    {
+        mFreezeCounter = value;
+    }
+
 private:
     KPADUnifiedWpadStatus mUniRingBufs[WPAD_MAX_CONTROLLERS * KPAD_MAX_READ_BUFS];
     u8 _1114[4];
