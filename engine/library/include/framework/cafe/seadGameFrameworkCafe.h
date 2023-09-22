@@ -39,8 +39,8 @@ public:
     GameFrameworkCafe(const CreateArg& arg);
     virtual ~GameFrameworkCafe();
 
-    virtual FrameBuffer* getMethodFrameBuffer(s32) const;
-    virtual LogicalFrameBuffer* getMethodLogicalFrameBuffer(s32) const;
+    virtual FrameBuffer* getMethodFrameBuffer(s32 method_type) const;
+    virtual LogicalFrameBuffer* getMethodLogicalFrameBuffer(s32 method_type) const;
 
 protected:
     virtual void initRun_(Heap*);
@@ -73,6 +73,15 @@ public:
     );
 
 protected:
+    enum
+    {
+        cGpuCounter_TVDrawBegin,
+        cGpuCounter_TVDrawEnd,
+        cGpuCounter_DRCDrawBegin,
+        cGpuCounter_DRCDrawEnd,
+        cGpuCounter_NumMax
+    };
+
     CreateArg mArg;
     BitFlag32 _6c;
     TickSpan mFrameSpan;
@@ -93,7 +102,7 @@ protected:
     FrameBuffer* mFrameBufferDRC;
     s32 mCurrentDisplaybuffer;
     u8 _36c;
-    void* _370;
+    u64* mGpuCounters;
     u32 _374[4 / sizeof(u32)];
 };
 static_assert(sizeof(GameFrameworkCafe) == 0x378, "sead::GameFrameworkCafe size mismatch");
