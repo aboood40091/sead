@@ -40,6 +40,12 @@ public:
     public:
         s32 controllerMax;
         IDelegate1<ControllerMgr*>* proc;
+
+        Parameter()
+            : controllerMax(0)
+            , proc(nullptr)
+        {
+        }
     };
 
 public:
