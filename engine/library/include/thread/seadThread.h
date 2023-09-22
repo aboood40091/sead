@@ -6,7 +6,7 @@
 #include <heap/seadHeap.h>
 #include <prim/seadNamable.h>
 #include <thread/seadThreadLocalStorage.h>
-
+#include <time/seadTickSpan.h>
 
 #ifdef cafe
 #include <cafe/os/OSThread.h>
@@ -34,6 +34,8 @@ public:
     //...
 
     Heap* getCurrentHeap() const { return mCurrentHeap; }
+
+    static void sleep(TickSpan span);
 
     //...
 
