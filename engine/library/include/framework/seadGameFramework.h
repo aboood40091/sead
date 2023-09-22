@@ -23,7 +23,7 @@ public:
 
     virtual void createControllerMgr(TaskBase*);
     virtual void createHostIOMgr(TaskBase*, HostIOMgr::Parameter*);
-    virtual void createProcessMeter(TaskBase*);
+    virtual void createProcessMeter(TaskBase* root_task);
     virtual void createSeadMenuMgr(TaskBase*);
     virtual void createInfLoopChecker(TaskBase*, const TickSpan&);
     virtual f32 calcFps() = 0;

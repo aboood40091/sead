@@ -53,6 +53,8 @@ public:
     void lock_();
     void unlock_();
 
+    void call();
+
     typedef IDelegate2<MethodTreeNode*, PauseFlag> PauseEventDelegate;
 
     struct { u32 data_[4]; } mDelegateHolder;

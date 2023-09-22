@@ -55,6 +55,11 @@ public:
         return mParentFramework;
     }
 
+    TaskBase* getRootTask() const
+    {
+        return mRootTask;
+    }
+
 private:
     void doInit_();
     void beginCreateRootTask_();

@@ -70,7 +70,7 @@ public:
     Framework();
     virtual ~Framework();
 
-    virtual void run(Heap*, const TaskBase::CreateArg&, const RunArg&);
+    virtual void run(sead::Heap* heap, const sead::TaskBase::CreateArg& root_create_arg, const RunArg& run_arg);
     virtual void createSystemTasks(TaskBase*, const CreateSystemTaskArg&);
     virtual FrameBuffer* getMethodFrameBuffer(s32 method_type) const = 0;
     virtual LogicalFrameBuffer* getMethodLogicalFrameBuffer(s32 method_type) const { return getMethodFrameBuffer(method_type); }
@@ -84,6 +84,11 @@ protected:
     virtual void procReset_();
 
 public:
+    TaskMgr* getTaskMgr()
+    {
+        return mTaskMgr;
+    }
+
     MethodTreeMgr* getMethodTreeMgr()
     {
         return mMethodTreeMgr;
