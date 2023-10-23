@@ -55,12 +55,7 @@ public:
     }
 
     u8* tryLoad(FileDevice::LoadArg& arg);
-
-    void unload(u8* data)
-    {
-        //SEAD_ASSERT(data);
-        delete data;
-    }
+    void unload(u8* data);
 
     void mount(FileDevice* device, const SafeString& drive_name = SafeString::cEmptyString);
     void unmount(const SafeString& drive);

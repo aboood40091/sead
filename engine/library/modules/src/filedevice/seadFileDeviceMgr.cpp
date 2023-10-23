@@ -220,6 +220,12 @@ u8* FileDeviceMgr::tryLoad(FileDevice::LoadArg& arg)
     return ret;
 }
 
+void FileDeviceMgr::unload(u8* data)
+{
+    //SEAD_ASSERT(data);
+    delete data;
+}
+
 #ifdef cafe
 void
 FileDeviceMgr::stateChangeCallback_(
