@@ -205,6 +205,11 @@ public:
         setDepthWriteEnableImpl(write_enable);
     }
 
+    void setDepthFunc(Graphics::DepthFunc func)
+    {
+        setDepthFuncImpl(func);
+    }
+
     void setBlendEnable(bool enable)
     {
         setBlendEnableImpl(enable);
@@ -248,6 +253,11 @@ public:
     void setBlendEquationSeparateMRT(u32 target, BlendEquation equation_rgb, BlendEquation equation_a)
     {
         setBlendEquationMRTImpl(target, equation_rgb, equation_a);
+    }
+
+    void setAlphaTestEnable(bool enable)
+    {
+        setAlphaTestEnableImpl(enable);
     }
 
     void lockDrawContext();
