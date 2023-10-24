@@ -63,6 +63,12 @@ public:
     void search(const ShaderProgram& program);
 
     void setUniform(u32 size, const void* buffer) const;
+
+    template <typename T>
+    void setUniform(const T& value) const
+    {
+        setUniform(sizeof(T), &value);
+    }
 };
 static_assert(sizeof(UniformLocation) == 0x10, "agl::UniformLocation size mismatch");
 

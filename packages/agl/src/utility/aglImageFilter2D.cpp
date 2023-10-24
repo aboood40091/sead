@@ -15,7 +15,7 @@ void ImageFilter2D::drawQuadTriangle(const ShaderProgram& program, const Texture
     tex_size.z = 1.0f / tex_size.x;
     tex_size.w = 1.0f / tex_size.y;
 
-    program.getUniformLocation(cUniform_TexSize).setUniform(sizeof(sead::Vector4f), &tex_size);
+    program.getUniformLocation(cUniform_TexSize).setUniform(tex_size);
     program.update();
 
     sampler.activate(program.getSamplerLocation(cSampler_Texture));
