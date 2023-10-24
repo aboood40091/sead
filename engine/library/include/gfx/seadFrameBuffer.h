@@ -51,6 +51,11 @@ public:
         return mPhysicalArea;
     }
 
+    void setVirtualSize(f32 x, f32 y)
+    {
+        mVirtualSize.set(x, y);
+    }
+
     void setVirtualSize(const Vector2f& virtual_size)
     {
         mVirtualSize = virtual_size;
