@@ -55,6 +55,13 @@ public:
     void setUpBuffer(const void* buffer, u32 stride, u32 buffer_byte_size);
     void setUpStream(s32 index, VertexStreamFormat format, u32 offset);
 
+    void flushCPUCacheNoSync() const
+    {
+        flushCPUCacheNoSync(0, mBufferByteSize);
+    }
+
+    void flushCPUCacheNoSync(u32 offset, u32 size) const;
+
 private:
     void cleanUp_();
 
