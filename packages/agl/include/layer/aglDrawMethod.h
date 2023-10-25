@@ -13,9 +13,9 @@ class DrawMethod : public sead::IDisposer, public sead::INamable
 private:
     enum DelegateType
     {
-        cDelegateType_Dummy         = 0,
-        cDelegateType_AnyDelegate1  = 1,
-        cDelegateType_AnyDelegate0  = 2
+        cDelegateType_Dummy     = 0,
+        cDelegateType_Const     = 1,
+        cDelegateType_NonConst  = 2
     };
 
     class Dummy
@@ -35,18 +35,18 @@ public:
     virtual ~DrawMethod();
 
     template <typename T>
-    void bind(T* obj, sead::Delegate1<T, const RenderInfo&>::MethodPtr method, const sead::SafeString& name)
+    void bind(T* obj, typename sead::Delegate1Const<T, const RenderInfo&>::MethodPtr method, const sead::SafeString& name)
     {
-        new (&mDelegateHolder) sead::Delegate1<T, const RenderInfo&>(obj, method);
-        mDelegateType = cDelegateType_AnyDelegate1;
+        new (&mDelegateHolder) sead::Delegate1Const<T, const RenderInfo&>(obj, method);
+        mDelegateType = cDelegateType_Const;
         setName(name);
     }
 
     template <typename T>
-    void bind(T* obj, sead::Delegate<T>::MethodPtr method, const sead::SafeString& name)
+    void bind(T* obj, typename sead::Delegate1<T, const RenderInfo&>::MethodPtr method, const sead::SafeString& name)
     {
-        new (&mDelegateHolder) sead::Delegate<T>(obj, method);
-        mDelegateType = cDelegateType_AnyDelegate0;
+        new (&mDelegateHolder) sead::Delegate1<T, const RenderInfo&>(obj, method);
+        mDelegateType = cDelegateType_NonConst;
         setName(name);
     }
 
