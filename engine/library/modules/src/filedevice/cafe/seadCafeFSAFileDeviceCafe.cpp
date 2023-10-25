@@ -451,4 +451,14 @@ CafeContentFileDevice::CafeContentFileDevice()
 {
 }
 
+CafeFSNativePathFileDevice::CafeFSNativePathFileDevice()
+    : CafeFSAFileDevice("native", "")
+{
+}
+
+void CafeFSNativePathFileDevice::formatPathForFSA_(BufferedSafeString* out, const SafeString& path) const
+{
+    out->copy(path);
+}
+
 } // namespace sead
