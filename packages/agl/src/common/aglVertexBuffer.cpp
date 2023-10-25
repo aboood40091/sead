@@ -77,4 +77,9 @@ void VertexBuffer::setUpStream(s32 index, VertexStreamFormat format, u32 offset)
     mStream[index].mIndexType = GX2_ATTRIB_INDEX_VERTEX_ID;
 }
 
+void VertexBuffer::flushCPUCacheNoSync(u32 offset, u32 size) const
+{
+    DCFlushRangeNoSync(static_cast<const u8*>(mpBuffer) + offset, size);
+}
+
 }
