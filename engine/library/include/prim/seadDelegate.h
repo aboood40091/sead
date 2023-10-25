@@ -172,6 +172,47 @@ public:
     }
 };
 
+template <typename T>
+class DelegateConst : public DelegateBase< const T, typename DelegateTraitsConst<T, void>::MethodPtr, IDelegate >
+{
+public:
+    typedef DelegateConst<T> self;
+    typedef typename DelegateTraitsConst<T, void>::MethodPtr MethodPtr;
+
+public:
+    DelegateConst()
+        : DelegateBase< const T, MethodPtr, IDelegate >()
+    {
+    }
+
+    DelegateConst(const T* o, MethodPtr m)
+        : DelegateBase< const T, MethodPtr, IDelegate >(o, m)
+    {
+    }
+
+    virtual void invoke()
+    {
+        if (mObject && mMethod)
+            (mObject->*mMethod)();
+    }
+
+    void invoke() const
+    {
+        if (mObject && mMethod)
+            (mObject->*mMethod)();
+    }
+
+    void operator() () const
+    {
+        invoke();
+    }
+
+    virtual IDelegate* clone(Heap* heap) const
+    {
+        return new (heap) self(*this);
+    }
+};
+
 class StaticDelegate : public Delegate<void>
 {
 public:
@@ -294,6 +335,41 @@ public:
     {
         if (mMethod)
             (mMethod)(a);
+    }
+
+    void operator() (A a) const
+    {
+        invoke(a);
+    }
+};
+
+template <typename T, typename A>
+class Delegate1Const : public DelegateBase< const T, typename DelegateTraits1Const<T, A, void>::MethodPtr, IDelegate1<A> >
+{
+public:
+    typedef typename DelegateTraits1Const<T, A, void>::MethodPtr MethodPtr;
+
+public:
+    Delegate1Const()
+        : DelegateBase< const T, MethodPtr, IDelegate1<A> >()
+    {
+    }
+
+    Delegate1Const(const T* o, MethodPtr m)
+        : DelegateBase< const T, MethodPtr, IDelegate1<A> >(o, m)
+    {
+    }
+
+    virtual void invoke(A a)
+    {
+        if (mObject && mMethod)
+            (mObject->*mMethod)(a);
+    }
+
+    void invoke(A a) const
+    {
+        if (mObject && mMethod)
+            (mObject->*mMethod)(a);
     }
 
     void operator() (A a) const
@@ -426,6 +502,41 @@ public:
     {
         if (mMethod)
             (mMethod)(a1, a2);
+    }
+
+    void operator() (A1 a1, A2 a2) const
+    {
+        invoke(a1, a2);
+    }
+};
+
+template <typename T, typename A1, typename A2>
+class Delegate2Const : public DelegateBase< const T, typename DelegateTraits2Const<T, A1, A2, void>::MethodPtr, IDelegate2<A1, A2> >
+{
+public:
+    typedef typename DelegateTraits2Const<T, A1, A2, void>::MethodPtr MethodPtr;
+
+public:
+    Delegate2Const()
+        : DelegateBase< const T, MethodPtr, IDelegate2<A1, A2> >()
+    {
+    }
+
+    Delegate2Const(const T* o, MethodPtr m)
+        : DelegateBase< const T, MethodPtr, IDelegate2<A1, A2> >(o, m)
+    {
+    }
+
+    virtual void invoke(A1 a1, A2 a2)
+    {
+        if (mObject && mMethod)
+            (mObject->*mMethod)(a1, a2);
+    }
+
+    void invoke(A1 a1, A2 a2) const
+    {
+        if (mObject && mMethod)
+            (mObject->*mMethod)(a1, a2);
     }
 
     void operator() (A1 a1, A2 a2) const
