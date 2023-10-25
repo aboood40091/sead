@@ -144,22 +144,41 @@ public:
 
     s32 getVariationMacroValueVariationNum(s32 macro_index) const;
 
-    u32 update() const // Shrug
-    {
-        return validate_();
-    }
-
     u32 updateVariation(s32 index) // I don't know the actual name
     {
         ShaderProgram* program = getVariation(index);
         program->mFlag.set(8 | 2);
-        return program->update();
+        return program->validate_();
     }
 
     const AttributeLocation& getAttributeLocation(s32 index) const { return mAttributeLocation[index]; }
     const UniformLocation& getUniformLocation(s32 index) const { return mUniformLocation[index]; }
     const UniformBlockLocation& getUniformBlockLocation(s32 index) const { return mUniformBlockLocation[index]; }
     const SamplerLocation& getSamplerLocation(s32 index) const { return mSamplerLocation[index]; }
+
+    const AttributeLocation& getAttributeLocationValidate(s32 index) const
+    {
+        validate_();
+        return mAttributeLocation[index];
+    }
+
+    const UniformLocation& getUniformLocationValidate(s32 index) const
+    {
+        validate_();
+        return mUniformLocation[index];
+    }
+
+    const UniformBlockLocation& getUniformBlockLocationValidate(s32 index) const
+    {
+        validate_();
+        return mUniformBlockLocation[index];
+    }
+
+    const SamplerLocation& getSamplerLocationValidate(s32 index) const
+    {
+        validate_();
+        return mSamplerLocation[index];
+    }
 
     void updateAttributeLocation() const;
     void updateUniformLocation() const;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <gfx/seadColor.h>
+#include <math/seadMatrix.h>
 #include <prim/seadNamable.h>
 
 namespace agl {
@@ -62,13 +64,32 @@ public:
 
     void search(const ShaderProgram& program);
 
-    void setUniform(u32 size, const void* buffer) const;
+public:
+    void setBool(bool value) const;
 
-    template <typename T>
-    void setUniform(const T& value) const
-    {
-        setUniform(sizeof(T), &value);
-    }
+    void setInt(s32 value) const;
+    void setUInt(u32 value) const;
+    void setFloat(f32 value) const;
+
+    void setIVec2(const sead::Vector2i& value) const;
+    void setUVec2(const sead::Vector2u& value) const;
+    void setVec2(const sead::Vector2f& value) const;
+
+    void setIVec3(const sead::Vector3i& value) const;
+    void setUVec3(const sead::Vector3u& value) const;
+    void setVec3(const sead::Vector3f& value) const;
+
+    void setIVec4(const sead::Vector4i& value) const;
+    void setUVec4(const sead::Vector4u& value) const;
+    void setVec4(const sead::Vector4f& value) const;
+
+    void setVec4(const sead::Color4f& value) const;
+
+    void setVec4Array(const sead::Matrix34f& value) const;  // vec4[3]
+    void setVec4Array(const sead::Matrix44f& value) const;  // vec4[4]
+
+    void setMtx43(const f32* value) const;
+    void setMtx44(const f32* value) const;
 };
 static_assert(sizeof(UniformLocation) == 0x10, "agl::UniformLocation size mismatch");
 

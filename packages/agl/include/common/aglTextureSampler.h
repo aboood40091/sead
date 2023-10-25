@@ -1,6 +1,6 @@
 #pragma once
 
-#include <common/aglShaderProgram.h>
+#include <common/aglShaderLocation.h>
 #include <common/aglTextureData.h>
 #include <gfx/seadColor.h>
 #include <gfx/seadGraphics.h>
@@ -60,12 +60,6 @@ public:
     u8 getUnk1() const { return _e9; }
 
     bool activate(const SamplerLocation& location, s32 = -1) const;
-
-    bool activate(const ShaderProgram* p_shader_program, s32 index) const
-    {
-        p_shader_program->update();
-        return activate(p_shader_program->getSamplerLocation(index));
-    }
 
 private:
     void applyTextureData_(const TextureData& texture_data);

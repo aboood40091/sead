@@ -681,7 +681,7 @@ ShaderMode DepthOfField::drawColorMipMap_(const DrawArg& arg, ShaderMode mode) c
             mip_level
         );
 
-        p_program_mipmap->getUniformLocation(cUniform_TexParam).setUniform(param * _1ec);
+        p_program_mipmap->getUniformLocation(cUniform_TexParam).setVec4(param * _1ec);
 
         bindRenderBuffer_(render_buffer, mip_level, 0);
         drawKick_(arg);
@@ -744,13 +744,13 @@ ShaderMode DepthOfField::drawDepthMipMap_(const DrawArg& arg, ShaderMode mode) c
         param.z = 1.0f / far_range;
         param.w = -(far_start * param.z);
 
-        p_program_near_mask->getUniformLocation(cUniform_NearFarParam).setUniform(param);
+        p_program_near_mask->getUniformLocation(cUniform_NearFarParam).setVec4(param);
 
         arg.p_ctx->mDepthTargetTextureSampler.activate(p_program_near_mask->getSamplerLocation(cSampler_TexDepth));
 
         param = getTexParam_(depth_sampler.getTextureData());
 
-        p_program_near_mask->getUniformLocation(cUniform_TexParam).setUniform(param * _1ec);
+        p_program_near_mask->getUniformLocation(cUniform_TexParam).setVec4(param * _1ec);
 
         bindRenderBuffer_(render_buffer, 0, 0);
         drawKick_(arg);
@@ -775,7 +775,7 @@ ShaderMode DepthOfField::drawDepthMipMap_(const DrawArg& arg, ShaderMode mode) c
                 mip_level
             );
 
-            p_program_mipmap->getUniformLocation(cUniform_TexParam).setUniform(param * _1ec);
+            p_program_mipmap->getUniformLocation(cUniform_TexParam).setVec4(param * _1ec);
 
             bindRenderBuffer_(render_buffer, mip_level, 0);
             drawKick_(arg);
@@ -903,14 +903,14 @@ void DepthOfField::uniformComposeParam_(const DrawArg& arg, const ShaderProgram*
     param.z = *mLevel;              // cMipLevelMax2
     param.w = 1.0f - *mSaturateMin; // cSaturate
 
-    program->getUniformLocation(cUniform_Param0).setUniform(param);
+    program->getUniformLocation(cUniform_Param0).setVec4(param);
 
     param.x = w_inv * _1f4;
     param.y = h_inv * _1f4;
     param.z = w_inv;
     param.w = h_inv;
 
-    program->getUniformLocation(cUniform_TexParam).setUniform(param);
+    program->getUniformLocation(cUniform_TexParam).setVec4(param);
 
     f32 range = end - start;
 
@@ -967,7 +967,7 @@ void DepthOfField::uniformComposeParam_(const DrawArg& arg, const ShaderProgram*
     near_far_param.z = near_far_param_z;
     near_far_param.w = near_far_param_w;
 
-    program->getUniformLocation(cUniform_NearFarParam).setUniform(near_far_param);
+    program->getUniformLocation(cUniform_NearFarParam).setVec4(near_far_param);
 
     if (*mEnableColorControl)
     {
@@ -1001,10 +1001,10 @@ void DepthOfField::uniformComposeParam_(const DrawArg& arg, const ShaderProgram*
         add_param.w = -(color_ctrl_depth_1_start * mul_param.w);
     }
 
-    program->getUniformLocation(cUniform_MulParam).setUniform(mul_param);
-    program->getUniformLocation(cUniform_AddParam).setUniform(add_param);
+    program->getUniformLocation(cUniform_MulParam).setVec4(mul_param);
+    program->getUniformLocation(cUniform_AddParam).setVec4(add_param);
 
-    program->getUniformLocation(cUniform_FarMulColor).setUniform(*mFarMulColor);
+    program->getUniformLocation(cUniform_FarMulColor).setVec4(*mFarMulColor);
 
     arg.p_ctx->mColorTextureSampler.activate(program->getSamplerLocation(cSampler_TexMipMap));
 
@@ -1018,10 +1018,10 @@ void DepthOfField::uniformComposeParam_(const DrawArg& arg, const ShaderProgram*
         mIndirectTextureSampler.activate(program->getSamplerLocation(cSampler_TexIndirect));
 
         mIndirectTexParam.z = 1.0f / (w_inv * arg.height); // Aspect ratio?
-        program->getUniformLocation(cUniform_IndirectTexParam).setUniform(mIndirectTexParam);
+        program->getUniformLocation(cUniform_IndirectTexParam).setVec4(mIndirectTexParam);
 
-        program->getUniformLocation(cUniform_IndirectTexMtx0).setUniform(mIndirectTexMtx0); // Passing Vec3f to Vec4f... whoops!
-        program->getUniformLocation(cUniform_IndirectTexMtx1).setUniform(mIndirectTexMtx1); // ^^^
+        program->getUniformLocation(cUniform_IndirectTexMtx0).setVec3(mIndirectTexMtx0);
+        program->getUniformLocation(cUniform_IndirectTexMtx1).setVec3(mIndirectTexMtx1);
     }
 }
 
@@ -1062,7 +1062,7 @@ void DepthOfField::uniformVignettingParam_(const DrawArg& arg, const ShaderProgr
         radius_scale_3
     );
 
-    program->getUniformLocation(cUniform_VignettingRadius).setUniform(vignetting_radius);
+    program->getUniformLocation(cUniform_VignettingRadius).setVec4(vignetting_radius);
 
     f32 param_0_scale = 1.0f;
     f32 param_1_scale = 1.0f;
@@ -1085,9 +1085,9 @@ void DepthOfField::uniformVignettingParam_(const DrawArg& arg, const ShaderProgr
         0.0f
     );
 
-    program->getUniformLocation(cUniform_VignettingParam).setUniform(vignetting_param);
+    program->getUniformLocation(cUniform_VignettingParam).setVec4(vignetting_param);
 
-    program->getUniformLocation(cUniform_VignettingColor).setUniform(*mVignettingColor);
+    program->getUniformLocation(cUniform_VignettingColor).setVec4(*mVignettingColor);
 
     sead::Vector4f vignetting_trans(
         temp_vignetting.mTrans->x,
@@ -1096,7 +1096,7 @@ void DepthOfField::uniformVignettingParam_(const DrawArg& arg, const ShaderProgr
         0.0f
     );
 
-    program->getUniformLocation(cUniform_VignettingTrans).setUniform(vignetting_trans);
+    program->getUniformLocation(cUniform_VignettingTrans).setVec4(vignetting_trans);
 }
 
 void DepthOfField::setIndirectTextureData(const TextureData* p_texture_data)
