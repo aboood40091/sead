@@ -39,7 +39,7 @@ public:
     DrawMethod* pushBackDrawMethod(DrawMethod* p_method);
 
     s32 removeDrawMethod(const DrawMethod* p_draw_method);
-    s32 removeDrawMethod(u32 render_step, const DrawMethod* p_draw_method);
+    void removeDrawMethod(u32 render_step, const DrawMethod* p_draw_method);
 
     void setCamera(sead::Camera* p_camera)
     {

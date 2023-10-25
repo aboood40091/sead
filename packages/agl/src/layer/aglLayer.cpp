@@ -30,4 +30,10 @@ s32 Layer::removeDrawMethod(const DrawMethod* p_draw_method)
     return ret;
 }
 
+void Layer::removeDrawMethod(u32 render_step, const DrawMethod* p_draw_method)
+{
+    // SEAD_ASSERT(p_draw_method != nullptr);
+    mRenderStep[render_step].remove(p_draw_method);
+}
+
 } }
