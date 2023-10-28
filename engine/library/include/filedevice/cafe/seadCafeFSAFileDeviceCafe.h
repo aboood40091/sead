@@ -27,7 +27,7 @@ public:
         return mCWDPath;
     }
 
-    bool setCurrentDirectory(const SafeString& path);
+    static bool setCurrentDirectory(const SafeString& path);
 
 protected:
     virtual bool doIsAvailable_() const

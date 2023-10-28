@@ -22,6 +22,21 @@ CafeFSAFileDevice::CafeFSAFileDevice(
 {
 }
 
+bool
+CafeFSAFileDevice::setCurrentDirectory(
+    const SafeString& path
+)
+{
+
+    FSCmdBlock block;
+    FSInitCmdBlock(&block);
+
+    FSClient* client = FileDeviceMgr::instance()->getFSClient_();
+
+    FSChangeDir(client, &block, path.cstr(), FS_RET_NO_ERROR);
+    return true;
+}
+
 FileDevice*
 CafeFSAFileDevice::doOpen_(
     FileHandle* handle, const SafeString& filename,
