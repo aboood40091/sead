@@ -265,9 +265,10 @@ CafeFSAFileDevice::doIsExistFile_(
 
         *is_exist = false;
     }
-
     else
-        *is_exist = stat.flag & (FS_STAT_FLAG_IS_DIRECTORY | FS_STAT_FLAG_IS_QUOTA);
+    {
+        *is_exist = (stat.flag & (FS_STAT_FLAG_IS_DIRECTORY | FS_STAT_FLAG_IS_QUOTA)) == 0;
+    }
 
     return true;
 }
@@ -295,9 +296,10 @@ CafeFSAFileDevice::doIsExistDirectory_(
 
         *is_exist = false;
     }
-
     else
+    {
         *is_exist = stat.flag & FS_STAT_FLAG_IS_DIRECTORY;
+    }
 
     return true;
 }
@@ -372,7 +374,7 @@ CafeFSAFileDevice::doReadDirectory_(
         }
 
         entry[i].name.copy(SafeString(dir_entry.name));
-        entry[i].is_directory = (dir_entry.stat.flag & FS_STAT_FLAG_IS_DIRECTORY) != 0;
+        entry[i].is_directory = dir_entry.stat.flag & FS_STAT_FLAG_IS_DIRECTORY;
     }
 
     if (read_num != nullptr)
