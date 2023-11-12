@@ -1,11 +1,11 @@
 #pragma once
 
+#include <common/aglRenderBuffer.h>
 #include <layer/aglLayerEnum.h>
 
 namespace sead {
 
 class Camera;
-class FrameBuffer;
 class Projection;
 class Viewport;
 
@@ -28,6 +28,7 @@ public:
     s32 getRenderStep() const { return mRenderStep; }
     DisplayType getDisplayType() const { return mDisplayType; }
     const sead::FrameBuffer* getFrameBuffer() const { return mpFrameBuffer; }
+    const agl::RenderBuffer* getRenderBuffer() const { return static_cast<const agl::RenderBuffer*>(mpFrameBuffer); }
     s32 getLayerIndex() const { return mLayerIndex; }
     Layer* getLayer() const { return mpLayer; }
     const sead::Camera* getCamera() const { return mpCamera; }
