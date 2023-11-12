@@ -50,12 +50,12 @@ public:
         setName(name);
     }
 
-    void setPriority(u32 priority)
+    void setPriority(s32 priority)
     {
         mPriority = priority;
     }
 
-    u32 getPriority() const
+    s32 getPriority() const
     {
         return mPriority;
     }
@@ -74,7 +74,7 @@ public:
 
 private:
     DelegateType mDelegateType;
-    u32 mPriority;
+    s32 mPriority;
     struct
     {
         u32 data_[8];       // Nintendo: "32 bytes... must be enough :)"
