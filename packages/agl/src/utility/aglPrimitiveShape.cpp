@@ -129,7 +129,7 @@ void PrimitiveShape::setUpStreamQuad_(sead::Heap* heap)
         indices[4] = 2;
         indices[5] = 3;
 
-        for (u32 i = 0; i < cVtxNum; i++)
+        for (u32 i = 0; i < cIdxNum; i++)
             mIdxQuad[i] = indices[i];
     }
     mIdxStreamQuad.setUpStream(mIdxQuad.getBufferPtr(), cIdxNum);
@@ -143,7 +143,7 @@ void PrimitiveShape::setUpStreamQuad_(sead::Heap* heap)
         indices[2] = 3;
         indices[3] = 2;
 
-        for (u32 i = 0; i < cVtxNum; i++)
+        for (u32 i = 0; i < cIdxLineNum; i++)
             mIdxLineQuad[i] = indices[i];
     }
     mIdxStreamLineQuad.setUpStream(mIdxLineQuad.getBufferPtr(), cIdxLineNum, GX2_PRIMITIVE_LINE_LOOP);
@@ -206,7 +206,7 @@ void PrimitiveShape::setUpStreamQuadTriangle_(sead::Heap* heap)
         indices[1] = 2;
         indices[2] = 1;
 
-        for (u32 i = 0; i < cVtxNum; i++)
+        for (u32 i = 0; i < cIdxNum; i++)
             mIdxQuadTriangle[i] = indices[i];
     }
     mIdxStreamQuadTriangle.setUpStream(mIdxQuadTriangle.getBufferPtr(), cIdxNum);
@@ -219,7 +219,7 @@ void PrimitiveShape::setUpStreamQuadTriangle_(sead::Heap* heap)
         indices[1] = 2;
         indices[2] = 1;
 
-        for (u32 i = 0; i < cVtxNum; i++)
+        for (u32 i = 0; i < cIdxLineNum; i++)
             mIdxLineQuadTriangle[i] = indices[i];
     }
     mIdxStreamLineQuadTriangle.setUpStream(mIdxLineQuadTriangle.getBufferPtr(), cIdxLineNum, GX2_PRIMITIVE_LINE_LOOP);
