@@ -1,6 +1,5 @@
 #include <common/aglTextureSampler.h>
 #include <detail/aglShaderHolder.h>
-#include <math/seadVector.h>
 #include <utility/aglDevTools.h>
 #include <utility/aglImageFilter2D.h>
 #include <utility/aglPrimitiveShape.h>
