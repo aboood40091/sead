@@ -18,8 +18,8 @@ void ImageFilter2D::drawQuadTriangle(const ShaderProgram& program, const Texture
     program.getUniformLocation(cUniform_TexSize).setVec4(tex_size);
     sampler.activate(program.getSamplerLocationValidate(cSampler_Texture));
 
-    utl::VertexAttributeHolder::instance()->getVertexAttribute(utl::VertexAttributeHolder::cAttribute_QuadTriangle).activate();
-    utl::PrimitiveShape::instance()->getIdxStreamQuadTriangle().draw();
+    VertexAttributeHolder::instance()->getVertexAttribute(VertexAttributeHolder::cAttribute_QuadTriangle).activate();
+    PrimitiveShape::instance()->getIdxStreamQuadTriangle().draw();
 }
 
 ShaderMode ImageFilter2D::drawTextureQuadTriangle(const TextureSampler& sampler, ShaderMode mode)
