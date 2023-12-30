@@ -2,7 +2,7 @@
 
 #include <container/seadBuffer.h>
 
-namespace agl { namespace env { 
+namespace agl { namespace env {
 
 class EnvObj;
 
@@ -18,32 +18,47 @@ public:
     virtual void allocBuffer(const AllocateArg& arg, sead::Heap* heap);
     virtual void freeBuffer();
 
-    EnvObj* get(s32 type) const
+    EnvObj* getEnvObj(s32 type, s32 index)
     {
-        if (mInfo[type]._2 > 1)
-            return *mEnvObj.get(mInfo[type]._0 + 1);
+        if (index < mTypeInfo[type].mMaxNum)
+            return *mEnvObj.get(mTypeInfo[type].mStartIndex + index);
+
+        else
+            return nullptr;
+    }
+
+    const EnvObj* getEnvObj(s32 type, s32 index) const
+    {
+        if (index < mTypeInfo[type].mMaxNum)
+            return *mEnvObj.get(mTypeInfo[type].mStartIndex + index);
 
         else
             return nullptr;
     }
 
     template <typename T>
-    T* get() const
+    T* getEnvObj(s32 index)
     {
-        return sead::DynamicCast<T>(get(*T::sTypeInfo));
+        return sead::DynamicCast<T>(getEnvObj(*T::sTypeInfo, index));
+    }
+
+    template <typename T>
+    const T* getEnvObj(s32 index) const
+    {
+        return sead::DynamicCast<T>(getEnvObj(*T::sTypeInfo, index));
     }
 
 protected:
-    struct Info
+    struct TypeInfo
     {
-        u16 _0;
-        u16 _2;
+        u16 mStartIndex;
+        u16 mMaxNum;
     };
-    static_assert(sizeof(Info) == 4);
+    static_assert(sizeof(TypeInfo) == 4);
 
     u32 _0;
     u32 _4;
-    sead::Buffer<Info> mInfo;
+    sead::Buffer<TypeInfo> mTypeInfo;
     sead::Buffer<EnvObj*> mEnvObj;
     u32 _18[4 / sizeof(u32)];
 };
