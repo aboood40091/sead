@@ -1,6 +1,7 @@
 #pragma once
 
 #include <environment/aglEnvObjBuffer.h>
+#include <math/seadMatrix.h>
 #include <utility/aglResParameter.h>
 
 namespace agl { namespace env {
