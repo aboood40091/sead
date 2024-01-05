@@ -8,15 +8,14 @@ class EnvObjBuffer;
 
 class Fog : public EnvObj
 {
-public:
-    static s32* sTypeInfo;
+    SEAD_RTTI_OVERRIDE(Fog, EnvObj)
+    AGL_ENV_OBJ_TYPE_INFO()
 
 public:
     Fog();
     virtual ~Fog();
 
-    virtual s32 getTypeID() const { return *sTypeInfo; }
-
+public:
     f32 getStart() const { return *mStart; }
     f32 getEnd() const { return *mEnd; }
     f32 getStartEndInv() const { return *mEnd == *mStart ? 1.0f : (1.0f / (*mEnd - *mStart)); }

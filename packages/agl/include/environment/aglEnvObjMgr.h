@@ -1,30 +1,63 @@
 #pragma once
 
-#include <environment/aglEnvObjBuffer.h>
+#include <environment/aglEnvObjSet.h>
 #include <math/seadMatrix.h>
+#include <utility/aglNamedObjMgr.h>
+#include <utility/aglParameterIO.h>
 #include <utility/aglResParameter.h>
 
 namespace agl { namespace env {
 
-// TODO
-class EnvObjSet
+class EnvObjMgr : public EnvObjBuffer, public utl::INamedObjMgr, public utl::IParameterIO
 {
 public:
-    u32 _0[0x1DC / sizeof(u32)];
-};
-static_assert(sizeof(EnvObjSet) == 0x1DC);
+    class InitArg : public AllocateArg
+    {
+    public:
+        InitArg();
 
-class EnvObjMgr : public EnvObjBuffer
-{
+        void setGroupMax(s32 max)
+        {
+            mGroupMax = max;
+        }
+
+        s32 getGroupMax() const
+        {
+            return mGroupMax;
+        }
+
+        void setViewMax(s32 max)
+        {
+            mViewMax = max;
+        }
+
+        s32 getViewMax() const
+        {
+            return mViewMax;
+        }
+
+    private:
+        s32 mGroupMax;
+        s32 mViewMax;
+    };
+    static_assert(sizeof(InitArg) == 0x110);
+
 public:
     EnvObjMgr();
     virtual ~EnvObjMgr();
 
     // TODO: Virtual functions
 
+    void initialize(const InitArg& arg, sead::Heap* heap = nullptr);
+
     void applyResource(utl::ResParameterArchive arc)
     {
         applyResource_(arc, arc, 1.0f);
+    }
+
+    void applyResourceLerp(utl::ResParameterArchive arc_a, utl::ResParameterArchive arc_b, f32 t)
+    {
+        applyResource_(arc_a, arc_b, t);
     }
 
     void update();
@@ -40,7 +73,7 @@ private:
     void applyResource_(utl::ResParameterArchive arc_a, utl::ResParameterArchive arc_b, f32 t);
 
 private:
-    u32 _20[0x230 / sizeof(u32)];
+    u32 _234[(0x250- 0x234) / sizeof(u32)];
     EnvObjSet mEnvObjSet;
     u32 _42C[(0x464 - 0x42C) / sizeof(u32)];
 };

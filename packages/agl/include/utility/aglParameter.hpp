@@ -5,27 +5,33 @@
 
 namespace agl { namespace utl {
 
-template <>
-inline Parameter<sead::Vector2f>::Parameter(const sead::Vector2f& value, const sead::SafeString& name, const sead::SafeString& label, IParameterObj* p_obj)
-    : ParameterBase()
+template <typename T>
+inline ParameterBase* Parameter<T>::clone(sead::Heap* heap, IParameterObj* p_obj) const
 {
-    initializeListNode(name, label, "", p_obj);
+    return new (heap, 4) Parameter<T>(getValue(), getParameterName(), getLabel(), getMeta(), p_obj);
+}
+
+template <typename T>
+inline void Parameter<T>::setValue(const T& value)
+{
+    mValue = value;
+}
+
+template <>
+inline void Parameter<sead::Vector2f>::setValue(const sead::Vector2f& value)
+{
     mValue.set(value);
 }
 
 template <>
-inline Parameter<sead::Vector3f>::Parameter(const sead::Vector3f& value, const sead::SafeString& name, const sead::SafeString& label, IParameterObj* p_obj)
-    : ParameterBase()
+inline void Parameter<sead::Vector3f>::setValue(const sead::Vector3f& value)
 {
-    initializeListNode(name, label, "", p_obj);
     mValue.set(value);
 }
 
 template <>
-inline Parameter<sead::Vector4f>::Parameter(const sead::Vector4f& value, const sead::SafeString& name, const sead::SafeString& label, IParameterObj* p_obj)
-    : ParameterBase()
+inline void Parameter<sead::Vector4f>::setValue(const sead::Vector4f& value)
 {
-    initializeListNode(name, label, "", p_obj);
     mValue.set(value);
 }
 

@@ -105,6 +105,35 @@ public:
     void setRotation(f32 rad);
 };
 
+class DirectCamera : public Camera
+{
+    SEAD_RTTI_OVERRIDE(DirectCamera, Camera)
+
+public:
+    DirectCamera()
+        : Camera()
+        , mDirectMatrix(Matrix34f::ident)
+    {
+    }
+
+    void setMatrix(const Matrix34f& mtx)
+    {
+        mDirectMatrix = mtx;
+        updateViewMatrix();
+    }
+
+    virtual void doUpdateMatrix(Matrix34f* dst) const
+    {
+        *dst = mDirectMatrix;
+    }
+
+private:
+    Matrix34f mDirectMatrix;
+};
+#ifdef cafe
+static_assert(sizeof(DirectCamera) == 0x64, "sead::DirectCamera size mismatch");
+#endif // cafe
+
 } // namespace sead
 
 #endif // SEAD_CAMERA_H_

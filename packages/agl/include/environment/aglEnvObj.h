@@ -1,6 +1,10 @@
 #pragma once
 
+#include <math/seadMatrix.h>
+#include <prim/seadBitFlag.h>
+#include <prim/seadRuntimeTypeInfo.h>
 #include <utility/aglNamedObj.h>
+#include <utility/aglNamedObjIndex.h>
 #include <utility/aglParameter.h>
 #include <utility/aglParameterObj.h>
 
@@ -8,6 +12,24 @@ namespace agl { namespace env {
 
 class EnvObj : public utl::IParameterObj, public utl::INamedObj
 {
+public:
+    class Index : public utl::INamedObjIndex
+    {
+    public:
+        Index()
+            : utl::INamedObjIndex()
+            , mEnvType(0)
+        {
+        }
+
+        virtual const sead::SafeString& getNamedObjName(s32) const;
+        virtual s32 getNamedObjNum() const;
+
+    protected:
+        s32 mEnvType;
+    };
+    static_assert(sizeof(Index) == 0x54);
+
 public:
     EnvObj();
 
@@ -30,6 +52,11 @@ public:
     virtual s32 getObjType() const { return getTypeID(); }
     virtual s32 getTypeID() const = 0;
 
+    void setName(const sead::SafeString& name)
+    {
+        *mName = name;
+    }
+
 protected:
     u32 _74;
     u16 _78;
@@ -41,3 +68,11 @@ protected:
 static_assert(sizeof(EnvObj) == 0x108);
 
 } }
+
+#define AGL_ENV_OBJ_TYPE_INFO()                                 \
+    private:                                                    \
+        static s32* sTypeInfo;                                  \
+                                                                \
+    public:                                                     \
+        static s32 getType() { return *sTypeInfo; }             \
+        virtual s32 getTypeID() const { return *sTypeInfo; }

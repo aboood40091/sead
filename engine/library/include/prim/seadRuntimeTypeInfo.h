@@ -60,6 +60,16 @@ DynamicCast(Type* ptr)
     return nullptr;
 }
 
+template<typename DerivedType, typename Type>
+inline const DerivedType*
+DynamicCast(const Type* ptr)
+{
+    if (IsDerivedTypes<DerivedType, Type>(ptr))
+        return static_cast<const DerivedType*>(ptr);
+
+    return nullptr;
+}
+
 } // namespace sead
 
 #define SEAD_RTTI_BASE(CLASS)                                                                                \

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <container/seadBuffer.h>
+#include <container/seadSafeArray.h>
 
 namespace agl { namespace env {
 
@@ -9,7 +10,44 @@ class EnvObj;
 class EnvObjBuffer
 {
 public:
-    class AllocateArg;
+    class AllocateArg
+    {
+    public:
+        AllocateArg();
+
+        virtual ~AllocateArg()
+        {
+        }
+
+        void setContainMax(s32 type, s32 max);
+
+        template <typename T>
+        void setContainMax(s32 max)
+        {
+            setContainMax(T::getType(), max);
+        }
+
+        s32 getContainMax(s32 type) const
+        {
+            return mTypeMax[type];
+        }
+
+        template <typename T>
+        s32 getContainMax() const
+        {
+            return getContainMax(T::getType());
+        }
+
+        s32 getContainTotal() const
+        {
+            return mTotal;
+        }
+
+    protected:
+        sead::SafeArray<s32, 64> mTypeMax;
+        s32 mTotal;
+    };
+    static_assert(sizeof(AllocateArg) == 0x108);
 
 public:
     EnvObjBuffer();
@@ -18,9 +56,17 @@ public:
     virtual void allocBuffer(const AllocateArg& arg, sead::Heap* heap);
     virtual void freeBuffer();
 
+    s32 searchTypeIndex(s32 type, const sead::SafeString& name) const;
+
+    template <typename T>
+    s32 searchTypeIndex(const sead::SafeString& name) const
+    {
+        return searchTypeIndex(T::getType(), name);
+    }
+
     EnvObj* getEnvObj(s32 type, s32 index)
     {
-        if (index < mTypeInfo[type].mMaxNum)
+        if (0 <= index && index < mTypeInfo[type].mMaxNum)
             return *mEnvObj.get(mTypeInfo[type].mStartIndex + index);
 
         else
@@ -29,7 +75,7 @@ public:
 
     const EnvObj* getEnvObj(s32 type, s32 index) const
     {
-        if (index < mTypeInfo[type].mMaxNum)
+        if (0 <= index && index < mTypeInfo[type].mMaxNum)
             return *mEnvObj.get(mTypeInfo[type].mStartIndex + index);
 
         else
@@ -39,13 +85,13 @@ public:
     template <typename T>
     T* getEnvObj(s32 index)
     {
-        return sead::DynamicCast<T>(getEnvObj(*T::sTypeInfo, index));
+        return sead::DynamicCast<T>(getEnvObj(T::getType(), index));
     }
 
     template <typename T>
     const T* getEnvObj(s32 index) const
     {
-        return sead::DynamicCast<T>(getEnvObj(*T::sTypeInfo, index));
+        return sead::DynamicCast<T>(getEnvObj(T::getType(), index));
     }
 
 protected:
