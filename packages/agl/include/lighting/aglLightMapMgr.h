@@ -14,7 +14,7 @@
 
 namespace agl { namespace lght {
 
-class LightMapMgr : public utl::IParameterIO
+class LightMapMgr : public utl::IParameterIO, public sead::hostio::Node
 {
     class CPUTexture
     {
