@@ -3,14 +3,13 @@
 #include <container/seadBuffer.h>
 #include <container/seadOffsetList.h>
 #include <container/seadPtrArray.h>
-#include <hostio/seadHostIODummy.h>
 #include <utility/aglNamedObj.h>
 
 namespace agl { namespace utl {
 
 class INamedObjIndex;
 
-class INamedObjMgr
+class INamedObjMgr : public sead::hostio::Node
 {
 public:
     enum GroupEventType

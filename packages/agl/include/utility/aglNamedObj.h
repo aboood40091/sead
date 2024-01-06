@@ -1,10 +1,11 @@
 #pragma once
 
+#include <hostio/seadHostIODummy.h>
 #include <prim/seadSafeString.h>
 
 namespace agl { namespace utl {
 
-class INamedObj
+class INamedObj : public sead::hostio::Node
 {
 public:
     INamedObj();
