@@ -20,7 +20,7 @@ public:
     private:
         INamedObjMgr* mpMgr;
         s32 mIndex;
-        sead::FixedSafeString<32> _8;
+        sead::FixedSafeString<32> mName;
         sead::FixedSafeString<256> _34;
     };
     static_assert(sizeof(Group) == 0x144);

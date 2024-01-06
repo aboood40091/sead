@@ -22,6 +22,10 @@ public:
         {
         }
 
+        virtual ~Index()
+        {
+        }
+
         virtual const sead::SafeString& getNamedObjName(s32) const;
         virtual s32 getNamedObjNum() const;
 
