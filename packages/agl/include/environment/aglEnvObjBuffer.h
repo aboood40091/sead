@@ -67,7 +67,7 @@ public:
     EnvObj* getEnvObj(s32 type, s32 index)
     {
         if (0 <= index && index < mTypeInfo[type].mMaxNum)
-            return *mEnvObj.get(mTypeInfo[type].mStartIndex + index);
+            return *mEnvObjPtrBuffer.get(mTypeInfo[type].mStartIndex + index);
 
         else
             return nullptr;
@@ -76,7 +76,7 @@ public:
     const EnvObj* getEnvObj(s32 type, s32 index) const
     {
         if (0 <= index && index < mTypeInfo[type].mMaxNum)
-            return *mEnvObj.get(mTypeInfo[type].mStartIndex + index);
+            return *mEnvObjPtrBuffer.get(mTypeInfo[type].mStartIndex + index);
 
         else
             return nullptr;
@@ -94,6 +94,17 @@ public:
         return sead::DynamicCast<T>(getEnvObj(T::getType(), index));
     }
 
+    s32 getEnvObjNum(s32 type) const
+    {
+        return mTypeInfo[type].mMaxNum;
+    }
+
+    template <typename T>
+    s32 getEnvObjNum(s32 type) const
+    {
+        return getEnvObjNum(T::getType());
+    }
+
 protected:
     struct TypeInfo
     {
@@ -105,7 +116,7 @@ protected:
     u32 _0;
     u32 _4;
     sead::Buffer<TypeInfo> mTypeInfo;
-    sead::Buffer<EnvObj*> mEnvObj;
+    sead::Buffer<EnvObj*> mEnvObjPtrBuffer;
     u32 _18[4 / sizeof(u32)];
 };
 static_assert(sizeof(EnvObjBuffer) == 0x20, "agl::env::EnvObjBuffer size mismatch");
