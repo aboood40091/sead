@@ -14,7 +14,7 @@ public:
     virtual ~AmbientLight() { }
 
     virtual void update();
-    virtual void drawDebug(const sead::Matrix34f&, const sead::Matrix44f&, s32);
+    virtual ShaderMode drawDebug(const sead::Matrix34f&, const sead::Matrix44f&, s32, ShaderMode mode);
 
     sead::Color4f getColor() const
     {
