@@ -15,7 +15,7 @@ public:
     Fog();
     virtual ~Fog();
 
-    virtual ShaderMode drawDebug(const sead::Matrix34f&, const sead::Matrix44f&, s32, ShaderMode mode);
+    virtual ShaderMode drawDebug(const sead::Matrix34f&, const sead::Matrix44f&, s32, ShaderMode mode) const;
 
 public:
     f32 getStart() const { return *mStart; }

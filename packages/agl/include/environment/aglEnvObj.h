@@ -48,7 +48,7 @@ public:
     virtual void initialize(s32, sead::Heap* heap) { }
     virtual void update() { }
     virtual void updateView(const sead::Matrix34f&, const sead::Matrix44f&, s32) { }
-    virtual ShaderMode drawDebug(const sead::Matrix34f&, const sead::Matrix44f&, s32, ShaderMode mode) { return mode; }
+    virtual ShaderMode drawDebug(const sead::Matrix34f&, const sead::Matrix44f&, s32, ShaderMode mode) const { return mode; }
     virtual void callbackLoadData() { }
     virtual const sead::SafeString& getEnvObjName() const { return *mName; }
     virtual const sead::SafeString& getGroupName() const { return *mGroup; }
