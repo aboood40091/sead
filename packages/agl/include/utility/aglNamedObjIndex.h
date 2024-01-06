@@ -27,8 +27,8 @@ static_assert(sizeof(INamedObjIndex) == 0x50);
 class INamedObjIndexCallback
 {
 public:
-    virtual void callbackSyncNameToIndex(INamedObjIndex* p_index) = 0;
-    virtual void callbackSyncIndexToName(INamedObjIndex* p_index) = 0;
+    virtual void callbackSyncNameToIndex(INamedObjIndex* p_index) { }
+    virtual void callbackSyncIndexToName(INamedObjIndex* p_index) { }
 };
 static_assert(sizeof(INamedObjIndexCallback) == 4);
 
