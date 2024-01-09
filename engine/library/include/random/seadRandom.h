@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SEAD_RANDOM_H_
+#define SEAD_RANDOM_H_
 
 #include <basis/seadTypes.h>
 
@@ -91,3 +92,5 @@ static_assert(sizeof(Random) == 0x10, "sead::Random size mismatch");
 #endif // cafe
 
 } // namespace sead
+
+#endif // SEAD_RANDOM_H_
