@@ -700,7 +700,7 @@ template <typename T>
 inline void
 Matrix44<T>::makeIdentity()
 {
-    Matrix44CalcCommon<T>::makeIdentity();
+    Matrix44CalcCommon<T>::makeIdentity(*this);;
 }
 
 template <typename T>
