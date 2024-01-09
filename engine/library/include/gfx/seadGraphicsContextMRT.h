@@ -75,6 +75,11 @@ public:
         mBlendEnableMask.changeBit(target, blend);
     }
 
+    void setBlendEnableMask(u32 mask)
+    {
+        mBlendEnableMask.setDirect(mask);
+    }
+
     void setBlendFactor(u32 target, Graphics::BlendFactor src_factor, Graphics::BlendFactor dst_factor)
     {
         setBlendFactorSrc(target, src_factor);
@@ -168,6 +173,11 @@ public:
         mColorMask = (mColorMask & ~(0xF << (target * 4))) | (color_mask << (target * 4));
     }
 
+    void setColorMask(u32 mask)
+    {
+        mColorMask = mask;
+    }
+
     void setStencilTestEnable(bool enable)
     {
         mStencilTestEnable = enable;
@@ -227,6 +237,11 @@ public:
     bool getBlendEnable(u32 target) const
     {
         return mBlendEnableMask.isOnBit(target);
+    }
+
+    u32 getBlendEnableMask() const
+    {
+        return mBlendEnableMask.getDirect();
     }
 
     Graphics::BlendFactor getBlendFactorSrcRGB(u32 target) const
@@ -301,6 +316,11 @@ public:
     {
         u32 color_mask = mColorMask >> (target * 4) & 0xF;
         return color_mask >> 3 & 1;
+    }
+
+    u32 getColorMask() const
+    {
+        return mColorMask;
     }
 
     bool getStencilTestEnable() const
