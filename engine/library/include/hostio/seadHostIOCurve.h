@@ -26,7 +26,7 @@ class Curve : public ICurve
 {
 public:
     Curve()
-        : mData(nullptr)
+        : mBuf(nullptr)
     {
         mInfo.curveType = 0;
         mInfo.unitSize = sizeof(T);
@@ -38,7 +38,7 @@ public:
     virtual Vector2f interpolateToVec2f(f32 t) const;
 
 private:
-    T* mData;
+    T* mBuf;
     CurveDataInfo mInfo;
 };
 static_assert(sizeof(Curve<f32>) == 0xC);
@@ -48,7 +48,7 @@ struct CurveData
 {
     u32 numUse;
     u32 curveType;
-    T data[N];
+    T buf[N];
 };
 static_assert(sizeof(CurveData<f32, 30>) == 0x80);
 
