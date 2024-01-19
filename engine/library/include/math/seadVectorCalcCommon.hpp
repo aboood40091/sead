@@ -241,6 +241,13 @@ Vector3CalcCommon<f32>::mul(Base& o, const Mtx34& m, const Base& v)
     ASM_MTXMultVec(const_cast<f32(*)[4]>(m.m), (const Vec*)&v, (Vec*)&o);
 }
 
+template <>
+inline void
+Vector3CalcCommon<f32>::rotate(Base& o, const Mtx34& m, const Base& v)
+{
+    ASM_MTXMultVecSR(const_cast<f32(*)[4]>(m.m), (const Vec*)&v, (Vec*)&o);
+}
+
 #endif // cafe
 
 template <typename T>

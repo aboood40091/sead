@@ -315,6 +315,20 @@ Vector3<T>::setMul(const Mtx34& m, const Self& v)
 
 template <typename T>
 inline void
+Vector3<T>::setRotate(const Mtx33& m, const Self& v)
+{
+    Vector3CalcCommon<T>::rotate(*this, m, v);
+}
+
+template <typename T>
+inline void
+Vector3<T>::setRotate(const Mtx34& m, const Self& v)
+{
+    Vector3CalcCommon<T>::rotate(*this, m, v);
+}
+
+template <typename T>
+inline void
 Vector3<T>::setScaleAdd(T t, const Self& a, const Self& b)
 {
     Vector3CalcCommon<T>::multScalarAdd(*this, t, a, b);

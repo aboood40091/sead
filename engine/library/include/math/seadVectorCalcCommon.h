@@ -34,6 +34,7 @@ class Vector3CalcCommon
 {
 public:
     typedef typename Policies<T>::Vec3Base Base;
+    typedef typename Policies<T>::Mtx33Base Mtx33;
     typedef typename Policies<T>::Mtx34Base Mtx34;
 
 public:
@@ -51,6 +52,8 @@ public:
     static void lerp(Base& o, const Base& a, const Base& b, f32 ratio);
 
     static void mul(Base& o, const Mtx34& m, const Base& v);
+    static void rotate(Base& o, const Mtx33& m, const Base& v);
+    static void rotate(Base& o, const Mtx34& m, const Base& v);
     static void multScalar(Base& o, const Base& v, T t);
     static void multScalarAdd(Base& o, T t, const Base& a, const Base& b);
     static T normalize(Base& v);

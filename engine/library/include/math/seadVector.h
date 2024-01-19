@@ -60,6 +60,9 @@ public:
 };
 
 template <typename T>
+class Matrix33;
+
+template <typename T>
 class Matrix34;
 
 template <typename T>
@@ -71,6 +74,7 @@ class Vector3 : public Policies<T>::Vec3Base
 private:
     typedef Vector3<T> Self;
     typedef Vector2<T> Vec2;
+    typedef Matrix33<T> Mtx33;
     typedef Matrix34<T> Mtx34;
     typedef Matrix44<T> Mtx44;
 
@@ -115,6 +119,8 @@ public:
     void setCross(const Self& a, const Self& b);
     void setLerp(const Self& a, const Self& b, f32 ratio);
     void setMul(const Mtx34& m, const Self& v);
+    void setRotate(const Mtx33& m, const Self& v);
+    void setRotate(const Mtx34& m, const Self& v);
     void setMulAndDivByW(const Mtx44& m, const Self& v);
     void setScaleAdd(T t, const Self& a, const Self& b);
 
