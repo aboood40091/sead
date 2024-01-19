@@ -91,13 +91,13 @@ void GraphicsContextMRT::apply() const
     {
         GX2SetBlendControl(
             static_cast<GX2RenderTarget>(GX2_RENDER_TARGET_0 + itr.getIndex()),
-            static_cast<GX2BlendFunction>(itr->blend_factor_src_rgb),
-            static_cast<GX2BlendFunction>(itr->blend_factor_dst_rgb),
-            static_cast<GX2BlendCombine>(itr->blend_equation_rgb),
+            static_cast<GX2BlendFunction>(itr->getBlendFactorSrcRGB()),
+            static_cast<GX2BlendFunction>(itr->getBlendFactorDstRGB()),
+            static_cast<GX2BlendCombine>(itr->getBlendEquationRGB()),
             GX2_ENABLE,
-            static_cast<GX2BlendFunction>(itr->blend_factor_src_a),
-            static_cast<GX2BlendFunction>(itr->blend_factor_dst_a),
-            static_cast<GX2BlendCombine>(itr->blend_equation_a)
+            static_cast<GX2BlendFunction>(itr->getBlendFactorSrcAlpha()),
+            static_cast<GX2BlendFunction>(itr->getBlendFactorDstAlpha()),
+            static_cast<GX2BlendCombine>(itr->getBlendEquationAlpha())
         );
     }
 
@@ -188,13 +188,13 @@ void GraphicsContextMRT::applyBlendAndFastZ() const
     {
         GX2SetBlendControl(
             static_cast<GX2RenderTarget>(GX2_RENDER_TARGET_0 + itr.getIndex()),
-            static_cast<GX2BlendFunction>(itr->blend_factor_src_rgb),
-            static_cast<GX2BlendFunction>(itr->blend_factor_dst_rgb),
-            static_cast<GX2BlendCombine>(itr->blend_equation_rgb),
+            static_cast<GX2BlendFunction>(itr->getBlendFactorSrcRGB()),
+            static_cast<GX2BlendFunction>(itr->getBlendFactorDstRGB()),
+            static_cast<GX2BlendCombine>(itr->getBlendEquationRGB()),
             GX2_ENABLE,
-            static_cast<GX2BlendFunction>(itr->blend_factor_src_a),
-            static_cast<GX2BlendFunction>(itr->blend_factor_dst_a),
-            static_cast<GX2BlendCombine>(itr->blend_equation_a)
+            static_cast<GX2BlendFunction>(itr->getBlendFactorSrcAlpha()),
+            static_cast<GX2BlendFunction>(itr->getBlendFactorDstAlpha()),
+            static_cast<GX2BlendCombine>(itr->getBlendEquationAlpha())
         );
     }
 #endif // cafe

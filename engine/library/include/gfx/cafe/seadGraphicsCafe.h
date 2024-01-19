@@ -9,24 +9,125 @@ namespace sead {
 
 class GraphicsCafe : public Graphics
 {
-    struct BlendExpression
+public:
+    class BlendExpression
     {
+    public:
         BlendExpression()
-            : blend_factor_src_rgb(cBlendFactor_SrcAlpha)
-            , blend_factor_src_a(cBlendFactor_SrcAlpha)
-            , blend_factor_dst_rgb(cBlendFactor_InvSrcAlpha)
-            , blend_factor_dst_a(cBlendFactor_InvSrcAlpha)
-            , blend_equation_rgb(cBlendEquation_Add)
-            , blend_equation_a(cBlendEquation_Add)
+            : mBlendFactorSrcRGB(Graphics::cBlendFactor_SrcAlpha)
+            , mBlendFactorSrcA(Graphics::cBlendFactor_SrcAlpha)
+            , mBlendFactorDstRGB(Graphics::cBlendFactor_InvSrcAlpha)
+            , mBlendFactorDstA(Graphics::cBlendFactor_InvSrcAlpha)
+            , mBlendEquationRGB(Graphics::cBlendEquation_Add)
+            , mBlendEquationA(Graphics::cBlendEquation_Add)
         {
         }
 
-        BlendFactor blend_factor_src_rgb;
-        BlendFactor blend_factor_src_a;
-        BlendFactor blend_factor_dst_rgb;
-        BlendFactor blend_factor_dst_a;
-        BlendEquation blend_equation_rgb;
-        BlendEquation blend_equation_a;
+        void setBlendFactor(Graphics::BlendFactor src_factor, Graphics::BlendFactor dst_factor)
+        {
+            setBlendFactorSrc(src_factor);
+            setBlendFactorDst(dst_factor);
+        }
+
+        void setBlendFactorSeparate(Graphics::BlendFactor src_factor_rgb, Graphics::BlendFactor dst_factor_rgb, Graphics::BlendFactor src_factor_a, Graphics::BlendFactor dst_factor_a)
+        {
+            setBlendFactorSrcRGB(src_factor_rgb);
+            setBlendFactorDstRGB(dst_factor_rgb);
+            setBlendFactorSrcAlpha(src_factor_a);
+            setBlendFactorDstAlpha(dst_factor_a);
+        }
+
+        void setBlendFactorSrc(Graphics::BlendFactor factor)
+        {
+            setBlendFactorSrcRGB(factor);
+            setBlendFactorSrcAlpha(factor);
+        }
+
+        void setBlendFactorDst(Graphics::BlendFactor factor)
+        {
+            setBlendFactorDstRGB(factor);
+            setBlendFactorDstAlpha(factor);
+        }
+
+        void setBlendFactorSrcRGB(Graphics::BlendFactor factor)
+        {
+            mBlendFactorSrcRGB = factor;
+        }
+
+        void setBlendFactorSrcAlpha(Graphics::BlendFactor factor)
+        {
+            mBlendFactorSrcA = factor;
+        }
+
+        void setBlendFactorDstRGB(Graphics::BlendFactor factor)
+        {
+            mBlendFactorDstRGB = factor;
+        }
+
+        void setBlendFactorDstAlpha(Graphics::BlendFactor factor)
+        {
+            mBlendFactorDstA = factor;
+        }
+
+        void setBlendEquation(Graphics::BlendEquation equation)
+        {
+            setBlendEquationRGB(equation);
+            setBlendEquationAlpha(equation);
+        }
+
+        void setBlendEquationSeparate(Graphics::BlendEquation equation_rgb, Graphics::BlendEquation equation_a)
+        {
+            setBlendEquationRGB(equation_rgb);
+            setBlendEquationAlpha(equation_a);
+        }
+
+        void setBlendEquationRGB(Graphics::BlendEquation equation)
+        {
+            mBlendEquationRGB = equation;
+        }
+
+        void setBlendEquationAlpha(Graphics::BlendEquation equation)
+        {
+            mBlendEquationA = equation;
+        }
+
+        Graphics::BlendFactor getBlendFactorSrcRGB() const
+        {
+            return mBlendFactorSrcRGB;
+        }
+
+        Graphics::BlendFactor getBlendFactorSrcAlpha() const
+        {
+            return mBlendFactorSrcA;
+        }
+
+        Graphics::BlendFactor getBlendFactorDstRGB() const
+        {
+            return mBlendFactorDstRGB;
+        }
+
+        Graphics::BlendFactor getBlendFactorDstAlpha() const
+        {
+            return mBlendFactorDstA;
+        }
+
+        Graphics::BlendEquation getBlendEquationRGB() const
+        {
+            return mBlendEquationRGB;
+        }
+
+        Graphics::BlendEquation getBlendEquationAlpha() const
+        {
+            return mBlendEquationA;
+        }
+
+    private:
+        Graphics::BlendFactor mBlendFactorSrcRGB;
+        Graphics::BlendFactor mBlendFactorSrcA;
+        Graphics::BlendFactor mBlendFactorDstRGB;
+        Graphics::BlendFactor mBlendFactorDstA;
+        Graphics::BlendEquation mBlendEquationRGB;
+        Graphics::BlendEquation mBlendEquationA;
     };
 
 public:

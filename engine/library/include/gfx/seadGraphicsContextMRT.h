@@ -10,24 +10,125 @@ namespace sead {
 
 class GraphicsContextMRT
 {
-    struct BlendExpression
+public:
+    class BlendExpression
     {
+    public:
         BlendExpression()
-            : blend_factor_src_rgb(Graphics::cBlendFactor_SrcAlpha)
-            , blend_factor_src_a(Graphics::cBlendFactor_SrcAlpha)
-            , blend_factor_dst_rgb(Graphics::cBlendFactor_InvSrcAlpha)
-            , blend_factor_dst_a(Graphics::cBlendFactor_InvSrcAlpha)
-            , blend_equation_rgb(Graphics::cBlendEquation_Add)
-            , blend_equation_a(Graphics::cBlendEquation_Add)
+            : mBlendFactorSrcRGB(Graphics::cBlendFactor_SrcAlpha)
+            , mBlendFactorSrcA(Graphics::cBlendFactor_SrcAlpha)
+            , mBlendFactorDstRGB(Graphics::cBlendFactor_InvSrcAlpha)
+            , mBlendFactorDstA(Graphics::cBlendFactor_InvSrcAlpha)
+            , mBlendEquationRGB(Graphics::cBlendEquation_Add)
+            , mBlendEquationA(Graphics::cBlendEquation_Add)
         {
         }
 
-        Graphics::BlendFactor blend_factor_src_rgb;
-        Graphics::BlendFactor blend_factor_src_a;
-        Graphics::BlendFactor blend_factor_dst_rgb;
-        Graphics::BlendFactor blend_factor_dst_a;
-        Graphics::BlendEquation blend_equation_rgb;
-        Graphics::BlendEquation blend_equation_a;
+        void setBlendFactor(Graphics::BlendFactor src_factor, Graphics::BlendFactor dst_factor)
+        {
+            setBlendFactorSrc(src_factor);
+            setBlendFactorDst(dst_factor);
+        }
+
+        void setBlendFactorSeparate(Graphics::BlendFactor src_factor_rgb, Graphics::BlendFactor dst_factor_rgb, Graphics::BlendFactor src_factor_a, Graphics::BlendFactor dst_factor_a)
+        {
+            setBlendFactorSrcRGB(src_factor_rgb);
+            setBlendFactorDstRGB(dst_factor_rgb);
+            setBlendFactorSrcAlpha(src_factor_a);
+            setBlendFactorDstAlpha(dst_factor_a);
+        }
+
+        void setBlendFactorSrc(Graphics::BlendFactor factor)
+        {
+            setBlendFactorSrcRGB(factor);
+            setBlendFactorSrcAlpha(factor);
+        }
+
+        void setBlendFactorDst(Graphics::BlendFactor factor)
+        {
+            setBlendFactorDstRGB(factor);
+            setBlendFactorDstAlpha(factor);
+        }
+
+        void setBlendFactorSrcRGB(Graphics::BlendFactor factor)
+        {
+            mBlendFactorSrcRGB = factor;
+        }
+
+        void setBlendFactorSrcAlpha(Graphics::BlendFactor factor)
+        {
+            mBlendFactorSrcA = factor;
+        }
+
+        void setBlendFactorDstRGB(Graphics::BlendFactor factor)
+        {
+            mBlendFactorDstRGB = factor;
+        }
+
+        void setBlendFactorDstAlpha(Graphics::BlendFactor factor)
+        {
+            mBlendFactorDstA = factor;
+        }
+
+        void setBlendEquation(Graphics::BlendEquation equation)
+        {
+            setBlendEquationRGB(equation);
+            setBlendEquationAlpha(equation);
+        }
+
+        void setBlendEquationSeparate(Graphics::BlendEquation equation_rgb, Graphics::BlendEquation equation_a)
+        {
+            setBlendEquationRGB(equation_rgb);
+            setBlendEquationAlpha(equation_a);
+        }
+
+        void setBlendEquationRGB(Graphics::BlendEquation equation)
+        {
+            mBlendEquationRGB = equation;
+        }
+
+        void setBlendEquationAlpha(Graphics::BlendEquation equation)
+        {
+            mBlendEquationA = equation;
+        }
+
+        Graphics::BlendFactor getBlendFactorSrcRGB() const
+        {
+            return mBlendFactorSrcRGB;
+        }
+
+        Graphics::BlendFactor getBlendFactorSrcAlpha() const
+        {
+            return mBlendFactorSrcA;
+        }
+
+        Graphics::BlendFactor getBlendFactorDstRGB() const
+        {
+            return mBlendFactorDstRGB;
+        }
+
+        Graphics::BlendFactor getBlendFactorDstAlpha() const
+        {
+            return mBlendFactorDstA;
+        }
+
+        Graphics::BlendEquation getBlendEquationRGB() const
+        {
+            return mBlendEquationRGB;
+        }
+
+        Graphics::BlendEquation getBlendEquationAlpha() const
+        {
+            return mBlendEquationA;
+        }
+
+    private:
+        Graphics::BlendFactor mBlendFactorSrcRGB;
+        Graphics::BlendFactor mBlendFactorSrcA;
+        Graphics::BlendFactor mBlendFactorDstRGB;
+        Graphics::BlendFactor mBlendFactorDstA;
+        Graphics::BlendEquation mBlendEquationRGB;
+        Graphics::BlendEquation mBlendEquationA;
     };
 
 public:
@@ -80,72 +181,9 @@ public:
         mBlendEnableMask.setDirect(mask);
     }
 
-    void setBlendFactor(u32 target, Graphics::BlendFactor src_factor, Graphics::BlendFactor dst_factor)
+    BlendExpression& getBlendExpression(u32 target)
     {
-        setBlendFactorSrc(target, src_factor);
-        setBlendFactorDst(target, dst_factor);
-    }
-
-    void setBlendFactorSeparate(u32 target, Graphics::BlendFactor src_factor_rgb, Graphics::BlendFactor dst_factor_rgb, Graphics::BlendFactor src_factor_a, Graphics::BlendFactor dst_factor_a)
-    {
-        setBlendFactorSrcRGB(target, src_factor_rgb);
-        setBlendFactorDstRGB(target, dst_factor_rgb);
-        setBlendFactorSrcAlpha(target, src_factor_a);
-        setBlendFactorDstAlpha(target, dst_factor_a);
-    }
-
-    void setBlendFactorSrc(u32 target, Graphics::BlendFactor factor)
-    {
-        setBlendFactorSrcRGB(target, factor);
-        setBlendFactorSrcAlpha(target, factor);
-    }
-
-    void setBlendFactorDst(u32 target, Graphics::BlendFactor factor)
-    {
-        setBlendFactorDstRGB(target, factor);
-        setBlendFactorDstAlpha(target, factor);
-    }
-
-    void setBlendFactorSrcRGB(u32 target, Graphics::BlendFactor factor)
-    {
-        mBlendExpression[target].blend_factor_src_rgb = factor;
-    }
-
-    void setBlendFactorSrcAlpha(u32 target, Graphics::BlendFactor factor)
-    {
-        mBlendExpression[target].blend_factor_src_a = factor;
-    }
-
-    void setBlendFactorDstRGB(u32 target, Graphics::BlendFactor factor)
-    {
-        mBlendExpression[target].blend_factor_dst_rgb = factor;
-    }
-
-    void setBlendFactorDstAlpha(u32 target, Graphics::BlendFactor factor)
-    {
-        mBlendExpression[target].blend_factor_dst_a = factor;
-    }
-
-    void setBlendEquation(u32 target, Graphics::BlendEquation equation)
-    {
-        setBlendEquationRGB(target, equation);
-        setBlendEquationAlpha(target, equation);
-    }
-
-    void setBlendEquationSeparate(u32 target, Graphics::BlendEquation equation_rgb, Graphics::BlendEquation equation_a)
-    {
-        setBlendEquationRGB(target, equation_rgb);
-        setBlendEquationAlpha(target, equation_a);
-    }
-
-    void setBlendEquationRGB(u32 target, Graphics::BlendEquation equation)
-    {
-        mBlendExpression[target].blend_equation_rgb = equation;
-    }
-
-    void setBlendEquationAlpha(u32 target, Graphics::BlendEquation equation)
-    {
-        mBlendExpression[target].blend_equation_a = equation;
+        return mBlendExpression[target];
     }
 
     void setBlendConstantColor(const Color4f& color)
@@ -244,34 +282,9 @@ public:
         return mBlendEnableMask.getDirect();
     }
 
-    Graphics::BlendFactor getBlendFactorSrcRGB(u32 target) const
+    const BlendExpression& getBlendExpression(u32 target) const
     {
-        return mBlendExpression[target].blend_factor_src_rgb;
-    }
-
-    Graphics::BlendFactor getBlendFactorSrcAlpha(u32 target) const
-    {
-        return mBlendExpression[target].blend_factor_src_a;
-    }
-
-    Graphics::BlendFactor getBlendFactorDstRGB(u32 target) const
-    {
-        return mBlendExpression[target].blend_factor_dst_rgb;
-    }
-
-    Graphics::BlendFactor getBlendFactorDstAlpha(u32 target) const
-    {
-        return mBlendExpression[target].blend_factor_dst_a;
-    }
-
-    Graphics::BlendEquation getBlendEquationRGB(u32 target) const
-    {
-        return mBlendExpression[target].blend_equation_rgb;
-    }
-
-    Graphics::BlendEquation getBlendEquationAlpha(u32 target) const
-    {
-        return mBlendExpression[target].blend_equation_a;
+        return mBlendExpression[target];
     }
 
     const Color4f& getBlendConstantColor() const
