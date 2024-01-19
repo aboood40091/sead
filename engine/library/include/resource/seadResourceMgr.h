@@ -28,6 +28,11 @@ public:
     const Resource& operator*() const { return *mPtr; }
     const Resource* operator->() const { return mPtr; }
 
+    bool isNull() const
+    {
+        return mPtr == nullptr;
+    }
+
 private:
     Resource* mPtr;
 };
@@ -116,6 +121,16 @@ public:
 
     ResourcePtr tryLoadWithoutDecomp(const LoadArg& arg);
     ResourcePtr tryLoad(const LoadArg& arg, const SafeString& convert_ext, Decompressor* decomp);
+
+    ResourcePtr loadWithoutDecomp(const LoadArg& arg)
+    {
+        ResourcePtr ret = tryLoadWithoutDecomp(arg);
+        if (ret.isNull())
+        {
+          //SEAD_ASSERT_MSG(false, "loadWithoutDecomp failed: %s", arg.path.cstr());
+        }
+        return ret;
+    }
 
     ResourceFactory* findFactory(const SafeString& ext);
     Decompressor* findDecompressor(const SafeString& ext);

@@ -27,7 +27,7 @@ FrameHeap::tryCreate(u32 size, const SafeString& name, Heap* parent, HeapDirecti
     size = Mathi::roundUpPow2(size, 4);
     if (size < sizeof(FrameHeap))
     {
-        // SEAD_WARN("size must be able to include manage area: size=%d\n", size);
+        // SEAD_WARNING(false, "size must be able to include manage area: size=%d\n", size);
         return nullptr;
     }
 
@@ -38,7 +38,7 @@ FrameHeap::tryCreate(u32 size, const SafeString& name, Heap* parent, HeapDirecti
 
     if (ptr == nullptr)
     {
-        // SEAD_WARN("heap alloc failed\n");
+        // SEAD_WARNING(false, "heap alloc failed\n");
         return nullptr;
     }
 

@@ -34,13 +34,11 @@ void ListNode::erase_()
 {
     // SEAD_ASSERT_MSG(n->isLinked(), "node is not linked.");
 
-    ListNode* prev = mPrev;
-    if (prev != nullptr)
-        prev->mNext = mNext;
+    if (mPrev != nullptr)
+        mPrev->mNext = mNext;
 
-    ListNode* next = mNext;
-    if (next != nullptr)
-        next->mPrev = mPrev;
+    if (mNext != nullptr)
+        mNext->mPrev = mPrev;
 
     mNext = nullptr;
     mPrev = nullptr;
@@ -48,20 +46,32 @@ void ListNode::erase_()
 
 ListNode* ListImpl::popBack()
 {
-    ListNode* n = back();
-    if (n != nullptr)
-       erase(n);
-
-    return n;
+    if (mCount > 0)
+    {
+        ListNode* n = mStartEnd.mPrev;
+        n->erase_();
+        mCount--;
+        return n;
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 
 ListNode* ListImpl::popFront()
 {
-    ListNode* n = front();
-    if (n != nullptr)
-       erase(n);
-
-    return n;
+    if (mCount > 0)
+    {
+        ListNode* n = mStartEnd.mNext;
+        n->erase_();
+        mCount--;
+        return n;
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 
 } // namespace sead

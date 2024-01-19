@@ -24,11 +24,10 @@ void Path::getPathExceptDrive(BufferedSafeString* dst, const SafeString& src)
     dst->trim(0);
 
     s32 index = src.findIndex("://");
-    if (index != -1)
-        dst->copyAt(0, src.getPart(index + 3));
-
-    else
+    if (index == -1)
         dst->copyAt(0, src);
+    else
+        dst->copyAt(0, src.getPart(index + 3));
 }
 
 } // namespace sead

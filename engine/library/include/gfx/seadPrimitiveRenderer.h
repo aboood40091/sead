@@ -18,7 +18,7 @@ public:
     public:
         QuadArg()
             : mCenter(Vector3f::zero)
-            , mSize(Vector3f::ones.x, Vector3f::ones.y) // Yes, not Vector2f::ones, for some reason
+            , mSize(Vector3f::ones) // Yes, not Vector2f::ones, for some reason
             , mColor0(Color4f::cWhite)
             , mColor1(Color4f::cWhite)
             , mHorizontal(false)
@@ -44,8 +44,6 @@ public:
         Color4f mColor0;
         Color4f mColor1;
         bool mHorizontal;
-
-        friend class PrimitiveRenderer;
     };
 #ifdef cafe
     static_assert(sizeof(QuadArg) == 0x38, "sead::PrimitiveRenderer::QuadArg size mismatch");
@@ -69,8 +67,6 @@ public:
     private:
         Vector2f mUVSrc;
         Vector2f mUVSize;
-
-        friend class PrimitiveRenderer;
     };
 #ifdef cafe
     static_assert(sizeof(UVArg) == 0x10, "sead::PrimitiveRenderer::UVArg size mismatch");
@@ -104,8 +100,6 @@ public:
         Vector3f mSize;
         Color4f mColor0;
         Color4f mColor1;
-
-        friend class PrimitiveRenderer;
     };
 #ifdef cafe
     static_assert(sizeof(CubeArg) == 0x38, "sead::PrimitiveRenderer::CubeArg size mismatch");
@@ -113,7 +107,7 @@ public:
 
 public:
     PrimitiveRenderer();
-    virtual ~PrimitiveRenderer() { }
+    virtual ~PrimitiveRenderer();
 
     void prepareFromBinary(Heap* heap, const void* bin_data, u32 bin_size);
     void prepare(Heap* heap, const SafeString& path);

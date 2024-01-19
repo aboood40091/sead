@@ -48,6 +48,22 @@ public:
         detachAll();
     }
 
+    MethodTreeNode* getChild() const
+    {
+        if (child() != nullptr)
+            return child()->val();
+        else
+            return nullptr;
+    }
+
+    MethodTreeNode* getNext() const
+    {
+        if (next() != nullptr)
+            return next()->val();
+        else
+            return nullptr;
+    }
+
     void attachMutexRec_(CriticalSection* m) const;
     void detachAll();
     void lock_();

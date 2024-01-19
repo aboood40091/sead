@@ -19,6 +19,11 @@ PrimitiveRenderer::PrimitiveRenderer()
 {
 }
 
+PrimitiveRenderer::~PrimitiveRenderer()
+{
+    delete mRendererImpl;
+}
+
 void PrimitiveRenderer::doPrepare_(Heap* heap)
 {
 #ifdef cafe
@@ -26,6 +31,8 @@ void PrimitiveRenderer::doPrepare_(Heap* heap)
 #else
     #error "Unknown platform"
 #endif // cafe
+
+  //SEAD_ASSERT(mRendererImpl);
 }
 
 void PrimitiveRenderer::prepareFromBinary(Heap* heap, const void* bin_data, u32 bin_size)
@@ -138,101 +145,86 @@ void PrimitiveRenderer::drawCylinder32(const Color4f& top, const Color4f& btm)
 void PrimitiveRenderer::drawQuad(const QuadArg& arg)
 {
     Matrix34f mtx;
-
     if (arg.isHorizontal())
-    {
-        const Vector2f& size = arg.mSize;
-        Vector3f scale(size.y, size.x, 1.0f);
-        Vector3f rotation(0.0f, 0.0f, Mathf::deg2rad(90));
-
-        mtx.makeSRT(scale, rotation, arg.mCenter);
-    }
+        mtx.makeSRT(
+            Vector3f(arg.getSize().y, arg.getSize().x, 1.0f),
+            Vector3f(0.0f, 0.0f, Mathf::deg2rad(90)),
+            arg.getCenter()
+        );
     else
-    {
-        const Vector2f& size = arg.mSize;
-        Vector3f scale(size.x, size.y, 1.0f);
-
-        mtx.makeST(scale, arg.mCenter);
-    }
+        mtx.makeST(
+            Vector3f(arg.getSize().x, arg.getSize().y, 1.0f),
+            arg.getCenter()
+        );
 
     Matrix34f outMtx;
     outMtx.setMul(mModelMtx, mtx);
 
-    mRendererImpl->drawQuadImpl(outMtx, arg.mColor0, arg.mColor1);
+    mRendererImpl->drawQuadImpl(outMtx, arg.getColor0(), arg.getColor1());
 }
 
 void PrimitiveRenderer::drawQuad(const Texture& texture, const QuadArg& arg, const UVArg& uv_arg)
 {
     Matrix34f mtx;
-
     if (arg.isHorizontal())
-    {
-        const Vector2f& size = arg.mSize;
-        Vector3f scale(size.y, size.x, 1.0f);
-        Vector3f rotation(0.0f, 0.0f, Mathf::deg2rad(90));
-
-        mtx.makeSRT(scale, rotation, arg.mCenter);
-    }
+        mtx.makeSRT(
+            Vector3f(arg.getSize().y, arg.getSize().x, 1.0f),
+            Vector3f(0.0f, 0.0f, Mathf::deg2rad(90)),
+            arg.getCenter()
+        );
     else
-    {
-        const Vector2f& size = arg.mSize;
-        Vector3f scale(size.x, size.y, 1.0f);
-
-        mtx.makeST(scale, arg.mCenter);
-    }
+        mtx.makeST(
+            Vector3f(arg.getSize().x, arg.getSize().y, 1.0f),
+            arg.getCenter()
+        );
 
     Matrix34f outMtx;
     outMtx.setMul(mModelMtx, mtx);
 
-    mRendererImpl->drawQuadImpl(outMtx, texture, arg.mColor0, arg.mColor1, uv_arg.mUVSrc, uv_arg.mUVSize);
+    mRendererImpl->drawQuadImpl(outMtx, texture, arg.getColor0(), arg.getColor1(), uv_arg.getUVSrc(), uv_arg.getUVSize());
 }
 
 void PrimitiveRenderer::drawBox(const QuadArg& arg)
 {
     Matrix34f mtx;
-
     if (arg.isHorizontal())
-    {
-        const Vector2f& size = arg.mSize;
-        Vector3f scale(size.x, size.y, 1.0f); // No flipping of x and y. Bug?
-        Vector3f rotation(0.0f, 0.0f, Mathf::deg2rad(90));
-
-        mtx.makeSRT(scale, rotation, arg.mCenter);
-    }
+        mtx.makeSRT(
+            Vector3f(arg.getSize().x, arg.getSize().y, 1.0f), // No flipping of x and y. Bug?
+            Vector3f(0.0f, 0.0f, Mathf::deg2rad(90)),
+            arg.getCenter()
+        );
     else
-    {
-        const Vector2f& size = arg.mSize;
-        Vector3f scale(size.x, size.y, 1.0f);
-
-        mtx.makeST(scale, arg.mCenter);
-    }
+        mtx.makeST(
+            Vector3f(arg.getSize().x, arg.getSize().y, 1.0f),
+            arg.getCenter()
+        );
 
     Matrix34f outMtx;
     outMtx.setMul(mModelMtx, mtx);
 
-    mRendererImpl->drawBoxImpl(outMtx, arg.mColor0, arg.mColor1);
+    mRendererImpl->drawBoxImpl(outMtx, arg.getColor0(), arg.getColor1());
 }
 
 void PrimitiveRenderer::drawCube(const CubeArg& arg)
 {
     Matrix34f mtx;
-    mtx.makeST(arg.mSize, arg.mCenter);
+    mtx.makeST(arg.getSize(), arg.getCenter());
 
     Matrix34f outMtx;
     outMtx.setMul(mModelMtx, mtx);
 
-    mRendererImpl->drawCubeImpl(outMtx, arg.mColor0, arg.mColor1);
+    mRendererImpl->drawCubeImpl(outMtx, arg.getColor0(), arg.getColor1());
 }
 
 void PrimitiveRenderer::drawWireCube(const CubeArg& arg)
 {
     Matrix34f mtx;
-    mtx.makeST(arg.mSize, arg.mCenter);
+    mtx.makeST(arg.getSize(), arg.getCenter());
 
     Matrix34f outMtx;
     outMtx.setMul(mModelMtx, mtx);
 
-    mRendererImpl->drawWireCubeImpl(outMtx, arg.mColor0, arg.mColor1);
+    mRendererImpl->drawWireCubeImpl(outMtx, arg.getColor0(), arg.getColor1());
 }
 
 void PrimitiveRenderer::drawLine(const Vector3f& from, const Vector3f& to, const Color4f& c0, const Color4f& c1)
@@ -271,11 +263,8 @@ void PrimitiveRenderer::drawLine(const Vector3f& from, const Vector3f& to, const
 
 void PrimitiveRenderer::drawSphere4x8(const Vector3f& pos, f32 radius, const Color4f& north, const Color4f& south)
 {
-    f32 diameter = 2.0f * radius;
-    Vector3f scale(diameter, diameter, diameter);
-
     Matrix34f mtx;
-    mtx.makeST(scale, pos);
+    mtx.makeST(Vector3f(radius * 2.0f, radius * 2.0f, radius * 2.0f), pos);
 
     Matrix34f outMtx;
     outMtx.setMul(mModelMtx, mtx);
@@ -290,11 +279,8 @@ void PrimitiveRenderer::drawSphere4x8(const Vector3f& pos, f32 radius, const Col
 
 void PrimitiveRenderer::drawSphere8x16(const Vector3f& pos, f32 radius, const Color4f& north, const Color4f& south)
 {
-    f32 diameter = 2.0f * radius;
-    Vector3f scale(diameter, diameter, diameter);
-
     Matrix34f mtx;
-    mtx.makeST(scale, pos);
+    mtx.makeST(Vector3f(radius * 2.0f, radius * 2.0f, radius * 2.0f), pos);
 
     Matrix34f outMtx;
     outMtx.setMul(mModelMtx, mtx);
@@ -309,11 +295,8 @@ void PrimitiveRenderer::drawSphere8x16(const Vector3f& pos, f32 radius, const Co
 
 void PrimitiveRenderer::drawDisk16(const Vector3f& pos, f32 radius, const Color4f& center, const Color4f& edge)
 {
-    f32 diameter = 2.0f * radius;
-    Vector3f scale(diameter, diameter, diameter);
-
     Matrix34f mtx;
-    mtx.makeST(scale, pos);
+    mtx.makeST(Vector3f(radius * 2.0f, radius * 2.0f, radius * 2.0f), pos);
 
     Matrix34f outMtx;
     outMtx.setMul(mModelMtx, mtx);
@@ -323,11 +306,8 @@ void PrimitiveRenderer::drawDisk16(const Vector3f& pos, f32 radius, const Color4
 
 void PrimitiveRenderer::drawDisk32(const Vector3f& pos, f32 radius, const Color4f& center, const Color4f& edge)
 {
-    f32 diameter = 2.0f * radius;
-    Vector3f scale(diameter, diameter, diameter);
-
     Matrix34f mtx;
-    mtx.makeST(scale, pos);
+    mtx.makeST(Vector3f(radius * 2.0f, radius * 2.0f, radius * 2.0f), pos);
 
     Matrix34f outMtx;
     outMtx.setMul(mModelMtx, mtx);
@@ -347,11 +327,8 @@ void PrimitiveRenderer::drawDisk32(const Vector3f& pos, f32 radius, const Color4
 
 void PrimitiveRenderer::drawCircle16(const Vector3f& pos, f32 radius, const Color4f& color)
 {
-    f32 diameter = 2.0f * radius;
-    Vector3f scale(diameter, diameter, diameter);
-
     Matrix34f mtx;
-    mtx.makeST(scale, pos);
+    mtx.makeST(Vector3f(radius * 2.0f, radius * 2.0f, radius * 2.0f), pos);
 
     Matrix34f outMtx;
     outMtx.setMul(mModelMtx, mtx);
@@ -361,11 +338,8 @@ void PrimitiveRenderer::drawCircle16(const Vector3f& pos, f32 radius, const Colo
 
 void PrimitiveRenderer::drawCircle32(const Vector3f& pos, f32 radius, const Color4f& color)
 {
-    f32 diameter = 2.0f * radius;
-    Vector3f scale(diameter, diameter, diameter);
-
     Matrix34f mtx;
-    mtx.makeST(scale, pos);
+    mtx.makeST(Vector3f(radius * 2.0f, radius * 2.0f, radius * 2.0f), pos);
 
     Matrix34f outMtx;
     outMtx.setMul(mModelMtx, mtx);
@@ -375,11 +349,8 @@ void PrimitiveRenderer::drawCircle32(const Vector3f& pos, f32 radius, const Colo
 
 void PrimitiveRenderer::drawCylinder16(const Vector3f& pos, f32 radius, f32 height, const Color4f& top_color, const Color4f& btm_color)
 {
-    f32 diameter = 2.0f * radius;
-    Vector3f scale(diameter, height, diameter);
-
     Matrix34f mtx;
-    mtx.makeST(scale, pos);
+    mtx.makeST(Vector3f(radius * 2.0f, height, radius * 2.0f), pos);
 
     Matrix34f outMtx;
     outMtx.setMul(mModelMtx, mtx);
@@ -394,11 +365,8 @@ void PrimitiveRenderer::drawCylinder16(const Vector3f& pos, f32 radius, f32 heig
 
 void PrimitiveRenderer::drawCylinder32(const Vector3f& pos, f32 radius, f32 height, const Color4f& top_color, const Color4f& btm_color)
 {
-    f32 diameter = 2.0f * radius;
-    Vector3f scale(diameter, height, diameter);
-
     Matrix34f mtx;
-    mtx.makeST(scale, pos);
+    mtx.makeST(Vector3f(radius * 2.0f, height, radius * 2.0f), pos);
 
     Matrix34f outMtx;
     outMtx.setMul(mModelMtx, mtx);
@@ -426,9 +394,9 @@ void PrimitiveRenderer::drawAxis(const Vector3f& pos, f32 scale)
 PrimitiveRenderer::QuadArg&
 PrimitiveRenderer::QuadArg::setCornerAndSize(const Vector3f& p, const Vector2f& size)
 {
-    mCenter.set(size.x * 0.5f + p.x,
-                size.y * 0.5f + p.y,
-                                p.z);
+    mCenter.set(p.x + size.x * 0.5f,
+                p.y + size.y * 0.5f,
+                p.z);
     mSize = size;
     return *this;
 }

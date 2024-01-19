@@ -87,8 +87,11 @@ public:
         else if (*mark8 == 0xfe && *(mark8 + 1) == 0xff)
             return cBig;
 
-        //SEAD_ASSERT_MSG(false, "Undefined endian mark(0x%02x 0x%02x).", *mark8, *(mark8 + 1));
-        return cLittle;
+        else
+        {
+            //SEAD_ASSERT_MSG(false, "Undefined endian mark(0x%02x 0x%02x).", *((u8*)&mark), *((u8*)&mark + 1));
+            return cLittle;
+        }
     }
 
     static u16 endianToMark(Types endian) { return (endian == cBig) ? 0xfeff : 0xfffe; }

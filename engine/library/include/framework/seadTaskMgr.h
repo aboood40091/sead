@@ -15,7 +15,7 @@ class Heap;
 class NullFaderTask;
 class Thread;
 
-class TaskMgr
+class TaskMgr : public hostio::Node
 {
 public:
     struct InitializeArg

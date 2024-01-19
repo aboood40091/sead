@@ -28,6 +28,34 @@ protected:
     T* mLocked;
 };
 
+template <typename T>
+class ConditionalScopedLock
+{
+public:
+    explicit ConditionalScopedLock(T* t, bool cond)
+        : mLocked(nullptr)
+    {
+        if (cond)
+        {
+            mLocked = t;
+            mLocked->lock();
+        }
+    }
+
+    virtual ~ConditionalScopedLock()
+    {
+        if (mLocked != nullptr)
+            mLocked->unlock();
+    }
+
+private:
+    ConditionalScopedLock(const ConditionalScopedLock<T>&);
+    const ConditionalScopedLock<T>& operator=(const ConditionalScopedLock<T>&);
+
+protected:
+    T* mLocked;
+};
+
 } // namespace sead
 
 #endif // SEAD_SCOPED_LOCK_H_

@@ -3,6 +3,7 @@
 
 #include <container/seadPtrArray.h>
 #include <heap/seadArena.h>
+#include <hostio/seadHostIODummy.h>
 #include <thread/seadCriticalSection.h>
 
 #define NUM_ROOT_HEAPS_MAX         4
@@ -16,7 +17,7 @@ class Heap;
 template <typename A>
 class IDelegate1;
 
-class HeapMgr
+class HeapMgr : public hostio::Node
 {
 public:
   //struct AllocCallbackArg;
@@ -48,7 +49,7 @@ public:
     static bool isInitialized() { return sInstancePtr != nullptr; }
     static HeapMgr* instance() { return sInstancePtr; }
 
-    Heap* findContainHeap(const void* ptr) const;
+    Heap* findContainHeap(const void* memBlock) const;
     Heap* getCurrentHeap() const;
 
     static Heap* getRootHeap(s32 n) { return sRootHeaps.at(n); }

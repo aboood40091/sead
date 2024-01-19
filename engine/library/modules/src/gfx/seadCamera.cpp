@@ -30,7 +30,7 @@ void LookAtCamera::doUpdateMatrix(Matrix34f* dst) const
 {
     if (mPos == mAt)
     {
-        // SEAD_WARN("Warning! LookAtCamera::mPos == LookAtCamera::mAt\n");
+        // SEAD_WARNING(false, "Warning! LookAtCamera::mPos == LookAtCamera::mAt\n");
         return;
     }
 

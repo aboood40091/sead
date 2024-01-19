@@ -4,6 +4,7 @@
 #include <container/seadTList.h>
 #include <heap/seadDisposer.h>
 #include <heap/seadHeap.h>
+#include <hostio/seadHostIODummy.h>
 #include <prim/seadNamable.h>
 #include <thread/seadThreadLocalStorage.h>
 #include <time/seadTickSpan.h>
@@ -59,7 +60,7 @@ private:
 static_assert(sizeof(Thread) == 0x90, "sead::Thread size mismatch");
 #endif // cafe
 
-class ThreadMgr
+class ThreadMgr : public hostio::Node
 {
     SEAD_SINGLETON_DISPOSER(ThreadMgr)
 

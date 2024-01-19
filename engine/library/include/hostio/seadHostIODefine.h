@@ -7,10 +7,6 @@ namespace sead { namespace hostio {
 
 struct FileInfo
 {
-    FileInfo()
-    {
-    }
-
     SafeString path;
     u64 size;
 };

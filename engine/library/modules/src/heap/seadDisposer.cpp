@@ -14,9 +14,10 @@ IDisposer::IDisposer()
     : mListNode()
     , mDisposerHeap(nullptr)
 {
-    if (sead::HeapMgr::isInitialized())
+    HeapMgr* heap_mgr = HeapMgr::instance();
+    if (heap_mgr != nullptr)
     {
-        mDisposerHeap = sead::HeapMgr::instance()->findContainHeap(this);
+        mDisposerHeap = heap_mgr->findContainHeap(this);
         if (mDisposerHeap != nullptr)
             mDisposerHeap->appendDisposer_(this);
     }

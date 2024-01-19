@@ -24,6 +24,9 @@ void setSphereVertex(Vertex* vtx, u16* idx, s32 sizeX, s32 sizeY);
 void setDiskVertex(Vertex* vtx, u16* idx, s32 divNum);
 void setCylinderVertex(Vertex* vtx, u16* idx, s32 divNum);
 
+inline s32 calcDiskVertexNum(s32 divNum) { return divNum + 1; }
+inline s32 calcDiskIndexNum(s32 divNum) { return divNum * 3; }
+
 } } // namespace sead::PrimitiveRendererUtil
 
 #endif // SEAD_PRIMITIVE_RENDERER_UTIL_H_

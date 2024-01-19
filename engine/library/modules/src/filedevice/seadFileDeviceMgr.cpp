@@ -20,13 +20,14 @@ FileDeviceMgr::FileDeviceMgr()
     , mMainFileDevice(nullptr)
     , mDefaultFileDevice(nullptr)
 {
-    if (!HeapMgr::isInitialized())
+    HeapMgr* heap_mgr = HeapMgr::instance();
+    if (heap_mgr == nullptr)
     {
         //SEAD_ASSERT_MSG(false, "FileDeviceMgr need HeapMgr");
         return;
     }
 
-    Heap* heap = HeapMgr::instance()->findContainHeap(this);
+    Heap* heap = heap_mgr->findContainHeap(this);
 
 #ifdef cafe
     FSInit();
@@ -52,7 +53,7 @@ FileDeviceMgr::FileDeviceMgr()
     mMainFileDevice = new(heap, 4) MainFileDevice(heap);
     mount(mMainFileDevice);
 
-    mDefaultFileDevice = mMainFileDevice;
+    setDefaultFileDevice(mMainFileDevice);
 }
 
 FileDeviceMgr::~FileDeviceMgr()

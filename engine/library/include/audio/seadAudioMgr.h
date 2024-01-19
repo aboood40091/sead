@@ -3,6 +3,7 @@
 
 #include <container/seadOffsetList.h>
 #include <heap/seadDisposer.h>
+#include <hostio/seadHostIODummy.h>
 
 namespace sead {
 
@@ -13,7 +14,7 @@ class AudioSubsetBase;
 class AudioSystem;
 class Heap;
 
-class AudioMgr
+class AudioMgr : public hostio::Node
 {
     SEAD_SINGLETON_DISPOSER(AudioMgr)
 

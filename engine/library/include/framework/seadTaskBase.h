@@ -111,6 +111,22 @@ public:
 
     void doneDestroy();
 
+    void detachCalc()
+    {
+        detachCalcImpl();
+    }
+
+    void detachDraw()
+    {
+        detachDrawImpl();
+    }
+
+    void detachCalcDraw()
+    {
+        detachCalc();
+        detachDraw();
+    }
+
 protected:
     TaskParameter* mParameter;
     BitFlag32 mInternalFlag;

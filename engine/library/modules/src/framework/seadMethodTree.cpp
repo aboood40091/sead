@@ -8,16 +8,15 @@ MethodTreeNode::attachMutexRec_(
     CriticalSection* m
 ) const
 {
-    const MethodTreeNode* node = this;
+    mCriticalSection = m;
 
-    do
-    {
-        MethodTreeNode* child = static_cast<MethodTreeNode*>(node->mChild);
-        node->mCriticalSection = m;
-        if (child != nullptr && child->mData != nullptr)
-            child->mData->attachMutexRec_(m);
-    }
-    while (node->mNext != nullptr && (node = static_cast<MethodTreeNode*>(node->mNext)->mData, node != nullptr));
+    MethodTreeNode* child = getChild();
+    if (child != nullptr)
+        child->attachMutexRec_(m);
+
+    MethodTreeNode* next = getNext();
+    if (next != nullptr)
+        next->attachMutexRec_(m);
 }
 
 void MethodTreeNode::detachAll()
@@ -35,18 +34,14 @@ void MethodTreeNode::detachAll()
 
 void MethodTreeNode::lock_()
 {
-    if (mCriticalSection == nullptr)
-        return;
-
-    mCriticalSection->lock();
+    if (mCriticalSection != nullptr)
+        mCriticalSection->lock();
 }
 
 void MethodTreeNode::unlock_()
 {
-    if (mCriticalSection == nullptr)
-        return;
-
-    mCriticalSection->unlock();
+    if (mCriticalSection != nullptr)
+        mCriticalSection->unlock();
 }
 
 } // namespace sead

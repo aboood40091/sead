@@ -19,6 +19,7 @@ public:
     Resource();
     virtual ~Resource();
 
+protected:
     virtual void doPostCreate_() { }
 };
 #ifdef cafe
@@ -34,10 +35,24 @@ public:
     virtual ~DirectResource();
 
     virtual u32 getLoadDataAlignment() { return 4; }
+
+protected:
     virtual void doCreate_(u8*, u32, Heap*) { }
 
-    void create(u8* buffer, u32 bufferSize, u32 allocSize, bool allocated, Heap* heap);
+public:
+    void create(u8* data, u32 size, u32 buffer_size, bool need_delete, Heap* instance_heap);
 
+    u8* getData() const
+    {
+        return mRawData;
+    }
+
+    u32 getSize() const
+    {
+        return mRawSize;
+    }
+
+protected:
     u8* mRawData;
     u32 mRawSize;
     u32 mBufferSize;
@@ -59,10 +74,16 @@ public:
 
     virtual ~ResourceFactory();
 
-    virtual Resource* create(const ResourceMgr::CreateArg& createArg) = 0;
-    virtual Resource* tryCreate(const ResourceMgr::LoadArg& loadArg) = 0;
-    virtual Resource* tryCreateWithDecomp(const ResourceMgr::LoadArg& loadArg, Decompressor* decompressor) = 0;
+    virtual Resource* create(const ResourceMgr::CreateArg& arg) = 0;
+    virtual Resource* tryCreate(const ResourceMgr::LoadArg& arg) = 0;
+    virtual Resource* tryCreateWithDecomp(const ResourceMgr::LoadArg& arg, Decompressor* decomp) = 0;
 
+    void setExt(const SafeString& ext)
+    {
+        mExt.copy(ext);
+    }
+
+protected:
     FixedSafeString<32> mExt;
 };
 #ifdef cafe
@@ -81,9 +102,11 @@ public:
     {
     }
 
-    virtual Resource* create(const ResourceMgr::CreateArg& createArg);
-    virtual Resource* tryCreate(const ResourceMgr::LoadArg& loadArg);
-    virtual Resource* tryCreateWithDecomp(const ResourceMgr::LoadArg& loadArg, Decompressor* decompressor);
+    virtual Resource* create(const ResourceMgr::CreateArg& arg);
+    virtual Resource* tryCreate(const ResourceMgr::LoadArg& arg);
+    virtual Resource* tryCreateWithDecomp(const ResourceMgr::LoadArg& arg, Decompressor* decomp);
+
+protected:
     virtual DirectResource* newResource_(Heap* heap, s32 alignment) = 0;
 };
 
@@ -100,6 +123,7 @@ public:
     {
     }
 
+private:
     virtual DirectResource* newResource_(Heap* heap, s32 alignment)
     {
         return new(heap, alignment) T;

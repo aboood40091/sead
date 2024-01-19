@@ -12,7 +12,7 @@ namespace sead {
 class Event : public IDisposer
 {
 public:
-    Event(bool);
+    Event(bool manual_reset);
 
 private:
     Event(const Event&);
@@ -21,7 +21,7 @@ private:
 public:
     virtual ~Event();
 
-    void initialize(bool);
+    void initialize(bool manual_reset);
     void wait();
     void setSignal();
     void resetSignal();

@@ -27,9 +27,12 @@ public:
 
     virtual u8* tryDecompFromDevice(const ResourceMgr::LoadArg& arg, Resource* res, u32* out_size, u32* out_buffer_size, bool* out_need_delete) = 0;
 
-private:
-    friend class ResourceMgr;
+    void setExt(const SafeString& ext)
+    {
+        mExt.copy(ext);
+    }
 
+private:
     FixedSafeString<32> mExt;
 };
 #ifdef cafe

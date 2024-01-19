@@ -1,76 +1,38 @@
 #include <heap/seadHeap.h>
 #include <heap/seadHeapMgr.h>
+#include <prim/seadScopedLock.h>
 
 namespace sead {
 
 void Heap::appendDisposer_(IDisposer* o)
 {
-    // sead::ConditionalScopedLock<sead::CriticalSection>*
-    CriticalSection* cs = nullptr;
-    if (mFlag.isOnBit(0))
-    {
-        cs = &mCS;
-        cs->lock();
-    }
-
+    ConditionalScopedLock<CriticalSection> lock(&mCS, mFlag.isOnBit(0));
     mDisposerList.pushBack(o);
-
-    if (cs != nullptr)
-        cs->unlock();
 }
 
 void Heap::removeDisposer_(IDisposer* o)
 {
-    // sead::ConditionalScopedLock<sead::CriticalSection>*
-    CriticalSection* cs = nullptr;
-    if (mFlag.isOnBit(0))
-    {
-        cs = &mCS;
-        cs->lock();
-    }
-
+    ConditionalScopedLock<CriticalSection> lock(&mCS, mFlag.isOnBit(0));
     mDisposerList.erase(o);
-
-    if (cs != nullptr)
-        cs->unlock();
 }
 
 Heap*
 Heap::findContainHeap_(const void* ptr)
 {
-    HeapMgr::getHeapTreeLockCS_()->lock();
+    ScopedLock<CriticalSection> lock_tree(HeapMgr::getHeapTreeLockCS_());
 
     if (!isInclude(ptr))
-    {
-        HeapMgr::getHeapTreeLockCS_()->unlock();
         return nullptr;
-    }
 
-    // sead::ConditionalScopedLock<sead::CriticalSection>*
-    CriticalSection* cs = nullptr;
-    if (mFlag.isOnBit(0))
-    {
-        cs = &mCS;
-        cs->lock();
-    }
+    ConditionalScopedLock<CriticalSection> lock(&mCS, mFlag.isOnBit(0));
 
     for (Heap::HeapList::iterator it = mChildren.begin(); it != mChildren.end(); ++it)
     {
-        if (it->isInclude(ptr))
-        {
-            Heap* heap = it->findContainHeap_(ptr);
-            if (cs != nullptr)
-                cs->unlock();
-
-            HeapMgr::getHeapTreeLockCS_()->unlock();
-            return heap;
-        }
+        Heap& heap = *it;
+        if (heap.isInclude(ptr))
+            return heap.findContainHeap_(ptr);
     }
 
-    if (cs != nullptr)
-        cs->unlock();
-
-    HeapMgr::getHeapTreeLockCS_()->unlock();
     return this;
 }
 

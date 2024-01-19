@@ -1,5 +1,6 @@
 #include <heap/seadHeap.h>
 #include <heap/seadHeapMgr.h>
+#include <prim/seadScopedLock.h>
 #include <thread/seadThread.h>
 
 namespace sead {
@@ -25,39 +26,33 @@ HeapMgr::~HeapMgr()
 }
 
 Heap*
-HeapMgr::findContainHeap(const void* ptr) const
+HeapMgr::findContainHeap(const void* memBlock) const
 {
-    // ScopedLock<CriticalSection>
-    sHeapTreeLockCS.lock();
+    ScopedLock<CriticalSection> lock(&sHeapTreeLockCS);
 
-    for (RootHeaps::iterator it = sRootHeaps.begin(); it != sRootHeaps.end(); ++it)
+    for (RootHeaps::iterator it_end = sRootHeaps.end(), it = sRootHeaps.begin(); it != it_end; ++it)
     {
-        Heap* heap = it->findContainHeap_(ptr);
-        if (heap != nullptr)
-        {
-            sHeapTreeLockCS.unlock();
-            return heap;
-        }
+        Heap* found = it->findContainHeap_(memBlock);
+        if (found != nullptr)
+            return found;
     }
 
-    for (IndependentHeaps::iterator it = sIndependentHeaps.begin(); it != sIndependentHeaps.end(); ++it)
+    for (IndependentHeaps::iterator it_end = sIndependentHeaps.end(), it = sIndependentHeaps.begin(); it != it_end; ++it)
     {
-        Heap* heap = it->findContainHeap_(ptr);
-        if (heap != nullptr)
-        {
-            sHeapTreeLockCS.unlock();
-            return heap;
-        }
+        Heap* found = it->findContainHeap_(memBlock);
+        if (found != nullptr)
+            return found;
     }
 
-    sHeapTreeLockCS.unlock();
     return nullptr;
 }
 
 Heap*
 HeapMgr::getCurrentHeap() const
 {
-    return ThreadMgr::instance()->getCurrentThread()->getCurrentHeap();
+    ThreadMgr* thread_mgr = ThreadMgr::instance();
+  //SEAD_ASSERT(thread_mgr);
+    return thread_mgr->getCurrentThread()->getCurrentHeap();
 }
 
 } // namespace sead

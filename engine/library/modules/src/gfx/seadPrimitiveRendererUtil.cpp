@@ -116,7 +116,7 @@ void setSphereVertex(Vertex* vtx, u16* idx, s32 sizeX, s32 sizeY)
 
                 vtx[pos].pos.set(pos_x, pos_y, pos_z);
                 vtx[pos].uv.set(pos_y + 0.5f, static_cast<f32>(x) / sizeX);
-                vtx[pos].color.r = 0.5f - pos_y;
+                vtx[pos].color.r = -pos_y + 0.5f;
             }
         }
 
@@ -191,6 +191,7 @@ void setDiskVertex(Vertex* vtx, u16* idx, s32 divNum)
 
         {
             s32 i = divNum;
+            f32 angle = Mathf::deg2rad(360) * i / divNum;
 
             vtx[i].pos.set(0.0f, 0.0f, 0.0f);
             vtx[i].uv.set(0.5f, 0.5f);
@@ -199,16 +200,21 @@ void setDiskVertex(Vertex* vtx, u16* idx, s32 divNum)
     }
 
     if (idx != nullptr)
+    {
         for (s32 i = 0; i < divNum; i++)
         {
             idx[i * 3 + 0] = i;
             idx[i * 3 + 1] = (i + 1) % divNum;
             idx[i * 3 + 2] = divNum;
         }
+    }
 }
 
 void setCylinderVertex(Vertex* vtx, u16* idx, s32 divNum)
 {
+    s32 vtxNum = calcDiskVertexNum(divNum);
+    s32 idxNum = calcDiskIndexNum(divNum);
+
     if (vtx != nullptr)
     {
         for (s32 i = 0; i < divNum; i++)
@@ -222,7 +228,7 @@ void setCylinderVertex(Vertex* vtx, u16* idx, s32 divNum)
             vtx[i].uv.y = 1.0f - vtx[i].pos.z;
             vtx[i].color.r = 0.0f;
 
-            s32 pos = i + divNum + 1;
+            s32 pos = i + vtxNum;
 
             vtx[pos].pos.x = Mathf::cos(angle) * 0.5f;
             vtx[pos].pos.z = -Mathf::sin(angle) * 0.5f;
@@ -241,7 +247,7 @@ void setCylinderVertex(Vertex* vtx, u16* idx, s32 divNum)
         }
 
         {
-            s32 pos = divNum + divNum + 1;
+            s32 pos = divNum + vtxNum;
 
             vtx[pos].pos.set(0.0f, -0.5f, 0.0f);
             vtx[pos].uv.set(0.5f, 0.5f);
@@ -257,10 +263,10 @@ void setCylinderVertex(Vertex* vtx, u16* idx, s32 divNum)
             idx[i * 3 + 1] = (i + 1) - ((i + 1) % divNum);
             idx[i * 3 + 2] = divNum;
 
-            s32 posOffs = divNum * 3;
-            idx[i * 3 + 0 + posOffs] = i + (divNum + 1);
-            idx[i * 3 + 1 + posOffs] = divNum + (divNum + 1);
-            idx[i * 3 + 2 + posOffs] = ((i + 1) - ((i + 1) % divNum)) + (divNum + 1);
+            s32 posOffs = idxNum;
+            idx[i * 3 + 0 + posOffs] = i + vtxNum;
+            idx[i * 3 + 1 + posOffs] = divNum + vtxNum;
+            idx[i * 3 + 2 + posOffs] = ((i + 1) - ((i + 1) % divNum)) + vtxNum;
         }
 
         for (s32 i = 0; i < divNum; i++)
@@ -268,11 +274,11 @@ void setCylinderVertex(Vertex* vtx, u16* idx, s32 divNum)
             s32 posOffs = divNum * 6;
 
             idx[i * 6 + 0 + posOffs] = i;
-            idx[i * 6 + 1 + posOffs] = i + (divNum + 1);
+            idx[i * 6 + 1 + posOffs] = i + vtxNum;
             idx[i * 6 + 2 + posOffs] = (i + 1) - ((i + 1) % divNum);
             idx[i * 6 + 3 + posOffs] = (i + 1) - ((i + 1) % divNum);
-            idx[i * 6 + 4 + posOffs] = i + (divNum + 1);
-            idx[i * 6 + 5 + posOffs] = ((i + 1) - ((i + 1) % divNum)) + (divNum + 1);
+            idx[i * 6 + 4 + posOffs] = i + vtxNum;
+            idx[i * 6 + 5 + posOffs] = ((i + 1) - ((i + 1) % divNum)) + vtxNum;
         }
     }
 }

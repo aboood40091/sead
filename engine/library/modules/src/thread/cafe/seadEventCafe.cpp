@@ -2,20 +2,20 @@
 
 namespace sead {
 
-Event::Event(bool param)
+Event::Event(bool manual_reset)
     : IDisposer()
     , mEventInner()
 {
-    initialize(param);
+    initialize(manual_reset);
 }
 
 Event::~Event()
 {
 }
 
-void Event::initialize(bool param)
+void Event::initialize(bool manual_reset)
 {
-    OSInitEvent(&mEventInner, false, !param);
+    OSInitEvent(&mEventInner, false, !manual_reset);
 }
 
 void Event::wait()

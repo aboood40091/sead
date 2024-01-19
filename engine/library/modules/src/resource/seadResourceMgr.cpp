@@ -15,53 +15,49 @@ ResourceMgr::ResourceMgr()
     , mDecompList()
     , mNullResourceFactory(nullptr)
 {
-    if (!HeapMgr::isInitialized())
+    HeapMgr* heap_mgr = HeapMgr::instance();
+    if (heap_mgr == nullptr)
     {
         //SEAD_ASSERT_MSG(false, ResourceMgr need HeapMgr);
         return;
     }
 
-    mNullResourceFactory = new (HeapMgr::instance()->findContainHeap(this), 4) DirectResourceFactory<DirectResource>();
+    Heap* heap = heap_mgr->findContainHeap(this);
+    mNullResourceFactory = new (heap, 4) DirectResourceFactory<DirectResource>();
     registerFactory(mNullResourceFactory, "");
 }
 
 ResourceMgr::~ResourceMgr()
 {
-    if (mNullResourceFactory == nullptr)
-        return;
-
-    delete mNullResourceFactory;
-    mNullResourceFactory = nullptr;
+    if (mNullResourceFactory != nullptr)
+    {
+        delete mNullResourceFactory;
+        mNullResourceFactory = nullptr;
+    }
 }
 
 void ResourceMgr::registerFactory(ResourceFactory* factory, const SafeString& name)
 {
-    factory->mExt.copy(name);
+    factory->setExt(name);
 
     mFactoryList.pushBack(factory);
 }
 
 void ResourceMgr::registerDecompressor(Decompressor* decompressor, const SafeString& name)
 {
-    if (!name.isEqual(SafeString::cEmptyString))
-        decompressor->mExt.copy(name);
+    if (name != SafeString::cEmptyString)
+        decompressor->setExt(name);
 
     mDecompList.pushBack(decompressor);
 }
 
 void ResourceMgr::unregisterFactory(ResourceFactory* factory)
 {
-    if (factory->mList == nullptr)
-        return;
-
     mFactoryList.erase(factory);
 }
 
 void ResourceMgr::unregisterDecompressor(Decompressor* decompressor)
 {
-    if (decompressor->mList == nullptr)
-        return;
-
     mDecompList.erase(decompressor);
 }
 

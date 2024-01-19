@@ -63,7 +63,9 @@ public:
 
     FileDevice* setDefaultFileDevice(FileDevice* device)
     {
-        return mDefaultFileDevice = device;
+        FileDevice* old = mDefaultFileDevice;
+        mDefaultFileDevice = device;
+        return old;
     }
 
     FileDevice* getDefaultFileDevice() const

@@ -33,6 +33,12 @@ public:
     void setUserFormat(StreamFormat* format);
 
 protected:
+    void setSrcStream_(StreamSrc* stream)
+    {
+        mSrcStream = stream;
+    }
+
+protected:
     StreamFormat*   mFormat;
     StreamSrc*      mSrcStream;
     Endian::Types   mSrcEndian;

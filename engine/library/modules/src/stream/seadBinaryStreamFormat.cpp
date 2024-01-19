@@ -100,7 +100,7 @@ void BinaryStreamFormat::readString(StreamSrc* src, BufferedSafeString* dst, u32
     {
         remain_size = size - dst->getBufferSize();
         size = dst->getBufferSize();
-        // SEAD_WARN("not enough buffer length. drop %u char(s).", remain_size);
+        // SEAD_WARNING(false, "not enough buffer length. drop %u char(s).", remain_size);
     }
     static_cast<void>(dst->cstr()); // Forces null termination
     u32 rb = src->read(dst->getBuffer(), size);

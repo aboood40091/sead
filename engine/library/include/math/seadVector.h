@@ -27,6 +27,9 @@ public:
 
     Vector2(T x_, T y_);
 
+    template <typename VectorType>
+    Vector2(const VectorType& v);
+
     Self operator*(T t) const;
     Self operator+(const Self& v) const;
     Self operator-(const Self& v) const;
@@ -67,6 +70,7 @@ class Vector3 : public Policies<T>::Vec3Base
 {
 private:
     typedef Vector3<T> Self;
+    typedef Vector2<T> Vec2;
     typedef Matrix34<T> Mtx34;
     typedef Matrix44<T> Mtx44;
 
@@ -84,6 +88,7 @@ public:
     //}
 
     Vector3(T x_, T y_, T z_);
+    Vector3(const Vec2& vec2, T z_);
 
     Self operator*(T t) const;
     Self operator+(const Self& v) const;
@@ -125,6 +130,8 @@ class Vector4 : public Policies<T>::Vec4Base
 {
 private:
     typedef Vector4<T> Self;
+    typedef Vector2<T> Vec2;
+    typedef Vector3<T> Vec3;
 
 public:
     typedef T ValueType;
@@ -140,6 +147,8 @@ public:
     //}
 
     Vector4(T x_, T y_, T z_, T w_);
+    Vector4(const Vec2& vec2, T z_, T w_);
+    Vector4(const Vec3& vec3, T w_);
 
     Self operator*(T t) const;
 

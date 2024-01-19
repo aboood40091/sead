@@ -9,13 +9,13 @@ namespace
 
 u32 calcHash32(const sead::SafeString& str, u32 key)
 {
-    const char* str_ = str.cstr();
+    const char* buffer = str.cstr();
 
-    u32 result = 0;
-    for (s32 i = 0; str_[i] != '\0'; i++)
-        result = result * key + str_[i];
+    u32 ret = 0;
+    for (s32 i = 0; buffer[i] != '\0'; i++)
+        ret = ret * key + buffer[i];
 
-    return result;
+    return ret;
 }
 
 s32 binarySearch_(
@@ -29,18 +29,17 @@ s32 binarySearch_(
     {
         middle = (start + end) / 2;
 
-        u32 entryHash = buffer[middle].hash;
-        if (entryHash == hash)
+        u32 buf_hash = buffer[middle].hash;
+        if (buf_hash == hash)
             return middle;
 
-        else if (entryHash < hash)
+        else if (buf_hash < hash)
         {
             if (start == middle)
                 return -1;
 
             start = middle;
         }
-
         else
         {
             if (end == middle)
@@ -91,23 +90,23 @@ SharcArchiveRes::getFileFastImpl_(
     s32 entry_id, FileInfo* file_info
 )
 {
-    if (entry_id < 0 || entry_id >= mFATEntrys.getSize())
+    if (entry_id < 0 || entry_id >= mFATEntrys.size())
         return nullptr;
 
-    u32 start = mFATEntrys.unsafeGet(entry_id)->data_start_offset;
+    u32 start_offset = mFATEntrys.unsafeGet(entry_id)->data_start_offset;
 
     if (file_info != nullptr)
     {
-        u32 end = mFATEntrys.unsafeGet(entry_id)->data_end_offset;
-        if (start > end)
+        u32 end_offset = mFATEntrys.unsafeGet(entry_id)->data_end_offset;
+        if (start_offset > end_offset)
             return nullptr;
 
-        u32 length = end - start;
+        u32 length = end_offset - start_offset;
 
-        setFileInfo(file_info, start, length);
+        setFileInfo(file_info, start_offset, length);
     }
 
-    return const_cast<u8*>(mDataBlock) + start;
+    return PtrUtil::addOffset(mDataBlock, start_offset);
 }
 
 s32
@@ -118,7 +117,7 @@ SharcArchiveRes::convertPathToEntryIDImpl_(
     u32 hash = calcHash32(file_path, mFATBlockHeader->hash_key);
 
     s32 start = 0;
-    s32 end = mFATEntrys.getSize();
+    s32 end = mFATEntrys.size();
 
     s32 id = binarySearch_(hash, mFATEntrys.getBufferPtr(), start, end);
     if (id == -1)
@@ -137,12 +136,15 @@ SharcArchiveRes::convertPathToEntryIDImpl_(
 
             else
             {
-                u32 offset_ = entry->name_offset;
+                u32 name_offset = entry->name_offset;
 
-                if (reinterpret_cast<const u8*>(mFNTBlock + (offset_ & 0xffffff)) > mDataBlock)
+                if (PtrUtil::addOffset(mFNTBlock, (name_offset & 0xffffff)) > mDataBlock)
+                {
+                  //SEAD_WARNING(false, "Invalid data start offset");
                     return -1;
+                }
 
-                if (file_path.isEqual(mFNTBlock + (offset_ & 0xffffff) * cFileNameTableAlign))
+                if (file_path.isEqual(mFNTBlock + (name_offset & 0xffffff) * cFileNameTableAlign))
                     return id;
             }
 
@@ -156,36 +158,39 @@ SharcArchiveRes::convertPathToEntryIDImpl_(
 bool
 SharcArchiveRes::setCurrentDirectoryImpl_(const SafeString&)
 {
+  //SEAD_ASSERT_MSG(false, "Not support.");
     return false;
 }
 
 bool
 SharcArchiveRes::openDirectoryImpl_(
-    SafeArray<u8, 32>* handle, const SafeString&
+    HandleBuffer* handle_buffer, const SafeString&
 )
 {
-    *reinterpret_cast<u32*>(handle->getBufferPtr()) = 0;
+    u32* handle = reinterpret_cast<u32*>(handle_buffer);
+    *handle = 0;
     return true;
 }
 
 bool
-SharcArchiveRes::closeDirectoryImpl_(SafeArray<u8, 32>* handle)
+SharcArchiveRes::closeDirectoryImpl_(HandleBuffer* handle_buffer)
 {
     return true;
 }
 
 u32
 SharcArchiveRes::readDirectoryImpl_(
-    SafeArray<u8, 32>* handle, DirectoryEntry* entry, u32 num
+    HandleBuffer* handle_buffer, DirectoryEntry* entry, u32 num
 )
 {
-    u32& handle_32 = *reinterpret_cast<u32*>(handle->getBufferPtr());
+    u32* handle = reinterpret_cast<u32*>(handle_buffer);
 
     u32 count = 0;
 
-    while (handle_32 + count < mFATBlockHeader->file_num && count < num)
+    while (*handle + count < mFATBlockHeader->file_num && count < num)
     {
-        u32 id = handle_32 + count;
+        u32 id = *handle + count;
+      //SEAD_ASSERT(id >= (*handle));
 
         u32 offset = mFATEntrys.unsafeGet(id)->name_offset;
         if (offset == 0)
@@ -193,18 +198,22 @@ SharcArchiveRes::readDirectoryImpl_(
 
         else
         {
-            if (reinterpret_cast<const u8*>(mFNTBlock + (offset & 0xffffff)) > mDataBlock)
+            if (PtrUtil::addOffset(mFNTBlock, (offset & 0xffffff)) > mDataBlock)
+            {
+              //SEAD_WARNING(false, "Invalid data start offset");
                 entry[count].name.clear();
-
+            }
             else
+            {
                 entry[count].name.copy(mFNTBlock + (offset & 0xffffff) * cFileNameTableAlign);
+            }
         }
 
         entry[count].is_directory = false;
         count++;
     }
 
-    handle_32 += count;
+    *handle += count;
     return count;
 }
 
@@ -212,54 +221,87 @@ bool
 SharcArchiveRes::prepareArchive_(const void* archive)
 {
     if (archive == nullptr)
+    {
+      //SEAD_ASSERT_MSG(false, "archive must not be nullptr.");
         return false;
+    }
 
-    const u8* archive_ = reinterpret_cast<const u8*>(archive);
+    const u8* archive8 = reinterpret_cast<const u8*>(archive);
 
-    mArchiveBlockHeader = reinterpret_cast<const ArchiveBlockHeader*>(archive_);
-    if (std::strncmp(mArchiveBlockHeader->signature, "SARC", 4) != 0)
+    mArchiveBlockHeader = reinterpret_cast<const ArchiveBlockHeader*>(archive8);
+    if (MemUtil::compare(mArchiveBlockHeader->signature, "SARC", 4) != 0)
+    {
+      //SEAD_ASSERT_MSG(false, "Invalid ArchiveBlockHeader");
         return false;
+    }
 
     mEndianType = Endian::markToEndian(mArchiveBlockHeader->byte_order);
     if (mEndianType != Endian::getHostEndian())
+    {
+      //SEAD_ASSERT_MSG(false, "Invalid Endian Type");
         return false;
+    }
 
     if (mArchiveBlockHeader->version != cArchiveVersion)
+    {
+      //SEAD_ASSERT_MSG(false, "unmatching version ( expect: %x, actual: %x )", cArchiveVersion, mArchiveBlockHeader->version);
         return false;
+    }
 
     if (mArchiveBlockHeader->header_size != sizeof(ArchiveBlockHeader))
+    {
+      //SEAD_ASSERT_MSG(false, "Invalid ArchiveBlockHeader");
         return false;
+    }
 
-    mFATBlockHeader = reinterpret_cast<const FATBlockHeader*>(archive_ + mArchiveBlockHeader->header_size);
-    if (std::strncmp(mFATBlockHeader->signature, "SFAT", 4) != 0)
+    mFATBlockHeader = reinterpret_cast<const FATBlockHeader*>(archive8 + mArchiveBlockHeader->header_size);
+    if (MemUtil::compare(mFATBlockHeader->signature, "SFAT", 4) != 0)
+    {
+      //SEAD_ASSERT_MSG(false, "Invalid FATBlockHeader");
         return false;
+    }
 
     if (mFATBlockHeader->header_size != sizeof(FATBlockHeader))
+    {
+      //SEAD_ASSERT_MSG(false, "Invalid FATBlockHeader");
         return false;
+    }
 
     if (mFATBlockHeader->file_num > cArchiveEntryMax)
+    {
+      //SEAD_ASSERT_MSG(false, "Invalid FATBlockHeader");
         return false;
+    }
 
     mFATEntrys.setBuffer(
         mFATBlockHeader->file_num,
-        const_cast<FATEntry*>(reinterpret_cast<const FATEntry*>(archive_ + mArchiveBlockHeader->header_size + mFATBlockHeader->header_size))
+        const_cast<FATEntry*>(reinterpret_cast<const FATEntry*>(archive8 + mArchiveBlockHeader->header_size + mFATBlockHeader->header_size))
     );
 
     const FNTBlockHeader* fnt_header = reinterpret_cast<const FNTBlockHeader*>(
-        archive_ + mArchiveBlockHeader->header_size +
+        archive8 + mArchiveBlockHeader->header_size +
         mFATBlockHeader->header_size + mFATBlockHeader->file_num * sizeof(FATEntry)
     );
-    if (std::strncmp(fnt_header->signature, "SFNT", 4) != 0)
+    if (MemUtil::compare(fnt_header->signature, "SFNT", 4) != 0)
+    {
+      //SEAD_ASSERT_MSG(false, "Invalid FNTBlockHeader");
         return false;
+    }
 
     if (fnt_header->header_size != sizeof(FNTBlockHeader))
+    {
+      //SEAD_ASSERT_MSG(false, "Invalid FNTBlockHeader");
         return false;
+    }
 
     mFNTBlock = reinterpret_cast<const char*>(fnt_header) + fnt_header->header_size;
-    if (static_cast<s32>(mArchiveBlockHeader->data_block_offset) < static_cast<s32>(reinterpret_cast<size_t>(mArchiveBlockHeader) - reinterpret_cast<size_t>(mFNTBlock)))
+    if (mArchiveBlockHeader->data_block_offset < PtrUtil::diff(mFNTBlock, mArchiveBlockHeader))
+    {
+      //SEAD_ASSERT_MSG(false, "Invalid data block offset");
         return false;
+    }
 
-    mDataBlock = archive_ + mArchiveBlockHeader->data_block_offset;
+    mDataBlock = archive8 + mArchiveBlockHeader->data_block_offset;
     return true;
 }
 

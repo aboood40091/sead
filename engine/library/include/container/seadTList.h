@@ -72,8 +72,11 @@ public:
 
     void erase(TListNode<T>* obj)
     {
-        obj->mList = nullptr;
-        ListImpl::erase(obj);
+        if (obj->mList != nullptr)
+        {
+            obj->mList = nullptr;
+            ListImpl::erase(obj);
+        }
     }
 
     TListNode<T>* front() const;

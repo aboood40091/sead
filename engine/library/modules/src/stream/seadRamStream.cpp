@@ -49,7 +49,7 @@ u32 RamStreamSrc::write(const void* src, u32 size)
 RamReadStream::RamReadStream(const void* start, u32 size, Modes mode)
     : mRamStreamSrc(const_cast<void*>(start), size)
 {
-    mSrcStream = &mRamStreamSrc;
+    setSrcStream_(&mRamStreamSrc);
     setMode(mode);
 }
 
