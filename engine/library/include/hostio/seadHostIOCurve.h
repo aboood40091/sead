@@ -8,8 +8,8 @@ namespace sead { namespace hostio {
 class ICurve
 {
 public:
-    virtual f32 interpolateToF32(f32 t) = 0;
-    virtual Vector2f interpolateToVec2f(f32 t) = 0;
+    virtual f32 interpolateToF32(f32 t) const = 0;
+    virtual Vector2f interpolateToVec2f(f32 t) const = 0;
 };
 
 struct CurveDataInfo
@@ -34,8 +34,8 @@ public:
         mInfo.numUse = 0;
     }
 
-    virtual f32 interpolateToF32(f32 t);
-    virtual Vector2f interpolateToVec2f(f32 t);
+    virtual f32 interpolateToF32(f32 t) const;
+    virtual Vector2f interpolateToVec2f(f32 t) const;
 
 private:
     T* mData;
