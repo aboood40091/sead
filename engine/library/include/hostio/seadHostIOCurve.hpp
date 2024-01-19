@@ -56,4 +56,18 @@ extern CurveFunctionType_f64 sCurveFunctionTbl_f64[cNumCurveType];
 extern CurveFunctionType_Vec2f sCurveFunctionTbl_Vec2f[cNumCurveType];
 extern CurveFunctionType_Vec2d sCurveFunctionTbl_Vec2d[cNumCurveType];
 
+template <>
+inline f32
+Curve<f32>::interpolateToF32(f32 t) const
+{
+    return (*(sCurveFunctionTbl_f32[mInfo.curveType]))(t, &mInfo, mBuf);
+}
+
+template <>
+inline Vector2f
+Curve<f32>::interpolateToVec2f(f32 t) const
+{
+    return (*(sCurveFunctionTbl_Vec2f[mInfo.curveType]))(t, &mInfo, mBuf);
+}
+
 } } // namespace sead::hostio
