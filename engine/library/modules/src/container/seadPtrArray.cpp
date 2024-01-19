@@ -31,7 +31,7 @@ void PtrArrayImpl::allocBuffer(s32 ptrNumMax, Heap* heap, s32 alignment)
 
 void PtrArrayImpl::freeBuffer()
 {
-    if (mPtrs != nullptr)
+    if (isBufferReady())
     {
         delete[] mPtrs;
         mPtrs = nullptr;
@@ -42,52 +42,51 @@ void PtrArrayImpl::freeBuffer()
 
 void PtrArrayImpl::sort(CompareCallbackImpl cmp)
 {
-    // One day, I will care enough to check which algorithm this is
-    if (mPtrNum > 1)
-    {
-        s32 v0, v1, v2, v3, v4;
+    // Algorithm used is "Cocktail Sort", also known as "Bidirectional Bubble Sort".
 
-        v1 = 0;
-        v4 = v1;
-        v3 = mPtrNum - 1;
-        v2 = v1;
-        do
+    s32 top;
+    s32 bottom;
+    s32 last_swap;
+    void* x;
+    void** ptrs = mPtrs;
+
+    if (mPtrNum <= 1)
+        return;
+
+    top = 0;
+    bottom = mPtrNum - 1;
+
+    while (true)
+    {
+        last_swap = top;
+        for (s32 i = top; i < bottom; i++)
         {
-            v0 = v4;
-            while (v1 < v3)
+            if ((*cmp)(ptrs[i], ptrs[i + 1]) > 0)
             {
-                v4 = (*cmp)(mPtrs[v1], mPtrs[v1 + 1]);
-                if (v4 > 0)
-                {
-                    void* ptr = mPtrs[v1 + 1];
-                    mPtrs[v1 + 1] = mPtrs[v1];
-                    mPtrs[v1] = ptr;
-                    v0 = v1;
-                }
-                v1 = v1 + 1;
-                v4 = v0;
+                x = ptrs[i + 1];
+                ptrs[i + 1] = ptrs[i];
+                ptrs[i] = x;
+                last_swap = i;
             }
-            v1 = v0;
-            v4 = v0;
-            if (v2 == v0)
-                return;
-            while (v2 < v4)
-            {
-                v3 = (*cmp)(mPtrs[v4], mPtrs[v4 - 1]);
-                if (v3 < 0)
-                {
-                    void* ptr = mPtrs[v4 - 1];
-                    mPtrs[v4 - 1] = mPtrs[v4];
-                    mPtrs[v4] = ptr;
-                    v1 = v4;
-                }
-                v4 = v4 - 1;
-            }
-            v4 = v1;
-            v3 = v0;
-            v2 = v1;
         }
-        while (v1 != v0);
+        bottom = last_swap;
+        if (static_cast<u32>(top) == static_cast<u32>(bottom))
+            break;
+
+        last_swap = bottom;
+        for (s32 i = bottom; i > top; i--)
+        {
+            if ((*cmp)(ptrs[i], ptrs[i - 1]) < 0)
+            {
+                void* x = ptrs[i - 1];
+                ptrs[i - 1] = ptrs[i];
+                ptrs[i] = x;
+                last_swap = i;
+            }
+        }
+        top = last_swap;
+        if (static_cast<u32>(top) == static_cast<u32>(bottom))
+            break;
     }
 }
 
