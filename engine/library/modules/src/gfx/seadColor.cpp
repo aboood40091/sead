@@ -39,7 +39,23 @@ Color4f& Color4f::operator*=(const Color4f& rhs)
     return *this;
 }
 
+Color4f& Color4f::operator*=(f32 rhs)
+{
+    r *= rhs;
+    g *= rhs;
+    b *= rhs;
+    a *= rhs;
+    return *this;
+}
+
 Color4f operator*(const Color4f& lhs, const Color4f& rhs)
+{
+    Color4f tmp = lhs;
+    tmp *= rhs;
+    return tmp;
+}
+
+Color4f operator*(const Color4f& lhs, f32 rhs)
 {
     Color4f tmp = lhs;
     tmp *= rhs;

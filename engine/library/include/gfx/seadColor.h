@@ -35,8 +35,10 @@ struct Color4f
 
     Color4f& operator+=(const Color4f& rhs);
     Color4f& operator*=(const Color4f& rhs);
+    Color4f& operator*=(f32 rhs);
 
     friend Color4f operator*(const Color4f& lhs, const Color4f& rhs);
+    friend Color4f operator*(const Color4f& lhs, f32 rhs);
     friend bool operator==(const Color4f& lhs, const Color4f& rhs);
 
     union
