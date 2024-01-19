@@ -169,6 +169,7 @@ public:
     T length() const;
 
     void multScalar(T t);
+    T normalize();
     void set(const Self& v);
     void set(T x_, T y_, T z_, T w_);
 

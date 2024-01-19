@@ -380,6 +380,22 @@ Vector4CalcCommon<T>::multScalar(Base& o, const Base& v, T t)
 }
 
 template <typename T>
+T Vector4CalcCommon<T>::normalize(Base& v)
+{
+    const T len = length(v);
+    if (len > 0)
+    {
+        const T inv_len = 1 / len;
+        v.x *= inv_len;
+        v.y *= inv_len;
+        v.z *= inv_len;
+        v.w *= inv_len;
+    }
+
+    return len;
+}
+
+template <typename T>
 inline void
 Vector4CalcCommon<T>::set(Base& o, const Base& v)
 {

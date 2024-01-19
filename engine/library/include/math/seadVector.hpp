@@ -422,6 +422,13 @@ Vector4<T>::multScalar(T t)
 }
 
 template <typename T>
+inline T
+Vector4<T>::normalize()
+{
+    return Vector4CalcCommon<T>::normalize(*this);
+}
+
+template <typename T>
 inline void
 Vector4<T>::set(const Self& v)
 {
