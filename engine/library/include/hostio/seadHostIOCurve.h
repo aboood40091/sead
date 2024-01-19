@@ -34,6 +34,27 @@ public:
         mInfo.numUse = 0;
     }
 
+    u8 getCurveType() const
+    {
+        return mInfo.curveType;
+    }
+
+    void setCurveType(u8 curveType)
+    {
+        mInfo.curveType = curveType;
+    }
+
+    u8 getNumUse() const
+    {
+        return mInfo.numUse;
+    }
+
+    void setNumUse(u32 numUse)
+    {
+      //SEAD_ASSERT(numUse <= 0xff);
+        mInfo.numUse = numUse;
+    }
+
     virtual f32 interpolateToF32(f32 t) const;
     virtual Vector2f interpolateToVec2f(f32 t) const;
 
