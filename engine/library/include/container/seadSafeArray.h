@@ -159,14 +159,49 @@ public:
     iterator end() { return iterator(mBuffer, N); }
     constIterator end() const { return constIterator(mBuffer, N); }
 
-    iterator toIterator(s32);
-    constIterator toIterator(s32) const;
+    iterator toIterator(s32 x)
+    {
+        if (static_cast<u32>(x) <= static_cast<u32>(N))
+        {
+            return iterator(mBuffer, x);
+        }
+        else
+        {
+            // SEAD_ASSERT_MSG(false, "range over [0,%d] : %d", N, x);
+            return end();
+        }
+    }
+
+    constIterator toIterator(s32 x) const
+    {
+        if (static_cast<u32>(x) <= static_cast<u32>(N))
+        {
+            return constIterator(mBuffer, x);
+        }
+        else
+        {
+            // SEAD_ASSERT_MSG(false, "range over [0,%d] : %d", N, x);
+            return end();
+        }
+    }
+
 
     constIterator constBegin() const { return constIterator(mBuffer); }
 
     constIterator constEnd() const { return constIterator(mBuffer, N); }
 
-    constIterator toConstIterator(s32) const;
+    constIterator toConstIterator(s32 x) const
+    {
+        if (static_cast<u32>(x) <= static_cast<u32>(N))
+        {
+            return constIterator(mBuffer, x);
+        }
+        else
+        {
+            // SEAD_ASSERT_MSG(false, "range over [0,%d] : %d", N, x);
+            return constEnd();
+        }
+    }
 
     reverseIterator reverseBegin();
     reverseConstIterator reverseBegin() const;
@@ -225,14 +260,14 @@ public:
     iterator end() { return iterator(mBuffer, N); }
     constIterator end() const { return constIterator(mBuffer, N); }
 
-    iterator toIterator(s32);
-    constIterator toIterator(s32) const;
+    iterator toIterator(s32 x) { return iterator(mBuffer, x); }
+    constIterator toIterator(s32 x) const { return constIterator(mBuffer, x); }
 
     constIterator constBegin() const { return constIterator(mBuffer); }
 
     constIterator constEnd() const { return constIterator(mBuffer, N); }
 
-    constIterator toConstIterator(s32) const;
+    constIterator toConstIterator(s32 x) const { return constIterator(mBuffer, x); }
 
     reverseIterator reverseBegin();
     reverseConstIterator reverseBegin() const;
