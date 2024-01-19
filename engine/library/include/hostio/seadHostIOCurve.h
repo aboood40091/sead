@@ -75,4 +75,10 @@ static_assert(sizeof(CurveData<f32, 30>) == 0x80);
 
 } } // namespace sead::hostio
 
+#ifdef __cplusplus
+
+#include <hostio/seadHostIOCurve.hpp>
+
+#endif // __cplusplus
+
 #endif // SEAD_HOST_IO_CURVE_H_
