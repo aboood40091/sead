@@ -44,8 +44,6 @@ Vector2<T> curveStep2DVec2_(f32 t, const CurveDataInfo* info, const T* buf);
 template <typename T>
 Vector2<T> curveNonuniformSplineVec2_(f32 t, const CurveDataInfo* info, const T* buf);
 
-static const s32 cNumCurveType = 10;
-
 typedef f32 (*CurveFunctionType_f32)(f32, const CurveDataInfo*, const f32*);
 typedef f64 (*CurveFunctionType_f64)(f32, const CurveDataInfo*, const f64*);
 typedef Vector2<f32> (*CurveFunctionType_Vec2f)(f32, const CurveDataInfo*, const f32*);

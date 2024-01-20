@@ -12,6 +12,22 @@ public:
     virtual Vector2f interpolateToVec2f(f32 t) const = 0;
 };
 
+enum CurveType
+{
+    cCurveLinear = 0,
+    cCurveHermit,
+    cCurveStep,
+    cCurveSin,
+    cCurveCos,
+    cCurveSinPow2,
+    cCurveLinear2D,
+    cCurveHermit2D,
+    cCurveStep2D,
+    cCurveNonuniformSpline,
+    cNumCurveType
+};
+static_assert(cNumCurveType == 10);
+
 struct CurveDataInfo
 {
     u8 curveType;
@@ -34,17 +50,38 @@ public:
         mInfo.numUse = 0;
     }
 
-    u8 getCurveType() const
+    T* getBuf() const
     {
-        return mInfo.curveType;
+        return mBuf;
     }
 
-    void setCurveType(u8 curveType)
+    void setBuf(T* buf)
     {
+        mBuf = buf;
+    }
+
+    CurveType getCurveType() const
+    {
+        return CurveType(mInfo.curveType);
+    }
+
+    void setCurveType(CurveType curveType)
+    {
+      //SEAD_ASSERT(mInfo.curveType < cNumCurveType);
         mInfo.curveType = curveType;
     }
 
-    u8 getNumUse() const
+    u32 getNumBuf() const
+    {
+        return mInfo.numBuf;
+    }
+
+    void setNumBuf(u32 numBuf)
+    {
+        mInfo.numBuf = numBuf;
+    }
+
+    u32 getNumUse() const
     {
         return mInfo.numUse;
     }
