@@ -98,6 +98,20 @@ T Vector2CalcCommon<T>::normalize(Base& v)
 }
 
 template <typename T>
+T Vector2CalcCommon<T>::setNormalize(Base& o, const Base& v)
+{
+    const T len = length(v);
+    if (len > 0)
+    {
+        const T inv_len = 1 / len;
+        o.x = v.x * inv_len;
+        o.y = v.y * inv_len;
+    }
+
+    return len;
+}
+
+template <typename T>
 inline void
 Vector2CalcCommon<T>::set(Base& o, const Base& v)
 {
@@ -322,6 +336,21 @@ T Vector3CalcCommon<T>::normalize(Base& v)
 }
 
 template <typename T>
+T Vector3CalcCommon<T>::setNormalize(Base& o, const Base& v)
+{
+    const T len = length(v);
+    if (len > 0)
+    {
+        const T inv_len = 1 / len;
+        o.x = v.x * inv_len;
+        o.y = v.y * inv_len;
+        o.z = v.z * inv_len;
+    }
+
+    return len;
+}
+
+template <typename T>
 inline void
 Vector3CalcCommon<T>::set(Base& o, const Base& v)
 {
@@ -404,6 +433,22 @@ T Vector4CalcCommon<T>::normalize(Base& v)
         v.y *= inv_len;
         v.z *= inv_len;
         v.w *= inv_len;
+    }
+
+    return len;
+}
+
+template <typename T>
+T Vector4CalcCommon<T>::setNormalize(Base& o, const Base& v)
+{
+    const T len = length(v);
+    if (len > 0)
+    {
+        const T inv_len = 1 / len;
+        o.x = v.x * inv_len;
+        o.y = v.y * inv_len;
+        o.z = v.z * inv_len;
+        o.w = v.w * inv_len;
     }
 
     return len;

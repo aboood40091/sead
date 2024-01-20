@@ -131,6 +131,13 @@ Vector2<T>::normalize()
 }
 
 template <typename T>
+inline T
+Vector2<T>::setNormalize(const Self& v)
+{
+    return Vector2CalcCommon<T>::setNormalize(*this, v);
+}
+
+template <typename T>
 inline void
 Vector2<T>::set(const Self& v)
 {
@@ -276,6 +283,13 @@ inline T
 Vector3<T>::normalize()
 {
     return Vector3CalcCommon<T>::normalize(*this);
+}
+
+template <typename T>
+inline T
+Vector3<T>::setNormalize(const Self& v)
+{
+    return Vector3CalcCommon<T>::setNormalize(*this, v);
 }
 
 template <typename T>
@@ -433,6 +447,13 @@ inline T
 Vector4<T>::normalize()
 {
     return Vector4CalcCommon<T>::normalize(*this);
+}
+
+template <typename T>
+inline T
+Vector4<T>::setNormalize(const Self& v)
+{
+    return Vector4CalcCommon<T>::setNormalize(*this, v);
 }
 
 template <typename T>

@@ -49,6 +49,7 @@ public:
     void div(const Self& a);
     void multScalar(T t);
     T normalize();
+    T setNormalize(const Self& v);
     void set(const Self& v);
     void set(T x_, T y_);
 
@@ -114,6 +115,7 @@ public:
     void add(const Self& a);
     void multScalar(T t);
     T normalize();
+    T setNormalize(const Self& v);
     void set(const Self& v);
     void set(T x_, T y_, T z_);
     void setAdd(const Self& a, const Self& b);
@@ -171,6 +173,7 @@ public:
 
     void multScalar(T t);
     T normalize();
+    T setNormalize(const Self& v);
     void set(const Self& v);
     void set(T x_, T y_, T z_, T w_);
 
