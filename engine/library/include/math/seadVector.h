@@ -41,8 +41,6 @@ public:
     bool operator==(const Self& v) const;
     bool operator!=(const Self& v) const;
 
-    bool isZero() const;
-
     T length() const;
 
     void add(const Self& a);
@@ -107,8 +105,6 @@ public:
     bool operator==(const Self& v) const;
     bool operator!=(const Self& v) const;
 
-    bool isZero() const;
-
     T dot(const Self& t) const;
     T length() const;
 
@@ -166,8 +162,6 @@ public:
 
     bool operator==(const Self& v) const;
     bool operator!=(const Self& v) const;
-
-    bool isZero() const;
 
     T length() const;
 

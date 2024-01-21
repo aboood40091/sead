@@ -88,14 +88,6 @@ Vector2<T>::operator!=(const Self& v) const
 }
 
 template <typename T>
-inline bool
-Vector2<T>::isZero() const
-{
-    return this->x == zero.x &&
-           this->y == zero.y;
-}
-
-template <typename T>
 inline T
 Vector2<T>::length() const
 {
@@ -239,15 +231,6 @@ inline bool
 Vector3<T>::operator!=(const Self& v) const
 {
     return !Vector3CalcCommon<T>::isEqual(*this, v);
-}
-
-template <typename T>
-inline bool
-Vector3<T>::isZero() const
-{
-    return this->x == zero.x &&
-           this->y == zero.y &&
-           this->z == zero.z;
 }
 
 template <typename T>
@@ -416,16 +399,6 @@ inline bool
 Vector4<T>::operator!=(const Self& v) const
 {
     return !Vector4CalcCommon<T>::isEqual(*this, v);
-}
-
-template <typename T>
-inline bool
-Vector4<T>::isZero() const
-{
-    return this->x == zero.x &&
-           this->y == zero.y &&
-           this->z == zero.z &&
-           this->w == zero.w;
 }
 
 template <typename T>

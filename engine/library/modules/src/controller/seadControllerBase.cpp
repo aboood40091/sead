@@ -253,8 +253,8 @@ u32 ControllerBase::getStickHold_(u32 prev_hold, const Vector2f& stick, f32 hold
 bool ControllerBase::isIdleBase_()
 {
     return getHoldMask() == 0 &&
-           mLeftStick.isZero() &&
-           mRightStick.isZero() &&
+           mLeftStick == sead::Vector2f::zero &&
+           mRightStick == sead::Vector2f::zero &&
            mLeftAnalogTrigger == 0.0f &&
            mRightAnalogTrigger == 0.0f;
 }
