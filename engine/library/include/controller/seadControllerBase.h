@@ -23,6 +23,13 @@ public:
     u32 getReleaseMask() const { return mPadRelease.getDirect(); }
     u32 getRepeatMask() const { return mPadRepeat.getDirect(); }
 
+    u32 getTrigMaskWithRepeat() const
+    {
+        u32 trig = getTrigMask();
+        u32 repeat = getRepeatMask();
+        return repeat | trig;
+    }
+
     u32 getPadHoldCount(s32 bit) const;
 
     const Vector2f& getLeftStick() const { return mLeftStick; }
@@ -41,13 +48,7 @@ public:
     bool isHoldAll(u32 mask) const { return (mask & getHoldMask()) == mask; }
     bool isRelease(u32 mask) const { return mask & getReleaseMask(); }
     bool isRepeat(u32 mask) const { return mask & getRepeatMask(); }
-
-    bool isTrigWithRepeat(u32 mask) const
-    {
-        u32 trig = getTrigMask();
-        u32 repeat = getRepeatMask();
-        return (repeat | trig) & mask;
-    }
+    bool isTrigWithRepeat(u32 mask) const { return mask & getTrigMaskWithRepeat(); }
 
     void setPadRepeat(u32 mask, u8 delay_frame, u8 pulse_frame);
 
