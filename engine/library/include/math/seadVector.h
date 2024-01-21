@@ -38,6 +38,9 @@ public:
     Self& operator-=(const Self& v);
     Self& operator=(const Self& v);
 
+    template <typename VectorType>
+    Self& operator=(const VectorType& v);
+
     bool operator==(const Self& v) const;
     bool operator!=(const Self& v) const;
 
@@ -50,7 +53,7 @@ public:
     T setNormalize(const Self& v);
     void set(const Self& v);
     void set(T x_, T y_);
-
+    void setSub(const Self& a, const Self& b);
     void setLerp(const Self& a, const Self& b, f32 ratio);
 
     static const Vector2 zero;
@@ -170,7 +173,6 @@ public:
     T setNormalize(const Self& v);
     void set(const Self& v);
     void set(T x_, T y_, T z_, T w_);
-
     void setLerp(const Self& a, const Self& b, f32 ratio);
 
     static const Vector4 zero;

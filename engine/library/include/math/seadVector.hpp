@@ -16,7 +16,7 @@ template <typename VectorType>
 inline
 Vector2<T>::Vector2(const VectorType& v)
 {
-    Vector2CalcCommon<T>::set(*this, v.x, v.y);
+    Vector2CalcCommon<T>::set(*this, static_cast<T>(v.x), static_cast<T>(v.y));
 }
 
 template <typename T>
@@ -70,6 +70,16 @@ Vector2<T>::operator=(const Self& v)
 {
     x = v.x;
     y = v.y;
+    return *this;
+}
+
+template <typename T>
+template <typename VectorType>
+inline Vector2<T>&
+Vector2<T>::operator=(const VectorType& v)
+{
+    x = static_cast<T>(v.x);
+    y = static_cast<T>(v.y);
     return *this;
 }
 
@@ -141,6 +151,13 @@ inline void
 Vector2<T>::set(T x_, T y_)
 {
     Vector2CalcCommon<T>::set(*this, x_, y_);
+}
+
+template <typename T>
+inline void
+Vector2<T>::setSub(const Self& a, const Self& b)
+{
+    Vector2CalcCommon<T>::sub(*this, a, b);
 }
 
 template <typename T>

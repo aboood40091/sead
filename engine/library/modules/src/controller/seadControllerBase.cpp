@@ -53,8 +53,7 @@ void ControllerBase::setPointerWithBound_(bool is_on, bool touchkey_hold, const 
         {
             if (mPointerBound.isInside(pos))
             {
-                mPointer.x = pos.x - mPointerBound.getMin().x;
-                mPointer.y = pos.y - mPointerBound.getMin().y;
+                mPointer.setSub(pos, mPointerBound.getMin());
             }
             else
             {
@@ -63,8 +62,7 @@ void ControllerBase::setPointerWithBound_(bool is_on, bool touchkey_hold, const 
         }
         else
         {
-            mPointer.x = pos.x;
-            mPointer.y = pos.y;
+            mPointer = pos;
         }
     }
 
@@ -79,8 +77,7 @@ void ControllerBase::setPointerWithBound_(bool is_on, bool touchkey_hold, const 
     {
         if (mPointerFlag.isOff(cPointerOn))
         {
-            mPointer.x = cInvalidPointer.x;
-            mPointer.y = cInvalidPointer.y;
+            mPointer = cInvalidPointer;
         }
 
         mPointerFlag.reset(cPointerUnkFlag3);
@@ -105,7 +102,7 @@ void ControllerBase::updateDerivativeParams_(u32 prev_hold, bool prev_pointer_on
 
     mPadTrig.setDirect(~prev_hold & mPadHold.getDirect());
     mPadRelease.setDirect(prev_hold & ~mPadHold.getDirect());
-    mPadRepeat.setDirect(0);
+    mPadRepeat.makeAllZero();
 
     for (s32 i = 0; i < mPadBitMax; i++)
     {
@@ -134,8 +131,7 @@ void ControllerBase::updateDerivativeParams_(u32 prev_hold, bool prev_pointer_on
     mPointerFlag.change(cPointerOnNow, !prev_pointer_on && mPointerFlag.isOn(cPointerOn));
     mPointerFlag.change(cPointerOffNow, prev_pointer_on && mPointerFlag.isOff(cPointerOn));
 
-    mPointerS32.x = (s32)mPointer.x;
-    mPointerS32.y = (s32)mPointer.y;
+    mPointerS32 = mPointer;
 }
 
 u32 ControllerBase::getPadHoldCount(s32 bit) const
@@ -270,8 +266,8 @@ void ControllerBase::setIdleBase_()
     for (s32 i = 0; i < mPadBitMax; i++)
         mPadHoldCounts[i] = 0;
 
-    mPointer.set(cInvalidPointer);
-    mPointerS32.set(cInvalidPointerS32);
+    mPointer = cInvalidPointer;
+    mPointerS32 = cInvalidPointerS32;
     mLeftStick.set(0.0f, 0.0f);
     mRightStick.set(0.0f, 0.0f);
     mLeftAnalogTrigger = 0.0f;
