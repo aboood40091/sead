@@ -56,7 +56,7 @@ void ControllerWrapper::calc(u32 prev_hold, bool prev_pointer_on)
         if (mTouchKeyBit > 0)
             touchkey_hold = mPadHold.isOnBit(mTouchKeyBit);
 
-        setPointerWithBound_(pointer_on, touchkey_hold, mController->getPointer());
+        setPointerWithBound_(pointer_on, touchkey_hold, mController->mPointer);
         updateDerivativeParams_(createPadMaskFromControllerPadMask_(prev_hold), prev_pointer_on);
     }
     else

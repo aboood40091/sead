@@ -7,6 +7,8 @@
 
 namespace sead {
 
+class ControllerWrapper;
+
 class ControllerBase
 {
 public:
@@ -36,8 +38,23 @@ public:
     const Vector2f& getRightStick() const { return mRightStick; }
     f32 getLeftAnalogTrigger() const { return mLeftAnalogTrigger; }
     f32 getRightAnalogTrigger() const { return mRightAnalogTrigger; }
-    const Vector2f& getPointer() const { return mPointer; }
-    const Vector2i& getPointerPrev() const { return mPointerS32; }
+
+    const Vector2f& getPointer() const
+    {
+        if (isPointerOn())
+            return mPointer;
+        else
+            return cInvalidPointer;
+    }
+
+    const Vector2i& getPointerPrev() const
+    {
+        if ((isPointerOn() && !isPointerOnNow()) || isPointerOffNow()) // This is something I came up with
+            return mPointerS32;
+        else
+            return cInvalidPointerS32;
+    }
+
     bool isPointerOn() const { return mPointerFlag.isOn(cPointerOn); }
     bool isPointerOnNow() const { return mPointerFlag.isOn(cPointerOnNow); }
     bool isPointerOffNow() const { return mPointerFlag.isOn(cPointerOffNow); }
@@ -111,6 +128,8 @@ protected:
     Vector2f mRightStick;
     f32 mLeftAnalogTrigger;
     f32 mRightAnalogTrigger;
+
+    friend class ControllerWrapper;
 };
 #ifdef cafe
 static_assert(sizeof(ControllerBase) == 0x130, "sead::ControllerBase size mismatch");
