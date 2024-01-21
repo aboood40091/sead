@@ -53,7 +53,7 @@ void ControllerWrapper::calc(u32 prev_hold, bool prev_pointer_on)
         bool pointer_on = mController->isPointerOn();
 
         bool touchkey_hold = false;
-        if (mTouchKeyBit > 0)
+        if (mTouchKeyBit >= 0)
             touchkey_hold = mPadHold.isOnBit(mTouchKeyBit);
 
         setPointerWithBound_(pointer_on, touchkey_hold, mController->mPointer);
