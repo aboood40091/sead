@@ -26,7 +26,12 @@ public:
     bool isLinked() const { return mNext || mPrev; }
 
 private:
-    void init_();
+    void init_()
+    {
+        mNext = nullptr;
+        mPrev = nullptr;
+    }
+
     void insertBack_(ListNode* n);
     void insertFront_(ListNode* n);
     void erase_();
