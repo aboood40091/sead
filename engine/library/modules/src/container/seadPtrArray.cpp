@@ -78,7 +78,7 @@ void PtrArrayImpl::sort(CompareCallbackImpl cmp)
         {
             if ((*cmp)(ptrs[i], ptrs[i - 1]) < 0)
             {
-                void* x = ptrs[i - 1];
+                x = ptrs[i - 1];
                 ptrs[i - 1] = ptrs[i];
                 ptrs[i] = x;
                 last_swap = i;
