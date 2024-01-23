@@ -155,28 +155,30 @@ template <typename T>
 inline T curveHermit_(f32 x, const CurveDataInfo* info, const T* buf)
 {
     if (info->numUse % 2 != 0)
-        return 0.0f;
+        return 0;
 
     if (x < 0.0f)
         return buf[0];
 
-    s32 numCtrlPoint = info->numUse / 2 - 1;
-    f32 ixD = x * numCtrlPoint;
-    s32 ix = (s32)(x * numCtrlPoint);
+    s32 numCtrlPoint = info->numUse / 2;
+    f32 ixD = x * (numCtrlPoint - 1);
+    s32 ix = (s32)(x * (numCtrlPoint - 1));
     f32 s = ixD - (f32)ix;
-    if (ix >= numCtrlPoint)
+    if (ix >= (numCtrlPoint - 1))
         return buf[ix * 2];
 
+    ix *= 2;
+
     // https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Unit_interval_[0,_1]
-    f32 vt0 =  2*s*s*s - 3*s*s     + 1;
-    f32 vt1 = -2*s*s*s + 3*s*s;
-    f32 tt0 =    s*s*s - 2*s*s + s;
-    f32 tt1 =    s*s*s -   s*s;
+    T vt0 =  2*s*s*s - 3*s*s     + 1;
+    T vt1 = -2*s*s*s + 3*s*s;
+    T tt0 =    s*s*s - 2*s*s + s;
+    T tt1 =    s*s*s -   s*s;
     return
-        buf[ix * 2 + 0] * vt0 +
-        buf[ix * 2 + 2] * vt1 +
-        buf[ix * 2 + 1] * tt0 +
-        buf[ix * 2 + 3] * tt1;
+        buf[ix + 0] * vt0 +
+        buf[ix + 2] * vt1 +
+        buf[ix + 1] * tt0 +
+        buf[ix + 3] * tt1;
 }
 
 template <typename T>
@@ -209,13 +211,13 @@ template <typename T>
 inline T curveLinear2D_(f32 x, const CurveDataInfo* info, const T* buf)
 {
     s32 numData = info->numUse / 2;
-    s32 lastBuf = numData - 1;
+    s32 lastBuf = (numData - 1) * 2;
 
     if (x <= buf[0])
         return buf[1];
 
-    if (x >= buf[lastBuf * 2 + 0])
-        return buf[lastBuf * 2 + 1];
+    if (x >= buf[lastBuf + 0])
+        return buf[lastBuf + 1];
 
     for (s32 i = 0; i < numData; i++)
     {
@@ -227,20 +229,20 @@ inline T curveLinear2D_(f32 x, const CurveDataInfo* info, const T* buf)
         }
     }
 
-    return 0.0f;
+    return 0;
 }
 
 template <typename T>
 inline T curveHermit2D_(f32 x, const CurveDataInfo* info, const T* buf)
 {
     s32 numData = info->numUse / 3;
-    s32 lastBuf = numData - 1;
+    s32 lastBuf = (numData - 1) * 3;
 
     if (x <= buf[0])
         return buf[1];
 
-    if (x >= buf[lastBuf * 3 + 0])
-        return buf[lastBuf * 3 + 1];
+    if (x >= buf[lastBuf + 0])
+        return buf[lastBuf + 1];
 
     for (s32 i = 0; i < numData; i++)
     {
@@ -262,20 +264,20 @@ inline T curveHermit2D_(f32 x, const CurveDataInfo* info, const T* buf)
         }
     }
 
-    return 0.0f;
+    return 0;
 }
 
 template <typename T>
 inline T curveStep2D_(f32 x, const CurveDataInfo* info, const T* buf)
 {
     s32 numData = info->numUse / 2;
-    s32 lastBuf = numData - 1;
+    s32 lastBuf = (numData - 1) * 2;
 
     if (x <= buf[0])
         return buf[1];
 
-    if (x >= buf[lastBuf * 2 + 0])
-        return buf[lastBuf * 2 + 1];
+    if (x >= buf[lastBuf + 0])
+        return buf[lastBuf + 1];
 
     for (s32 i = 0; i < numData; i++)
     {
@@ -284,7 +286,7 @@ inline T curveStep2D_(f32 x, const CurveDataInfo* info, const T* buf)
             return buf[ix + 1];
     }
 
-    return 0.0f;
+    return 0;
 }
 
 template <typename T>
@@ -357,11 +359,11 @@ inline Vector2<T> curveNonuniformSplineVec2_(f32 t, const CurveDataInfo* info, c
     Vector4f result;
 
     for (s32 i = 0; i < info->numUse / 2; i++)
-        rns.addNode(Vector4f(buf[i * 2 + 0], buf[i * 2 + 1], 0.0f, 0.0f));
+        rns.addNode(Vector4f(buf[i * 2 + 0], buf[i * 2 + 1], 0.0f, 1.0f));
 
     rns.buildSpline();
     result = rns.getPosition(t);
-    return Vector2f(result.x, result.y);
+    return Vector2<T>(result.x, result.y);
 }
 
 f32 (*sCurveFunctionTbl_f32[cNumCurveType])(f32, const CurveDataInfo*, const f32*) = {
