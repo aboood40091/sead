@@ -574,6 +574,15 @@ Matrix34<T>::getBase(Vec3& o, s32 axis) const
 }
 
 template <typename T>
+inline Matrix34<T>::Vec3
+Matrix34<T>::getBase(s32 axis) const
+{
+    Vec3 o;
+    Matrix34CalcCommon<T>::getBase(o, *this, axis);
+    return o;
+}
+
+template <typename T>
 inline void
 Matrix34<T>::getRow(Vec4& o, s32 row) const
 {
@@ -581,10 +590,28 @@ Matrix34<T>::getRow(Vec4& o, s32 row) const
 }
 
 template <typename T>
+inline Matrix34<T>::Vec4
+Matrix34<T>::getRow(s32 row) const
+{
+    Vec4 o;
+    Matrix34CalcCommon<T>::getRow(o, *this, row);
+    return o;
+}
+
+template <typename T>
 inline void
 Matrix34<T>::getTranslation(Vec3& o) const
 {
     Matrix34CalcCommon<T>::getTranslation(o, *this);
+}
+
+template <typename T>
+inline Matrix34<T>::Vec3
+Matrix34<T>::getTranslation() const
+{
+    Vec3 o;
+    Matrix34CalcCommon<T>::getTranslation(o, *this);
+    return o;
 }
 
 template <typename T>
@@ -795,10 +822,28 @@ Matrix44<T>::getCol(Vec4& o, s32 axis) const
 }
 
 template <typename T>
+inline Matrix44<T>::Vec4
+Matrix44<T>::getCol(s32 axis) const
+{
+    Vec4 o;
+    Matrix44CalcCommon<T>::getCol(o, *this, axis);
+    return o;
+}
+
+template <typename T>
 inline void
 Matrix44<T>::getRow(Vec4& o, s32 row) const
 {
     Matrix44CalcCommon<T>::getRow(o, *this, row);
+}
+
+template <typename T>
+inline Matrix44<T>::Vec4
+Matrix44<T>::getRow(s32 row) const
+{
+    Vec4 o;
+    Matrix44CalcCommon<T>::getRow(o, *this, row);
+    return o;
 }
 
 template <typename T>

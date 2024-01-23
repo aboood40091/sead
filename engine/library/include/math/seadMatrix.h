@@ -192,8 +192,11 @@ public:
     void setMultTranslationLocal(const Self& n, const Vec3& t);
 
     void getBase(Vec3& o, s32 axis) const;
+    Vec3 getBase(s32 axis) const;
     void getRow(Vec4& o, s32 row) const;
+    Vec4 getRow(s32 row) const;
     void getTranslation(Vec3& o) const;
+    Vec3 getTranslation() const;
 
     void setBase(s32 axis, const Vec3& v);
     void setRow(s32 row, const Vec4& v);
@@ -261,7 +264,9 @@ public:
     void scaleBases(T sx, T sy, T sz, T sw);
 
     void getCol(Vec4& o, s32 axis) const;
+    Vec4 getCol(s32 axis) const;
     void getRow(Vec4& o, s32 row) const;
+    Vec4 getRow(s32 row) const;
 
     void setCol(s32 axis, const Vec4& v);
     void setRow(s32 row, const Vec4& v);
