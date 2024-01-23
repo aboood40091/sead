@@ -74,4 +74,18 @@ ListNode* ListImpl::popFront()
     }
 }
 
+void ListImpl::clear()
+{
+    ListNode* node = mStartEnd.mNext;
+    while (node != &mStartEnd)
+    {
+        ListNode* n = node;
+        node = node->mNext;
+        n->init_();
+    }
+    mCount = 0;
+    mStartEnd.mNext = &mStartEnd;
+    mStartEnd.mPrev = &mStartEnd;
+}
+
 } // namespace sead
