@@ -18,12 +18,16 @@ public:
 
     static bool isEqual(const Base& a, const Base& b);
 
+    static T dot(const Base& a, const Base& b);
+
     static T squaredLength(const Base& v);
     static T length(const Base& v);
 
     static void lerp(Base& o, const Base& a, const Base& b, f32 ratio);
 
     static void multScalar(Base& o, const Base& v, T t);
+    static void divScalar(Base& o, const Base& v, T t);
+    static void neg(Base& o, const Base& v);
     static T normalize(Base& v);
     static T setNormalize(Base& o, const Base& v);
 
@@ -58,6 +62,8 @@ public:
     static void rotate(Base& o, const Mtx34& m, const Base& v);
     static void multScalar(Base& o, const Base& v, T t);
     static void multScalarAdd(Base& o, T t, const Base& a, const Base& b);
+    static void divScalar(Base& o, const Base& v, T t);
+    static void neg(Base& o, const Base& v);
     static T normalize(Base& v);
     static T setNormalize(Base& o, const Base& v);
 
@@ -73,8 +79,11 @@ public:
 
 public:
     static void add(Base& o, const Base& a, const Base& b);
+    static void sub(Base& o, const Base& a, const Base& b);
 
     static bool isEqual(const Base& a, const Base& b);
+
+    static T dot(const Base& a, const Base& b);
 
     static T squaredLength(const Base& v);
     static T length(const Base& v);
@@ -82,6 +91,8 @@ public:
     static void lerp(Base& o, const Base& a, const Base& b, f32 ratio);
 
     static void multScalar(Base& o, const Base& v, T t);
+    static void divScalar(Base& o, const Base& v, T t);
+    static void neg(Base& o, const Base& v);
     static T normalize(Base& v);
     static T setNormalize(Base& o, const Base& v);
 

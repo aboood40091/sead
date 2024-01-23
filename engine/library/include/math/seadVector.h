@@ -31,8 +31,10 @@ public:
     Vector2(const VectorType& v);
 
     Self operator*(T t) const;
+    Self operator/(T t) const;
     Self operator+(const Self& v) const;
     Self operator-(const Self& v) const;
+    Self operator-() const;
 
     Self& operator+=(const Self& v);
     Self& operator-=(const Self& v);
@@ -44,11 +46,13 @@ public:
     bool operator==(const Self& v) const;
     bool operator!=(const Self& v) const;
 
+    T dot(const Self& t) const;
     T length() const;
 
     void add(const Self& a);
     void div(const Self& a);
     void multScalar(T t);
+    void divScalar(T t);
     T normalize();
     T setNormalize(const Self& v);
     void set(const Self& v);
@@ -98,8 +102,10 @@ public:
     Vector3(const Vec2& vec2, T z_);
 
     Self operator*(T t) const;
+    Self operator/(T t) const;
     Self operator+(const Self& v) const;
     Self operator-(const Self& v) const;
+    Self operator-() const;
 
     Self& operator+=(const Self& v);
     Self& operator-=(const Self& v);
@@ -113,6 +119,7 @@ public:
 
     void add(const Self& a);
     void multScalar(T t);
+    void divScalar(T t);
     T normalize();
     T setNormalize(const Self& v);
     void set(const Self& v);
@@ -159,6 +166,10 @@ public:
     Vector4(const Vec3& vec3, T w_);
 
     Self operator*(T t) const;
+    Self operator/(T t) const;
+    Self operator+(const Self& v) const;
+    Self operator-(const Self& v) const;
+    Self operator-() const;
 
     Self& operator+=(const Self& v);
     Self& operator=(const Self& v);
@@ -166,9 +177,11 @@ public:
     bool operator==(const Self& v) const;
     bool operator!=(const Self& v) const;
 
+    T dot(const Self& t) const;
     T length() const;
 
     void multScalar(T t);
+    void divScalar(T t);
     T normalize();
     T setNormalize(const Self& v);
     void set(const Self& v);
@@ -182,6 +195,15 @@ public:
     static const Vector4 ew;
     static const Vector4 ones;
 };
+
+template <typename T>
+Vector2<T> operator*(T t, const Vector2<T>& v);
+
+template <typename T>
+Vector3<T> operator*(T t, const Vector3<T>& v);
+
+template <typename T>
+Vector4<T> operator*(T t, const Vector4<T>& v);
 
 typedef Vector2<s32> Vector2i;
 typedef Vector3<s32> Vector3i;

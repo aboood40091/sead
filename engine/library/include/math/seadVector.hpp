@@ -30,6 +30,24 @@ Vector2<T>::operator*(T t) const
 
 template <typename T>
 inline Vector2<T>
+operator*(T t, const Vector2<T>& v)
+{
+    Vector2<T> o;
+    Vector2CalcCommon<T>::multScalar(o, v, t);
+    return o;
+}
+
+template <typename T>
+inline Vector2<T>
+Vector2<T>::operator/(T t) const
+{
+    Self o;
+    Vector2CalcCommon<T>::divScalar(o, *this, t);
+    return o;
+}
+
+template <typename T>
+inline Vector2<T>
 Vector2<T>::operator+(const Self& v) const
 {
 
@@ -45,6 +63,15 @@ Vector2<T>::operator-(const Self& v) const
 
     Self o;
     Vector2CalcCommon<T>::sub(o, *this, v);
+    return o;
+}
+
+template <typename T>
+inline Vector2<T>
+Vector2<T>::operator-() const
+{
+    Self o;
+    Vector2CalcCommon<T>::neg(o, *this);
     return o;
 }
 
@@ -95,6 +122,13 @@ inline bool
 Vector2<T>::operator!=(const Self& v) const
 {
     return !Vector2CalcCommon<T>::isEqual(*this, v);
+}
+
+template <typename T>
+inline T
+Vector2<T>::dot(const Self& t) const
+{
+    return Vector2CalcCommon<T>::dot(*this, t);
 }
 
 template <typename T>
@@ -192,6 +226,24 @@ Vector3<T>::operator*(T t) const
 
 template <typename T>
 inline Vector3<T>
+operator*(T t, const Vector3<T>& v)
+{
+    Vector3<T> o;
+    Vector3CalcCommon<T>::multScalar(o, v, t);
+    return o;
+}
+
+template <typename T>
+inline Vector3<T>
+Vector3<T>::operator/(T t) const
+{
+    Self o;
+    Vector3CalcCommon<T>::divScalar(o, *this, t);
+    return o;
+}
+
+template <typename T>
+inline Vector3<T>
 Vector3<T>::operator+(const Self& v) const
 {
 
@@ -207,6 +259,15 @@ Vector3<T>::operator-(const Self& v) const
 
     Self o;
     Vector3CalcCommon<T>::sub(o, *this, v);
+    return o;
+}
+
+template <typename T>
+inline Vector3<T>
+Vector3<T>::operator-() const
+{
+    Self o;
+    Vector3CalcCommon<T>::neg(o, *this);
     return o;
 }
 
@@ -386,6 +447,53 @@ Vector4<T>::operator*(T t) const
 }
 
 template <typename T>
+inline Vector4<T>
+operator*(T t, const Vector4<T>& v)
+{
+    Vector4<T> o;
+    Vector4CalcCommon<T>::multScalar(o, v, t);
+    return o;
+}
+
+template <typename T>
+inline Vector4<T>
+Vector4<T>::operator/(T t) const
+{
+    Self o;
+    Vector4CalcCommon<T>::divScalar(o, *this, t);
+    return o;
+}
+
+template <typename T>
+inline Vector4<T>
+Vector4<T>::operator+(const Self& v) const
+{
+
+    Self o;
+    Vector4CalcCommon<T>::add(o, *this, v);
+    return o;
+}
+
+template <typename T>
+inline Vector4<T>
+Vector4<T>::operator-(const Self& v) const
+{
+
+    Self o;
+    Vector4CalcCommon<T>::sub(o, *this, v);
+    return o;
+}
+
+template <typename T>
+inline Vector4<T>
+Vector4<T>::operator-() const
+{
+    Self o;
+    Vector4CalcCommon<T>::neg(o, *this);
+    return o;
+}
+
+template <typename T>
 inline Vector4<T>&
 Vector4<T>::operator+=(const Self& v)
 {
@@ -416,6 +524,13 @@ inline bool
 Vector4<T>::operator!=(const Self& v) const
 {
     return !Vector4CalcCommon<T>::isEqual(*this, v);
+}
+
+template <typename T>
+inline T
+Vector4<T>::dot(const Self& t) const
+{
+    return Vector4CalcCommon<T>::dot(*this, t);
 }
 
 template <typename T>

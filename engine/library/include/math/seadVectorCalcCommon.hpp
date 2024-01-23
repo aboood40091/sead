@@ -55,6 +55,13 @@ Vector2CalcCommon<T>::isEqual(const Base& a, const Base& b)
 
 template <typename T>
 inline T
+Vector2CalcCommon<T>::dot(const Base& a, const Base& b)
+{
+    return a.x * b.x + a.y * b.y;
+}
+
+template <typename T>
+inline T
 Vector2CalcCommon<T>::squaredLength(const Base& v)
 {
     return v.x * v.x + v.y * v.y;
@@ -81,6 +88,23 @@ Vector2CalcCommon<T>::multScalar(Base& o, const Base& v, T t)
 {
     o.x = v.x * t;
     o.y = v.y * t;
+}
+
+template <typename T>
+inline void
+Vector2CalcCommon<T>::divScalar(Base& o, const Base& v, T t)
+{
+    T inv_t = MathCalcCommon<T>::inv(t);
+    o.x = v.x * inv_t;
+    o.y = v.y * inv_t;
+}
+
+template <typename T>
+inline void
+Vector2CalcCommon<T>::neg(Base& o, const Base& v)
+{
+    o.x = MathCalcCommon<T>::neg(v.x);
+    o.y = MathCalcCommon<T>::neg(v.y);
 }
 
 template <typename T>
@@ -321,6 +345,25 @@ Vector3CalcCommon<f32>::multScalarAdd(Base& o, f32 t, const Base& a, const Base&
 #endif // cafe
 
 template <typename T>
+inline void
+Vector3CalcCommon<T>::divScalar(Base& o, const Base& v, T t)
+{
+    T inv_t = MathCalcCommon<T>::inv(t);
+    o.x = v.x * inv_t;
+    o.y = v.y * inv_t;
+    o.z = v.z * inv_t;
+}
+
+template <typename T>
+inline void
+Vector3CalcCommon<T>::neg(Base& o, const Base& v)
+{
+    o.x = MathCalcCommon<T>::neg(v.x);
+    o.y = MathCalcCommon<T>::neg(v.y);
+    o.z = MathCalcCommon<T>::neg(v.z);
+}
+
+template <typename T>
 T Vector3CalcCommon<T>::normalize(Base& v)
 {
     const T len = length(v);
@@ -379,6 +422,16 @@ Vector4CalcCommon<T>::add(Base& o, const Base& a, const Base& b)
 }
 
 template <typename T>
+inline void
+Vector4CalcCommon<T>::sub(Base& o, const Base& a, const Base& b)
+{
+    o.x = a.x - b.x;
+    o.y = a.y - b.y;
+    o.z = a.z - b.z;
+    o.w = a.w - b.w;
+}
+
+template <typename T>
 inline bool
 Vector4CalcCommon<T>::isEqual(const Base& a, const Base& b)
 {
@@ -386,6 +439,13 @@ Vector4CalcCommon<T>::isEqual(const Base& a, const Base& b)
            a.y == b.y &&
            a.z == b.z &&
            a.w == b.w;
+}
+
+template <typename T>
+inline T
+Vector4CalcCommon<T>::dot(const Base& a, const Base& b)
+{
+    return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
 template <typename T>
@@ -420,6 +480,27 @@ Vector4CalcCommon<T>::multScalar(Base& o, const Base& v, T t)
     o.y = v.y * t;
     o.z = v.z * t;
     o.w = v.w * t;
+}
+
+template <typename T>
+inline void
+Vector4CalcCommon<T>::divScalar(Base& o, const Base& v, T t)
+{
+    T inv_t = MathCalcCommon<T>::inv(t);
+    o.x = v.x * inv_t;
+    o.y = v.y * inv_t;
+    o.z = v.z * inv_t;
+    o.w = v.w * inv_t;
+}
+
+template <typename T>
+inline void
+Vector4CalcCommon<T>::neg(Base& o, const Base& v)
+{
+    o.x = MathCalcCommon<T>::neg(v.x);
+    o.y = MathCalcCommon<T>::neg(v.y);
+    o.z = MathCalcCommon<T>::neg(v.z);
+    o.w = MathCalcCommon<T>::neg(v.w);
 }
 
 template <typename T>
