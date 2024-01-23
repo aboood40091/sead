@@ -48,8 +48,15 @@ public:
     static T ln2()    { return 0.69314718055994530942 ; }
     static T ln2Inv() { return 1.442695040888963407   ; }
 
-    static T neg(T t);
-    static T inv(T t);
+    static T neg(T t)
+    {
+        return -t;
+    }
+
+    static T inv(T t)
+    {
+        return 1 / t;
+    }
 
     static T sign(T t)
     {
