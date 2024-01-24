@@ -9,6 +9,47 @@ ParameterBase::ParameterBase()
     initializeListNode("default", "parameter", "", nullptr);
 }
 
+ParameterBase::ParameterBase(const sead::SafeString& name, const sead::SafeString& label, IParameterObj* p_obj)
+{
+    initializeListNode(name, label, "", p_obj);
+}
+
+ParameterBase::ParameterBase(const sead::SafeString& name, const sead::SafeString& label, const sead::SafeString& meta, IParameterObj* p_obj)
+{
+    initializeListNode(name, label, meta, p_obj);
+}
+
+bool ParameterBase::makeZero()
+{
+    bool ret = false;
+    switch (getParameterType())
+    {
+    case cType_f32:
+        *static_cast<f32*>(ptr()) = 0.0f;
+        ret = true;
+        break;
+    case cType_vec2:
+        static_cast<sead::Vector2f*>(ptr())->set(0.0f, 0.0f);
+        ret = true;
+        break;
+    case cType_vec3:
+        static_cast<sead::Vector3f*>(ptr())->set(0.0f, 0.0f, 0.0f);
+        ret = true;
+        break;
+    case cType_vec4:
+        static_cast<sead::Vector4f*>(ptr())->set(0.0f, 0.0f, 0.0f, 0.0f);
+        ret = true;
+        break;
+    case cType_color:
+        static_cast<sead::Color4f*>(ptr())->setf(0.0f, 0.0f, 0.0f, 0.0f);
+        ret = true;
+        break;
+    default:
+        break;
+    }
+    return ret;
+}
+
 void ParameterBase::applyResource(ResParameter res)
 {
     if (getParameterType() != cType_bool)
@@ -78,34 +119,34 @@ void ParameterBase::applyResource(ResParameter res, f32 t)
     postApplyResource_(res.getValue(), res.ptr()->mSize - sizeof(ResParameterData));
 }
 
-bool ParameterBase::copy(const ParameterBase& parameter)
+bool ParameterBase::copy(const ParameterBase& src)
 {
-    if (getParameterType() != parameter.getParameterType() ||
-        mHash != parameter.mHash)
+    if (getParameterType() != src.getParameterType() ||
+        mHash != src.mHash)
     {
         return false;
     }
 
-    copyUnsafe(parameter);
+    copyUnsafe(src);
     return true;
 }
 
-void ParameterBase::copyUnsafe(const ParameterBase& parameter)
+void ParameterBase::copyUnsafe(const ParameterBase& src)
 {
-    u8* dst = static_cast<u8*>(ptr());
-    const u8* src = static_cast<const u8*>(parameter.ptr());
+    u8* p_dst = static_cast<u8*>(ptr());
+    const u8* p_src = static_cast<const u8*>(src.ptr());
     s32 len = size();
 
     for (s32 i = 0; i < len; i++)
-        *dst++ = *src++;
+        *p_dst++ = *p_src++;
 }
 
-bool ParameterBase::copyLerp(const ParameterBase& parameter_a, const ParameterBase& parameter_b, f32 t)
+bool ParameterBase::copyLerp(const ParameterBase& src_a, const ParameterBase& src_b, f32 t)
 {
-    if (getParameterType() != parameter_a.getParameterType() ||
-        mHash != parameter_a.mHash ||
-        getParameterType() != parameter_b.getParameterType() ||
-        mHash != parameter_b.mHash)
+    if (getParameterType() != src_a.getParameterType() ||
+        mHash != src_a.mHash ||
+        getParameterType() != src_b.getParameterType() ||
+        mHash != src_b.mHash)
     {
         return false;
     }
@@ -116,22 +157,22 @@ bool ParameterBase::copyLerp(const ParameterBase& parameter_a, const ParameterBa
     case cType_int:
     case cType_string32:
     case cType_string64:
-        copyUnsafe(parameter_a);
+        copyUnsafe(src_a);
         break;
     case cType_f32:
-        copyLerp_<f32>(parameter_a, parameter_b, t);
+        copyLerp_<f32>(src_a, src_b, t);
         break;
     case cType_vec2:
-        copyLerp_<sead::Vector2f>(parameter_a, parameter_b, t);
+        copyLerp_<sead::Vector2f>(src_a, src_b, t);
         break;
     case cType_vec3:
-        copyLerp_<sead::Vector3f>(parameter_a, parameter_b, t);
+        copyLerp_<sead::Vector3f>(src_a, src_b, t);
         break;
     case cType_vec4:
-        copyLerp_<sead::Vector4f>(parameter_a, parameter_b, t);
+        copyLerp_<sead::Vector4f>(src_a, src_b, t);
         break;
     case cType_color:
-        copyLerp_<sead::Color4f>(parameter_a, parameter_b, t);
+        copyLerp_<sead::Color4f>(src_a, src_b, t);
         break;
     case cType_curve1:
     case cType_curve2:
@@ -142,6 +183,17 @@ bool ParameterBase::copyLerp(const ParameterBase& parameter_a, const ParameterBa
         // SEAD_ASSERT_MSG(false, "%d", s32(getParameterType()));
     }
     return true;
+}
+
+void ParameterBase::writeToXML(sead::XmlElement*, sead::Heap*) const
+{
+    // Deleted from NSMBU
+}
+
+s32 ParameterBase::readFromXML(const sead::XmlElement&)
+{
+    // Deleted from NSMBU
+    return 2;
 }
 
 void ParameterBase::initializeListNode(const sead::SafeString& name, const sead::SafeString& label, const sead::SafeString& meta, IParameterObj* p_obj)

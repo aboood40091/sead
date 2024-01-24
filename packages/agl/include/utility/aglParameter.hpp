@@ -1,5 +1,6 @@
 #pragma once
 
+#include <basis/seadNew.h>
 #include <gfx/seadColor.h>
 #include <math/seadVector.h>
 
@@ -11,25 +12,25 @@ inline ParameterBase* Parameter<T>::clone(sead::Heap* heap, IParameterObj* p_obj
     return new (heap, 4) Parameter<T>(getValue(), getParameterName(), getLabel(), getMeta(), p_obj);
 }
 
-template <typename T>
-inline void Parameter<T>::setValue(const T& value)
+template <typename T> template <typename U>
+inline void Parameter<T>::setValue(const U& value)
 {
     mValue = value;
 }
 
-template <>
+template <> template <>
 inline void Parameter<sead::Vector2f>::setValue(const sead::Vector2f& value)
 {
     mValue.set(value);
 }
 
-template <>
+template <> template <>
 inline void Parameter<sead::Vector3f>::setValue(const sead::Vector3f& value)
 {
     mValue.set(value);
 }
 
-template <>
+template <> template <>
 inline void Parameter<sead::Vector4f>::setValue(const sead::Vector4f& value)
 {
     mValue.set(value);
@@ -110,6 +111,27 @@ inline ParameterBase::ParameterType
 Parameter< sead::FixedSafeString<32> >::getParameterType() const
 {
     return cType_string32;
+}
+
+template <>
+inline const void*
+Parameter< sead::FixedSafeString<32> >::ptr() const
+{
+    return mValue.cstr();
+}
+
+template <>
+inline void*
+Parameter< sead::FixedSafeString<32> >::ptr()
+{
+    return mValue.getBuffer();
+}
+
+template <>
+inline size_t
+Parameter< sead::FixedSafeString<32> >::size() const
+{
+    return 32;
 }
 
 } }

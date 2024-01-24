@@ -11,6 +11,8 @@ public:
     INamedObj();
     virtual ~INamedObj();
 
+    static const sead::SafeString& getDefaultGroupName();
+
     virtual const sead::SafeString& getObjName() const { return sead::SafeString::cEmptyString; }
     virtual const sead::SafeString& getGroupName() const { return sead::SafeString::cEmptyString; }
     virtual s32 getObjType() const { return 0; }

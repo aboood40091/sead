@@ -13,16 +13,19 @@ class IParameterList
 public:
     IParameterList();
 
+    void addList(IParameterList* child, const sead::SafeString& name);
     void addObj(IParameterObj* child, const sead::SafeString& name);
 
     void applyResParameterList(ResParameterList list);
+
+    bool isApply(ResParameterList list) const { return list.getParameterListNameHash() == mNameHash; }
 
 protected:
     virtual bool preWrite_() const { return true; }
     virtual void postWrite_() const { }
     virtual bool preRead_() { return true; }
     virtual void postRead_() { }
-    virtual bool isApply_(ResParameterList list) const { return list.getParameterListNameHash() == mNameHash; }
+    virtual bool isApply_(ResParameterList list) const { return isApply(list); }
     virtual void callbackNotAppliable_(IParameterObj*, ResParameter) { }
 
     void setParameterListName_(const sead::SafeString& name);
@@ -35,8 +38,8 @@ protected:
     sead::OffsetList<IParameterObj> mChildObj;
     sead::FixedSafeString<64> mName;
     u32 mNameHash;
-    u32 _70;
     sead::ListNode mListNode;
+    IParameterList* mpParent;
 
     friend class IParameterObj;
 };

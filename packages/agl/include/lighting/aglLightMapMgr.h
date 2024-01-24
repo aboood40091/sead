@@ -5,7 +5,6 @@
 #include <container/seadPtrArray.h>
 #include <container/seadSafeArray.h>
 #include <environment/aglEnvObjMgr.h>
-#include <gfx/seadGraphicsContextMRT.h>
 #include <lighting/aglLightMap.h>
 #include <utility/aglDebugTexturePage.h>
 #include <utility/aglParameterObj.h>
@@ -16,6 +15,19 @@ namespace agl { namespace lght {
 
 class LightMapMgr : public utl::IParameterIO, public sead::hostio::Node
 {
+    static const s32 cLUTValueNum = 128;
+
+    enum LUTType
+    {
+        cLUT_Lambert = 0,
+        cLUT_Half_Lambert,
+        cLUT_Hemisphere,
+        cLUT_UserData_0,
+        cLUT_UserData_Num = 29,
+        cLUT_Num = cLUT_UserData_0 + cLUT_UserData_Num
+    };
+    static_assert(cLUT_Num == 32);
+
     class CPUTexture
     {
     public:
@@ -23,11 +35,12 @@ class LightMapMgr : public utl::IParameterIO, public sead::hostio::Node
         ~CPUTexture();
 
     private:
-        u8* mPtr;
+        void* mPtr;
         u32 mSize;
         TextureData mTextureData;
         TextureSampler mTextureSampler;
 
+        friend class LightMap;
         friend class LightMapMgr;
     };
     static_assert(sizeof(CPUTexture) == 0x244);
@@ -38,17 +51,14 @@ class LightMapMgr : public utl::IParameterIO, public sead::hostio::Node
         utl::Parameter< sead::FixedSafeString<32> > mName;
         utl::ParameterCurve1f mIntensity;
 
+        friend class LightMap;
         friend class LightMapMgr;
     };
     static_assert(sizeof(LUT) == 0xD8);
 
-public:
-    struct GraphicsContext
-    {
-        sead::GraphicsContextMRT ctx[3][2];
-    };
-    static_assert(sizeof(GraphicsContext) == 0x6A8);
+    typedef LightMap::GraphicsContext GraphicsContext;
 
+public:
     class CreateArg
     {
     public:
@@ -115,15 +125,11 @@ public:
     LightMapMgr();
     virtual ~LightMapMgr();
 
-protected:
-    virtual void postRead_();
-
-public:
-    void initialize(const env::EnvObjBuffer::AllocateArg& alloc_arg, const CreateArg& create_arg, env::EnvObjMgr* p_env_obj_mgr, sead::Heap* heap = nullptr);
+    void initialize(const env::EnvObjBuffer::AllocateArg& alloc_arg, const CreateArg& create_arg, env::EnvObjMgr* p_env_mgr, sead::Heap* heap = nullptr);
 
     void update();
 
-    void updateGPU(bool invalidate_gpu = false);
+    void updateGPU(bool invalidate_gpu = false) const;
     void updateViewGPU(s32 view_index, bool ignore_mapping_type, const sead::Matrix34f& view_mtx, bool invalidate_gpu = false) const;
 
     ShaderMode draw(s32 view_index, bool ignore_mapping_type, ShaderMode mode) const;
@@ -146,13 +152,22 @@ public:
 
     s32 searchIndex(const sead::SafeString& name) const;
 
+protected:
+    virtual void postRead_();
+
+private:
+    void updateLUT_();
+    void createNormalMap_(s32 size_sphere, s32 size_cube);
+    void constructList_();
+    void constructMemory_();
+
 private:
     sead::Buffer<LightMap> mLightMap;
     sead::PtrArray<LightMap> mLightMapCalc;
     CPUTexture mCPUTextureLUT;
     CPUTexture mCPUTextureSphereNormal;
     CPUTexture mCPUTextureCubeNormal;
-    sead::SafeArray<LUT, 32> mLUT;
+    sead::UnsafeArray<LUT, cLUT_Num> mLUT;
     GraphicsContext mGraphicsContext;
     utl::IParameterObj mConfig;
     utl::Parameter< sead::FixedSafeString<32> > mType;
@@ -161,6 +176,8 @@ private:
     u32 _2b88; // Unused
     utl::DebugTexturePage mDebugTexturePage;
     sead::Heap* mpLightMapHeap;
+
+    friend class LightMap;
 };
 static_assert(sizeof(LightMapMgr) == 0x2D6C, "agl::lght::LightMapMgr size mismatch");
 

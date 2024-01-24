@@ -5,7 +5,7 @@
 namespace agl { namespace utl {
 
 IParameterList::IParameterList()
-    : _70(0)
+    : mpParent(nullptr)
 {
     mChildList.initOffset(offsetof(IParameterList, mListNode));
     mChildObj.initOffset(offsetof(IParameterObj, mListNode));
@@ -17,6 +17,16 @@ void IParameterList::setParameterListName_(const sead::SafeString& name)
 {
     mName = name;
     mNameHash = ParameterBase::calcHash(name);
+}
+
+void IParameterList::addList(IParameterList* child, const sead::SafeString& name)
+{
+    // SEAD_ASSERT(child != nullptr);
+    child->setParameterListName_(name);
+
+    mChildList.pushBack(child);
+
+    child->mpParent = this;
 }
 
 void IParameterList::addObj(IParameterObj* child, const sead::SafeString& name)
@@ -47,10 +57,10 @@ void IParameterList::applyResParameterList_(ResParameterList list, bool lerp, f3
             if (itr->isApply_(child_obj))
             {
                 if (lerp)
-                    itr->applyResParameterObj_(child_obj, true, t, this);
+                    itr->applyResParameterObjLerp(child_obj, t, this);
 
                 else
-                    itr->applyResParameterObj_(child_obj, false, 1.0f, this);
+                    itr->applyResParameterObj(child_obj, this);
 
                 break;
             }

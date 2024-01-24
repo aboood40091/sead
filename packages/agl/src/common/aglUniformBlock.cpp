@@ -156,6 +156,15 @@ void UniformBlock::flush(void* p_memory, bool invalidate_gpu) const
 #endif // cafe
 }
 
+void UniformBlock::flushNoSync(void* p_memory, bool invalidate_gpu) const
+{
+#ifdef cafe
+    DCFlushRangeNoSync(p_memory, mBlockSize);
+    if (invalidate_gpu)
+        GX2Invalidate(GX2_INVALIDATE_UNIFORM_BLOCK, p_memory, mBlockSize);
+#endif // cafe
+}
+
 bool UniformBlock::setUniform(const void* p_data, const UniformBlockLocation& location, u32 offset, size_t size) const
 {
     if (!location.isValid())

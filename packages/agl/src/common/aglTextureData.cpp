@@ -1,5 +1,6 @@
 #include <common/aglTextureData.h>
 #include <common/aglTextureFormatInfo.h>
+#include <detail/aglGX2.h>
 #include <detail/aglTextureDataUtil.h>
 #include <prim/seadMemUtil.h>
 
@@ -31,6 +32,45 @@ void TextureData::invalidateGPUCache() const
 
     if (getMipPtr())
         GX2Invalidate(GX2_INVALIDATE_TEXTURE, getMipPtr(), getMipByteSize());
+}
+
+void TextureData::copyTo_(const TextureData* dst, s32 dst_slice, s32 dst_mip_level, s32 src_slice, s32 src_mip_level, bool restore_state) const
+{
+  //SEAD_ASSERT( dst != nullptr );
+  //SEAD_ASSERT( 0 < dst_mip_level || dst->getImagePtr() != nullptr );
+
+  //SEAD_ASSERT( dst_slice < static_cast< int >( dst->getSliceNum( dst_mip_level ) ) );
+  //SEAD_ASSERT( src_slice < static_cast< int >( getSliceNum( src_mip_level ) ) );
+
+  //SEAD_ASSERT( dst_mip_level < static_cast< int >( dst->getMipLevelNum() ) );
+  //SEAD_ASSERT( src_mip_level < static_cast< int >( getMipLevelNum() ) );
+
+  //SEAD_ASSERT( getWidth( src_mip_level ) == dst->getWidth( dst_mip_level ) );
+  //SEAD_ASSERT( getHeight( src_mip_level ) == dst->getHeight( dst_mip_level ) );
+
+    GX2CopySurface(
+        &mSurface,
+        src_mip_level,
+        src_slice,
+        &dst->mSurface,
+        dst_mip_level,
+        dst_slice
+    );
+
+    if (restore_state)
+        driver::GX2Resource::instance()->restoreContextState();
+}
+
+void TextureData::copyToAll(const TextureData* dst) const
+{
+    u32 slice_num = sead::Mathu::min(getSliceNum(), dst->getSliceNum());
+    u32 mip_level_num = sead::Mathu::min(getMipLevelNum(), dst->getMipLevelNum());
+
+    for (u32 slice = 0; slice < slice_num; slice++)
+        for (u32 mip_level = 0; mip_level < mip_level_num; mip_level++)
+            copyTo(dst, slice, mip_level);
+
+    driver::GX2Resource::instance()->restoreContextState();
 }
 
 void TextureData::initialize_(TextureType type, TextureFormat format, u32 width, u32 height, u32 slice_num, u32 mip_level_num, MultiSampleType multi_sample_type)

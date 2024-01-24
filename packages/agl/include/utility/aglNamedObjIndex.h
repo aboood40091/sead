@@ -13,14 +13,35 @@ public:
     INamedObjIndex();
     virtual ~INamedObjIndex();
 
-    virtual const sead::SafeString& getNamedObjName(s32) const = 0;
+    virtual const sead::SafeString& getNamedObjName(s32 index) const = 0;
     virtual s32 getNamedObjNum() const = 0;
+
+    void bind(INamedObjMgr* p_mgr);
+
+    s32 getIndex() const
+    {
+        return mIndex;
+    }
+
+    void setIndex(s32 index)
+    {
+        mIndex = index;
+    }
+
+    void setCallback(INamedObjIndexCallback* p_callback)
+    {
+        mpCallback = p_callback;
+    }
+
+    void syncNameToIndex();
 
 protected:
     sead::ListNode mListNode;
     INamedObjMgr* mpObjMgr;
-    u32 _48;
+    s32 mIndex;
     INamedObjIndexCallback* mpCallback;
+
+    friend class INamedObjMgr;
 };
 static_assert(sizeof(INamedObjIndex) == 0x50);
 

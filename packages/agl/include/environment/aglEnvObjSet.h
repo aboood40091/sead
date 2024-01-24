@@ -1,6 +1,5 @@
 #pragma once
 
-#include <environment/aglEnvObj.h>
 #include <environment/aglEnvObjBuffer.h>
 #include <hostio/seadHostIODummy.h>
 #include <utility/aglNamedObjIndex.h>
@@ -11,9 +10,10 @@ namespace agl { namespace env {
 
 class EnvObjMgr;
 
-class EnvObjSet : public EnvObjBuffer, public utl::INamedObjIndexCallback, public utl::IParameterList
+class EnvObjSet : public EnvObjBuffer, public utl::INamedObjIndexCallback, public utl::IParameterList, public sead::hostio::Node
 {
-    class Ref : public utl::IParameterObj, public EnvObj::Index
+protected:
+    class Ref : public utl::IParameterObj
     {
     public:
         Ref()
@@ -24,6 +24,7 @@ class EnvObjSet : public EnvObjBuffer, public utl::INamedObjIndexCallback, publi
         virtual bool isApply_(utl::ResParameterObj obj) const;
 
     private:
+        EnvObj::Index mEnvIndex;
         utl::Parameter< sead::FixedSafeString<32> > mType;
 
         friend class EnvObjSet;
@@ -33,6 +34,8 @@ class EnvObjSet : public EnvObjBuffer, public utl::INamedObjIndexCallback, publi
 public:
     EnvObjSet();
     virtual ~EnvObjSet();
+
+    void bind(EnvObjMgr* p_env_mgr);
 
     virtual void allocBuffer(const AllocateArg& arg, sead::Heap* heap);
 
@@ -58,7 +61,7 @@ public:
         return *mName;
     }
 
-    void pushBack(EnvObj* p_obj);
+    bool pushBack(EnvObj* p_obj);
 
 protected:
     utl::Parameter< sead::FixedSafeString<32> > mName;
@@ -66,6 +69,8 @@ protected:
     EnvObjMgr* mpEnvObjMgr;
     utl::IParameterObj mSetting;
     sead::Buffer<Ref> mObjRefArrayBuffer;
+
+    friend class EnvObjMgr;
 };
 static_assert(sizeof(EnvObjSet) == 0x1DC);
 

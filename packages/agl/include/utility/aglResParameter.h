@@ -22,6 +22,11 @@ public:
         return ptr()->mNameHash;
     }
 
+    bool isApply(u32 name_hash)
+    {
+        return getParameterNameHash() == name_hash;
+    }
+
     const void* getValue() const
     {
         return (const void*)(ptr() + 1);
@@ -67,7 +72,27 @@ public:
 
     ResParameter getResParameter(u32 index) const;
 
-    inline s32 searchIndex(u32 name_hash) const; // TODO
+    s32 searchIndex(u32 name_hash) const
+    {
+        for (constIterator itr = begin(), itr_end = end(); itr != itr_end; ++itr)
+            if (name_hash == itr->mNameHash)
+                return itr.getIndex();
+
+        return -1;
+    }
+
+    ResParameter searchResParameter(u32 name_hash) const
+    {
+        u32 index = searchIndex(name_hash);
+
+        constIterator itr = begin();
+        constIterator itr_end = constIterator(index, nullptr);
+
+        while (itr != itr_end)
+            ++itr;
+
+        return &(*itr);
+    }
 
     void modifyEndianObj(bool is_le);
 };

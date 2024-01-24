@@ -6,6 +6,7 @@
 namespace sead {
 
 class Heap;
+class XmlElement;
 
 }
 
@@ -36,18 +37,25 @@ public:
 
 public:
     ParameterBase();
-    virtual ~ParameterBase() { }
+    ParameterBase(const sead::SafeString& name, const sead::SafeString& label, IParameterObj* p_obj);
+    ParameterBase(const sead::SafeString& name, const sead::SafeString& label, const sead::SafeString& meta, IParameterObj* p_obj);
+
+    bool makeZero();
 
     void applyResource(ResParameter res);
     void applyResource(ResParameter res, f32 t);
 
-    virtual bool copy(const ParameterBase& parameter);
-    virtual void copyUnsafe(const ParameterBase& parameter);
-    virtual bool copyLerp(const ParameterBase& parameter_a, const ParameterBase& parameter_b, f32 t);
+    virtual bool copy(const ParameterBase& src);
+    virtual void copyUnsafe(const ParameterBase& src);
+    bool copyLerp(const ParameterBase& src_a, const ParameterBase& src_b, f32 t);
 
 private:
     template <typename T>
-    void copyLerp_(const ParameterBase& parameter_a, const ParameterBase& parameter_b, f32 t);
+    void copyLerp_(const ParameterBase& src_a, const ParameterBase& src_b, f32 t);
+
+public:
+    virtual void writeToXML(sead::XmlElement*, sead::Heap*) const;
+    virtual s32 readFromXML(const sead::XmlElement&);
 
 public:
     sead::SafeString getParameterName() const
@@ -102,6 +110,12 @@ public:
     {
     }
 
+    Parameter(const T& value, const sead::SafeString& name, const sead::SafeString& label, IParameterObj* p_obj)
+        : ParameterBase()
+    {
+        initialize(value, name, label, p_obj);
+    }
+
     Parameter(const T& value, const sead::SafeString& name, const sead::SafeString& label, const sead::SafeString& meta, IParameterObj* p_obj)
         : ParameterBase()
     {
@@ -116,13 +130,21 @@ public:
     virtual size_t size() const { return sizeof(mValue); }
     virtual ParameterBase* clone(sead::Heap* heap, IParameterObj* p_obj) const;
 
+    void initialize(const T& value, const sead::SafeString& name, const sead::SafeString& label, IParameterObj* p_obj)
+    {
+        initializeListNode(name, label, "", p_obj);
+        setValue(value);
+    }
+
     void initialize(const T& value, const sead::SafeString& name, const sead::SafeString& label, const sead::SafeString& meta, IParameterObj* p_obj)
     {
         initializeListNode(name, label, meta, p_obj);
         setValue(value);
     }
 
-    void setValue(const T& value);
+    template <typename U>
+    void setValue(const U& value);
+
     const T& getValue() const { return mValue; }
 
     T& operator*() { return mValue; }

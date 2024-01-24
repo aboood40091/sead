@@ -30,7 +30,7 @@ protected:
     sead::FixedSafeString<64> mType;
     u32 mVersion;
     void* mpDelegate; // sead delegate
-    sead::FixedSafeString<256> _d4;
+    sead::FixedSafeString<256> mSaveFilePath;
 };
 static_assert(sizeof(IParameterIO) == 0x1E0, "agl::utl::IParameterIO size mismatch");
 

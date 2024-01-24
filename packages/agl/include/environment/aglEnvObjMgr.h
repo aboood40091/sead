@@ -6,7 +6,11 @@
 #include <utility/aglParameterIO.h>
 #include <utility/aglResParameter.h>
 
-namespace agl { namespace env {
+namespace agl {
+
+class RenderBuffer;
+
+namespace env {
 
 class EnvObjMgr : public EnvObjBuffer, public utl::INamedObjMgr, public utl::IParameterIO
 {
@@ -14,11 +18,11 @@ class EnvObjMgr : public EnvObjBuffer, public utl::INamedObjMgr, public utl::IPa
     {
         sead::Matrix34f view_mtx;
         sead::Matrix44f proj_mtx;
-        f32 _70;
-        f32 _74;
+        f32 near;                       // Maybe
+        f32 far;                        // ^^
         u32 _78;
-        u32 _7c;
-        u32 _80;
+        sead::BitFlag32 _7c;            // ^^
+        RenderBuffer* p_render_buffer;
         f32 _84;
     };
     static_assert(sizeof(ViewInfo) == 0x88);
@@ -55,13 +59,19 @@ public:
     };
     static_assert(sizeof(InitArg) == 0x110);
 
-    class TypeNode : public utl::IParameterList
+    class TypeNode : public utl::IParameterList, public sead::hostio::Node
     {
     public:
         TypeNode();
 
+        virtual ~TypeNode()
+        {
+        }
+
+        void initialize(s32 type, EnvObjMgr* p_mgr, sead::Heap* heap);
+
     protected:
-        s32 mIndex;
+        s32 mType;
         EnvObjMgr* mpMgr;
     };
     static_assert(sizeof(TypeNode) == 0x88);
@@ -82,6 +92,11 @@ public:
 
     virtual void listenPropertyEventFromGroup(GroupEventType, Group*);
 
+    virtual const sead::SafeString& getSaveFilePath() const
+    {
+        return mSaveFilePath;
+    }
+
     virtual const sead::SafeString& getNamedObjName(s32 index, s32 type) const
     {
         return getEnvObj(type, index)->getEnvObjName();
@@ -89,10 +104,8 @@ public:
 
     virtual s32 getNamedObjNum(s32 type) const
     {
-        return getEnvObjNum(type);
+        return getEnvObjMaxNum(type);
     }
-
-    virtual void constructList();
 
 public:
     void initialize(const InitArg& arg, sead::Heap* heap = nullptr);
@@ -107,9 +120,17 @@ public:
         applyResource_(arc_a, arc_b, t);
     }
 
+    void reconstruct()
+    {
+        mFlag.setBit(0);
+        mFlag.setBit(1);
+    }
+
     void update();
 
     void updateView(const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, s32 view_index);
+
+    void constructList();
 
     const EnvObjSet& getEnvObjSet() const
     {
@@ -120,6 +141,8 @@ private:
     bool saveImpl_(const sead::SafeString&, u32, s32) const;
 
     void applyResource_(utl::ResParameterArchive arc_a, utl::ResParameterArchive arc_b, f32 t);
+
+    ShaderMode drawFog_(s32 view_index, const EnvObj& obj, f32 start, f32 end, const sead::Vector3f& direction, const sead::Color4f& color, ShaderMode mode) const;
 
 private:
     sead::BitFlag32 mFlag;
@@ -135,6 +158,8 @@ private:
     s32 mApplyResourceGroupIndex;
     u32 _45c;
     u32 _460;
+
+    friend class EnvObj;
 };
 static_assert(sizeof(EnvObjMgr) == 0x464, "agl::env::EnvObjMgr size mismatch");
 

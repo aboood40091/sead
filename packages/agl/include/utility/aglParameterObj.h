@@ -16,6 +16,25 @@ public:
 
     void pushBackListNode(ParameterBase* p_node);
 
+    void applyResParameterObj(ResParameterObj obj, IParameterList* p_list = nullptr)
+    {
+        applyResParameterObj_(obj, false, 1.0f, p_list);
+    }
+
+    void applyResParameterObjLerp(ResParameterObj obj, f32 t, IParameterList* p_list = nullptr)
+    {
+        applyResParameterObj_(obj, true, t, p_list);
+    }
+
+    void applyResParameterObj(ResParameterObj obj_a, ResParameterObj obj_b, f32 t, IParameterList* p_list = nullptr)
+    {
+        makeZero_();
+        applyResParameterObjLerp(obj_a, 1.0f - t, p_list);
+        applyResParameterObjLerp(obj_b, t, p_list);
+    }
+
+protected:
+    s32 makeZero_();
     void applyResParameterObj_(ResParameterObj obj, bool lerp, f32 t, IParameterList* p_list);
 
 protected:

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <environment/aglEnvObj.h>
+#include <utility/aglParameterDirection.h>
 
 namespace agl { namespace env {
 
@@ -13,9 +14,9 @@ class Fog : public EnvObj
 
 public:
     Fog();
-    virtual ~Fog();
+    virtual ~Fog() { }
 
-    virtual ShaderMode drawDebug(const sead::Matrix34f&, const sead::Matrix44f&, s32, ShaderMode mode) const;
+    virtual ShaderMode drawDebug(const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, s32 view_index, ShaderMode mode) const;
 
 public:
     f32 getStart() const { return *mStart; }
@@ -28,7 +29,7 @@ private:
     utl::Parameter<f32> mStart;
     utl::Parameter<f32> mEnd;
     utl::Parameter<sead::Color4f> mColor;
-    agl::utl::Parameter<sead::Vector3f> mDirection;
+    utl::ParameterDirection3f mDirection;
 };
 static_assert(sizeof(Fog) == 0x16C);
 

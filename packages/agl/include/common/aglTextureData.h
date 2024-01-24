@@ -91,6 +91,22 @@ public:
     void invalidateGPUCache() const;
 
 private:
+    void copyTo_(const TextureData* dst, s32 dst_slice, s32 dst_mip_level, s32 src_slice, s32 src_mip_level, bool restore_state) const;
+
+public:
+    void copyTo(const TextureData* dst, s32 slice, s32 mip_level) const
+    {
+        copyTo_(dst, slice, mip_level, slice, mip_level, false);
+    }
+
+    void copyTo(const TextureData* dst, s32 dst_slice, s32 dst_mip_level, s32 src_slice, s32 src_mip_level) const
+    {
+        copyTo_(dst, dst_slice, dst_mip_level, src_slice, src_mip_level, false);
+    }
+
+    void copyToAll(const TextureData* dst) const;
+
+private:
     void initialize_(TextureType type, TextureFormat format, u32 width, u32 height, u32 slice_num, u32 mip_level_num, MultiSampleType multi_sample_type);
     void initializeSize_(u32 width, u32 height, u32 slice_num);
 
@@ -99,7 +115,7 @@ public:
 
 private:
     TextureFormat mFormat;
-    GX2Surface mSurface;
+    mutable GX2Surface mSurface;
     u32 mMinWidth;
     u32 mMinHeight;
     u32 mMinSlice;

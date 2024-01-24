@@ -6,7 +6,7 @@ namespace agl { namespace utl {
 IParameterIO::IParameterIO(const sead::SafeString& type, u32 version)
     : IParameterList()
     , mpDelegate(nullptr)
-    , _d4(sead::SafeString::cEmptyString)
+    , mSaveFilePath(sead::SafeString::cEmptyString)
 {
     mType = type;
     mVersion = version;

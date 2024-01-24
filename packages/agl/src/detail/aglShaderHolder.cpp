@@ -1,5 +1,6 @@
 #include <detail/aglRootNode.h>
 #include <detail/aglShaderHolder.h>
+#include <lighting/aglLightMap.h>
 #include <postfx/aglDepthOfField.h>
 #include <resource/seadArchiveRes.h>
 #include <utility/aglImageFilter2D.h>
@@ -448,16 +449,16 @@ void ShaderHolder::initialize(sead::ArchiveRes* p_arc, sead::Heap* heap)
             break;
         case cShader_Lightmap:
         case cShader_LightmapClear:
-            p->createUniformBlock(3, heap);
+            p->createUniformBlock(lght::LightMap::cUniformBlockID_Num, heap);
             {
-                p->setUniformBlockName(0, "Light");
-                p->setUniformBlockName(1, "LightView");
-                p->setUniformBlockName(2, "LightMip");
+                p->setUniformBlockName(lght::LightMap::cUniformBlockID_Light,       "Light");
+                p->setUniformBlockName(lght::LightMap::cUniformBlockID_LightView,   "LightView");
+                p->setUniformBlockName(lght::LightMap::cUniformBlockID_LightMip,    "LightMip");
             }
-            p->createSamplerLocation(2, heap);
+            p->createSamplerLocation(lght::LightMap::cSampler_Num, heap);
             {
-                p->setSamplerLocationName(0, "cLUT");
-                p->setSamplerLocationName(1, "cNormal");
+                p->setSamplerLocationName(lght::LightMap::cSampler_LUT,             "cLUT");
+                p->setSamplerLocationName(lght::LightMap::cSampler_Normal,          "cNormal");
             }
             break;
         case cShader_LightPrePassPointLight:

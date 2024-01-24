@@ -2,10 +2,9 @@
 
 #include <container/seadBuffer.h>
 #include <container/seadSafeArray.h>
+#include <environment/aglEnvObj.h>
 
 namespace agl { namespace env {
-
-class EnvObj;
 
 class EnvObjBuffer
 {
@@ -44,7 +43,7 @@ public:
         }
 
     protected:
-        sead::SafeArray<s32, 64> mTypeMax;
+        sead::SafeArray<s32, EnvObj::cTypeMax> mTypeMax;
         s32 mTotal;
     };
     static_assert(sizeof(AllocateArg) == 0x108);
@@ -56,6 +55,21 @@ public:
     virtual void allocBuffer(const AllocateArg& arg, sead::Heap* heap);
     virtual void freeBuffer();
 
+    s32 getContainTotal() const
+    {
+        return mEnvObjPtrBuffer.size();
+    }
+
+    void sort(s32 type);
+
+    s32 searchBufferIndex(s32 type, const sead::SafeString& name) const;
+
+    template <typename T>
+    s32 searchBufferIndex(const sead::SafeString& name) const
+    {
+        return searchBufferIndex(T::getType(), name);
+    }
+
     s32 searchTypeIndex(s32 type, const sead::SafeString& name) const;
 
     template <typename T>
@@ -63,6 +77,8 @@ public:
     {
         return searchTypeIndex(T::getType(), name);
     }
+
+    s32 searchType(s32 buffer_index) const;
 
     EnvObj* getEnvObj(s32 type, s32 index)
     {
@@ -94,15 +110,26 @@ public:
         return sead::DynamicCast<T>(getEnvObj(T::getType(), index));
     }
 
-    s32 getEnvObjNum(s32 type) const
+    s32 getEnvObjStartIndex(s32 type) const
+    {
+        return mTypeInfo[type].mStartIndex;
+    }
+
+    template <typename T>
+    s32 getEnvObjStartIndex(s32 type) const
+    {
+        return getEnvObjStartIndex(T::getType());
+    }
+
+    s32 getEnvObjMaxNum(s32 type) const
     {
         return mTypeInfo[type].mMaxNum;
     }
 
     template <typename T>
-    s32 getEnvObjNum(s32 type) const
+    s32 getEnvObjMaxNum(s32 type) const
     {
-        return getEnvObjNum(T::getType());
+        return getEnvObjMaxNum(T::getType());
     }
 
 protected:
