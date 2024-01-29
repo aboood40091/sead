@@ -20,6 +20,14 @@ class RenderStep;
 
 class Layer : public sead::IDisposer
 {
+    enum Flag
+    {
+        cFlag_ClearColor    = 1 << 0,
+        cFlag_ClearAlpha    = 1 << 1,
+        cFlag_ClearDepth    = 1 << 2,
+        cFlag_Unk           = 1 << 3
+    };
+
 public:
     Layer();
     virtual ~Layer();
@@ -49,6 +57,36 @@ public:
     void setProjection(sead::Projection* p_projection)
     {
         mpProjection = p_projection;
+    }
+
+    void setClearColorEnable(bool enable)
+    {
+        mFlag.change(cFlag_ClearColor, enable);
+    }
+
+    bool getClearColorEnable() const
+    {
+        return mFlag.isOn(cFlag_ClearColor);
+    }
+
+    void setClearAlphaEnable(bool enable)
+    {
+        mFlag.change(cFlag_ClearAlpha, enable);
+    }
+
+    bool getClearAlphaEnable() const
+    {
+        return mFlag.isOn(cFlag_ClearAlpha);
+    }
+
+    void setClearDepthEnable(bool enable)
+    {
+        mFlag.change(cFlag_ClearDepth, enable);
+    }
+
+    bool getClearDepthEnable() const
+    {
+        return mFlag.isOn(cFlag_ClearDepth);
     }
 
     // ...
