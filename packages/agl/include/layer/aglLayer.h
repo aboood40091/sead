@@ -20,6 +20,7 @@ class RenderStep;
 
 class Layer : public sead::IDisposer
 {
+public:
     enum ClearFlag
     {
         cClearFlag_Color    = 1 << 0,
@@ -27,6 +28,17 @@ class Layer : public sead::IDisposer
         cClearFlag_Depth    = 1 << 2,
         cClearFlag_Unk      = 1 << 3    // Set in NSMBU, but never read by agl
     };
+
+    friend ClearFlag operator|(const ClearFlag& lhs, const ClearFlag& rhs)
+    {
+        return (ClearFlag)((u32)lhs | (u32)rhs);
+    }
+
+    friend ClearFlag& operator|=(ClearFlag& lhs, const ClearFlag& rhs)
+    {
+        lhs = lhs | rhs;
+        return lhs;
+    }
 
 public:
     Layer();
@@ -57,6 +69,16 @@ public:
     void setProjection(sead::Projection* p_projection)
     {
         mpProjection = p_projection;
+    }
+
+    void setClearFlag(ClearFlag flag)
+    {
+        mClearFlag.setDirect(flag);
+    }
+
+    ClearFlag getClearFlag() const
+    {
+        return ClearFlag(mClearFlag.getDirect());
     }
 
     void setClearColorEnable(bool enable)
