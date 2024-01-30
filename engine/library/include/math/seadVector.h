@@ -51,6 +51,8 @@ public:
     T dot(const Self& t) const;
     T squaredLength() const;
     T length() const;
+    T squaredDistance(const Self& v) const;
+    T distance(const Self& v) const;
 
     void add(const Self& a);
     void div(const Self& a);
@@ -122,6 +124,8 @@ public:
     T dot(const Self& t) const;
     T squaredLength() const;
     T length() const;
+    T squaredDistance(const Self& v) const;
+    T distance(const Self& v) const;
 
     void add(const Self& a);
     void multScalar(T t);
@@ -189,6 +193,8 @@ public:
     T dot(const Self& t) const;
     T squaredLength() const;
     T length() const;
+    T squaredDistance(const Self& v) const;
+    T distance(const Self& v) const;
 
     void multScalar(T t);
     void divScalar(T t);

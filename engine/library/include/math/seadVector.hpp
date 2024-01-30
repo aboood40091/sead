@@ -162,6 +162,20 @@ Vector2<T>::length() const
 }
 
 template <typename T>
+inline T
+Vector2<T>::squaredDistance(const Self& v) const
+{
+    return Vector2CalcCommon<T>::squaredDistance(*this, v);
+}
+
+template <typename T>
+inline T
+Vector2<T>::distance(const Self& v) const
+{
+    return Vector2CalcCommon<T>::distance(*this, v);
+}
+
+template <typename T>
 inline void
 Vector2<T>::add(const Self& a)
 {
@@ -369,6 +383,20 @@ inline T
 Vector3<T>::length() const
 {
     return Vector3CalcCommon<T>::length(*this);
+}
+
+template <typename T>
+inline T
+Vector3<T>::squaredDistance(const Self& v) const
+{
+    return Vector3CalcCommon<T>::squaredDistance(*this, v);
+}
+
+template <typename T>
+inline T
+Vector3<T>::distance(const Self& v) const
+{
+    return Vector3CalcCommon<T>::distance(*this, v);
 }
 
 template <typename T>
@@ -615,6 +643,20 @@ inline T
 Vector4<T>::length() const
 {
     return Vector4CalcCommon<T>::length(*this);
+}
+
+template <typename T>
+inline T
+Vector4<T>::squaredDistance(const Self& v) const
+{
+    return Vector4CalcCommon<T>::squaredDistance(*this, v);
+}
+
+template <typename T>
+inline T
+Vector4<T>::distance(const Self& v) const
+{
+    return Vector4CalcCommon<T>::distance(*this, v);
 }
 
 template <typename T>

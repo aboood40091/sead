@@ -23,6 +23,9 @@ public:
     static T squaredLength(const Base& v);
     static T length(const Base& v);
 
+    static T squaredDistance(const Base& v, const Base& t);
+    static T distance(const Base& v, const Base& t);
+
     static void lerp(Base& o, const Base& a, const Base& b, f32 ratio);
 
     static void multScalar(Base& o, const Base& v, T t);
@@ -54,6 +57,9 @@ public:
 
     static T squaredLength(const Base& v);
     static T length(const Base& v);
+
+    static T squaredDistance(const Base& v, const Base& t);
+    static T distance(const Base& v, const Base& t);
 
     static void lerp(Base& o, const Base& a, const Base& b, f32 ratio);
 
@@ -87,6 +93,9 @@ public:
 
     static T squaredLength(const Base& v);
     static T length(const Base& v);
+
+    static T squaredDistance(const Base& v, const Base& t);
+    static T distance(const Base& v, const Base& t);
 
     static void lerp(Base& o, const Base& a, const Base& b, f32 ratio);
 

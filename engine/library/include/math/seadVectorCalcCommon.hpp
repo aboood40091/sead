@@ -75,6 +75,22 @@ Vector2CalcCommon<T>::length(const Base& v)
 }
 
 template <typename T>
+inline T
+Vector2CalcCommon<T>::squaredDistance(const Base& v, const Base& t)
+{
+    T dx = v.x - t.x;
+    T dy = v.y - t.y;
+    return dx * dx + dy * dy;
+}
+
+template <typename T>
+inline T
+Vector2CalcCommon<T>::distance(const Base& v, const Base& t)
+{
+    return MathCalcCommon<T>::sqrt(squaredDistance(v, t));
+}
+
+template <typename T>
 inline void
 Vector2CalcCommon<T>::lerp(Base& o, const Base& a, const Base& b, f32 ratio)
 {
@@ -287,6 +303,45 @@ Vector3CalcCommon<f32>::length(const Base& v)
 #endif // cafe
 
 template <typename T>
+inline T
+Vector3CalcCommon<T>::squaredDistance(const Base& v, const Base& t)
+{
+    T dx = v.x - t.x;
+    T dy = v.y - t.y;
+    T dz = v.z - t.z;
+    return dx * dx + dy * dy + dz * dz;
+}
+
+#ifdef cafe
+
+template <>
+inline f32
+Vector3CalcCommon<f32>::squaredDistance(const Base& v, const Base& t)
+{
+    return ASM_VECSquareDistance((const Vec*)&v, (const Vec*)&t);
+}
+
+#endif // cafe
+
+template <typename T>
+inline T
+Vector3CalcCommon<T>::distance(const Base& v, const Base& t)
+{
+    return MathCalcCommon<T>::sqrt(squaredDistance(v, t));
+}
+
+#ifdef cafe
+
+template <>
+inline f32
+Vector3CalcCommon<f32>::distance(const Base& v, const Base& t)
+{
+    return ASM_VECDistance((const Vec*)&v, (const Vec*)&t);
+}
+
+#endif // cafe
+
+template <typename T>
 inline void
 Vector3CalcCommon<T>::lerp(Base& o, const Base& a, const Base& b, f32 ratio)
 {
@@ -471,6 +526,24 @@ inline T
 Vector4CalcCommon<T>::length(const Base& v)
 {
     return MathCalcCommon<T>::sqrt(squaredLength(v));
+}
+
+template <typename T>
+inline T
+Vector4CalcCommon<T>::squaredDistance(const Base& v, const Base& t)
+{
+    T dx = v.x - t.x;
+    T dy = v.y - t.y;
+    T dz = v.z - t.z;
+    T dw = v.w - t.w;
+    return dx * dx + dy * dy + dz * dz + dw * dw;
+}
+
+template <typename T>
+inline T
+Vector4CalcCommon<T>::distance(const Base& v, const Base& t)
+{
+    return MathCalcCommon<T>::sqrt(squaredDistance(v, t));
 }
 
 template <typename T>
