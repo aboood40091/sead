@@ -149,6 +149,13 @@ Vector2<T>::dot(const Self& t) const
 
 template <typename T>
 inline T
+Vector2<T>::squaredLength() const
+{
+    return Vector2CalcCommon<T>::squaredLength(*this);
+}
+
+template <typename T>
+inline T
 Vector2<T>::length() const
 {
     return Vector2CalcCommon<T>::length(*this);
@@ -348,6 +355,13 @@ inline T
 Vector3<T>::dot(const Self& t) const
 {
     return Vector3CalcCommon<T>::dot(*this, t);
+}
+
+template <typename T>
+inline T
+Vector3<T>::squaredLength() const
+{
+    return Vector3CalcCommon<T>::squaredLength(*this);
 }
 
 template <typename T>
@@ -587,6 +601,13 @@ inline T
 Vector4<T>::dot(const Self& t) const
 {
     return Vector4CalcCommon<T>::dot(*this, t);
+}
+
+template <typename T>
+inline T
+Vector4<T>::squaredLength() const
+{
+    return Vector4CalcCommon<T>::squaredLength(*this);
 }
 
 template <typename T>

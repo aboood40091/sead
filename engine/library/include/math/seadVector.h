@@ -49,6 +49,7 @@ public:
     bool operator!=(const Self& v) const;
 
     T dot(const Self& t) const;
+    T squaredLength() const;
     T length() const;
 
     void add(const Self& a);
@@ -119,6 +120,7 @@ public:
     bool operator!=(const Self& v) const;
 
     T dot(const Self& t) const;
+    T squaredLength() const;
     T length() const;
 
     void add(const Self& a);
@@ -185,6 +187,7 @@ public:
     bool operator!=(const Self& v) const;
 
     T dot(const Self& t) const;
+    T squaredLength() const;
     T length() const;
 
     void multScalar(T t);
