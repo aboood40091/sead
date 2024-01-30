@@ -20,12 +20,12 @@ class RenderStep;
 
 class Layer : public sead::IDisposer
 {
-    enum Flag
+    enum ClearFlag
     {
-        cFlag_ClearColor    = 1 << 0,
-        cFlag_ClearAlpha    = 1 << 1,
-        cFlag_ClearDepth    = 1 << 2,
-        cFlag_Unk           = 1 << 3
+        cClearFlag_Color    = 1 << 0,
+        cClearFlag_Alpha    = 1 << 1,
+        cClearFlag_Depth    = 1 << 2,
+        cClearFlag_Unk      = 1 << 3    // Set in NSMBU, but never read by agl
     };
 
 public:
@@ -61,32 +61,32 @@ public:
 
     void setClearColorEnable(bool enable)
     {
-        mFlag.change(cFlag_ClearColor, enable);
+        mClearFlag.change(cClearFlag_Color, enable);
     }
 
     bool getClearColorEnable() const
     {
-        return mFlag.isOn(cFlag_ClearColor);
+        return mClearFlag.isOn(cClearFlag_Color);
     }
 
     void setClearAlphaEnable(bool enable)
     {
-        mFlag.change(cFlag_ClearAlpha, enable);
+        mClearFlag.change(cClearFlag_Alpha, enable);
     }
 
     bool getClearAlphaEnable() const
     {
-        return mFlag.isOn(cFlag_ClearAlpha);
+        return mClearFlag.isOn(cClearFlag_Alpha);
     }
 
     void setClearDepthEnable(bool enable)
     {
-        mFlag.change(cFlag_ClearDepth, enable);
+        mClearFlag.change(cClearFlag_Depth, enable);
     }
 
     bool getClearDepthEnable() const
     {
-        return mFlag.isOn(cFlag_ClearDepth);
+        return mClearFlag.isOn(cClearFlag_Depth);
     }
 
     // ...
@@ -102,7 +102,7 @@ protected:
     DisplayType mDisplayType;
     u32 mRenderDisplayFlag;
     u32 mDisplayType2; // ... ?
-    sead::BitFlag32 mFlag;
+    sead::BitFlag32 mClearFlag;
     s32 mIndex;
     u32 _68;
     sead::Color4f mClearColor;
