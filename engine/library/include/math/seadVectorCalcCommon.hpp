@@ -257,6 +257,17 @@ Vector3CalcCommon<T>::squaredLength(const Base& v)
     return v.x * v.x + v.y * v.y + v.z * v.z;
 }
 
+#ifdef cafe
+
+template <>
+inline f32
+Vector3CalcCommon<f32>::squaredLength(const Base& v)
+{
+    return ASM_VECSquareMag((const Vec*)&v);
+}
+
+#endif // cafe
+
 template <typename T>
 inline T
 Vector3CalcCommon<T>::length(const Base& v)
