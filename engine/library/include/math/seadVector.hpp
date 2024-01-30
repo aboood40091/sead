@@ -77,6 +77,22 @@ Vector2<T>::operator-() const
 
 template <typename T>
 inline Vector2<T>&
+Vector2<T>::operator*=(T t)
+{
+    Vector2CalcCommon<T>::multScalar(*this, *this, t);
+    return *this;
+}
+
+template <typename T>
+inline Vector2<T>&
+Vector2<T>::operator/=(T t)
+{
+    Vector2CalcCommon<T>::divScalar(*this, *this, t);
+    return *this;
+}
+
+template <typename T>
+inline Vector2<T>&
 Vector2<T>::operator+=(const Self& v)
 {
     Vector2CalcCommon<T>::add(*this, *this, v);
@@ -269,6 +285,22 @@ Vector3<T>::operator-() const
     Self o;
     Vector3CalcCommon<T>::neg(o, *this);
     return o;
+}
+
+template <typename T>
+inline Vector3<T>&
+Vector3<T>::operator*=(T t)
+{
+    Vector3CalcCommon<T>::multScalar(*this, *this, t);
+    return *this;
+}
+
+template <typename T>
+inline Vector3<T>&
+Vector3<T>::operator/=(T t)
+{
+    Vector3CalcCommon<T>::divScalar(*this, *this, t);
+    return *this;
 }
 
 template <typename T>
@@ -491,6 +523,22 @@ Vector4<T>::operator-() const
     Self o;
     Vector4CalcCommon<T>::neg(o, *this);
     return o;
+}
+
+template <typename T>
+inline Vector4<T>&
+Vector4<T>::operator*=(T t)
+{
+    Vector4CalcCommon<T>::multScalar(*this, *this, t);
+    return *this;
+}
+
+template <typename T>
+inline Vector4<T>&
+Vector4<T>::operator/=(T t)
+{
+    Vector4CalcCommon<T>::divScalar(*this, *this, t);
+    return *this;
 }
 
 template <typename T>

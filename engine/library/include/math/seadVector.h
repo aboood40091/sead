@@ -36,6 +36,8 @@ public:
     Self operator-(const Self& v) const;
     Self operator-() const;
 
+    Self& operator*=(T t);
+    Self& operator/=(T t);
     Self& operator+=(const Self& v);
     Self& operator-=(const Self& v);
     Self& operator=(const Self& v);
@@ -107,6 +109,8 @@ public:
     Self operator-(const Self& v) const;
     Self operator-() const;
 
+    Self& operator*=(T t);
+    Self& operator/=(T t);
     Self& operator+=(const Self& v);
     Self& operator-=(const Self& v);
     Self& operator=(const Self& v);
@@ -171,6 +175,8 @@ public:
     Self operator-(const Self& v) const;
     Self operator-() const;
 
+    Self& operator*=(T t);
+    Self& operator/=(T t);
     Self& operator+=(const Self& v);
     Self& operator-=(const Self& v);
     Self& operator=(const Self& v);
