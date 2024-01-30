@@ -74,7 +74,7 @@ protected:
 static_assert(sizeof(Renderer) == 0xF78, "agl::lyr::Renderer size mismatch");
 
 template <typename T>
-T* Renderer::createLayer<T>(s32 layer_index, const sead::SafeString& name, DisplayType display_type, sead::Heap* heap)
+T* Renderer::createLayer(s32 layer_index, const sead::SafeString& name, DisplayType display_type, sead::Heap* heap)
 {
     T* p_layer = new (heap, 4) T();
     initLayer_(p_layer, layer_index, name, display_type, heap);
