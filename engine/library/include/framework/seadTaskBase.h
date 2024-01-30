@@ -14,6 +14,7 @@
 namespace sead {
 
 class FaderTaskBase;
+class MethodTreeMgr;
 class MethodTreeNode;
 struct TaskConstructArg;
 class TaskEvent;
@@ -126,6 +127,8 @@ public:
         detachCalc();
         detachDraw();
     }
+
+    MethodTreeMgr* getMethodTreeMgr() const;
 
     template <typename T>
     T* getParameter() const
