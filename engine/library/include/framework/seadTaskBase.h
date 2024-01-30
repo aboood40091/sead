@@ -127,6 +127,11 @@ public:
         detachDraw();
     }
 
+    TaskMgr* getTaskMgr() const
+    {
+        return mTaskMgr;
+    }
+
 protected:
     TaskParameter* mParameter;
     BitFlag32 mInternalFlag;
