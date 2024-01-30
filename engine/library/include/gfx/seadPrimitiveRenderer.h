@@ -30,6 +30,7 @@ public:
         QuadArg& setCornerAndSize(const Vector3f& p, const Vector2f& size);
         QuadArg& setBoundBox(const BoundBox2f& box, f32 z);
         QuadArg& setColor(const Color4f& colorT, const Color4f& colorB);
+        QuadArg& setColor(const Color4f& color) { return setColor(color, color); }
         QuadArg& setColorHorizontal(const Color4f& colorL, const Color4f& colorR);
 
         const Vector3f& getCenter() const { return mCenter; }
@@ -88,7 +89,7 @@ public:
         CubeArg& setCornerAndSize(const Vector3f& p, const Vector3f& size);
         CubeArg& setBoundBox(const BoundBox3f& box);
         CubeArg& setColor(const Color4f& c0, const Color4f& c1) { mColor0 = c0; mColor1 = c1; return *this; }
-        CubeArg& setColor(const Color4f& color) { setColor(color, color); return *this; }
+        CubeArg& setColor(const Color4f& color) { return setColor(color, color); }
 
         const Vector3f& getCenter() const { return mCenter; }
         const Vector3f& getSize() const { return mSize; }
