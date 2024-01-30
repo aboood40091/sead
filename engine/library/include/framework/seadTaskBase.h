@@ -127,9 +127,29 @@ public:
         detachDraw();
     }
 
+    template <typename T>
+    T* getParameter() const
+    {
+        T* param = DynamicCast<T>(mParameter);
+        return param;
+    }
+
+    TaskBase* getParentTask() const
+    {
+        if (parent() != nullptr)
+            return parent()->val();
+        else
+            return nullptr;
+    }
+
     TaskMgr* getTaskMgr() const
     {
         return mTaskMgr;
+    }
+
+    Tag getTag() const
+    {
+        return mTag;
     }
 
 protected:
