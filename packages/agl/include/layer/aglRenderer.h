@@ -36,10 +36,13 @@ public:
 
     void removeDrawMethod(const DrawMethod* p_draw_method);
 
+    template <typename T>
+    T* createLayer(s32 layer_index, const sead::SafeString& name, DisplayType display_type, sead::Heap* heap);
+
     Layer* getLayer(s32 index) const { return mLayer[index]; }
 
 protected:
-    void initLayer_(Layer* layer, s32 layer_index, const sead::SafeString& name, DisplayType display_type, sead::Heap* heap);
+    void initLayer_(Layer* p_layer, s32 layer_index, const sead::SafeString& name, DisplayType display_type, sead::Heap* heap);
 
 protected:
     u32 _10;
@@ -69,5 +72,13 @@ protected:
     f32 _f70;
 };
 static_assert(sizeof(Renderer) == 0xF78, "agl::lyr::Renderer size mismatch");
+
+template <typename T>
+T* Renderer::createLayer<T>(s32 layer_index, const sead::SafeString& name, DisplayType display_type, sead::Heap* heap)
+{
+    T* p_layer = new (heap, 4) T();
+    initLayer_(p_layer, layer_index, name, display_type, heap);
+    return p_layer;
+}
 
 } }
