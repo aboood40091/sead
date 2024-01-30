@@ -172,6 +172,7 @@ public:
     Self operator-() const;
 
     Self& operator+=(const Self& v);
+    Self& operator-=(const Self& v);
     Self& operator=(const Self& v);
 
     bool operator==(const Self& v) const;

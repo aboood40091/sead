@@ -503,6 +503,14 @@ Vector4<T>::operator+=(const Self& v)
 
 template <typename T>
 inline Vector4<T>&
+Vector4<T>::operator-=(const Self& v)
+{
+    Vector4CalcCommon<T>::sub(*this, *this, v);
+    return *this;
+}
+
+template <typename T>
+inline Vector4<T>&
 Vector4<T>::operator=(const Self& v)
 {
     x = v.x;
