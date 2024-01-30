@@ -66,9 +66,19 @@ public:
         mpCamera = p_camera;
     }
 
+    sead::Camera* getCamera() const
+    {
+        return mpCamera;
+    }
+
     void setProjection(sead::Projection* p_projection)
     {
         mpProjection = p_projection;
+    }
+
+    sead::Projection* getProjection() const
+    {
+        return mpProjection;
     }
 
     void setClearFlag(ClearFlag flag)
