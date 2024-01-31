@@ -10,6 +10,12 @@ namespace sead {
 class SeparateHeap : public Heap
 {
 public:
+    // TODO: These should be inline
+    virtual const void* getStartAddress() const;
+    virtual const void* getEndAddress() const;
+    virtual size_t getSize() const;
+
+public:
     static SeparateHeap* create(const SafeString& name, u32 management_area_size, u32 allocate_area_size, Heap* parent = nullptr, bool enable_lock = false);
 };
 
