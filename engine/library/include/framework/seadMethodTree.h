@@ -16,7 +16,7 @@ class CriticalSection;
 template <typename T, typename U>
 class IDelegate2;
 
-class MethodTreeNode : public TTreeNode<MethodTreeNode*>, INamable, IDisposer
+class MethodTreeNode : public TTreeNode<MethodTreeNode*>, public INamable, public IDisposer
 {
     SEAD_RTTI_BASE(MethodTreeNode)
 

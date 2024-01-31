@@ -137,6 +137,8 @@ public:
         return param;
     }
 
+    void adjustHeapAll();
+
     TaskBase* getParentTask() const
     {
         if (parent() != nullptr)

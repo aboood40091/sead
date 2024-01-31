@@ -64,7 +64,7 @@ protected:
 
 public:
     bool isEmpty() const;
-    s32 size() const;
+    s32 size() const { return mCount; }
     void reverse();
     void shuffle();
     void shuffle(Random* random);

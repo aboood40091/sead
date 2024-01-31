@@ -120,6 +120,7 @@ public:
         {
             return mPtr->mData;
         }
+
         T* operator->() const
         {
             return &mPtr->mData;
@@ -142,10 +143,53 @@ public:
 
     protected:
         TListNode<T>* mPtr;
+
+        friend class constIterator;
     };
 
-    // TODO
-    class constIterator { };
+    class constIterator
+    {
+    public:
+        constIterator(const TListNode<T>* ptr)
+            : mPtr(ptr)
+        {
+        }
+
+        constIterator(const iterator& it)
+            : mPtr(it.mPtr)
+        {
+        }
+
+        constIterator& operator++()
+        {
+            mPtr = static_cast<const TListNode<T>*>(mPtr->next());
+            return *this;
+        }
+
+    public:
+        const T& operator*() const
+        {
+            return mPtr->mData;
+        }
+
+        const T* operator->() const
+        {
+            return &mPtr->mData;
+        }
+
+        friend bool operator==(const constIterator& it1, const constIterator& it2)
+        {
+            return it1.mPtr == it2.mPtr;
+        }
+
+        friend bool operator!=(const constIterator& it1, const constIterator& it2)
+        {
+            return it1.mPtr != it2.mPtr;
+        }
+
+    protected:
+        const TListNode<T>* mPtr;
+    };
 
     class robustIterator
     {
@@ -210,8 +254,17 @@ public:
     }
 
     iterator toIterator(TListNode<T>*) const;
-    constIterator constBegin() const;
-    constIterator constEnd() const;
+
+    constIterator constBegin() const
+    {
+        return constIterator(static_cast<TListNode<T>*>(mStartEnd.next()));
+    }
+
+    constIterator constEnd() const
+    {
+        return constIterator(static_cast<TListNode<T>*>(const_cast<ListNode*>(&mStartEnd)));
+    }
+
     constIterator toConstIterator(const TListNode<T>*) const;
 
     robustIterator robustBegin() const

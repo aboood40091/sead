@@ -136,10 +136,57 @@ public:
     protected:
         T* mPtr;
         s32 mOffset;
+
+        friend class constIterator;
     };
 
-    // TODO
-    class constIterator { };
+    class constIterator
+    {
+    public:
+        constIterator(const T* ptr, s32 offset)
+            : mPtr(ptr)
+            , mOffset(offset)
+        {
+        }
+
+        constIterator(const iterator& it)
+            : mPtr(it.mPtr)
+            , mOffset(it.mOffset)
+        {
+        }
+
+        constIterator& operator++()
+        {
+            const ListNode* next = static_cast<const ListNode*>(PtrUtil::addOffset(mPtr, mOffset))->next();
+            mPtr = static_cast<const T*>(PtrUtil::addOffset(next, -mOffset));
+            return *this;
+        }
+
+    public:
+        const T& operator*() const
+        {
+            return *mPtr;
+        }
+
+        const T* operator->() const
+        {
+            return mPtr;
+        }
+
+        friend bool operator==(const constIterator& it1, const constIterator& it2)
+        {
+            return it1.mPtr == it2.mPtr;
+        }
+
+        friend bool operator!=(const constIterator& it1, const constIterator& it2)
+        {
+            return it1.mPtr != it2.mPtr;
+        }
+
+    protected:
+        const T* mPtr;
+        s32 mOffset;
+    };
 
     class robustIterator
     {
@@ -207,8 +254,15 @@ public:
 
     iterator toIterator(T*) const;
 
-    constIterator constBegin() const;
-    constIterator constEnd() const;
+    constIterator constBegin() const
+    {
+        return constIterator(listNodeToObj(mStartEnd.next()), mOffset);
+    }
+
+    constIterator constEnd() const
+    {
+        return constIterator(listNodeToObj(&mStartEnd), mOffset);
+    }
 
     constIterator toConstIterator(const T*) const;
 

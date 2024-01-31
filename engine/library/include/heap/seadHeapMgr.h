@@ -56,7 +56,7 @@ public:
     static s32 getRootHeapNum() { return sRootHeaps.size(); }
     static void addRootHeap(Heap* heap);
     static const Arena* getArena();
-    static IndependentHeaps* getIndependentHeaps();
+    static IndependentHeaps* getIndependentHeaps() { return &sIndependentHeaps; }
     static bool isContainedInAnyHeap(const void* ptr) { return sInstancePtr->findContainHeap(ptr) != nullptr; }
 
   //IAllocCallback* setAllocCallback(IAllocCallback*);
