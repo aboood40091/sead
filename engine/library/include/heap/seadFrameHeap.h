@@ -14,17 +14,17 @@ public:
     virtual ~FrameHeap();
 
     virtual void destroy();
-    virtual u32 adjust();
+    virtual size_t adjust();
     virtual void* tryAlloc(size_t size, s32 alignment);
     virtual void free(void* ptr);
     virtual void* resizeFront(void*, size_t);
     virtual void* resizeBack(void*, size_t);
     virtual void freeAll();
-    virtual u32 getStartAddress() const;
-    virtual u32 getEndAddress() const;
-    virtual u32 getSize() const;
-    virtual u32 getFreeSize() const;
-    virtual u32 getMaxAllocatableSize(s32 alignment = 4) const;
+    virtual const void* getStartAddress() const;
+    virtual const void* getEndAddress() const;
+    virtual size_t getSize() const;
+    virtual size_t getFreeSize() const;
+    virtual size_t getMaxAllocatableSize(s32 alignment = 4) const;
     virtual bool isInclude(const void*) const;
     virtual bool isFreeable() const;
     virtual bool isResizable() const;

@@ -39,7 +39,7 @@ public:
     SEAD_RTTI_BASE(Heap)
 
     virtual void destroy() = 0;
-    virtual u32 adjust() = 0;
+    virtual size_t adjust() = 0;
 
     void* alloc(size_t size, s32 alignment)
     {
@@ -51,11 +51,11 @@ public:
     virtual void* resizeFront(void* ptr, size_t new_size) = 0;
     virtual void* resizeBack(void* ptr, size_t new_size) = 0;
     virtual void freeAll() = 0;
-    virtual u32 getStartAddress() const = 0;
-    virtual u32 getEndAddress() const = 0;
-    virtual u32 getSize() const = 0;
-    virtual u32 getFreeSize() const = 0;
-    virtual u32 getMaxAllocatableSize(s32 alignment = 4) const = 0;
+    virtual const void* getStartAddress() const = 0;
+    virtual const void* getEndAddress() const = 0;
+    virtual size_t getSize() const = 0;
+    virtual size_t getFreeSize() const = 0;
+    virtual size_t getMaxAllocatableSize(s32 alignment = 4) const = 0;
     Heap* getParent() const { return mParent; }
     virtual bool isInclude(const void* ptr) const = 0;
     HeapDirection getDirection() const { return mDirection; }
@@ -75,9 +75,9 @@ public:
     {
     }
 
+protected:
     virtual void genInformation_(hostio::Context* context);
 
-protected:
     Heap* findContainHeap_(const void* ptr);
     bool hasNoChild_() const;
     //static void setEnableDebugFillSystem_(Heap*, bool);
@@ -93,10 +93,10 @@ protected:
     void checkAccessThread_() const;
 
 public:
-    HeapList::constIterator childBegin() const;
-    HeapList::constIterator childEnd() const;
-    DisposerList::constIterator disposerBegin() const;
-    DisposerList::constIterator disposerEnd() const;
+    OffsetList<Heap>::constIterator childBegin() const;
+    OffsetList<Heap>::constIterator childEnd() const;
+    OffsetList<IDisposer>::constIterator disposerBegin() const;
+    OffsetList<IDisposer>::constIterator disposerEnd() const;
 
     void pushBackChild_(Heap*);
 
