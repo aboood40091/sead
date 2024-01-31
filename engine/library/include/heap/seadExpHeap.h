@@ -10,6 +10,9 @@ namespace sead {
 class ExpHeap : public Heap
 {
 public:
+    ExpHeap(const SafeString& name, Heap* parent, void* start, u32 size, HeapDirection direction, bool enable_lock);
+    virtual ~ExpHeap();
+
     virtual const void* getStartAddress() const;
     virtual const void* getEndAddress() const;
     virtual size_t getSize() const;
