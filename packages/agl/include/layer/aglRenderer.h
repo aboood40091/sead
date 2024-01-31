@@ -39,6 +39,8 @@ public:
     template <typename T>
     T* createLayer(s32 layer_index, const sead::SafeString& name, DisplayType display_type, sead::Heap* heap);
 
+    RenderBuffer* getRenderBuffer(s32 index) const { return mRenderBuffer[index]; }
+
     Layer* getLayer(s32 index) const { return mLayer[index]; }
 
 protected:
