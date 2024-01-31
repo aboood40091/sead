@@ -75,6 +75,10 @@ public:
 
     Thread* getCurrentThread() const;
     bool isMainThread() const;
+    Thread* getMainThread() const { return mMainThread; }
+
+    ThreadList::constIterator constBegin() const { return mList.constBegin(); }
+    ThreadList::constIterator constEnd() const { return mList.constEnd(); }
 
     static void quitAndWaitDoneMultipleThread(Thread **, s32, bool);
     static void waitDoneMultipleThread(Thread* const*, s32);
