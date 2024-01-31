@@ -64,7 +64,9 @@ public:
     void* getStackTop() const { return mStackTop; }
     void* getStackBottom() const { return PtrUtil::addOffset(mStackTop, mStackSize); }
 
-    s32 getState() const { return mState[0]; } // Temp
+    // Temp
+    s32 getState() const { return mState[0]; }
+    MessageQueue::Element getQuitMsg() const { return mQuitMsg; }
 
 protected:
     MessageQueue mMessageQueue;
