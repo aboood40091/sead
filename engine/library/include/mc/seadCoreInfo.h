@@ -99,7 +99,7 @@ public:
     {
     }
 
-    CoreIdMask(CoreId id)
+    explicit CoreIdMask(CoreId id)
         : mId(id)
     {
         mMask = getCoreMask_(mId);
