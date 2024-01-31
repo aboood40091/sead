@@ -107,8 +107,8 @@ public:
 
         iterator& operator++()
         {
-            ListNode* next = reinterpret_cast<ListNode*>((uintptr_t)mPtr + mOffset)->next();
-            mPtr = reinterpret_cast<T*>((uintptr_t)next - mOffset);
+            ListNode* next = reinterpret_cast<ListNode*>(PtrUtil::addOffset(mPtr, mOffset))->next();
+            mPtr = reinterpret_cast<T*>(PtrUtil::addOffset(next, -mOffset));
             return *this;
         }
 
@@ -193,14 +193,14 @@ public:
     public:
         robustIterator(T* ptr, s32 offset)
             : mPtr(ptr)
-            , mNext(reinterpret_cast<ListNode*>((uintptr_t)ptr + offset)->next())
+            , mNext(reinterpret_cast<ListNode*>(PtrUtil::addOffset(ptr, offset))->next())
             , mOffset(offset)
         {
         }
 
         robustIterator& operator++()
         {
-            mPtr = reinterpret_cast<T*>((uintptr_t)mNext - mOffset);
+            mPtr = reinterpret_cast<T*>(PtrUtil::addOffset(mNext, -mOffset));
             mNext = mNext->next();
             return *this;
         }
@@ -298,12 +298,12 @@ protected:
 
     ListNode* objToListNode(const T* obj) const
     {
-        return reinterpret_cast<ListNode*>((uintptr_t)obj + mOffset);
+        return reinterpret_cast<ListNode*>(PtrUtil::addOffset(obj, mOffset));
     }
 
     T* listNodeToObj(const ListNode* node) const
     {
-        return reinterpret_cast<T*>((uintptr_t)node - mOffset);
+        return reinterpret_cast<T*>(PtrUtil::addOffset(node, -mOffset));
     }
 
     T* listNodeToObjWithNullCheck(const ListNode* node) const
