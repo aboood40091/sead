@@ -6,6 +6,7 @@
 #include <heap/seadHeap.h>
 #include <hostio/seadHostIODummy.h>
 #include <prim/seadNamable.h>
+#include <thread/seadMessageQueue.h>
 #include <thread/seadThreadLocalStorage.h>
 #include <time/seadTickSpan.h>
 
@@ -41,12 +42,12 @@ public:
     //...
 
 private:
-    u32 mMessageQueue[0x40 / sizeof(u32)]; // MessageQueue
+    MessageQueue mMessageQueue;
     s32 mStackSize;
     ThreadListNode mListNode;
     Heap* mCurrentHeap;
-    u32 mBlockType; // MessageQueue::BlockType
-    s32 mQuitMsg; // MessageQueue::Element
+    MessageQueue::BlockType mBlockType;
+    MessageQueue::Element mQuitMsg;
     u32 mID;
     u32 mState[1]; // State
     s32 mCoreNo;
