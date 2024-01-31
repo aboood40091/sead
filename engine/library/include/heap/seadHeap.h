@@ -93,10 +93,25 @@ protected:
     void checkAccessThread_() const;
 
 public:
-    OffsetList<Heap>::constIterator childBegin() const;
-    OffsetList<Heap>::constIterator childEnd() const;
-    OffsetList<IDisposer>::constIterator disposerBegin() const;
-    OffsetList<IDisposer>::constIterator disposerEnd() const;
+    OffsetList<Heap>::constIterator childBegin() const
+    {
+        return mChildren.constBegin();
+    }
+
+    OffsetList<Heap>::constIterator childEnd() const
+    {
+        return mChildren.constEnd();
+    }
+
+    OffsetList<IDisposer>::constIterator disposerBegin() const
+    {
+        return mDisposerList.constBegin();
+    }
+
+    OffsetList<IDisposer>::constIterator disposerEnd() const
+    {
+        return mDisposerList.constEnd();
+    }
 
     void pushBackChild_(Heap*);
 
