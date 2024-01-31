@@ -16,6 +16,7 @@
 
 namespace sead {
 
+class CoreIdMask;
 class Thread;
 
 typedef TList<Thread*> ThreadList;
@@ -26,22 +27,46 @@ class Thread : public IDisposer, public INamable
 public:
     virtual ~Thread();
 
-    virtual void destroy();
-    virtual bool sendMessage(s32, u32); // sendMessage(MessageQueue::Element, MessageQueue::BlockType)
-    virtual s32 recvMessage(u32); // MessageQueue::Element recvMessage(MessageQueue::BlockType)
+    virtual void destroy() { waitDone(); }
+    virtual bool sendMessage(MessageQueue::Element, MessageQueue::BlockType);
+    virtual MessageQueue::Element recvMessage(MessageQueue::BlockType);
     virtual bool start();
     virtual void quit(bool);
+    bool isDone() const;
     virtual void waitDone();
-    virtual void quitAndDestroySingleThread(bool is_jam);
-    //...
-
-    Heap* getCurrentHeap() const { return mCurrentHeap; }
-
+    virtual void quitAndDestroySingleThread(bool is_jam) { quitAndWaitDoneSingleThread(is_jam); }
+    virtual void quitAndWaitDoneSingleThread(bool is_jam);
     static void sleep(TickSpan span);
+    static void yield();
+    u32 getID() const { return mID; }
+    Heap* getCurrentHeap() const { return mCurrentHeap; }
+    virtual void setPriority(s32);
+    virtual s32 getPriority() const;
+    virtual MessageQueue::BlockType getBlockType() const { return mBlockType; }
+    virtual s32 getStackSize() const { return mStackSize; }
+    virtual s32 calcStackUsedSizePeak() const;
+    void checkStackOverFlow();
+    const CoreIdMask& getAffinity() const;
+    void setAffinity(const CoreIdMask&);
 
-    //...
+protected:
+    ThreadListNode* getListNode();
+    void setCurrentHeap_(Heap*);
+    void run_();
+    virtual void calc_(MessageQueue::Element) = 0;
+    void initStackCheck_();
+    virtual u32* getStackCheckStartAddress_() const;
+#ifdef cafe
+    static void cafeThreadFunc_(void*);
+#endif // cafe
 
-private:
+public:
+    void* getStackTop() const { return mStackTop; }
+    void* getStackBottom() const { return PtrUtil::addOffset(mStackTop, mStackSize); }
+
+    s32 getState() const { return mState[0]; } // Temp
+
+protected:
     MessageQueue mMessageQueue;
     s32 mStackSize;
     ThreadListNode mListNode;
@@ -49,8 +74,8 @@ private:
     MessageQueue::BlockType mBlockType;
     MessageQueue::Element mQuitMsg;
     u32 mID;
-    u32 mState[1]; // State
-    s32 mCoreNo;
+    s32 mState[1]; // State
+    u32 mCoreIdMask;
 #ifdef cafe
     OSThread* mThreadInner;
 #endif // cafe

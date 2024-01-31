@@ -27,7 +27,7 @@ bool TaskMgr::changeTaskState_(TaskBase* task, TaskBase::State state)
 
             if (mPrepareThread != nullptr)
             {
-                if (mPrepareThread->sendMessage(1, 1))
+                if (mPrepareThread->sendMessage(1, MessageQueue::cNoBlock))
                     return true;
 
                 else
