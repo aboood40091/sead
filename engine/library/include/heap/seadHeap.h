@@ -103,6 +103,11 @@ public:
         return mChildren.constEnd();
     }
 
+    u32 childSize() const
+    {
+        return mChildren.size();
+    }
+
     OffsetList<IDisposer>::constIterator disposerBegin() const
     {
         return mDisposerList.constBegin();
@@ -111,6 +116,11 @@ public:
     OffsetList<IDisposer>::constIterator disposerEnd() const
     {
         return mDisposerList.constEnd();
+    }
+
+    u32 disposerSize() const
+    {
+        return mDisposerList.size();
     }
 
     void pushBackChild_(Heap*);
