@@ -17,7 +17,7 @@ public:
     AudioSoundHeapCafe(size_t size, Heap* heap);
     ~AudioSoundHeapCafe();
 
-    void setSoundDataManagement(nw::snd::SoundDataManager& soundDataMgr, nw::snd::SoundArchive& soundArchive);
+    void setSoundDataManagement(nw::snd::SoundDataManager& mgr, nw::snd::SoundArchive& arc);
 
     bool isCrossingMemoryBoundary() const;
 
