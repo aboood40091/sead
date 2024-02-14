@@ -8,7 +8,10 @@ namespace sead {
 class PtrUtil
 {
 public:
-    static void* roundUpPow2(const void*, u32);
+    static void* roundUpPow2(const void* ptr, u32 alignment)
+    {
+        return (void*)(uintptr(ptr) + (alignment - 1) & ~(alignment - 1));
+    }
     static void* roundUpN(const void*, u32);
     static void* roundDownPow2(const void*, u32);
     static void* roundDownN(const void*, u32);
