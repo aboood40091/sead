@@ -68,7 +68,7 @@ void PrimitiveShape::setUpStreamQuad_(sead::Heap* heap)
     const u32 cIdxNum = 6;
     const u32 cIdxLineNum = 4;
 
-    mVtxQuad.allocBuffer(cVtxNum * sizeof(Vertex), heap);
+    mVtxQuad.allocBuffer(cVtxNum, heap);
     {
         sead::UnsafeArray<Vertex, cVtxNum> vertices;
 
@@ -118,7 +118,7 @@ void PrimitiveShape::setUpStreamQuad_(sead::Heap* heap)
     mVtxBufferQuad.setUpBuffer(mVtxQuad.getBufferPtr(), sizeof(Vertex), cVtxNum * sizeof(Vertex));
     setUpStreams_(&mVtxBufferQuad);
 
-    mIdxQuad.allocBuffer(cIdxNum * sizeof(u32), heap, GX2_INDEX_BUFFER_ALIGNMENT);
+    mIdxQuad.allocBuffer(cIdxNum, heap, GX2_INDEX_BUFFER_ALIGNMENT);
     {
         sead::UnsafeArray<u32, cIdxNum> indices;
 
@@ -134,7 +134,7 @@ void PrimitiveShape::setUpStreamQuad_(sead::Heap* heap)
     }
     mIdxStreamQuad.setUpStream(mIdxQuad.getBufferPtr(), cIdxNum);
 
-    mIdxLineQuad.allocBuffer(cIdxLineNum * sizeof(u32), heap, GX2_INDEX_BUFFER_ALIGNMENT);
+    mIdxLineQuad.allocBuffer(cIdxLineNum, heap, GX2_INDEX_BUFFER_ALIGNMENT);
     {
         sead::UnsafeArray<u32, cIdxLineNum> indices;
 
@@ -157,7 +157,7 @@ void PrimitiveShape::setUpStreamQuadTriangle_(sead::Heap* heap)
     const u32 cIdxNum = 3;
     const u32 cIdxLineNum = 3;
 
-    mVtxQuadTriangle.allocBuffer(cVtxNum * sizeof(Vertex), heap);
+    mVtxQuadTriangle.allocBuffer(cVtxNum, heap);
     {
         sead::UnsafeArray<Vertex, cVtxNum> vertices;
 
@@ -198,7 +198,7 @@ void PrimitiveShape::setUpStreamQuadTriangle_(sead::Heap* heap)
     mVtxBufferQuadTriangle.setUpBuffer(mVtxQuadTriangle.getBufferPtr(), sizeof(Vertex), cVtxNum * sizeof(Vertex));
     setUpStreams_(&mVtxBufferQuadTriangle);
 
-    mIdxQuadTriangle.allocBuffer(cIdxNum * sizeof(u32), heap, GX2_INDEX_BUFFER_ALIGNMENT);
+    mIdxQuadTriangle.allocBuffer(cIdxNum, heap, GX2_INDEX_BUFFER_ALIGNMENT);
     {
         sead::UnsafeArray<u32, cIdxNum> indices;
 
@@ -211,7 +211,7 @@ void PrimitiveShape::setUpStreamQuadTriangle_(sead::Heap* heap)
     }
     mIdxStreamQuadTriangle.setUpStream(mIdxQuadTriangle.getBufferPtr(), cIdxNum);
 
-    mIdxLineQuadTriangle.allocBuffer(cIdxLineNum * sizeof(u32), heap, GX2_INDEX_BUFFER_ALIGNMENT);
+    mIdxLineQuadTriangle.allocBuffer(cIdxLineNum, heap, GX2_INDEX_BUFFER_ALIGNMENT);
     {
         sead::UnsafeArray<u32, cIdxLineNum> indices;
 
