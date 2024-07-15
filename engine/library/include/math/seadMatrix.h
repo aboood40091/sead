@@ -168,6 +168,7 @@ public:
     void makeRT(const Vec3& r, const Vec3& t);
     void makeRTIdx(const Vector3<u32>& r, const Vec3& t);
     void makeRzxyIdx(u32 xr, u32 yr, u32 zr);
+    void makeRzxyIdx(const Vector3<u32>& r);
     void makeRzxyTIdx(const Vector3<u32>& r, const Vec3& t);
     void makeS(const Vec3& s);
     void makeS(T x, T y, T z);

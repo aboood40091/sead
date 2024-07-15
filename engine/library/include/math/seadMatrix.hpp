@@ -447,6 +447,13 @@ Matrix34<T>::makeRzxyIdx(u32 xr, u32 yr, u32 zr)
 
 template <typename T>
 inline void
+Matrix34<T>::makeRzxyIdx(const Vector3<u32>& r)
+{
+    Matrix34CalcCommon<T>::makeRzxyIdx(*this, r.x, r.y, r.z);
+}
+
+template <typename T>
+inline void
 Matrix34<T>::makeRzxyTIdx(const Vector3<u32>& r, const Vec3& t)
 {
     Matrix34CalcCommon<T>::makeRzxyTIdx(*this, r, t);
