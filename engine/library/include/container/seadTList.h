@@ -59,7 +59,9 @@ public:
 
     void pushBack(TListNode<T>* obj)
     {
-        obj->erase();
+        if (obj->mList != nullptr)
+            obj->mList->erase(obj);
+
         obj->mList = this;
         ListImpl::pushBack(obj);
     }
