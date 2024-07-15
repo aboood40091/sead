@@ -183,7 +183,9 @@ public:
     void toQuat(Quat& q) const;
 
     void scaleAllElements(T s);
+    void scaleBases(T s);
     void scaleBases(T sx, T sy, T sz);
+    void scaleBases(const Vec3& s);
 
     void multScaleLocal(const Vec3& s);
     void setMultScaleLocal(const Self& n, const Vec3& s);

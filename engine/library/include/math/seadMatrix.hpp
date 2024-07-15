@@ -673,9 +673,23 @@ Matrix34<T>::scaleAllElements(T s)
 
 template <typename T>
 inline void
+Matrix34<T>::scaleBases(T s)
+{
+    Matrix34CalcCommon<T>::scaleBases(*this, s, s, s);
+}
+
+template <typename T>
+inline void
 Matrix34<T>::scaleBases(T sx, T sy, T sz)
 {
     Matrix34CalcCommon<T>::scaleBases(*this, sx, sy, sz);
+}
+
+template <typename T>
+inline void
+Matrix34<T>::scaleBases(const Vec3& s)
+{
+    Matrix34CalcCommon<T>::scaleBases(*this, s.x, s.y, s.z);
 }
 
 template <typename T>
