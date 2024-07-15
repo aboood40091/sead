@@ -191,6 +191,11 @@ public:
     void multTranslationLocal(const Vec3& t);
     void setMultTranslationLocal(const Self& n, const Vec3& t);
 
+    void multTranslationWorld(const Vec3& t);
+    void multTranslationWorld(T x, T y, T z);
+    void setMultTranslationWorld(const Vec3& t, const Self& n);
+    void setMultTranslationWorld(T x, T y, T z, const Self& n);
+
     void getBase(Vec3& o, s32 axis) const;
     Vec3 getBase(s32 axis) const;
     void getRow(Vec4& o, s32 row) const;

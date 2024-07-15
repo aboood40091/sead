@@ -568,6 +568,56 @@ Matrix34<T>::setMultTranslationLocal(const Self& n, const Vec3& t)
 
 template <typename T>
 inline void
+Matrix34<T>::multTranslationWorld(const Vec3& t)
+{
+    Matrix34CalcCommon<T>::multTranslationWorld(*this, t, *this);
+}
+
+template <typename T>
+inline void
+Matrix34<T>::multTranslationWorld(T x, T y, T z)
+{
+    Matrix34CalcCommon<T>::multTranslationWorld(*this, Vec3(x, y, z), *this);
+}
+
+#ifdef cafe
+
+template <>
+inline void
+Matrix34<f32>::multTranslationWorld(f32 x, f32 y, f32 z)
+{
+    ASM_MTXTransApply(m, m, x, y, z);
+}
+
+#endif // cafe
+
+template <typename T>
+inline void
+Matrix34<T>::setMultTranslationWorld(const Vec3& t, const Self& n)
+{
+    Matrix34CalcCommon<T>::multTranslationWorld(*this, t, n);
+}
+
+template <typename T>
+inline void
+Matrix34<T>::setMultTranslationWorld(T x, T y, T z, const Self& n)
+{
+    Matrix34CalcCommon<T>::multTranslationWorld(*this, Vec3(x, y, z), n);
+}
+
+#ifdef cafe
+
+template <>
+inline void
+Matrix34<f32>::setMultTranslationWorld(f32 x, f32 y, f32 z, const Self& n)
+{
+    ASM_MTXTransApply(const_cast<f32(*)[4]>(n.m), m, x, y, z);
+}
+
+#endif // cafe
+
+template <typename T>
+inline void
 Matrix34<T>::getBase(Vec3& o, s32 axis) const
 {
     Matrix34CalcCommon<T>::getBase(o, *this, axis);
