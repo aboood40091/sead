@@ -31,9 +31,8 @@ public:
 
     void erase()
     {
-        TList<T>* list = mList;
-        if (list)
-            list->erase(this);
+        if (mList != nullptr)
+            mList->erase(this);
     }
 
     T mData;
