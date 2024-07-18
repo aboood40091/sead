@@ -4,11 +4,11 @@ namespace sead {
 
 template <typename Key>
 TreeMapNode<Key>*
-TreeMapImpl<Key>::insert(TreeMapNode<Key>* h, TreeMapNode<Key>* node)
+TreeMapImpl<Key>::insert(Node* h, Node* node)
 {
     if (h == nullptr)
     {
-        node->mColor_ = true;
+        node->mColor_ = Node::cRed_;
         node->mLeft_ = nullptr;
         node->mRight_ = nullptr;
     }
@@ -53,7 +53,7 @@ TreeMapImpl<Key>::insert(TreeMapNode<Key>* h, TreeMapNode<Key>* node)
 
 template <typename Key>
 TreeMapNode<Key>*
-TreeMapImpl<Key>::find(TreeMapNode<Key>* node, const Key& key) const
+TreeMapImpl<Key>::find(Node* node, const Key& key) const
 {
     while (node != nullptr)
     {
@@ -70,31 +70,31 @@ TreeMapImpl<Key>::find(TreeMapNode<Key>* node, const Key& key) const
 
 template <typename Key>
 inline TreeMapNode<Key>*
-TreeMapImpl<Key>::rotateLeft(TreeMapNode<Key>* h)
+TreeMapImpl<Key>::rotateLeft(Node* h)
 {
-    TreeMapNode<Key>* n = h->mRight_;
+    Node* n = h->mRight_;
     h->mRight_ = n->mLeft_;
     n->mLeft_ = h;
     n->mColor_ = h->mColor_;
-    h->mColor_ = true;
+    h->mColor_ = Node::cRed_;
     return n;
 }
 
 template <typename Key>
 inline TreeMapNode<Key>*
-TreeMapImpl<Key>::rotateRight(TreeMapNode<Key>* h)
+TreeMapImpl<Key>::rotateRight(Node* h)
 {
-    TreeMapNode<Key>* n = h->mLeft_;
+    Node* n = h->mLeft_;
     h->mLeft_ = n->mRight_;
     n->mRight_ = h;
     n->mColor_ = h->mColor_;
-    h->mColor_ = true;
+    h->mColor_ = Node::cRed_;
     return n;
 }
 
 template <typename Key>
 inline void
-TreeMapImpl<Key>::flipColors(TreeMapNode<Key>* h)
+TreeMapImpl<Key>::flipColors(Node* h)
 {
     h->mColor_ = !h->mColor_;
     h->mLeft_->mColor_ = !h->mLeft_->mColor_;
@@ -103,9 +103,11 @@ TreeMapImpl<Key>::flipColors(TreeMapNode<Key>* h)
 
 template <typename Key>
 inline bool
-TreeMapImpl<Key>::isRed(TreeMapNode<Key>* h)
+TreeMapImpl<Key>::isRed(Node* h)
 {
-    return h != nullptr && h->mColor_;
+    if (h == nullptr)
+        return false;
+    return h->mColor_ == Node::cRed_;
 }
 
 } // namespace sead

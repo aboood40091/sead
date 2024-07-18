@@ -13,7 +13,7 @@ public:
     {
         mLeft_ = nullptr;
         mRight_ = nullptr;
-        mColor_ = true;
+        mColor_ = cRed_;
     }
 
     virtual ~TreeMapNode()
@@ -26,36 +26,42 @@ public:
     TreeMapNode<Key>* mRight_;
     bool mColor_;
     Key mKey_;
+
+    static const bool cRed_ = true;
+    static const bool cBlack_ = false;
 };
 
 template <typename Key>
 class TreeMapImpl
 {
 public:
+    typedef TreeMapNode<Key> Node;
+
+public:
     TreeMapImpl()
         : mRoot(nullptr)
     {
     }
 
-    void insert(TreeMapNode<Key>* node)
+    void insert(Node* node)
     {
         mRoot = insert(mRoot, node);
-        mRoot->mColor_ = false;
+        mRoot->mColor_ = Node::cBlack_;
     }
 
-    TreeMapNode<Key>* insert(TreeMapNode<Key>* h, TreeMapNode<Key>* node);
+    Node* insert(Node* h, Node* node);
 
-    TreeMapNode<Key>* find(const Key& key) const
+    Node* find(const Key& key) const
     {
         return find(mRoot, key);
     }
 
-    TreeMapNode<Key>* find(TreeMapNode<Key>* node, const Key& key) const;
+    Node* find(Node* node, const Key& key) const;
 
-    static TreeMapNode<Key>* rotateLeft(TreeMapNode<Key>* h);
-    static TreeMapNode<Key>* rotateRight(TreeMapNode<Key>* h);
-    static void flipColors(TreeMapNode<Key>* h);
-    static bool isRed(TreeMapNode<Key>* h);
+    static Node* rotateLeft(Node* h);
+    static Node* rotateRight(Node* h);
+    static void flipColors(Node* h);
+    static bool isRed(Node* h);
 
     template <typename T> // T = {*}Delegate1<..., TreeMapNode<Key>*>
     void forEach(const T& fun) const
@@ -65,7 +71,7 @@ public:
     }
 
     template <typename T> // T = {*}Delegate1<..., TreeMapNode<Key>*>
-    static void forEach(TreeMapNode<Key>* node, const T& fun)
+    static void forEach(Node* node, const T& fun)
     {
         if (node->mLeft_ != nullptr)
             forEach(node->mLeft_, fun);
@@ -77,7 +83,7 @@ public:
     }
 
 protected:
-    TreeMapNode<Key>* mRoot;
+    Node* mRoot;
 };
 
 } // namespace sead
