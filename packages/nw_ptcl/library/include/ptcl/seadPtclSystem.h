@@ -23,6 +23,34 @@ enum
     cEftMaxGroup = nw::eft::EFT_GROUP_MAX
 };
 
+class Config : public nw::eft::Config
+{
+public:
+    Config()
+        : nw::eft::Config()
+        , mpHeap()
+        , mpViewerSysHeap(nullptr)
+        , _28()
+        , _29()
+        , _2a(7)
+        , _2b(1)
+        , _2c()
+        , _2d(0x12)
+    {
+    }
+
+//private:
+    ::sead::Heap* mpHeap;
+    ::sead::Heap* mpViewerSysHeap;
+    u8 _28;
+    u8 _29;
+    u8 _2a;
+    u8 _2b;
+    u8 _2c;
+    u8 _2d;
+};
+static_assert(sizeof(Config) == 0x30);
+
 class Heap : public nw::eft::Heap
 {
 public:
