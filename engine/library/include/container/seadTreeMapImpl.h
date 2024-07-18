@@ -10,10 +10,10 @@ class TreeMapNode
 {
 public:
     TreeMapNode()
-        : mLeft_(nullptr)
-        , mRight_(nullptr)
-        , mColor_(true)
     {
+        mLeft_ = nullptr;
+        mRight_ = nullptr;
+        mColor_ = true;
     }
 
     virtual ~TreeMapNode()

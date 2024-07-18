@@ -63,9 +63,9 @@ TreeMapImpl<Key>::find(TreeMapNode<Key>* node, const Key& key) const
         else if (cmp > 0)
             node = node->mRight_;
         else
-            break;
+            return node;
     }
-    return node;
+    return nullptr;
 }
 
 template <typename Key>
