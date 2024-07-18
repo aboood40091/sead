@@ -11,6 +11,8 @@ namespace nw { namespace eftvw { // TODO: Implement this properly
 class ViewerSystem
 {
 public:
+    ViewerSystem(nw::eft::Heap* heap, nw::eft::Heap* connectionHeap, nw::eft::System* system);
+    
     void UnbindResource(u32 resourceId);
 };
 
@@ -54,6 +56,10 @@ static_assert(sizeof(Config) == 0x30);
 class Heap : public nw::eft::Heap
 {
 public:
+    Heap()
+    {
+    }
+
     explicit Heap(::sead::Heap* heap)
         : mpHeap(heap)
     {
@@ -69,13 +75,17 @@ public:
         mpHeap->free(ptr);
     }
 
-private:
+//private:
     ::sead::Heap* mpHeap;
 };
 static_assert(sizeof(Heap) == 8, "sead::ptcl::Heap size mismatch");
 
 class PtclEditorInterface
 {
+public:
+    PtclEditorInterface();
+
+private:
     u32 _0[0xE58 / sizeof(u32)];
 };
 static_assert(sizeof(PtclEditorInterface) == 0xE58, "sead::ptcl::PtclEditorInterface size mismatch");
@@ -83,6 +93,27 @@ static_assert(sizeof(PtclEditorInterface) == 0xE58, "sead::ptcl::PtclEditorInter
 class PtclSystem : public nw::eft::System
 {
 public:
+    PtclSystem(const Config& config)
+        : nw::eft::System(config)
+    {
+        mHeap.mpHeap = config.mpHeap;
+        Initialize(&mHeap, config);
+
+        if (config.mpViewerSysHeap != nullptr)
+        {
+            mViewerSysHeap.mpHeap = config.mpViewerSysHeap;
+            mViewerSysHeap.mpHeap->setEnableLock(true);
+            mpViewerSys = new nw::eftvw::ViewerSystem(&mViewerSysHeap, &mViewerSysHeap, this);
+        }
+        else
+        {
+            mpViewerSys = nullptr;
+        }
+
+        mSeadHeapArray = new (config.mpHeap) ::sead::Heap*[config.GetResourceNum()];
+        std::memset(mSeadHeapArray, 0, sizeof(::sead::Heap*) * config.GetResourceNum());
+    }
+
     void clearResource(s32 resId)
     {
         if (mpViewerSys != nullptr)

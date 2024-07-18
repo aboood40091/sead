@@ -32,6 +32,24 @@ private:
     typedef OffsetList<Heap> HeapList;
     typedef OffsetList<IDisposer> DisposerList;
 
+    class Flag
+    {
+    public:
+        enum ValueType
+        {
+            cDontUseThis_StartNumMinus1 = -1,
+            cEnableLock,
+          //cDisposing,
+          //cEnableWarning,
+          //cEnableDebugFillSystem,
+          //cEnableDebugFillUser,
+          //cDontUseThis_MaxNumPlus1,
+            cDontUseThis_MemSize32bit = 0x7FFFFFFF,
+          //cEnumStart = cDontUseThis_StartNumMinus1 + 1,
+          //cEnumMax = cDontUseThis_MaxNumPlus1 - 1
+        };
+    };
+
 public:
     Heap(const SafeString& name, Heap* parent, void* start, size_t size, HeapDirection direction, bool enable_lock);
     virtual ~Heap() { }
@@ -62,8 +80,17 @@ public:
     virtual bool isFreeable() const = 0;
     virtual bool isResizable() const = 0;
     virtual bool isAdjustable() const = 0;
-    void setEnableLock(bool enable_lock);
-    bool isEnableLock() const;
+
+    void setEnableLock(bool enable_lock)
+    {
+        mFlag.changeBit(Flag::cEnableLock, enable_lock);
+    }
+
+    bool isEnableLock() const
+    {
+        return mFlag.isOnBit(Flag::cEnableLock);
+    }
+
     bool lock();
     bool unlock();
     void setEnableWarning(bool);
