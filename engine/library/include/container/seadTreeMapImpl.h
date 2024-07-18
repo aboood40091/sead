@@ -58,6 +58,11 @@ public:
 
     Node* find(Node* node, const Key& key) const;
 
+    bool contains(const Key& key) const
+    {
+        return find(key) != nullptr;
+    }
+
     static Node* rotateLeft(Node* h);
     static Node* rotateRight(Node* h);
     static void flipColors(Node* h);
