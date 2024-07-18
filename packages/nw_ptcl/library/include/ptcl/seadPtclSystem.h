@@ -114,6 +114,13 @@ public:
         std::memset(mSeadHeapArray, 0, sizeof(::sead::Heap*) * config.GetResourceNum());
     }
 
+    void entryResource(::sead::Heap* heap, void* resource, s32 resId)
+    {
+        mSeadHeapArray[resId] = heap;
+        Heap heap_(mSeadHeapArray[resId]);
+        EntryResource(&heap_, resource, resId);
+    }
+
     void clearResource(s32 resId)
     {
         if (mpViewerSys != nullptr)
