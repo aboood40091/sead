@@ -153,6 +153,11 @@ public:
         return nullptr;
     }
 
+    bool contains(const SafeString& key) const
+    {
+        return find(key) != nullptr;
+    }
+
     void insert(const SafeString& key, const Value& value)
     {
         if (!isFull())
