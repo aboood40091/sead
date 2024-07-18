@@ -51,6 +51,15 @@ public:
 
     Node* insert(Node* h, Node* node);
 
+    void erase(const Key& key)
+    {
+        mRoot = erase(mRoot, key);
+        if (mRoot != nullptr)
+            mRoot->mColor_ = Node::cBlack_;
+    }
+
+    Node* erase(Node* h, const Key& key);
+
     Node* find(const Key& key) const
     {
         return find(mRoot, key);
@@ -63,6 +72,11 @@ public:
         return find(key) != nullptr;
     }
 
+    static Node* min(Node* h);
+    static Node* eraseMin(Node* h);
+    static Node* moveRedLeft(Node* h);
+    static Node* moveRedRight(Node* h);
+    static Node* fixUp(Node* h);
     static Node* rotateLeft(Node* h);
     static Node* rotateRight(Node* h);
     static void flipColors(Node* h);
