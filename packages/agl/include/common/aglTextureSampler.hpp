@@ -157,4 +157,13 @@ TextureSampler::setBorderColor(const sead::Color4f& color)
     mFlag.setBit(5);
 }
 
+inline const GX2Texture&
+TextureSampler::getTexture() const
+{
+    if (!mFlag.isZero())
+        initRegs_();
+
+    return mGX2Texture;
+}
+
 }

@@ -59,6 +59,8 @@ public:
     void setUnk1(u8 v) { _e9 = v; }
     u8 getUnk1() const { return _e9; }
 
+    const GX2Texture& getTexture() const;
+
     bool activate(const SamplerLocation& location, s32 = -1) const;
 
 private:
