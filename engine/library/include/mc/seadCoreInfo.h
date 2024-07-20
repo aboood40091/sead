@@ -49,8 +49,8 @@ public:
         cUndef,
         cDontUseThis_MaxNumPlus1,
         cDontUseThis_MemSize32bit = 2147483647,
-        cEnumStart = 0,
-        cEnumMax = 33
+        cEnumStart = cDontUseThis_StartNumMinus1 + 1,
+        cEnumMax = cDontUseThis_MaxNumPlus1 - 1
     };
     static_assert(sizeof(ValueType) == 4, "sead::CoreId::ValueType size mismatch");
 
@@ -67,7 +67,7 @@ public:
 
     CoreId(s32 value)
     {
-        // SEAD_ASSERT_MSG(value >= cMain && value < cDontUseThis_MaxNumPlus1, "range over: %d, [%d - %d)", value, s32(cMain), s32(cDontUseThis_MaxNumPlus1));
+        // SEAD_ASSERT_MSG(value >= cMain && value < s32(cEnumMax) + 1, "range over: %d, [%d - %d)", value, s32(cMain), s32(cEnumMax) + 1);
         mValue = value;
     }
 
