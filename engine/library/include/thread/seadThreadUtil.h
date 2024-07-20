@@ -8,8 +8,8 @@ namespace sead {
 class ThreadUtil
 {
 public:
-    static s32 ConvertPrioritySeadToPlatform(s32);
-    static s32 ConvertPriorityPlatformToSead(s32);
+    static s32 ConvertPrioritySeadToPlatform(s32 prio);
+    static s32 ConvertPriorityPlatformToSead(s32 prio);
 };
 
 } // namespace sead
