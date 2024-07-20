@@ -22,9 +22,34 @@ class Thread;
 typedef TList<Thread*> ThreadList;
 typedef TListNode<Thread*> ThreadListNode;
 
+class ThreadMgr;
+
 class Thread : public IDisposer, public INamable
 {
 public:
+    static const s32 cDefaultSeadPriority = 16;
+    static const s32 cDefaultPriority;
+
+    static const MessageQueue::BlockType cDefaultBlockType = MessageQueue::cNoBlock;
+    static const MessageQueue::Element cDefaultQuitMsg = 0x7fffffff;
+    static const s32 cDefaultStackSize = 4 * 1024;
+    static const s32 cDefaultMsgQueueSize = 32;
+
+private:
+    Thread(const Thread&);
+    const Thread& operator=(const Thread&);
+
+protected:
+    Thread(
+        Heap*
+#ifdef cafe
+        , OSThread*
+#endif // cafe
+    );
+    friend class ThreadMgr;
+
+public:
+    Thread(const SafeString& name, Heap* heap, s32 priority = cDefaultPriority, MessageQueue::BlockType block_type = cDefaultBlockType, MessageQueue::Element quit_msg = cDefaultQuitMsg, s32 stack_size = cDefaultStackSize, s32 msg_queue_size = cDefaultMsgQueueSize);
     virtual ~Thread();
 
     virtual void destroy() { waitDone(); }
