@@ -126,10 +126,101 @@ public:
 };
 static_assert(sizeof(Heap) == 8, "sead::ptcl::Heap size mismatch");
 
+class PtclWorldScale
+{
+public:
+    PtclWorldScale()
+    {
+        unkParam1Max = 100.0f;
+        unkParam2Max = 10.0f;
+        unkParam3Max = 1.0f;
+        unkParam4Max = 10.0f;
+        unkParam5Max = 1000;
+        update();
+    }
+
+    void update()
+    {
+        unkParam1Meta                    .format("Min=%5.1f,Max=%5.1f",                            -unkParam1Max, unkParam1Max);
+        unkParam1PositiveMeta            .format("Min=0,Max=%5.1f",                                unkParam1Max);
+        unkParam3Meta                    .format("Min=%5.1f,Max=%5.1f",                            -unkParam3Max, unkParam3Max);
+        unkParam3PositiveMeta            .format("Min=0,Max=%5.1f",                                unkParam3Max);
+        unkParam3PositiveFractionMeta    .format("Min=0,Max=%5.1f",                                unkParam3Max / 10.0f);
+        unkParam2Meta                    .format("Min=%5.1f,Max=%5.1f,Menu=True,MenuDefault=Auto", -unkParam2Max, unkParam2Max);
+        unkParam2PositiveMeta            .format("Min=0,Max=%5.1f,Menu=True,MenuDefault=Auto",     unkParam2Max);
+        unkParam4Meta                    .format("Min=%5.1f,Max=%5.1f,Menu=True,MenuDefault=Auto", -unkParam4Max, unkParam4Max);
+        unkParam4PositiveMeta            .format("Min=0,Max=%5.1f,Menu=True,MenuDefault=Auto",     unkParam4Max);
+        unkParam5Meta                    .format("Min=0,Max=%d",                                   unkParam5Max);
+        unkParam5NonZeroMeta             .format("Min=1,Max=%d",                                   unkParam5Max);
+        unkParam1DisableMeta             .format("%s,IsEnable=False",                              unkParam1Meta.cstr());
+        unkParam1PositiveDisableMeta     .format("%s,IsEnable=False",                              unkParam1PositiveMeta.cstr());
+        unkParam3PositiveDisableMeta     .format("%s,IsEnable=False",                              unkParam3PositiveMeta.cstr());
+        unkParam2DisableMeta             .format("%s,IsEnable=False",                              unkParam2Meta.cstr());
+        unkParam4DisableMeta             .format("%s,IsEnable=False",                              unkParam4Meta.cstr());
+        unkParam4PositiveDisableMeta     .format("%s,IsEnable=False",                              unkParam4PositiveMeta.cstr());
+        unkParam5DisableMeta             .format("%s,IsEnable=False",                              unkParam5Meta.cstr());
+        unkParam2PositiveDisableMeta     .format("%s,IsEnable=False",                              unkParam2PositiveMeta.cstr());
+        unkParam5NonZeroDisableMeta      .format("%s,IsEnable=False",                              unkParam5NonZeroMeta.cstr());
+        unkParam3PositiveWithMenuMeta    .format("%s,Menu=True,MenuDefault=Auto",                  unkParam3PositiveMeta.cstr());
+        unkParam5ScaledMeta              .format("Min=0,Max=%d",                                   unkParam5Max * 10);
+        unkParam5ScaledNonZeroMeta       .format("Min=1,Max=%d",                                   unkParam5Max * 10);
+        unkParam5ScaledDisableMeta       .format("%s,IsEnable=False",                              unkParam5ScaledMeta.cstr());
+        unkParam5ScaledNonZeroDisableMeta.format("%s,IsEnable=False",                              unkParam5ScaledNonZeroMeta.cstr());
+    }
+
+private:
+    f32 unkParam1Max; // Min = Negation of this
+    f32 unkParam2Max; // ^^^
+    f32 unkParam3Max; // ^^^
+    f32 unkParam4Max; // ^^^
+    s32 unkParam5Max; // ^^^
+    FixedSafeString<64> unkParam1Meta;
+    FixedSafeString<64> unkParam1PositiveMeta;
+    FixedSafeString<64> unkParam3Meta;
+    FixedSafeString<64> unkParam3PositiveMeta;
+    FixedSafeString<64> unkParam3PositiveFractionMeta;
+    FixedSafeString<96> unkParam3PositiveWithMenuMeta;
+    FixedSafeString<96> unkParam2Meta;
+    FixedSafeString<96> unkParam2PositiveMeta;
+    FixedSafeString<96> unkParam4Meta;
+    FixedSafeString<96> unkParam4PositiveMeta;
+    FixedSafeString<64> unkParam5Meta;
+    FixedSafeString<64> unkParam5NonZeroMeta;
+    FixedSafeString<64> unkParam1DisableMeta;
+    FixedSafeString<64> unkParam1PositiveDisableMeta;
+    FixedSafeString<64> unkParam3PositiveDisableMeta;
+    FixedSafeString<96> unkParam2DisableMeta;
+    FixedSafeString<96> unkParam2PositiveDisableMeta;
+    FixedSafeString<64> unkParam4DisableMeta;
+    FixedSafeString<96> unkParam4PositiveDisableMeta;
+    FixedSafeString<64> unkParam5DisableMeta;
+    FixedSafeString<64> unkParam5NonZeroDisableMeta;
+    FixedSafeString<64> unkParam5ScaledMeta;
+    FixedSafeString<64> unkParam5ScaledNonZeroMeta;
+    FixedSafeString<64> unkParam5ScaledDisableMeta;
+    FixedSafeString<64> unkParam5ScaledNonZeroDisableMeta;
+};
+static_assert(sizeof(PtclWorldScale) == 0x880);
+
 class PtclEditorInterface
 {
 public:
-    PtclEditorInterface();
+    PtclEditorInterface()
+        : _8c8(0)
+    {
+        mCenter = Matrix34f::ident;
+        _8cc = Matrix34f::ident;
+        _4 = 0;
+        _8fc = 1.0f;
+
+        for (s32 i = 0; i < 16; i++)
+            _900[i].format("[%d]", i);
+
+        _dc0[0] = "”’l‚P";
+        _dc0[1] = "”’l‚Q";
+
+        mColor.setf(1.0f, 1.0f, 1.0f, 1.0f);
+    }
 
     void applyViewerCenter(nw::eftvw::ViewerSystem* p_system)
     {
@@ -141,7 +232,7 @@ public:
         setViewerColor(p_system, mColor.r, mColor.g, mColor.b, mColor.a);
     }
 
-    static void setViewerCenter(nw::eftvw::ViewerSystem* p_system, const sead::Matrix34f& center)
+    static void setViewerCenter(nw::eftvw::ViewerSystem* p_system, const Matrix34f& center)
     {
         p_system->SetViewerCenter(reinterpret_cast<const nw::math::Matrix34&>(center.a[0]));
     }
@@ -153,10 +244,16 @@ public:
     }
 
 private:
-    u32 _0[0x888 / sizeof(u32)];
-    sead::Matrix34f mCenter;
-    sead::Color4f mColor;
-    u32 _8c8[(0xE58 - 0x8C8) / sizeof(u32)];
+    u32 _0[4 / sizeof(u32)];
+    u32 _4;
+    PtclWorldScale mWorldScale;
+    Matrix34f mCenter;
+    Color4f mColor;
+    u32 _8c8;
+    Matrix34f _8cc;
+    f32 _8fc;
+    FixedSafeString<64> _900[16];
+    FixedSafeString<64> _dc0[2];
 };
 static_assert(sizeof(PtclEditorInterface) == 0xE58, "sead::ptcl::PtclEditorInterface size mismatch");
 
@@ -186,13 +283,13 @@ public:
 
     void entryResource(::sead::Heap* heap, void* resource, s32 resId)
     {
-        sead::Graphics::instance()->lockDrawContext();
+        Graphics::instance()->lockDrawContext();
         {
             mSeadHeapArray[resId] = heap;
             Heap heap_(mSeadHeapArray[resId]);
             EntryResource(&heap_, resource, resId);
         }
-        sead::Graphics::instance()->unlockDrawContext();
+        Graphics::instance()->unlockDrawContext();
     }
 
     void clearResource(s32 resId)
@@ -208,12 +305,12 @@ public:
         mSeadHeapArray[resId] = nullptr;
     }
 
-    bool createEmitterSetID(nw::eft::Handle* handle, const sead::Vector3f& pos, s32 emitterSetID, s32 resourceID = 0, s32 groupID = 0, u32 emitterMask = 0xffffffff)
+    bool createEmitterSetID(nw::eft::Handle* handle, const Vector3f& pos, s32 emitterSetID, s32 resourceID = 0, s32 groupID = 0, u32 emitterMask = 0xffffffff)
     {
         return CreateEmitterSetID(handle, reinterpret_cast<const nw::math::VEC3&>(pos.x), emitterSetID, resourceID, groupID, emitterMask);
     }
 
-    bool createEmitterSetID(nw::eft::Handle* handle, const sead::Matrix34f& mtx, s32 emitterSetID, s32 resourceID = 0, s32 groupID = 0, u32 emitterMask = 0xffffffff)
+    bool createEmitterSetID(nw::eft::Handle* handle, const Matrix34f& mtx, s32 emitterSetID, s32 resourceID = 0, s32 groupID = 0, u32 emitterMask = 0xffffffff)
     {
         return CreateEmitterSetID(handle, reinterpret_cast<const nw::math::MTX34&>(mtx.a[0]), emitterSetID, resourceID, groupID, emitterMask);
     }
@@ -234,15 +331,15 @@ public:
     {
         if (mpViewerSys != nullptr && nw::eftvw::ToolConnecter::IsConnected())
         {
-            sead::Graphics::instance()->lockDrawContext();
+            Graphics::instance()->lockDrawContext();
             {
                 mEditorInterface.applyViewerCenter(mpViewerSys);
                 mEditorInterface.applyViewerColor(mpViewerSys);
 
-                sead::CurrentHeapSetter chs(mViewerSysHeap.mpHeap);
+                CurrentHeapSetter chs(mViewerSysHeap.mpHeap);
                 mpViewerSys->ExecuteCommand();
             }
-            sead::Graphics::instance()->unlockDrawContext();
+            Graphics::instance()->unlockDrawContext();
 
             mpViewerSys->ProcCalc(1.0f);
         }
