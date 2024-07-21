@@ -281,6 +281,56 @@ public:
         std::memset(mSeadHeapArray, 0, sizeof(::sead::Heap*) * config.GetResourceNum());
     }
 
+    const TickTime& getCreationTime() const
+    {
+        return mTime;
+    }
+
+    ::sead::Heap* getHeap() const
+    {
+        return mHeap.mpHeap;
+    }
+
+    Heap& getEftHeap()
+    {
+        return mHeap;
+    }
+
+    const Heap& getEftHeap() const
+    {
+        return mHeap;
+    }
+
+    ::sead::Heap* getViewerSysHeap() const
+    {
+        return mViewerSysHeap.mpHeap;
+    }
+
+    Heap& getViewerSysEftHeap()
+    {
+        return mViewerSysHeap;
+    }
+
+    const Heap& getViewerSysEftHeap() const
+    {
+        return mViewerSysHeap;
+    }
+
+    nw::eftvw::ViewerSystem* getViewerSys() const
+    {
+        return mpViewerSys;
+    }
+
+    PtclEditorInterface& getEditorInterface()
+    {
+        return mEditorInterface;
+    }
+
+    const PtclEditorInterface& getEditorInterface() const
+    {
+        return mEditorInterface;
+    }
+
     void entryResource(::sead::Heap* heap, void* resource, s32 resId)
     {
         Graphics::instance()->lockDrawContext();
@@ -303,6 +353,11 @@ public:
         ClearResource(&heap, resId);
 
         mSeadHeapArray[resId] = nullptr;
+    }
+
+    ::sead::Heap* getResourceHeap(s32 resId) const
+    {
+        return mSeadHeapArray[resId];
     }
 
     bool createEmitterSetID(nw::eft::Handle* handle, const Vector3f& pos, s32 emitterSetID, s32 resourceID = 0, s32 groupID = 0, u32 emitterMask = 0xffffffff)
