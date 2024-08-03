@@ -64,6 +64,41 @@ public:
         cPadIdx_Max             = 28
     };
 
+    enum PadFlag
+    {
+        cPadFlag_A               = 1 << cPadIdx_A,
+        cPadFlag_B               = 1 << cPadIdx_B,
+        cPadFlag_C               = 1 << cPadIdx_C,
+        cPadFlag_X               = 1 << cPadIdx_X,
+        cPadFlag_Y               = 1 << cPadIdx_Y,
+        cPadFlag_Z               = 1 << cPadIdx_Z,
+        cPadFlag_2               = 1 << cPadIdx_2, // Also Right-Stick Click
+        cPadFlag_1               = 1 << cPadIdx_1, // Also Left-Stick Click
+        cPadFlag_Home            = 1 << cPadIdx_Home,
+        cPadFlag_Minus           = 1 << cPadIdx_Minus,
+        cPadFlag_Plus            = 1 << cPadIdx_Plus,
+        cPadFlag_Start           = 1 << cPadIdx_Start,
+        cPadFlag_Select          = 1 << cPadIdx_Select,
+        cPadFlag_ZL              = cPadFlag_C,
+        cPadFlag_ZR              = cPadFlag_Z,
+        cPadFlag_L               = 1 << cPadIdx_L,
+        cPadFlag_R               = 1 << cPadIdx_R,
+        cPadFlag_Touch           = 1 << cPadIdx_Touch,
+        cPadFlag_Up              = 1 << cPadIdx_Up,
+        cPadFlag_Down            = 1 << cPadIdx_Down,
+        cPadFlag_Left            = 1 << cPadIdx_Left,
+        cPadFlag_Right           = 1 << cPadIdx_Right,
+        cPadFlag_LeftStickUp     = 1 << cPadIdx_LeftStickUp,
+        cPadFlag_LeftStickDown   = 1 << cPadIdx_LeftStickDown,
+        cPadFlag_LeftStickLeft   = 1 << cPadIdx_LeftStickLeft,
+        cPadFlag_LeftStickRight  = 1 << cPadIdx_LeftStickRight,
+        cPadFlag_RightStickUp    = 1 << cPadIdx_RightStickUp,
+        cPadFlag_RightStickDown  = 1 << cPadIdx_RightStickDown,
+        cPadFlag_RightStickLeft  = 1 << cPadIdx_RightStickLeft,
+        cPadFlag_RightStickRight = 1 << cPadIdx_RightStickRight,
+        cPadFlag_All             = (1 << cPadIdx_Max) - 1
+    };
+
 public:
     Controller(ControllerMgr* mgr);
     virtual ~Controller() { }
