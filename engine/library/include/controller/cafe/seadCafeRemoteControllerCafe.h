@@ -17,8 +17,8 @@ public:
 
     s32 getChannel() const { return mChannel; }
 
-    u8 getInternalDeviceType() const { return mDeviceTypeInternal; }
-    u8 getDeviceType() const { return mDeviceType; }
+    u8 getCurrentDeviceType() const { return mDeviceTypeCurrent; }
+    u8 getLastConnectedDeviceType() const { return mDeviceTypeLastConnected; }
 
     bool isEnableCL() const { return mIsEnableCL; }
     void setEnableCL(bool enable) { mIsEnableCL = enable; }
@@ -27,8 +27,8 @@ private:
     virtual void calcImpl_();
 
     s32 mChannel;
-    u8 mDeviceTypeInternal;
-    u8 mDeviceType;
+    u8 mDeviceTypeCurrent;
+    u8 mDeviceTypeLastConnected;
     bool mIsConnected;
     bool mIsEnableCL;
 };

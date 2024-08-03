@@ -7,8 +7,8 @@ namespace sead {
 CafeRemoteController::CafeRemoteController(ControllerMgr* mgr, s32 channel)
     : Controller(mgr)
     , mChannel(channel)
-    , mDeviceTypeInternal(WPAD_DEV_NOT_FOUND)
-    , mDeviceType(WPAD_DEV_NOT_FOUND)
+    , mDeviceTypeCurrent(WPAD_DEV_NOT_FOUND)
+    , mDeviceTypeLastConnected(WPAD_DEV_NOT_FOUND)
     , mIsConnected(false)
     , mIsEnableCL(false)
 {
@@ -121,22 +121,22 @@ void CafeRemoteController::calcImpl_()
             mLeftAnalogTrigger = 0.0f;
             mRightAnalogTrigger = 0.0f;
             mIsConnected = true;
-            mDeviceTypeInternal = status.dev_type;
+            mDeviceTypeCurrent = status.dev_type;
         }
         else
         {
             mIsConnected = false;
-            mDeviceTypeInternal = WPAD_DEV_NOT_FOUND;
+            mDeviceTypeCurrent = WPAD_DEV_NOT_FOUND;
         }
     }
     else
     {
         mIsConnected = false;
-        mDeviceTypeInternal = WPAD_DEV_NOT_FOUND;
+        mDeviceTypeCurrent = WPAD_DEV_NOT_FOUND;
     }
 
-    if (mDeviceTypeInternal < WPAD_DEV_NOT_SUPPORTED)
-        mDeviceType = mDeviceTypeInternal;
+    if (mDeviceTypeCurrent < WPAD_DEV_NOT_SUPPORTED)
+        mDeviceTypeLastConnected = mDeviceTypeCurrent;
 }
 
 } // namespace sead
