@@ -47,7 +47,7 @@ public:
     SEAD_RTTI_BASE(Layer)
 
     virtual u32 getRenderStepNum() const = 0;
-    virtual void getRenderStepName(sead::SafeString* p_name, s32 idx) const = 0;
+    virtual sead::SafeString getRenderStepName(s32 idx) const = 0;
     virtual void initialize(sead::Heap* heap) { }
     virtual void calc() { }
     virtual void preDraw(const RenderInfo& render_info) const { }
