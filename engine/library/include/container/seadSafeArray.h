@@ -101,8 +101,8 @@ public:
         s32 getIndex() const { return ((uintptr_t)mPtr - (uintptr_t)mStart) / sizeof(T); }
 
     private:
-        T* mPtr;
         T* mStart;
+        T* mPtr;
     };
 
     class constIterator
@@ -142,8 +142,8 @@ public:
         s32 getIndex() const { return ((uintptr_t)mPtr - (uintptr_t)mStart) / sizeof(T); }
 
     private:
-        const T* mPtr;
         const T* mStart;
+        const T* mPtr;
     };
 
     // TODO
