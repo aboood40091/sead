@@ -34,6 +34,8 @@ private:
   //typedef IDelegate1<const DestroyCallbackArg*>       IDestroyCallback;
 
     typedef FixedPtrArray<Heap,        NUM_ROOT_HEAPS_MAX> RootHeaps;
+
+public:
     typedef FixedPtrArray<Heap, NUM_INDEPENDENT_HEAPS_MAX> IndependentHeaps;
 
 public:
