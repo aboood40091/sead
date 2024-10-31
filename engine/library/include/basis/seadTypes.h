@@ -39,4 +39,10 @@ typedef sintptr  intptr_t;
 
 #endif // cafe
 
+#ifdef __ghs__
+    #define noinline  __noinline
+#else
+    #define noinline
+#endif // __ghs__
+
 #endif // SEAD_TYPES_H_
