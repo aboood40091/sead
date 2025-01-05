@@ -14,7 +14,7 @@ class TListNode : public ListNode
 public:
     TListNode()
         : ListNode()
-        , mData(nullptr)
+        , mData()
         , mList(nullptr)
     {
     }

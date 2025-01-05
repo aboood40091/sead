@@ -43,13 +43,13 @@ class TTreeNode : public TreeNode
 public:
     TTreeNode()
         : TreeNode()
-        , mData(nullptr)
+        , mData()
     {
     }
 
-    TTreeNode(T ptr)
+    TTreeNode(T data)
         : TreeNode()
-        , mData(ptr)
+        , mData(data)
     {
     }
 
