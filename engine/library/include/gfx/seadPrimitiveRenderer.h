@@ -27,6 +27,7 @@ public:
 
         QuadArg& setCenter(const Vector3f& p) { mCenter = p; return *this; }
         QuadArg& setSize(const Vector2f& size) { mSize = size; return *this; }
+        QuadArg& setSize(f32 w, f32 h) { mSize.set(w, h); return *this; }
         QuadArg& setCornerAndSize(const Vector3f& p, const Vector2f& size);
         QuadArg& setBoundBox(const BoundBox2f& box, f32 z);
         QuadArg& setColor(const Color4f& colorT, const Color4f& colorB);
