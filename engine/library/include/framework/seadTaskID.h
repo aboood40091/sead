@@ -59,6 +59,11 @@ public:
         mID.mFactory = f;
     }
 
+    Type getType() const
+    {
+        return mType;
+    }
+
     TaskBase* create(const TaskConstructArg& arg);
 
 private:
