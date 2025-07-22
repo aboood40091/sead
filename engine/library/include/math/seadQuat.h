@@ -33,7 +33,7 @@ static_assert(sizeof(Quatf) == 0x10, "sead::Quat<T> size mismatch");
 #endif // cafe
 
 template <>
-extern const Quat<f32> Quat<f32>::unit;
+const Quat<f32> Quat<f32>::unit;
 
 }  // namespace sead
 

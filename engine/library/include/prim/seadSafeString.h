@@ -219,22 +219,22 @@ protected:
 };
 
 template <>
-extern const char SafeStringBase<char>::cNullChar;
+const char SafeStringBase<char>::cNullChar;
 
 template <>
-extern const char SafeStringBase<char>::cLineBreakChar;
+const char SafeStringBase<char>::cLineBreakChar;
 
 template <>
-extern const SafeStringBase<char> SafeStringBase<char>::cEmptyString;
+const SafeStringBase<char> SafeStringBase<char>::cEmptyString;
 
 template <>
-extern const char16 SafeStringBase<char16>::cNullChar;
+const char16 SafeStringBase<char16>::cNullChar;
 
 template <>
-extern const char16 SafeStringBase<char16>::cLineBreakChar;
+const char16 SafeStringBase<char16>::cLineBreakChar;
 
 template <>
-extern const SafeStringBase<char16> SafeStringBase<char16>::cEmptyString;
+const SafeStringBase<char16> SafeStringBase<char16>::cEmptyString;
 
 template <typename CharType>
 class BufferedSafeStringBase : public SafeStringBase<CharType>

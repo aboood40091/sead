@@ -240,49 +240,49 @@ static_assert(sizeof(Vector4f) == 0x10, "sead::Vector4<T> size mismatch");
 #endif // cafe
 
 template <>
-extern const Vector2<f32> Vector2<f32>::zero;
+const Vector2<f32> Vector2<f32>::zero;
 
 template <>
-extern const Vector2<f32> Vector2<f32>::ex;
+const Vector2<f32> Vector2<f32>::ex;
 
 template <>
-extern const Vector2<f32> Vector2<f32>::ey;
+const Vector2<f32> Vector2<f32>::ey;
 
 template <>
-extern const Vector2<f32> Vector2<f32>::ones;
+const Vector2<f32> Vector2<f32>::ones;
 
 template <>
-extern const Vector3<f32> Vector3<f32>::zero;
+const Vector3<f32> Vector3<f32>::zero;
 
 template <>
-extern const Vector3<f32> Vector3<f32>::ex;
+const Vector3<f32> Vector3<f32>::ex;
 
 template <>
-extern const Vector3<f32> Vector3<f32>::ey;
+const Vector3<f32> Vector3<f32>::ey;
 
 template <>
-extern const Vector3<f32> Vector3<f32>::ez;
+const Vector3<f32> Vector3<f32>::ez;
 
 template <>
-extern const Vector3<f32> Vector3<f32>::ones;
+const Vector3<f32> Vector3<f32>::ones;
 
 template <>
-extern const Vector4<f32> Vector4<f32>::zero;
+const Vector4<f32> Vector4<f32>::zero;
 
 template <>
-extern const Vector4<f32> Vector4<f32>::ex;
+const Vector4<f32> Vector4<f32>::ex;
 
 template <>
-extern const Vector4<f32> Vector4<f32>::ey;
+const Vector4<f32> Vector4<f32>::ey;
 
 template <>
-extern const Vector4<f32> Vector4<f32>::ez;
+const Vector4<f32> Vector4<f32>::ez;
 
 template <>
-extern const Vector4<f32> Vector4<f32>::ew;
+const Vector4<f32> Vector4<f32>::ew;
 
 template <>
-extern const Vector4<f32> Vector4<f32>::ones;
+const Vector4<f32> Vector4<f32>::ones;
 
 }  // namespace sead
 

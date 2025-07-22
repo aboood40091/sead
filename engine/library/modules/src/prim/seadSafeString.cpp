@@ -11,22 +11,16 @@ static const char16 cEmptyStringChar16[1] = L"";
 
 namespace sead {
 
-template <>
 const char SafeStringBase<char>::cNullChar = '\0';
 
-template <>
 const char SafeStringBase<char>::cLineBreakChar = '\n';
 
-template <>
 const SafeStringBase<char> SafeStringBase<char>::cEmptyString("");
 
-template <>
 const char16 SafeStringBase<char16>::cNullChar = 0;
 
-template <>
 const char16 SafeStringBase<char16>::cLineBreakChar = static_cast<char16>('\n');
 
-template <>
 const SafeStringBase<char16> SafeStringBase<char16>::cEmptyString(cEmptyStringChar16);
 
 template <>

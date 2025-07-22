@@ -232,31 +232,31 @@ public:
 };
 
 template <>
-extern s32 MathCalcCommon<s32>::gcd(s32 m, s32 n);
+s32 MathCalcCommon<s32>::gcd(s32 m, s32 n);
 
 template <>
-extern s32 MathCalcCommon<s32>::lcm(s32 m, s32 n);
+s32 MathCalcCommon<s32>::lcm(s32 m, s32 n);
 
 template <>
-extern u32 MathCalcCommon<f32>::atanIdx_(f32 t);
+u32 MathCalcCommon<f32>::atanIdx_(f32 t);
 
 template <>
-extern f32 MathCalcCommon<f32>::expTable(f32 x);
+f32 MathCalcCommon<f32>::expTable(f32 x);
 
 template <>
-extern f32 MathCalcCommon<f32>::logTable(f32 x);
+f32 MathCalcCommon<f32>::logTable(f32 x);
 
 template <>
-extern const MathCalcCommon<f32>::SinCosSample MathCalcCommon<f32>::cSinCosTbl[];
+const MathCalcCommon<f32>::SinCosSample MathCalcCommon<f32>::cSinCosTbl[];
 
 template <>
-extern const MathCalcCommon<f32>::AtanSample   MathCalcCommon<f32>::  cAtanTbl[];
+const MathCalcCommon<f32>::AtanSample   MathCalcCommon<f32>::  cAtanTbl[];
 
 template <>
-extern const MathCalcCommon<f32>::ExpSample    MathCalcCommon<f32>::   cExpTbl[];
+const MathCalcCommon<f32>::ExpSample    MathCalcCommon<f32>::   cExpTbl[];
 
 template <>
-extern const MathCalcCommon<f32>::LogSample    MathCalcCommon<f32>::   cLogTbl[];
+const MathCalcCommon<f32>::LogSample    MathCalcCommon<f32>::   cLogTbl[];
 
 // For convenience
 typedef MathCalcCommon<s32> Mathi;

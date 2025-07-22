@@ -284,52 +284,52 @@ public:
 };
 
 template <>
-extern const Matrix22<f32> Matrix22<f32>::zero;
+const Matrix22<f32> Matrix22<f32>::zero;
 
 template <>
-extern const Matrix22<f32> Matrix22<f32>::ident;
+const Matrix22<f32> Matrix22<f32>::ident;
 
 template <>
-extern const Matrix33<f32> Matrix33<f32>::zero;
+const Matrix33<f32> Matrix33<f32>::zero;
 
 template <>
-extern const Matrix33<f32> Matrix33<f32>::ident;
+const Matrix33<f32> Matrix33<f32>::ident;
 
 template <>
-extern const Matrix34<f32> Matrix34<f32>::zero;
+const Matrix34<f32> Matrix34<f32>::zero;
 
 template <>
-extern const Matrix34<f32> Matrix34<f32>::ident;
+const Matrix34<f32> Matrix34<f32>::ident;
 
 template <>
-extern const Matrix44<f32> Matrix44<f32>::zero;
+const Matrix44<f32> Matrix44<f32>::zero;
 
 template <>
-extern const Matrix44<f32> Matrix44<f32>::ident;
+const Matrix44<f32> Matrix44<f32>::ident;
 
 template <>
-extern const Matrix22<f64> Matrix22<f64>::zero;
+const Matrix22<f64> Matrix22<f64>::zero;
 
 template <>
-extern const Matrix22<f64> Matrix22<f64>::ident;
+const Matrix22<f64> Matrix22<f64>::ident;
 
 template <>
-extern const Matrix33<f64> Matrix33<f64>::zero;
+const Matrix33<f64> Matrix33<f64>::zero;
 
 template <>
-extern const Matrix33<f64> Matrix33<f64>::ident;
+const Matrix33<f64> Matrix33<f64>::ident;
 
 template <>
-extern const Matrix34<f64> Matrix34<f64>::zero;
+const Matrix34<f64> Matrix34<f64>::zero;
 
 template <>
-extern const Matrix34<f64> Matrix34<f64>::ident;
+const Matrix34<f64> Matrix34<f64>::ident;
 
 template <>
-extern const Matrix44<f64> Matrix44<f64>::zero;
+const Matrix44<f64> Matrix44<f64>::zero;
 
 template <>
-extern const Matrix44<f64> Matrix44<f64>::ident;
+const Matrix44<f64> Matrix44<f64>::ident;
 
 typedef Matrix22<f32> Matrix22f;
 typedef Matrix33<f32> Matrix33f;
