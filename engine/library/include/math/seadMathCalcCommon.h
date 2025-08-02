@@ -123,8 +123,8 @@ public:
 
     static T abs(T t)
     {
-        if (x > 0) return  x;
-        else       return -x;
+        if (t > 0) return  t;
+        else       return -t;
     }
 
     static T max(T a, T b)
