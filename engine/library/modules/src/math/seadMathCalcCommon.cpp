@@ -5,6 +5,7 @@ namespace sead {
 // https://github.com/open-ead/NW4F-Eft/blob/nsmbu/src/math/math_Triangular.cpp
 // Who copied who? No one knows. :P
 
+template <>
 const MathCalcCommon<f32>::SinCosSample MathCalcCommon<f32>::cSinCosTbl[256 + 1] = {
     0.0f, 0.024541229009628296f, 1.0f, -0.00030118130962364376f,
     0.024541229009628296f, 0.02452644519507885f, 0.99969881772995f, -0.0009033624664880335f,
@@ -265,6 +266,7 @@ const MathCalcCommon<f32>::SinCosSample MathCalcCommon<f32>::cSinCosTbl[256 + 1]
     0.0f, 0.024541229009628296f, 1.0f, -0.00030118130962364376f,
 };
 
+template <>
 const MathCalcCommon<f32>::AtanSample MathCalcCommon<f32>::cAtanTbl[128 + 1] = {
     0x0, 5340245,
     0x517c55, 5339593,
@@ -397,6 +399,7 @@ const MathCalcCommon<f32>::AtanSample MathCalcCommon<f32>::cAtanTbl[128 + 1] = {
     0x20000000, 2659773,
 };
 
+template <>
 u32 MathCalcCommon<f32>::atanIdx_(f32 t)
 {
     t *= 128;
