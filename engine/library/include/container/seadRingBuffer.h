@@ -5,6 +5,8 @@
 
 namespace sead {
 
+class Heap;
+
 template <typename T>
 class RingBuffer
 {
