@@ -17,6 +17,10 @@ template <typename T, s32 N>
 class SafeArray
 {
 public:
+    SafeArray()
+    {
+    }
+
     T& operator[](s32 x)
     {
         if (static_cast<u32>(x) < static_cast<u32>(N))
@@ -217,6 +221,7 @@ public:
 
     reverseConstIterator toReverseConstIterator(s32) const;
 
+private:
     T mBuffer[N];
 };
 
@@ -224,6 +229,10 @@ template <typename T, s32 N>
 class UnsafeArray
 {
 public:
+    UnsafeArray()
+    {
+    }
+
     T& operator[](s32 x) { return mBuffer[x]; }
     const T& operator[](s32 x) const { return mBuffer[x]; }
 
@@ -283,6 +292,7 @@ public:
 
     reverseConstIterator toReverseConstIterator(s32) const;
 
+private:
     T mBuffer[N];
 };
 

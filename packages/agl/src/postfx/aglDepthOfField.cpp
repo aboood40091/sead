@@ -249,9 +249,9 @@ void DepthOfField::assignShaderProgram_()
 
 void DepthOfField::initVertex_(sead::Heap* heap)
 {
-    static const sead::UnsafeArray<s32, 2> sShapeNum = { 32, 4 };
+    static const s32 sShapeNum[2] = { 32, 4 };
 
-    const sead::UnsafeArray<f32, 4> cTexcoordX = { 1.0f, 1.0f, 0.0f, 0.0f };
+    const f32 cTexcoordX[4] = { 1.0f, 1.0f, 0.0f, 0.0f };
 
     for (u32 i_shape = 0; i_shape < 2; i_shape++)
     {
@@ -361,7 +361,7 @@ void DepthOfField::initVertex_(sead::Heap* heap)
 
 void DepthOfField::initIndex_(sead::Heap* heap)
 {
-    static const sead::UnsafeArray<s32, 2> sShapeNum = { 32, 4 };
+    static const s32 sShapeNum[2] = { 32, 4 };
 
     for (u32 i_shape = 0; i_shape < 2; i_shape++)
     {
