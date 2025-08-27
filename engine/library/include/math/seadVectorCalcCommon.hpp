@@ -111,8 +111,7 @@ inline void
 Vector2CalcCommon<T>::divScalar(Base& o, const Base& v, T t)
 {
     T inv_t = MathCalcCommon<T>::inv(t);
-    o.x = v.x * inv_t;
-    o.y = v.y * inv_t;
+    multScalar(o, v, inv_t);
 }
 
 template <typename T>
@@ -415,9 +414,7 @@ inline void
 Vector3CalcCommon<T>::divScalar(Base& o, const Base& v, T t)
 {
     T inv_t = MathCalcCommon<T>::inv(t);
-    o.x = v.x * inv_t;
-    o.y = v.y * inv_t;
-    o.z = v.z * inv_t;
+    multScalar(o, v, inv_t);
 }
 
 template <typename T>
@@ -571,10 +568,7 @@ inline void
 Vector4CalcCommon<T>::divScalar(Base& o, const Base& v, T t)
 {
     T inv_t = MathCalcCommon<T>::inv(t);
-    o.x = v.x * inv_t;
-    o.y = v.y * inv_t;
-    o.z = v.z * inv_t;
-    o.w = v.w * inv_t;
+    multScalar(o, v, inv_t);
 }
 
 template <typename T>
