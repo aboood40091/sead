@@ -112,6 +112,7 @@ public:
     static void multScaleLocal(Base& o, const Base& n, const Vec3& s);
     static void multTranslationLocal(Base& o, const Base& n, const Vec3& t);
 
+    static void multScaleWorld(Base& o, const Vec3& s, const Base& n);
     static void multTranslationWorld(Base& o, const Vec3& t, const Base& n);
 
     static void getBase(Vec3& v, const Base& n, s32 axis);

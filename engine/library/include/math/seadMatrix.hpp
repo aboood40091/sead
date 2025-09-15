@@ -575,6 +575,56 @@ Matrix34<T>::setMultTranslationLocal(const Self& n, const Vec3& t)
 
 template <typename T>
 inline void
+Matrix34<T>::multScaleWorld(const Vec3& s)
+{
+    Matrix34CalcCommon<T>::multScaleWorld(*this, s, *this);
+}
+
+template <typename T>
+inline void
+Matrix34<T>::multScaleWorld(T x, T y, T z)
+{
+    Matrix34CalcCommon<T>::multScaleWorld(*this, Vec3(x, y, z), *this);
+}
+
+#ifdef cafe
+
+template <>
+inline void
+Matrix34<f32>::multScaleWorld(f32 x, f32 y, f32 z)
+{
+    ASM_MTXScaleApply(m, m, x, y, z);
+}
+
+#endif // cafe
+
+template <typename T>
+inline void
+Matrix34<T>::setMultScaleWorld(const Vec3& s, const Self& n)
+{
+    Matrix34CalcCommon<T>::multScaleWorld(*this, s, n);
+}
+
+template <typename T>
+inline void
+Matrix34<T>::setMultScaleWorld(T x, T y, T z, const Self& n)
+{
+    Matrix34CalcCommon<T>::multScaleWorld(*this, Vec3(x, y, z), n);
+}
+
+#ifdef cafe
+
+template <>
+inline void
+Matrix34<f32>::setMultScaleWorld(f32 x, f32 y, f32 z, const Self& n)
+{
+    ASM_MTXScaleApply(const_cast<f32(*)[4]>(n.m), m, x, y, z);
+}
+
+#endif // cafe
+
+template <typename T>
+inline void
 Matrix34<T>::multTranslationWorld(const Vec3& t)
 {
     Matrix34CalcCommon<T>::multTranslationWorld(*this, t, *this);

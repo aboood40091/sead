@@ -194,6 +194,11 @@ public:
     void multTranslationLocal(const Vec3& t);
     void setMultTranslationLocal(const Self& n, const Vec3& t);
 
+    void multScaleWorld(const Vec3& s);
+    void multScaleWorld(T x, T y, T z);
+    void setMultScaleWorld(const Vec3& s, const Self& n);
+    void setMultScaleWorld(T x, T y, T z, const Self& n);
+
     void multTranslationWorld(const Vec3& t);
     void multTranslationWorld(T x, T y, T z);
     void setMultTranslationWorld(const Vec3& t, const Self& n);
