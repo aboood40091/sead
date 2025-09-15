@@ -443,6 +443,13 @@ Vector3<T>::set(T x_, T y_, T z_)
 
 template <typename T>
 inline void
+Vector3<T>::set(const Vec2& vec2, T z_)
+{
+    Vector3CalcCommon<T>::set(*this, vec2.x, vec2.y, z_);
+}
+
+template <typename T>
+inline void
 Vector3<T>::setAdd(const Self& a, const Self& b)
 {
     Vector3CalcCommon<T>::add(*this, a, b);
@@ -692,6 +699,20 @@ inline void
 Vector4<T>::set(T x_, T y_, T z_, T w_)
 {
     Vector4CalcCommon<T>::set(*this, x_, y_, z_, w_);
+}
+
+template <typename T>
+inline void
+Vector4<T>::set(const Vec2& vec2, T z_, T w_)
+{
+    Vector4CalcCommon<T>::set(*this, vec2.x, vec2.y, z_, w_);
+}
+
+template <typename T>
+inline void
+Vector4<T>::set(const Vec3& vec3, T w_)
+{
+    Vector4CalcCommon<T>::set(*this, vec3.x, vec3.y, vec3.z, w_);
 }
 
 template <typename T>

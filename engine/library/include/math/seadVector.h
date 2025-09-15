@@ -134,6 +134,7 @@ public:
     T setNormalize(const Self& v);
     void set(const Self& v);
     void set(T x_, T y_, T z_);
+    void set(const Vec2& vec2, T z_);
     void setAdd(const Self& a, const Self& b);
     void setCross(const Self& a, const Self& b);
     void setLerp(const Self& a, const Self& b, f32 ratio);
@@ -202,6 +203,8 @@ public:
     T setNormalize(const Self& v);
     void set(const Self& v);
     void set(T x_, T y_, T z_, T w_);
+    void set(const Vec2& vec2, T z_, T w_);
+    void set(const Vec3& vec3, T w_);
     void setLerp(const Self& a, const Self& b, f32 ratio);
 
     static const Vector4 zero;
