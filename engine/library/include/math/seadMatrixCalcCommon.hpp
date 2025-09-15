@@ -1741,6 +1741,25 @@ void Matrix34CalcCommon<T>::multTranslationLocal(Base& o, const Base& n, const V
 }
 
 template <typename T>
+void Matrix34CalcCommon<T>::multTranslationWorld(Base& o, const Vec3& t, const Base& n)
+{
+    o.m[0][0] = n.m[0][0];
+    o.m[0][1] = n.m[0][1];
+    o.m[0][2] = n.m[0][2];
+    o.m[0][3] = n.m[0][3] + t.x;
+
+    o.m[1][0] = n.m[1][0];
+    o.m[1][1] = n.m[1][1];
+    o.m[1][2] = n.m[1][2];
+    o.m[1][3] = n.m[1][3] + t.y;
+
+    o.m[2][0] = n.m[2][0];
+    o.m[2][1] = n.m[2][1];
+    o.m[2][2] = n.m[2][2];
+    o.m[2][3] = n.m[2][3] + t.z;
+}
+
+template <typename T>
 void Matrix34CalcCommon<T>::getBase(Vec3& v, const Base& n, s32 axis)
 {
     v.x = n.m[0][axis];
