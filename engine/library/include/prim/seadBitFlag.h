@@ -83,10 +83,37 @@ public:
     bool isOnBit(s32 bit) const { return isOn(makeMask(bit)); }
     bool isOffBit(s32 bit) const { return isOff(makeMask(bit)); }
 
-    s32 countOnBit() const;
-    inline s32 countContinuousOffBitFromRight() const;
-    s32 countRightOnBit(s32) const;
-    s32 findOnBitFromRight(s32) const;
+    s32 countOnBit() const
+    {
+        if (sizeof(T) <= sizeof(u32))
+            return BitFlagUtil::countOnBit(mBits);
+        else
+            return BitFlagUtil::countOnBit64(mBits);
+    }
+
+    s32 countContinuousOffBitFromRight() const
+    {
+        if (sizeof(T) <= sizeof(u32))
+            return BitFlagUtil::countContinuousOffBitFromRight(mBits);
+        else
+            return BitFlagUtil::countContinuousOffBitFromRight64(mBits);
+    }
+
+    s32 countRightOnBit(s32 bit) const
+    {
+        if (sizeof(T) <= sizeof(u32))
+            return BitFlagUtil::countRightOnBit(mBits, bit);
+        else
+            return BitFlagUtil::countRightOnBit64(mBits, bit);
+    }
+
+    s32 findOnBitFromRight(s32 num) const
+    {
+        if (sizeof(T) <= sizeof(u32))
+            return BitFlagUtil::findOnBitFromRight(mBits, num);
+        else
+            return BitFlagUtil::findOnBitFromRight64(mBits, num);
+    }
 
 protected:
     T mBits;
