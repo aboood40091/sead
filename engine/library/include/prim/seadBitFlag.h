@@ -5,6 +5,33 @@
 
 namespace sead {
 
+class BitFlagUtil
+{
+public:
+    static s32 countOnBit(u32 x);
+
+    static s32 countContinuousOffBitFromRight(u32 x)
+    {
+        return countOnBit((x & -x) - 1);
+    }
+
+    static s32 countRightOnBit(u32 x, s32 bit);
+    static s32 findOnBitFromRight(u32 x, s32 num);
+
+    static s32 countOnBit64(u64 x)
+    {
+        return countOnBit(static_cast<u32>(x)) + countOnBit(static_cast<u32>(x >> 32));
+    }
+
+    static s32 countContinuousOffBitFromRight64(u64 x)
+    {
+        return countOnBit64((x & -x) - 1);
+    }
+
+    static s32 countRightOnBit64(u64 x, s32 bit);
+    static s32 findOnBitFromRight64(u64 x, s32 num);
+};
+
 template <typename T>
 class BitFlag
 {
