@@ -440,7 +440,12 @@ public:
     const T* getBufferPtr() const { return mBuffer; }
     u32 getByteSize() const { return mSize * sizeof(T); }
 
-    Buffer<T>& operator=(const Buffer<T>&);
+    Buffer<T>& operator=(const Buffer<T>& rhs)
+    {
+        mSize = rhs.mSize;
+        mBuffer = rhs.mBuffer;
+        return *this;
+    }
 
     bool isRangeValid(s32 x) const
     {
