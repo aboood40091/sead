@@ -147,6 +147,11 @@ public:
             return nullptr;
     }
 
+    Heap* getHeap()
+    {
+        return mHeapArray.getPrimaryHeap();
+    }
+
     TaskMgr* getTaskMgr() const
     {
         return mTaskMgr;
