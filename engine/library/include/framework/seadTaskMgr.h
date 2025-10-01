@@ -55,6 +55,11 @@ public:
         return mParentFramework;
     }
 
+    Heap* getHeap()
+    {
+        return mHeapArray.getPrimaryHeap();
+    }
+
     TaskBase* getRootTask() const
     {
         return mRootTask;
