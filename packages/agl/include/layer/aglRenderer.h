@@ -44,6 +44,12 @@ public:
     s32 getLayerNum() const { return mLayer.size(); }
     Layer* const& getLayer(s32 index) const { return mLayer[index]; }
 
+    template <typename T>
+    T* getLayer(s32 index) const
+    {
+        return sead::DynamicCast<T>(mLayer[index]);
+    }
+
 protected:
     void initLayer_(Layer* p_layer, s32 layer_index, const sead::SafeString& name, DisplayType display_type, sead::Heap* heap);
 
