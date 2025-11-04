@@ -457,6 +457,13 @@ Vector3<T>::setAdd(const Self& a, const Self& b)
 
 template <typename T>
 inline void
+Vector3<T>::setSub(const Self& a, const Self& b)
+{
+    Vector3CalcCommon<T>::sub(*this, a, b);
+}
+
+template <typename T>
+inline void
 Vector3<T>::setCross(const Self& a, const Self& b)
 {
     Vector3CalcCommon<T>::cross(*this, a, b);

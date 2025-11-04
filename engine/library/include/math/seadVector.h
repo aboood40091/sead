@@ -136,6 +136,7 @@ public:
     void set(T x_, T y_, T z_);
     void set(const Vec2& vec2, T z_);
     void setAdd(const Self& a, const Self& b);
+    void setSub(const Self& a, const Self& b);
     void setCross(const Self& a, const Self& b);
     void setLerp(const Self& a, const Self& b, f32 ratio);
     void setMul(const Mtx34& m, const Self& v);
