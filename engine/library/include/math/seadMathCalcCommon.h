@@ -151,32 +151,32 @@ public:
 
     static T deg2rad(T a)
     {
-        return a * (pi() / 180);
+        return a * (pi() / 180.0f);
     }
 
     static T rad2deg(T a)
     {
-        return a * 180 / pi();
+        return a * 180.0f / pi();
     }
 
-    static s32 deg2idx(T a)
+    static u32 deg2idx(T a)
     {
-        return a * cHalfRoundIdx / 180;
+        return (s32)(a * cHalfRoundIdx / 180.0f);
     }
 
-    static s32 rad2idx(T a)
+    static u32 rad2idx(T a)
     {
-        return a * cHalfRoundIdx / pi();
+        return (s32)(a * cHalfRoundIdx / pi());
     }
 
-    static T idx2deg(s32 a)
+    static T idx2deg(u32 a)
     {
-        return a * (180.0f / cHalfRoundIdx);
+        return (s32)a * (180.0f / cHalfRoundIdx);
     }
 
-    static T idx2rad(s32 a)
+    static T idx2rad(u32 a)
     {
-        return a * pi() / cHalfRoundIdx;
+        return (s32)a * pi() / cHalfRoundIdx;
     }
 
     static T roundAngle(T);
@@ -212,7 +212,7 @@ public:
 
     static bool chase(T*, T, T);
     static bool chaseAngle(T*, T, T);
-    static bool chaseAngleIdx(u32*, u32, s64);
+    static bool chaseAngleIdx(u32*, u32, T);
 
     static T lerp(T a, T b, f32 ratio)
     {
