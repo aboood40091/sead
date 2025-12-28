@@ -494,7 +494,7 @@ template <typename T>
 inline T
 MathCalcCommon<T>::clampMax(T val, T max_)
 {
-    if (val > max_) return max_;
+    if (val > max_) val = max_;
 
     return val;
 }
@@ -503,7 +503,7 @@ template <typename T>
 inline T
 MathCalcCommon<T>::clampMin(T val, T min_)
 {
-    if (val < min_) return min_;
+    if (val < min_) val = min_;
 
     return val;
 }
