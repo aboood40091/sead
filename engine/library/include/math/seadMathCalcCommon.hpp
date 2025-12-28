@@ -483,7 +483,7 @@ MathCalcCommon<s32>::roundUpPow2(s32 val, s32 base)
 }
 
 template <>
-inline s32
+inline u32
 MathCalcCommon<u32>::roundUpPow2(u32 val, s32 base)
 {
     //SEAD_ASSERT_MSG((base - 1u & base) == 0, "illegal param[base:%d]", base);
