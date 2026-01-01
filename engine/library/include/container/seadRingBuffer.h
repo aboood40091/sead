@@ -60,20 +60,14 @@ public:
 
     T* unsafeGet(s32 x)
     {
-        s32 idx = mHead + x;
-        if (idx >= mNumMax)
-            idx -= mNumMax;
-
-        return &mBuffer[idx];
+        // SEAD_ASSERT_MSG(static_cast<u32>(x) < static_cast<u32>(mNum), "index exceeded [%d/%d/%d]", x, mNum, mNumMax);
+        return &mBuffer[calcRealIndex(x)];
     }
 
-    const T* unsafeGet(s32 idx) const
+    const T* unsafeGet(s32 x) const
     {
-        s32 idx = mHead + x;
-        if (idx >= mNumMax)
-            idx -= mNumMax;
-
-        return &mBuffer[idx];
+        // SEAD_ASSERT_MSG(static_cast<u32>(x) < static_cast<u32>(mNum), "index exceeded [%d/%d/%d]", x, mNum, mNumMax);
+        return &mBuffer[calcRealIndex(x)];
     }
 
     // ...
@@ -90,6 +84,15 @@ public:
     }
 
     // ...
+
+protected:
+    s32 calcRealIndex(s32 x) const
+    {
+        s32 idx = mHead + x;
+        if (idx >= mNumMax)
+            idx -= mNumMax;
+        return idx;
+    }
 
 public:
     class iterator
