@@ -58,6 +58,32 @@ public:
 
     // ...
 
+    T& operator[] (s32 x)
+    {
+        if (static_cast<u32>(x) < static_cast<u32>(mNum))
+        {
+            return mBuffer[calcRealIndex(x)];
+        }
+        else
+        {
+            // SEAD_ASSERT_MSG(false, "index exceeded [%d/%d/%d]", x, mNum, mNumMax);
+            return mBuffer[0];
+        }
+    }
+
+    const T& operator[] (s32 x) const
+    {
+        if (static_cast<u32>(x) < static_cast<u32>(mNum))
+        {
+            return mBuffer[calcRealIndex(x)];
+        }
+        else
+        {
+            // SEAD_ASSERT_MSG(false, "index exceeded [%d/%d/%d]", x, mNum, mNumMax);
+            return mBuffer[0];
+        }
+    }
+
     T* get(s32 x)
     {
         if (static_cast<u32>(x) < static_cast<u32>(mNum))
