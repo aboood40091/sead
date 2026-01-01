@@ -122,6 +122,40 @@ public:
         return &mBuffer[calcRealIndex(x)];
     }
 
+    T& front()
+    {
+        return *unsafeGet(0);
+    }
+
+    const T& front() const
+    {
+        return *unsafeGet(0);
+    }
+
+    T& back()
+    {
+        if (mNum > 0)
+        {
+            return mBuffer[calcRealIndex(mNum - 1)];
+        }
+        else
+        {
+            // SEAD_ASSERT_MSG(false, "no element");
+            return mBuffer[0];
+        }
+    }
+
+    const T& back() const
+    {
+        if (mNum > 0)
+            return *unsafeGet(mNum - 1);
+        else
+        {
+            // SEAD_ASSERT_MSG(false, "no element");
+            return mBuffer[0];
+        }
+    }
+
     // ...
 
     void pushBack(const T& obj)
