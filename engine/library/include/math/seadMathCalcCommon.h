@@ -156,7 +156,7 @@ public:
 
     static T rad2deg(T a)
     {
-        return a * 180.0f / pi();
+        return a * (180.0f / pi());
     }
 
     static u32 deg2idx(T a)
@@ -171,7 +171,7 @@ public:
 
     static T idx2deg(u32 a)
     {
-        return (s32)a * (180.0f / cHalfRoundIdx);
+        return (s32)a * 180.0f / cHalfRoundIdx;
     }
 
     static T idx2rad(u32 a)
