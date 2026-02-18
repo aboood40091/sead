@@ -13,7 +13,7 @@
 
 namespace sead { namespace hostio {
 
-class Context;
+struct Context;
 
 } // namespace sead::hostio
 
