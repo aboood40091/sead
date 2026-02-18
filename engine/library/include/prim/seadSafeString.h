@@ -71,7 +71,7 @@ public:
         friend bool operator==(const iterator& a, const iterator& b)
         {
             return a.mString == b.mString && a.mIndex == b.mIndex;
-        };
+        }
 
         friend bool operator!=(const iterator& a_, const iterator& b_)
         {
@@ -127,18 +127,18 @@ public:
     iterator begin() const
     {
         return iterator(this, 0);
-    };
+    }
 
     iterator end() const
     {
         return iterator(this, calcLength() + 1);
-    };
+    }
 
 public:
     token_iterator tokenBegin(const SafeStringBase<CharType>& delimiter) const
     {
         return token_iterator(this, 0, delimiter);
-    };
+    }
 
     token_iterator tokenEnd(const SafeStringBase<CharType>& delimiter = SafeStringBase<CharType>()) const
     {
