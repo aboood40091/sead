@@ -15,21 +15,34 @@ class DynamicTextureAllocator
 {
     SEAD_SINGLETON_DISPOSER(DynamicTextureAllocator)
 
+public:
+    enum AllocateType
+    {
+        cAllocateType_Main = 0, // User-side initializes the memory for the allocators. In NSMBU, this is 32 MB of MEM1 (eDRAM)
+        cAllocateType_Sub1,     // In NSMBU, this is 32 MB of MEM2 (DDR3 RAM)
+        cAllocateType_Sub2,     // In NSMBU, this is null
+        cAllocateType_Num
+    };
+    static_assert(cAllocateType_Num == 3, "cAllocateType_Num mismatch");
+
 private:
     struct Context
     {
         sead::Buffer<TextureDataEx> mTextureDataEx;
-        sead::UnsafeArray<TextureMemoryAllocator, 3> mTextureMemoryAllocator;
+        sead::UnsafeArray<TextureMemoryAllocator, cAllocateType_Num> mTextureMemoryAllocator;
     };
     static_assert(sizeof(Context) == 0x908, "agl::utl::DynamicTextureAllocator::Context size mismatch");
 
-    friend class TextureDataEx;
+    static const s32 cCoreMaxNum = 3;
 
-public:
-    enum AllocateType
+    enum ContextType
     {
-        cAllocateType_Num = 3
+        cContextType_Persistent = cCoreMaxNum, // The context for persistent textures that are shared across all cores
+        cContextType_Num
     };
+    static_assert(cContextType_Num == 4, "cContextType_Num mismatch");
+
+    friend class TextureDataEx;
 
 public:
     DynamicTextureAllocator();
@@ -40,7 +53,7 @@ public:
         TextureFormat format,
         u32 width, u32 height, u32 mip_level_num,
         void** pp_buffer = nullptr,
-        AllocateType allocate_type = AllocateType(0),
+        AllocateType allocate_type = cAllocateType_Main,
         bool invalidate_gpu_cache = true
     );
 
@@ -66,7 +79,7 @@ private:
 
 private:
     sead::BitFlag32 _10;
-    sead::UnsafeArray<Context, 4> mContext;
+    sead::UnsafeArray<Context, cContextType_Num> mContext;
     sead::CriticalSection mCriticalSection;
     u32 _2470;
     sead::Heap* mpDebugHeap;
@@ -84,9 +97,9 @@ private:
     TextureMemoryAllocator*                 mpMemoryAllocator;
     TextureMemoryAllocator::MemoryBlock*    mpMemoryBlock;
     sead::SafeString                        mName;
-    u32                                     _ac;
+    u32                                     mAllocatorUsedSize;
     u8                                      mAllocType;
-    u8                                      _b1;
+    u8                                      mLRUCounter;        // "Least Recently Used" counter for eviction
     u8                                      mMipLevelNum;
     sead::BitFlag8                          mFlag;
     u8                                      mSurfaceSwizzle;

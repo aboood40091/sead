@@ -11,7 +11,7 @@ bool DynamicTextureAllocator::isValid_(const Context* p_ctx) const
     if (p_ctx)
         return isContextValid_(p_ctx);
 
-    for (sead::UnsafeArray<Context, 4>::constIterator itr_ctx = mContext.constBegin(), itr_ctx_end = --mContext.constEnd(); itr_ctx != itr_ctx_end; ++itr_ctx)
+    for (sead::UnsafeArray<Context, cContextType_Num>::constIterator itr_ctx = mContext.constBegin(), itr_ctx_end = --mContext.constEnd(); itr_ctx != itr_ctx_end; ++itr_ctx)
         if (!isContextValid_(&(*itr_ctx)))
             return false;
 
@@ -20,12 +20,12 @@ bool DynamicTextureAllocator::isValid_(const Context* p_ctx) const
 
 bool DynamicTextureAllocator::isContextValid_(const Context* p_ctx) const
 {
-    const Context* p_self_ctx = &(mContext[3]);
+    const Context* p_self_ctx = &(mContext[cContextType_Persistent]);
 
     int overwrapperd =  // Yes, you read that correctly. "int", not "bool".
-        (p_ctx->mTextureMemoryAllocator[0].isOverwrapperd(p_self_ctx->mTextureMemoryAllocator[0]) ||
-         p_ctx->mTextureMemoryAllocator[1].isOverwrapperd(p_self_ctx->mTextureMemoryAllocator[1]) ||
-         p_ctx->mTextureMemoryAllocator[2].isOverwrapperd(p_self_ctx->mTextureMemoryAllocator[2]));
+        (p_ctx->mTextureMemoryAllocator[cAllocateType_Main].isOverwrapperd(p_self_ctx->mTextureMemoryAllocator[cAllocateType_Main]) ||
+         p_ctx->mTextureMemoryAllocator[cAllocateType_Sub1].isOverwrapperd(p_self_ctx->mTextureMemoryAllocator[cAllocateType_Sub1]) ||
+         p_ctx->mTextureMemoryAllocator[cAllocateType_Sub2].isOverwrapperd(p_self_ctx->mTextureMemoryAllocator[cAllocateType_Sub2]));
 
     return !overwrapperd;
 }
@@ -88,12 +88,12 @@ TextureData* DynamicTextureAllocator::alloc_(
                 break;
             }
 
-            if (tex._b1 > 0)
-                tex._b1--;
+            if (tex.mLRUCounter > 0)
+                tex.mLRUCounter--;
 
-            if (tex._b1 < index)
+            if (tex.mLRUCounter < index)
             {
-                index = tex._b1;
+                index = tex.mLRUCounter;
                 p_tex = &tex;
             }
         }
@@ -133,24 +133,18 @@ TextureData* DynamicTextureAllocator::alloc_(
 
     p_tex->mAllocType = allocate_type;
     {
-        u32 allocator_num;
-        u32 allocator_idx;
+        if (p_tex->mFlag.isOnBit(0)) // Force allocation from the main allocator (cAllocateType_Main)
+            allocate_type = cAllocateType_Main;
+        else if (p_tex->mFlag.isOnBit(1)) // Force allocation from the sub allocator (cAllocateType_Sub1)
+            allocate_type = cAllocateType_Sub1;
 
-        if (p_tex->mFlag.isOnBit(0))
-        {
-            allocator_num = 1;
-            allocator_idx = 0;
-        }
-        else
-        {
-            if (p_tex->mFlag.isOnBit(1))
-                allocate_type = AllocateType(1);
+        const u32 allocator_num = 1;
+        u32 allocator_idx_start = u32(allocate_type);
+        u32 allocator_idx_end = allocator_idx_start + allocator_num;
 
-            allocator_num = u32(allocate_type) + 1;
-            allocator_idx = u32(allocate_type);
-        }
+        u32 allocator_idx = allocator_idx_start;
 
-        for (; allocator_idx < allocator_num; allocator_idx++)
+        for (; allocator_idx < allocator_idx_end; allocator_idx++)
         {
             p_tex->mpMemoryAllocator = &(p_ctx->mTextureMemoryAllocator[allocator_idx]);
             p_tex->mpMemoryBlock = p_tex->mpMemoryAllocator->alloc(*p_tex, pp_buffer, allocate_from_head);
@@ -175,8 +169,8 @@ TextureData* DynamicTextureAllocator::alloc_(
     if (mip_ptr != nullptr)
         p_tex->setMipPtr(mip_ptr);
 
-    p_tex->_ac = p_tex->mpMemoryAllocator->getUsedSize();
-    p_tex->_b1 = p_ctx->mTextureDataEx.size();
+    p_tex->mAllocatorUsedSize = p_tex->mpMemoryAllocator->getUsedSize();
+    p_tex->mLRUCounter = p_ctx->mTextureDataEx.size();
     p_tex->mName = name;
 
     if (invalidate_gpu_cache)
@@ -198,7 +192,7 @@ void DynamicTextureAllocator::free(const TextureData* ptr)
         // TODO: scoped lock
         mCriticalSection.lock();
         {
-            for (sead::UnsafeArray<Context, 4>::iterator itr_ctx = mContext.begin(), itr_ctx_end = --mContext.end(); itr_ctx != itr_ctx_end; ++itr_ctx)
+            for (sead::UnsafeArray<Context, cContextType_Num>::iterator itr_ctx = mContext.begin(), itr_ctx_end = --mContext.end(); itr_ctx != itr_ctx_end; ++itr_ctx)
                 if (itr_ctx.getIndex() != s32(sead::CoreInfo::getCurrentCoreId()))
                     if (free_(&(*itr_ctx), ptr))
                         break;
