@@ -121,12 +121,17 @@ public:
         return mClearFlag.isOn(cClearFlag_Depth);
     }
 
+    const sead::Viewport& getDrawViewport() const
+    {
+        return mDrawViewport;
+    }
+
     // ...
 
 protected:
     Renderer* mpRenderer;
-    sead::Viewport mViewport;
-    sead::Viewport mScissor; // I think
+    sead::Viewport mBaseViewport;
+    sead::Viewport mDrawViewport;
     sead::Camera* mpCamera;
     sead::Projection* mpProjection;
     sead::BitFlag32 _4c;
