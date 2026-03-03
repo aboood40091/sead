@@ -226,6 +226,13 @@ Vector2<T>::set(T x_, T y_)
 
 template <typename T>
 inline void
+Vector2<T>::setAdd(const Self& a, const Self& b)
+{
+    Vector2CalcCommon<T>::add(*this, a, b);
+}
+
+template <typename T>
+inline void
 Vector2<T>::setSub(const Self& a, const Self& b)
 {
     Vector2CalcCommon<T>::sub(*this, a, b);

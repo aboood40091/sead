@@ -62,6 +62,7 @@ public:
     T setNormalize(const Self& v);
     void set(const Self& v);
     void set(T x_, T y_);
+    void setAdd(const Self& a, const Self& b);
     void setSub(const Self& a, const Self& b);
     void setLerp(const Self& a, const Self& b, f32 ratio);
 
