@@ -13,9 +13,13 @@ typedef s64 d_sintptr;
 typedef uintptr uintptr_t;
 typedef sintptr  intptr_t;
 
+#ifndef VSCODE_INTELLISENSE
+
 #ifndef override
     #define override
 #endif // override
+
+#endif // VSCODE_INTELLISENSE
 
 #ifndef forceinline
     #define forceinline __attribute__((always_inline))
