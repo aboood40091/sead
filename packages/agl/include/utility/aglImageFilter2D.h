@@ -1,6 +1,7 @@
 #pragma once
 
 #include <common/aglShaderEnum.h>
+#include <gfx/seadViewport.h>
 
 namespace agl {
 
@@ -87,7 +88,25 @@ public:
     };
     static_assert(cFrameBufferCopySampler_Num == 9);
 
+    enum GaussianKernel
+    {
+        cGaussianKernel_3 = 0,
+        cGaussianKernel_5,
+        cGaussianKernel_7,
+        cGaussianKernel_9,
+        cGaussianKernel_11,
+        cGaussianKernel_13,
+        cGaussianKernel_Num
+    };
+    static_assert(cGaussianKernel_Num == 6);
+
 public:
+    static ShaderMode drawTexture(const TextureSampler& sampler, const sead::Viewport& viewport, const sead::Vector2f& scale, const sead::Vector2f& pos, ShaderMode mode = cShaderMode_Invalid);
+    static ShaderMode drawTextureTexCoord(const TextureSampler& sampler, const sead::Viewport& viewport, const sead::Vector2f& tex_scale, f32 tex_rotate, const sead::Vector2f& tex_trans, const sead::Vector2f& scale, const sead::Vector2f& pos, ShaderMode mode = cShaderMode_Invalid);
+    static ShaderMode drawTextureMSAA(const TextureSampler& sampler, const sead::Viewport& viewport, const sead::Vector2f& scale, const sead::Vector2f& pos, ShaderMode mode = cShaderMode_Invalid);
+    static ShaderMode drawGaussian(const TextureSampler& sampler, const sead::Viewport& viewport, GaussianKernel kernel, bool dir_x, bool omit, const sead::Vector2f& pos, ShaderMode mode = cShaderMode_Invalid);
+    static ShaderMode drawCubic(const TextureSampler& sampler, const sead::Viewport& viewport, const sead::Vector2f& tex_scale, f32 tex_rotate, const sead::Vector2f& tex_trans, const sead::Vector2f& scale, const sead::Vector2f& pos, ShaderMode mode = cShaderMode_Invalid);
+
     static void drawQuadTriangle(const ShaderProgram& program, const TextureSampler& sampler);
     static ShaderMode drawTextureQuadTriangle(const TextureSampler& sampler, ShaderMode mode);
 };
