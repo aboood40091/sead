@@ -57,4 +57,8 @@ typedef sintptr  intptr_t;
 
 #endif
 
+// TODO: Move to the proper headers
+#define SEAD_MACRO_UTIL_ROUNDUP(x, y) ((x) + ((y) - 1) & ~((y) - 1))
+#define SEAD_MACRO_UTIL_ROUNDDOWN(x, y) ((x) & ~((y) - 1))
+
 #endif // SEAD_TYPES_H_
