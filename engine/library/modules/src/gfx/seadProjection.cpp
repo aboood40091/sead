@@ -98,7 +98,7 @@ void Projection::doUpdateDeviceMatrix(Matrix44f* dst, const Matrix44f& src, Grap
         (*dst)(1, 3) *= -1;
         break;
     default:
-        // SEAD_ASSERTMSG(false, "Invalid DevicePosture(%d).", s32(pose));
+        // SEAD_ASSERT_MSG(false, "Invalid DevicePosture(%d).", s32(pose));
     }
 
     (*dst)(2, 0) = (*dst)(2, 0) * mDeviceZScale;
