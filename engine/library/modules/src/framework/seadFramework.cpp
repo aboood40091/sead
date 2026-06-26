@@ -40,4 +40,10 @@ Framework::~Framework()
         mMethodTreeMgrHeap->destroy();
 }
 
+Framework::InitializeArg::InitializeArg()
+    : heap_size(0x3000000)  // 48 MiB
+    , arena(nullptr)
+{
+}
+
 } // namespace sead
