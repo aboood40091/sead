@@ -189,6 +189,8 @@ protected:
     virtual void setPolygonOffsetEnableImpl(bool fill_front_enable, bool fill_back_enable, bool point_line_enable);
 
 public:
+    void initialize();
+
     void setViewportRealPosition(f32 x, f32 y, f32 w, f32 h)
     {
         setViewportImpl(x, y, w, h);
