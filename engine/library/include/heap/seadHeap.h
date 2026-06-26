@@ -61,7 +61,9 @@ public:
 
     void* alloc(size_t size, s32 alignment)
     {
-        return tryAlloc(size, alignment);
+        void* ptr = tryAlloc(size, alignment);
+        // SEAD_ASSERT_MSG(ptr != nullptr, "alloc failed. size: %d, heap: %s", size, getName().cstr());
+        return ptr;
     }
 
     virtual void* tryAlloc(size_t size, s32 alignment) = 0;
