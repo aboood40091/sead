@@ -32,4 +32,11 @@ Quat<T>::set(T w_, T x_, T y_, T z_)
     QuatCalcCommon<T>::set(*this, w_, x_, y_, z_);
 }
 
+template <typename T>
+inline void
+Quat<T>::slerpTo(const Self& to, f32 t)
+{
+    QuatCalcCommon<T>::slerpTo(*this, *this, to, t);
+}
+
 }  // namespace sead

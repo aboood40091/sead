@@ -22,6 +22,7 @@ public:
     void makeUnit();
     bool makeVectorRotation(const Vec3& from, const Vec3& to);
     void set(T w_, T x_, T y_, T z_);
+    void slerpTo(const Self& to, f32 t);
 
     static const Quat unit;
 };

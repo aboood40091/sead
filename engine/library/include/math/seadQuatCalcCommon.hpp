@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef cafe
+#include <cafe.h>
+#endif // cafe
+
 #include <math/seadMathCalcCommon.h>
 #include <math/seadQuat.h>
 
@@ -44,5 +48,16 @@ QuatCalcCommon<T>::set(Base& q, T w, T x, T y, T z)
     q.y = y;
     q.z = z;
 }
+
+#ifdef cafe
+
+template <>
+inline void
+QuatCalcCommon<f32>::slerpTo(Base& q, const Base& from, const Base& to, f32 t)
+{
+    C_QUATSlerp(reinterpret_cast<const Quaternion*>(&from.x), reinterpret_cast<const Quaternion*>(&to.x), reinterpret_cast<Quaternion*>(&q.x), t);
+}
+
+#endif // cafe
 
 } // namespace sead
