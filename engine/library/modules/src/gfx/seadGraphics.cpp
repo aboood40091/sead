@@ -1,4 +1,5 @@
 #include <gfx/seadGraphics.h>
+#include <gfx/seadGraphicsContext.h>
 #include <thread/seadThread.h>
 
 namespace sead {
@@ -8,6 +9,16 @@ Graphics* Graphics::sInstance = nullptr;
 Graphics::DevicePosture Graphics::sDefaultDevicePosture = Graphics::cDevicePosture_Same;
 f32 Graphics::sDefaultDeviceZScale = 1.0f;
 f32 Graphics::sDefaultDeviceZOffset = 0.0f;
+
+Graphics::Graphics()
+    : mContextHolderThread(nullptr)
+    , mContextRefCounter(0)
+{
+}
+
+Graphics::~Graphics()
+{
+}
 
 void Graphics::lockDrawContext()
 {
