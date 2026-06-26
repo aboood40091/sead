@@ -46,4 +46,10 @@ Framework::InitializeArg::InitializeArg()
 {
 }
 
+Framework::RunArg::RunArg()
+    : prepare_stack_size(0)
+    , prepare_priority(-1)
+{
+}
+
 } // namespace sead
