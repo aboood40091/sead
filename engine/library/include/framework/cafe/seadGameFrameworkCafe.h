@@ -50,13 +50,21 @@ public:
     GameFrameworkCafe(const CreateArg& arg);
     virtual ~GameFrameworkCafe();
 
+    void initializeGraphicsSystem(
+        Heap* heap, s32 argc = 0, char** argv = nullptr,
+        const Vector2f& tv_virtual_fb_size = Vector2f::zero, const Vector2f& drc_virtual_fb_size = Vector2f(854.0f, 480.0f),
+        Heap* heap_for_display_buffer = nullptr
+    );
+
+    void setVBlankWaitInterval(u32 wait_vblank);
+
     virtual FrameBuffer* getMethodFrameBuffer(s32 method_type) const;
     virtual const LogicalFrameBuffer* getMethodLogicalFrameBuffer(s32 method_type) const;
 
 protected:
     virtual void initRun_(Heap*);
     virtual void runImpl_();
-    virtual MethodTreeMgr* createMethodTreeMgr_(Heap*);
+    virtual MethodTreeMgr* createMethodTreeMgr_(Heap* heap);
 
 public:
     virtual f32 calcFps()
@@ -65,7 +73,10 @@ public:
         return static_cast<f32>(sec_span.toS64()) / static_cast<f32>(mFrameSpan.toS64());
     }
 
-    virtual void setCaption(const SafeString&) { }
+    virtual void setCaption(const SafeString& caption)
+    {
+        // SEAD_PRINT("%s\n", caption.cstr());
+    }
 
 protected:
     virtual void mainLoop_();
@@ -74,20 +85,15 @@ protected:
     virtual void procCalc_();
     virtual void waitForNextFrame_();
     virtual void swapBuffer_();
-    virtual void clearFrameBuffers_(s32);
+    virtual void clearFrameBuffers_(s32 method_type);
+
+    void gpuMesureEnd_();
 
     void drawTV_();
     void copyToTV_();
 
     void drawDRC_();
     void copyToDRC_();
-
-public:
-    void initializeGraphicsSystem(
-        Heap* heap, s32 argc = 0, char** argv = nullptr,
-        const Vector2f& tv_virtual_fb_size = Vector2f::zero, const Vector2f& drc_virtual_fb_size = Vector2f(854.0f, 480.0f),
-        Heap* heap_for_display_buffer = nullptr
-    );
 
 protected:
     enum
@@ -98,9 +104,10 @@ protected:
         cGpuCounter_DRCDrawEnd,
         cGpuCounter_NumMax
     };
+    static const size_t cGpuCounterSize = sizeof(u64) * cGpuCounter_NumMax;
 
     CreateArg mArg;
-    BitFlag32 _6c;
+    BitFlag32 mFlag;
     TickSpan mFrameSpan;
     TickTime mLastFrameBegin;
     FrameBuffer* mDefaultFrameBuffer;
@@ -118,9 +125,9 @@ protected:
     FrameBuffer* mFrameBuffer;
     FrameBuffer* mFrameBufferDRC;
     DeferredCopyCallback mDeferredCopyCallback;
-    bool _36c;
+    bool mCopyPostDrawAll;
     u64* mGpuCounters;
-    u32 _374[4 / sizeof(u32)];
+  //u32 _374[4 / sizeof(u32)];  // alignment?
 };
 static_assert(sizeof(GameFrameworkCafe) == 0x378, "sead::GameFrameworkCafe size mismatch");
 
