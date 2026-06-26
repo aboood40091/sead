@@ -34,6 +34,13 @@ Quat<T>::set(T w_, T x_, T y_, T z_)
 
 template <typename T>
 inline void
+Quat<T>::setSlerp(const Self& from, const Self& to, f32 t)
+{
+    QuatCalcCommon<T>::slerpTo(*this, from, to, t);
+}
+
+template <typename T>
+inline void
 Quat<T>::slerpTo(const Self& to, f32 t)
 {
     QuatCalcCommon<T>::slerpTo(*this, *this, to, t);
