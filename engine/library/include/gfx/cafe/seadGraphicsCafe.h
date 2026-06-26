@@ -134,7 +134,6 @@ public:
     static GraphicsCafe* instance() { return static_cast<GraphicsCafe*>(sInstance); }
 
 public:
-    GraphicsCafe() { }
     virtual ~GraphicsCafe();
 
     GX2ContextState* getGX2ContextState() { return mContextState; }
