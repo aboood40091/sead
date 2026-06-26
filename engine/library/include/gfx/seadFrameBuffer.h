@@ -141,6 +141,14 @@ public:
     {
     }
 
+    void initialize(f32 width, f32 height, sead::Heap* heap)
+    {
+        mWidth = width;
+        mHeight = height;
+        initializeImpl_(heap);
+    }
+
+protected:
     virtual void initializeImpl_(sead::Heap* heap) = 0;
 
 protected:
