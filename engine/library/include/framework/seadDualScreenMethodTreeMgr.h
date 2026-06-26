@@ -22,6 +22,26 @@ public:
     DualScreenMethodTreeMgr();
     virtual ~DualScreenMethodTreeMgr();
 
+    Screen getSysDrawScreen() const
+    {
+        return mSysDrawScreen;
+    }
+
+    void setSysDrawScreen(Screen screen)
+    {
+        mSysDrawScreen = screen;
+    }
+
+    Screen getAppDrawScreen() const
+    {
+        return mAppDrawScreen;
+    }
+
+    void setAppDrawScreen(Screen screen)
+    {
+        mAppDrawScreen = screen;
+    }
+
     virtual void attachMethod(s32, MethodTreeNode*);
     virtual MethodTreeNode* getRootMethodTreeNode(s32);
     virtual void pauseAll(bool);
