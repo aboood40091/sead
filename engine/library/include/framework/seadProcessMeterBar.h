@@ -28,6 +28,21 @@ public:
     {
     }
 
+#if 0 // defined(SEAD_TARGET_DEBUG)
+    void measureBegin();
+    void measureBegin(const TickTime& t);
+
+    void measureEnd();
+    void measureEnd(const TickTime& t);
+#else
+    // These are no-ops in the release build
+    void measureBegin() { }
+    void measureBegin(const TickTime& t) { }
+
+    void measureEnd() { }
+    void measureEnd(const TickTime& t) { }
+#endif
+
 /*
 protected:
     // ...
@@ -57,6 +72,28 @@ private:
 #ifdef cafe
 static_assert(sizeof(MultiProcessMeterBar<32>) == 8, "sead::MultiProcessMeterBar size mismatch");
 #endif // cafe
+
+class ProcessMeter
+{
+private:
+    static ProcessMeter* sInstance;
+
+public:
+    static ProcessMeter* instance()
+    {
+        return sInstance;
+    }
+
+public:
+#if 0 // defined(SEAD_TARGET_DEBUG)
+    void measureBeginFrame();
+    void measureEndFrame();
+#else
+    // These are no-ops in the release build
+    void measureBeginFrame() { }
+    void measureEndFrame() { }
+#endif
+};
 
 } // namespace sead
 
