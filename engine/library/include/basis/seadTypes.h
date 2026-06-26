@@ -43,10 +43,18 @@ typedef sintptr  intptr_t;
 
 #endif // cafe
 
+#ifndef VSCODE_INTELLISENSE
+
 #ifdef __ghs__
     #define noinline  __noinline
 #else
     #define noinline
 #endif // __ghs__
+
+#else
+
+#define noinline
+
+#endif
 
 #endif // SEAD_TYPES_H_
