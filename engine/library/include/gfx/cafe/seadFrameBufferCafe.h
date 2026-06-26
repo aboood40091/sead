@@ -62,8 +62,8 @@ public:
 
     enum Resolution
     {
-        cResolution_Auto, // Maybe? Idk
-        cResolution_720P
+        cResolution_720P,
+        cResolution_1080P
     };
     static_assert(sizeof(Resolution) == 4, "sead::DisplayBufferCafe::Resolution size mismatch");
 
