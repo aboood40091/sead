@@ -141,7 +141,7 @@ public:
     {
     }
 
-    void initialize(f32 width, f32 height, sead::Heap* heap)
+    void initialize(f32 width, f32 height, Heap* heap)
     {
         mWidth = width;
         mHeight = height;
@@ -149,7 +149,7 @@ public:
     }
 
 protected:
-    virtual void initializeImpl_(sead::Heap* heap) = 0;
+    virtual void initializeImpl_(Heap* heap) = 0;
 
 protected:
     f32 mWidth;

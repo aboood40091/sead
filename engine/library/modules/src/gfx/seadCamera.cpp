@@ -34,15 +34,15 @@ void LookAtCamera::doUpdateMatrix(Matrix34f* dst) const
         return;
     }
 
-    sead::Vector3f dir = mPos;
+    Vector3f dir = mPos;
     dir -= mAt;
     dir.normalize();
 
-    sead::Vector3f right;
+    Vector3f right;
     right.setCross(mUp, dir);
     right.normalize();
 
-    sead::Vector3f up;
+    Vector3f up;
     up.setCross(dir, right);
 
     f32 x = -right.dot(mPos);

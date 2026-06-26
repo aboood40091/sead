@@ -67,7 +67,7 @@ public:
     {
     }
 
-    bool isGroup(s32 group_index, const agl::utl::INamedObj& obj) const
+    bool isGroup(s32 group_index, const INamedObj& obj) const
     {
         return group_index == -1 || mGroupBuffer[group_index].getName() == obj.getGroupName();
     }

@@ -31,7 +31,7 @@ u32 RamStreamSrc::read(void* dst, u32 size)
     if (mCurPos + size > mSize)
         size = mSize - mCurPos;
 
-    sead::MemUtil::copy(dst, mStartAddr + mCurPos, size);
+    MemUtil::copy(dst, mStartAddr + mCurPos, size);
     mCurPos += size;
     return size;
 }
@@ -41,7 +41,7 @@ u32 RamStreamSrc::write(const void* src, u32 size)
     if (mCurPos + size > mSize)
         size = mSize - mCurPos;
 
-    sead::MemUtil::copy(mStartAddr + mCurPos, src, size);
+    MemUtil::copy(mStartAddr + mCurPos, src, size);
     mCurPos += size;
     return size;
 }

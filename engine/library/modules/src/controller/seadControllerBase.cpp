@@ -250,8 +250,8 @@ bool ControllerBase::isIdleBase_()
 {
     return getHoldMask() == 0 &&
            !isPointerOn() &&
-           mLeftStick == sead::Vector2f::zero &&
-           mRightStick == sead::Vector2f::zero &&
+           mLeftStick == Vector2f::zero &&
+           mRightStick == Vector2f::zero &&
            mLeftAnalogTrigger == 0.0f &&
            mRightAnalogTrigger == 0.0f;
 }

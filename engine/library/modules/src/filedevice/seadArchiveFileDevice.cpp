@@ -310,7 +310,7 @@ bool ArchiveFileDevice::doRead_(u32* read_size, FileHandle* handle, u8* buf, u32
     if (arc_handle->file_info.getLength() < arc_handle->cur_pos + size)
         size = arc_handle->file_info.getLength() - arc_handle->cur_pos;
 
-    sead::MemUtil::copy(buf, arc_handle->image + arc_handle->cur_pos, size);
+    MemUtil::copy(buf, arc_handle->image + arc_handle->cur_pos, size);
     arc_handle->cur_pos += size;
 
     if (read_size != nullptr)

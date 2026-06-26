@@ -26,7 +26,7 @@ void Graphics::initialize()
     {
         initializeImpl();
 
-        sead::GraphicsContext context;
+        GraphicsContext context;
         context.apply();
     }
     unlockDrawContext();
@@ -34,7 +34,7 @@ void Graphics::initialize()
 
 void Graphics::lockDrawContext()
 {
-    sead::Thread* current = ThreadMgr::instance()->getCurrentThread();
+    Thread* current = ThreadMgr::instance()->getCurrentThread();
     if (current == mContextHolderThread && mContextRefCounter > 0)
     {
         mContextRefCounter++;
@@ -52,7 +52,7 @@ void Graphics::lockDrawContext()
 
 void Graphics::unlockDrawContext()
 {
-    sead::Thread* current = ThreadMgr::instance()->getCurrentThread();
+    Thread* current = ThreadMgr::instance()->getCurrentThread();
     // SEAD_ASSERT(mContextHolderThread == current);
     // SEAD_ASSERT(mContextRefCounter > 0);
     if (--mContextRefCounter == 0)

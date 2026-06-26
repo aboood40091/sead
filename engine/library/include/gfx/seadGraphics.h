@@ -13,7 +13,7 @@ namespace sead {
 struct Color4f;
 class Thread;
 
-class Graphics : public sead::IDisposer
+class Graphics : public IDisposer
 {
 public:
     enum DevicePosture

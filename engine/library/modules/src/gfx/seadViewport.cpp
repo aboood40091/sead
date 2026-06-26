@@ -102,18 +102,18 @@ void Viewport::getOnFrameBufferSize(Vector2f* dst, const LogicalFrameBuffer& fb)
 
 void Viewport::apply(const LogicalFrameBuffer& frame_buffer) const
 {
-    sead::Vector2f real_pos;
+    Vector2f real_pos;
     getOnFrameBufferPos(&real_pos, frame_buffer);
 
-    sead::Vector2f real_size;
+    Vector2f real_size;
     getOnFrameBufferSize(&real_size, frame_buffer);
 
     // SEAD_ASSERT(frame_buffer.getPhysicalArea().isInside(real_pos) && frame_buffer.getPhysicalArea().isInside(real_pos + real_size));
 
     real_pos.y = (frame_buffer.getPhysicalArea().getSizeY() - real_size.y) - real_pos.y;
 
-    sead::Graphics::instance()->setViewportRealPosition(real_pos.x, real_pos.y, real_size.x, real_size.y);
-    sead::Graphics::instance()->setScissorRealPosition(real_pos.x, real_pos.y, real_size.x, real_size.y);
+    Graphics::instance()->setViewportRealPosition(real_pos.x, real_pos.y, real_size.x, real_size.y);
+    Graphics::instance()->setScissorRealPosition(real_pos.x, real_pos.y, real_size.x, real_size.y);
 }
 
 }  // namespace sead
