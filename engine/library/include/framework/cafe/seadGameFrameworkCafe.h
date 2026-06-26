@@ -51,7 +51,7 @@ public:
     virtual ~GameFrameworkCafe();
 
     virtual FrameBuffer* getMethodFrameBuffer(s32 method_type) const;
-    virtual LogicalFrameBuffer* getMethodLogicalFrameBuffer(s32 method_type) const;
+    virtual const LogicalFrameBuffer* getMethodLogicalFrameBuffer(s32 method_type) const;
 
 protected:
     virtual void initRun_(Heap*);
