@@ -80,7 +80,7 @@ public:
     virtual FrameBuffer* getMethodFrameBuffer(s32 method_type) const = 0;
     virtual const LogicalFrameBuffer* getMethodLogicalFrameBuffer(s32 method_type) const { return getMethodFrameBuffer(method_type); }
     virtual bool setProcessPriority(ProcessPriority) { return false; }
-    virtual void reserveReset(void* param) { mResetParameter = param; mReserveReset = true; }
+    virtual void reserveReset(void* param) { mReserveReset = true; mResetParameter = param; }
 
 protected:
     virtual void initRun_(Heap*) { }
