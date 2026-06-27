@@ -19,15 +19,17 @@ public:
     GameFramework();
     virtual ~GameFramework();
 
-    virtual void createSystemTasks(TaskBase*, const CreateSystemTaskArg&);
+    void startDisplay();
 
-    virtual void createControllerMgr(TaskBase*);
-    virtual void createHostIOMgr(TaskBase*, HostIOMgr::Parameter*);
+    virtual void createSystemTasks(TaskBase* root_task, const CreateSystemTaskArg& arg);
+
+    virtual void createControllerMgr(TaskBase* root_task);
+    virtual void createHostIOMgr(TaskBase* root_task, HostIOMgr::Parameter* param);
     virtual void createProcessMeter(TaskBase* root_task);
-    virtual void createSeadMenuMgr(TaskBase*);
-    virtual void createInfLoopChecker(TaskBase*, const TickSpan&);
+    virtual void createSeadMenuMgr(TaskBase* root_task);
+    virtual void createInfLoopChecker(TaskBase* root_task, const TickSpan& span);
     virtual f32 calcFps() = 0;
-    virtual void saveScreenShot(const SafeString&) { }
+    virtual void saveScreenShot(const SafeString&) { /* SEAD_ASSERT_MSG(false, "Not implement."); */ }
     virtual bool isScreenShotBusy() { return false; }
 
 protected:
