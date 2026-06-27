@@ -56,10 +56,12 @@ template <s32 N>
 class MultiProcessMeterBar : public ProcessMeterBarBase
 {
 public:
-    struct Section;
+    MultiProcessMeterBar()
+        : ProcessMeterBarBase(/* mBuffer, N, */ "" /*, ... */)
+    {
+    }
 
-public:
-    MultiProcessMeterBar(/* const SafeString& name, const Color4f& color */)
+    MultiProcessMeterBar(const SafeString& name, const Color4f& color)
         : ProcessMeterBarBase(/* mBuffer, N, name */ "" /*, color */)
     {
     }
