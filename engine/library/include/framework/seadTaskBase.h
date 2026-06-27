@@ -71,6 +71,18 @@ public:
     static_assert(sizeof(CreateArg) == 0x80, "sead::TaskBase::CreateArg size mismatch");
 #endif // cafe
 
+    struct MgrTaskArg : CreateArg
+    {
+        MgrTaskArg(const TaskClassID& class_id);
+    };
+    static_assert(sizeof(MgrTaskArg) == sizeof(CreateArg), "sead::TaskBase::MgrTaskArg size mismatch");
+
+    struct SystemMgrTaskArg : MgrTaskArg
+    {
+        SystemMgrTaskArg(const TaskClassID& class_id);
+    };
+    static_assert(sizeof(SystemMgrTaskArg) == sizeof(MgrTaskArg), "sead::TaskBase::SystemMgrTaskArg size mismatch");
+
     struct TakeoverArg;
     struct PushArg;
 
