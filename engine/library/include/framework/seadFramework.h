@@ -27,7 +27,10 @@ class Framework
 public:
     struct CreateSystemTaskArg
     {
-        inline CreateSystemTaskArg();
+        CreateSystemTaskArg()
+            : hostio_parameter(nullptr)
+        {
+        }
 
         HostIOMgr::Parameter* hostio_parameter;
         TickSpan infloop_detection_span;

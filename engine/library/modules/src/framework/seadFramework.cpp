@@ -5,12 +5,6 @@
 
 namespace sead {
 
-Framework::CreateSystemTaskArg::CreateSystemTaskArg()
-    : hostio_parameter(nullptr)
-    , infloop_detection_span()
-{
-}
-
 Framework::Framework()
     : mReserveReset(false)
     , mResetParameter(nullptr)
