@@ -73,8 +73,10 @@ public:
     Framework();
     virtual ~Framework();
 
+    static void initialize(const InitializeArg& arg);
+
     virtual void run(Heap* heap, const TaskBase::CreateArg& root_create_arg, const RunArg& run_arg);
-    virtual void createSystemTasks(TaskBase*, const CreateSystemTaskArg&);
+    virtual void createSystemTasks(TaskBase* root_task, const CreateSystemTaskArg& arg);
     virtual FrameBuffer* getMethodFrameBuffer(s32 method_type) const = 0;
     virtual const LogicalFrameBuffer* getMethodLogicalFrameBuffer(s32 method_type) const { return getMethodFrameBuffer(method_type); }
     virtual bool setProcessPriority(ProcessPriority) { return false; }
