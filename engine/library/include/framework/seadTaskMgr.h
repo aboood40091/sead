@@ -74,7 +74,13 @@ public:
     TaskBase* createTaskSync(const TaskBase::CreateArg& arg);
 
     template <typename T>
-    T* createSingletonTaskSync(const TaskBase::CreateArg& arg);
+    T* createSingletonTaskSync(const TaskBase::CreateArg& arg)
+    {
+        TaskBase* task = createTaskSync(arg);
+        T* derived = DynamicCast<T>(task);
+        // SEAD_ASSERT(derived != nullptr);
+        return derived;
+    }
 
 private:
     TaskBase* doCreateTask_(const TaskBase::CreateArg& arg, HeapArray* ha);
