@@ -75,28 +75,6 @@ private:
 static_assert(sizeof(MultiProcessMeterBar<32>) == 8, "sead::MultiProcessMeterBar size mismatch");
 #endif // cafe
 
-class ProcessMeter
-{
-private:
-    static ProcessMeter* sInstance;
-
-public:
-    static ProcessMeter* instance()
-    {
-        return sInstance;
-    }
-
-public:
-#if 0 // defined(SEAD_TARGET_DEBUG)
-    void measureBeginFrame();
-    void measureEndFrame();
-#else
-    // These are no-ops in the release build
-    void measureBeginFrame() { }
-    void measureEndFrame() { }
-#endif
-};
-
 } // namespace sead
 
 #endif // SEAD_PROCESS_METER_BAR_H_

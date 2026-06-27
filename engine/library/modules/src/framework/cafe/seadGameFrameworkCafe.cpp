@@ -1,6 +1,7 @@
 #include <basis/seadNew.h>
 #include <framework/cafe/seadGameFrameworkCafe.h>
 #include <framework/seadDualScreenMethodTreeMgr.h>
+#include <framework/seadProcessMeter.h>
 #include <framework/seadTaskMgr.h>
 #include <gfx/cafe/seadFrameBufferCafe.h>
 #include <gfx/cafe/seadGraphicsCafe.h>
@@ -17,7 +18,7 @@ void* allocFromMem1FrmHeap(size_t size, s32 alignment)
 
 namespace sead {
 
-void GameFrameworkCafe::initialize(const Framework::InitializeArg& arg)
+void GameFrameworkCafe::initialize(const InitializeArg& arg)
 {
     GameFramework::initialize(arg);
 }
@@ -134,6 +135,8 @@ void GameFrameworkCafe::initializeGraphicsSystem(
 
     BoundBox2f drc_physical_area(0.0f, 0.0f, 854.0f, 480.0f);
     mLogicalFrameBufferDRC.setPhysicalArea(drc_physical_area);
+
+    // IMDisableDim();
 }
 
 void GameFrameworkCafe::initRun_(Heap*)
