@@ -14,6 +14,7 @@ class Heap;
 
 void* operator new(size_t size);
 void* operator new[](size_t size);
+void* operator new[](size_t size, s32 alignment);
 
 void operator delete(void* ptr);
 void operator delete[](void* ptr);
