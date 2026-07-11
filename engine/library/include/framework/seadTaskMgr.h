@@ -151,8 +151,8 @@ static_assert(sizeof(TaskMgr) == 0x1A8, "sead::TaskMgr size mismatch");
 #define SEAD_TASK_SINGLETON_DISPOSER(CLASS)                                       \
     public:                                                                       \
         static CLASS* instance() { return sInstance; }                            \
-        static void setInstance_(sead::TaskBase* instance);                       \
         static void deleteInstance();                                             \
+        static void setInstance_(sead::TaskBase* instance);                       \
                                                                                   \
     protected:                                                                    \
         class SingletonDisposer_                                                  \
