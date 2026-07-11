@@ -35,7 +35,14 @@ public:
     void clear() { mPtrNum = 0; }
     void resize(s32);
     void unsafeResize(s32);
-    void swap(s32 pos1, s32 pos2);
+
+    void swap(s32 pos1, s32 pos2)
+    {
+        void* tmp = mPtrs[pos1];
+        mPtrs[pos1] = mPtrs[pos2];
+        mPtrs[pos2] = tmp;
+    }
+
     void reverse();
     PtrArrayImpl& operator=(const PtrArrayImpl&);
     void shuffle();
