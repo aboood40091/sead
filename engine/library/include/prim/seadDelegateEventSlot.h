@@ -31,7 +31,7 @@ public:
     public:
         explicit Slot()
             : IDisposer()
-            , m_Node()
+            , mNode()
             , mDelegatePtr(nullptr)
             , mConnectedToDelegateEvent(false)
         {
@@ -101,7 +101,7 @@ public:
         if (slot.mConnectedToDelegateEvent)
             slot.release();
 
-        mList.pushBack(slot);
+        mList.pushBack(&slot.mNode);
         slot.mConnectedToDelegateEvent = true;
     }
 
