@@ -76,12 +76,12 @@ public:
     const BoundBox2f& getPointerBound() const { return mPointerBound; }
 
 protected:
-    bool isIdleBase_();
-    void setIdleBase_();
     void setPointerWithBound_(bool is_on, bool touchkey_hold, const Vector2f& pos);
     void updateDerivativeParams_(u32 prev_hold, bool prev_pointer_on);
     u32 getStickHold_(u32 prev_hold, const Vector2f& stick, f32 hold_threshold, f32 release_threshold, s32 start_bit);
     u32 createStickCrossMask_();
+    bool isIdleBase_();
+    void setIdleBase_();
 
     enum
     {

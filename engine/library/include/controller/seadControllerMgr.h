@@ -49,12 +49,11 @@ public:
     };
 
 public:
-    ControllerMgr();
     ControllerMgr(const TaskConstructArg& arg);
+    ControllerMgr();
     virtual ~ControllerMgr() { }
 
     virtual void prepare();
-    virtual void calc();
 
     void initialize(s32 controller_max, Heap* heap);
     void finalize();
@@ -62,7 +61,11 @@ public:
     void initializeDefault(Heap* heap);
     void finalizeDefault();
 
+    virtual void calc();
+
     // TODO: Add/remove devices & controllers
+
+    s32 findControllerPort(const Controller* controller) const;
 
     Controller* getControllerByOrder(ControllerDefine::ControllerId id, s32 index) const;
     ControlDevice* getControlDevice(ControllerDefine::DeviceId id) const;
@@ -74,8 +77,6 @@ public:
     T getControlDeviceAs() const;
     template <typename T>
     T getControllerAddonAs(s32 index) const;
-
-    s32 findControllerPort(const Controller* controller) const;
 
 private:
     OffsetList<ControlDevice> mDevices;
