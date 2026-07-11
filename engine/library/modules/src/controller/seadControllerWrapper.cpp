@@ -72,6 +72,8 @@ void ControllerWrapper::calc(u32 prev_hold, bool prev_pointer_on)
 
 void ControllerWrapper::setPadConfig(s32 padbit_max, const u8* pad_config, bool enable_stickcross_emulation)
 {
+    mPadBitMax = padbit_max;
+
     MemUtil::copy(mPadConfig, pad_config, padbit_max);
 
     mLeftStickCrossStartBit = -1;
