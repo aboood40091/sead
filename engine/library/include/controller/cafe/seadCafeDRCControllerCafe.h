@@ -10,6 +10,10 @@ class CafeDRCController : public Controller
     SEAD_RTTI_OVERRIDE(CafeDRCController, Controller)
 
 public:
+    static const f32 cTouchPadSizeX;
+    static const f32 cTouchPadSizeY;
+
+public:
     struct TouchPanelInfo
     {
         TouchPanelInfo()

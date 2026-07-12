@@ -4,6 +4,9 @@
 
 namespace sead {
 
+const f32 CafeDRCController::cTouchPadSizeX = 1280.0f;
+const f32 CafeDRCController::cTouchPadSizeY = 720.0f;
+
 CafeDRCController::CafeDRCController(ControllerMgr* mgr)
     : Controller(mgr)
     , mIsConnected(false)
@@ -40,25 +43,25 @@ void CafeDRCController::calcImpl_()
         u32 hold = status.hold;
 
         mPadHold.makeAllZero();
-        mPadHold.change(1 << Controller::cPadIdx_A,      hold & VPAD_BUTTON_A);
-        mPadHold.change(1 << Controller::cPadIdx_B,      hold & VPAD_BUTTON_B);
-        mPadHold.change(1 << Controller::cPadIdx_X,      hold & VPAD_BUTTON_X);
-        mPadHold.change(1 << Controller::cPadIdx_Y,      hold & VPAD_BUTTON_Y);
-        mPadHold.change(1 << Controller::cPadIdx_Plus |
-                        1 << Controller::cPadIdx_Start,  hold & VPAD_BUTTON_PLUS);
-        mPadHold.change(1 << Controller::cPadIdx_Minus |
-                        1 << Controller::cPadIdx_Select, hold & VPAD_BUTTON_MINUS);
-        mPadHold.change(1 << Controller::cPadIdx_L,      hold & VPAD_TRIGGER_L);
-        mPadHold.change(1 << Controller::cPadIdx_R,      hold & VPAD_TRIGGER_R);
-        mPadHold.change(1 << Controller::cPadIdx_ZL,     hold & VPAD_TRIGGER_ZL);
-        mPadHold.change(1 << Controller::cPadIdx_ZR,     hold & VPAD_TRIGGER_ZR);
-        mPadHold.change(1 << Controller::cPadIdx_Home,   hold & VPAD_BUTTON_HOME);
-        mPadHold.change(1 << Controller::cPadIdx_Up,     hold & VPAD_BUTTON_UP);
-        mPadHold.change(1 << Controller::cPadIdx_Down,   hold & VPAD_BUTTON_DOWN);
-        mPadHold.change(1 << Controller::cPadIdx_Left,   hold & VPAD_BUTTON_LEFT);
-        mPadHold.change(1 << Controller::cPadIdx_Right,  hold & VPAD_BUTTON_RIGHT);
-        mPadHold.change(1 << Controller::cPadIdx_2,      hold & VPAD_BUTTON_STICK_R);
-        mPadHold.change(1 << Controller::cPadIdx_1,      hold & VPAD_BUTTON_STICK_L);
+        if (hold & VPAD_BUTTON_A)       mPadHold.set(cPadFlag_A);
+        if (hold & VPAD_BUTTON_B)       mPadHold.set(cPadFlag_B);
+        if (hold & VPAD_BUTTON_X)       mPadHold.set(cPadFlag_X);
+        if (hold & VPAD_BUTTON_Y)       mPadHold.set(cPadFlag_Y);
+        if (hold & VPAD_BUTTON_PLUS)    mPadHold.set(cPadFlag_Plus |
+                                                     cPadFlag_Start);
+        if (hold & VPAD_BUTTON_MINUS)   mPadHold.set(cPadFlag_Minus |
+                                                     cPadFlag_Select);
+        if (hold & VPAD_TRIGGER_L)      mPadHold.set(cPadFlag_L);
+        if (hold & VPAD_TRIGGER_R)      mPadHold.set(cPadFlag_R);
+        if (hold & VPAD_TRIGGER_ZL)     mPadHold.set(cPadFlag_ZL);
+        if (hold & VPAD_TRIGGER_ZR)     mPadHold.set(cPadFlag_ZR);
+        if (hold & VPAD_BUTTON_HOME)    mPadHold.set(cPadFlag_Home);
+        if (hold & VPAD_BUTTON_UP)      mPadHold.set(cPadFlag_Up);
+        if (hold & VPAD_BUTTON_DOWN)    mPadHold.set(cPadFlag_Down);
+        if (hold & VPAD_BUTTON_LEFT)    mPadHold.set(cPadFlag_Left);
+        if (hold & VPAD_BUTTON_RIGHT)   mPadHold.set(cPadFlag_Right);
+        if (hold & VPAD_BUTTON_STICK_R) mPadHold.set(cPadFlag_2);
+        if (hold & VPAD_BUTTON_STICK_L) mPadHold.set(cPadFlag_1);
 
         mLeftStick.set(status.lStick.x, status.lStick.y);
         mRightStick.set(status.rStick.x, status.rStick.y);
@@ -99,10 +102,10 @@ void CafeDRCController::calcImpl_()
 
         updateTouchPanelInfo_(&mTouchPanelInfos[0], tp_valid_x && tp_valid_y, tp_data.x, tp_data.y);
 
-        VPADGetTPCalibratedPoint(0, &tp_data, &v_pad_info.status[0].tpFilteredData1);
+        VPADGetTPCalibratedPoint(0, &tp_data, &status.tpFilteredData1);
         updateTouchPanelInfo_(&mTouchPanelInfos[1], tp_data.touch == VPAD_TP_TOUCH_ON, tp_data.x, tp_data.y);
 
-        VPADGetTPCalibratedPoint(0, &tp_data, &v_pad_info.status[0].tpFilteredData2);
+        VPADGetTPCalibratedPoint(0, &tp_data, &status.tpFilteredData2);
         updateTouchPanelInfo_(&mTouchPanelInfos[2], tp_data.touch == VPAD_TP_TOUCH_ON, tp_data.x, tp_data.y);
 
         const TouchPanelInfo& tp_info = mTouchPanelInfos[mCurrentTouchPanel];
