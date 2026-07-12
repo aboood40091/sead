@@ -105,8 +105,8 @@ void CafeRemoteController::calcImpl_()
                                                                      cPadFlag_Select);
                     if (cl_hold & WPAD_CL_TRIGGER_L)    mPadHold.set(cPadFlag_L);
                     if (cl_hold & WPAD_CL_TRIGGER_R)    mPadHold.set(cPadFlag_R);
-                    if (cl_hold & WPAD_CL_TRIGGER_ZL)   mPadHold.set(cPadFlag_C);
-                    if (cl_hold & WPAD_CL_TRIGGER_ZR)   mPadHold.set(cPadFlag_Z);
+                    if (cl_hold & WPAD_CL_TRIGGER_ZL)   mPadHold.set(cPadFlag_ZL);
+                    if (cl_hold & WPAD_CL_TRIGGER_ZR)   mPadHold.set(cPadFlag_ZR);
                     if (cl_hold & WPAD_CL_BUTTON_HOME)  mPadHold.set(cPadFlag_Home);
                     if (cl_hold & WPAD_CL_BUTTON_UP)    mPadHold.set(cPadFlag_Up);
                     if (cl_hold & WPAD_CL_BUTTON_DOWN)  mPadHold.set(cPadFlag_Down);
