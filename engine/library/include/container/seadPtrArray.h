@@ -65,14 +65,15 @@ protected:
 
     void pushBack(void* ptr)
     {
-        if (isFull())
+        if (!isFull())
+        {
+            mPtrs[mPtrNum] = ptr;
+            ++mPtrNum;
+        }
+        else
         {
             // SEAD_ASSERT_MSG(false, "list is full.");
-            return;
         }
-
-        mPtrs[mPtrNum] = ptr;
-        ++mPtrNum;
     }
 
     void pushFront(void* ptr) { insert(0, ptr); }
