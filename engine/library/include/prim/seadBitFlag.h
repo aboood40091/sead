@@ -60,7 +60,7 @@ public:
     void set(T mask) { mBits |= mask; }
     void reset(T mask) { mBits &= ~mask; }
     void toggle(T mask) { mBits ^= mask; }
-    void change(T mask, bool b) { b ? set(mask) : reset(mask); }
+    void change(T mask, bool b) { if (b) { set(mask); } else { reset(mask); } }
 
     bool isZero() const { return mBits == 0; }
     bool isOn(T mask) const { return (mBits & mask) != 0; }
