@@ -1,6 +1,7 @@
 #include <basis/seadNew.h>
 #include <filedevice/seadFileDevice.h>
 #include <filedevice/seadFileDeviceMgr.h>
+#include <filedevice/seadPath.h>
 #include <math/seadMathCalcCommon.h>
 #include <prim/seadSafeString.h>
 
@@ -534,6 +535,71 @@ FileDevice::tryMakeDirectory(
         return false;
 
     return doMakeDirectory_(path, permission);
+}
+
+bool
+FileDevice::tryMakeDirectoryWithParent(
+    const SafeString& path, u32 permission
+)
+{
+    //SEAD_ASSERT_MSG(mPermission, "Device permission error.");
+
+    if (!mPermission)
+        return false;
+
+    bool is_exist = false;
+    if (!tryIsExistDirectory(&is_exist, path))
+        return false;
+    if (is_exist)
+        return true;
+
+    FixedSafeString<512> root_path;
+    bool has_parent = Path::getDirectoryName(&root_path, path);
+    s32 num_non_exist = 1;
+    while (has_parent)
+    {
+        is_exist = false;
+        if (!tryIsExistDirectory(&is_exist, root_path))
+            return false;
+        if (is_exist)
+            break;
+
+        has_parent = Path::getDirectoryName(&root_path, root_path);
+        ++num_non_exist;
+    }
+    if (!has_parent)
+        root_path.trim(0);
+
+    SafeString path_delimiter = "/";
+
+    SafeString::token_iterator itr_count = path.tokenBegin(path_delimiter);
+    SafeString::token_iterator itr_end = path.tokenEnd(path_delimiter);
+    s32 num_exist = 0;
+    for (; itr_count != itr_end; ++itr_count)
+        num_exist++;
+    num_exist -= num_non_exist;
+
+    SafeString::token_iterator itr = path.tokenBegin(path_delimiter);
+    for (; itr != itr_end; ++itr)
+    {
+        if (num_exist > 0)
+        {
+            --num_exist;
+            continue;
+        }
+
+        FixedSafeString<128> dirname;
+        itr.get(&dirname);
+
+        if (root_path != "")
+            root_path.append("/");
+        root_path.append(dirname);
+
+        if (!tryMakeDirectory(root_path, permission))
+            return false;
+    }
+
+    return true;
 }
 
 RawErrorCode FileDevice::getLastRawError() const
