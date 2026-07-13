@@ -172,6 +172,16 @@ SafeStringBase<CharType>::token_iterator::operator++()
 
 template <typename CharType>
 inline s32
+SafeStringBase<CharType>::token_iterator::get(BufferedSafeStringBase<CharType>* out) const
+{
+    token_iterator next_delim = *this;
+    ++next_delim;
+    s32 size = next_delim.getIndex() - getIndex() - 1;
+    return out->copy(mString->getPart(*this), size);
+}
+
+template <typename CharType>
+inline s32
 BufferedSafeStringBase<CharType>::copy(const SafeStringBase<CharType>& rhs, s32 size)
 {
     CharType* mutable_string_top = getMutableStringTop_();
