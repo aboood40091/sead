@@ -160,8 +160,14 @@ public:
     }
 
     inline s32 calcLength() const;
+
     inline const SafeStringBase<CharType> getPart(s32 at) const;
-    inline const SafeStringBase<CharType> getPart(const iterator& it) const;
+
+    const SafeStringBase<CharType> getPart(const iterator& it) const
+    {
+        return getPart(it.getIndex());
+    }
+
     inline bool include(const CharType& c) const;
     inline bool include(const SafeStringBase<CharType>& str) const;
     inline bool isEqual(const SafeStringBase<CharType>& rhs) const;
