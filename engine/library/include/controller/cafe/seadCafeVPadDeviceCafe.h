@@ -23,7 +23,7 @@ public:
     static_assert(sizeof(VPadInfo) == 0xAC8, "sead::CafeVPadDevice::VPadInfo size mismatch");
 
 public:
-    CafeVPadDevice(ControllerMgr* mgr);
+    explicit CafeVPadDevice(ControllerMgr* mgr);
     virtual ~CafeVPadDevice();
 
     virtual void calc();

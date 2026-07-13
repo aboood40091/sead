@@ -28,7 +28,7 @@ public:
     static_assert(sizeof(TouchPanelInfo) == 0xC, "sead::CafeDRCController::TouchPanelInfo size mismatch");
 
 public:
-    CafeDRCController(ControllerMgr* mgr);
+    explicit CafeDRCController(ControllerMgr* mgr);
     virtual ~CafeDRCController() { }
 
     virtual bool isConnected() const { return mIsConnected; }

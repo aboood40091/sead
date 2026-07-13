@@ -100,7 +100,7 @@ public:
     };
 
 public:
-    Controller(ControllerMgr* mgr);
+    explicit Controller(ControllerMgr* mgr);
     virtual ~Controller() { }
 
     virtual void calc();
