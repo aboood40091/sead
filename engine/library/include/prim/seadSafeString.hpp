@@ -147,6 +147,30 @@ SafeStringBase<CharType>::findIndex(const SafeStringBase<CharType>& token) const
 }
 
 template <typename CharType>
+inline typename SafeStringBase<CharType>::token_iterator&
+SafeStringBase<CharType>::token_iterator::operator++()
+{
+    s32 index = getIndex();
+    s32 length = mString->calcLength();
+    if (!(0 <= index && index <= length))
+    {
+        // SEAD_ASSERT_MSG(false, "index(%d) out of range [0, %d].\n", index, length);
+        return *this;
+    }
+    for (;;)
+    {
+        //SEAD_ASSERT(0 <= index && index <= length);
+        const CharType& c = mString->unsafeAt_(index);
+        if (c == 0 || mDelimiter.include(c))
+            break;
+
+        index++;
+    }
+    mIndex = index + 1;
+    return *this;
+}
+
+template <typename CharType>
 inline s32
 BufferedSafeStringBase<CharType>::copy(const SafeStringBase<CharType>& rhs, s32 size)
 {
