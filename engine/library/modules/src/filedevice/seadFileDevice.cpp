@@ -9,24 +9,6 @@
 
 namespace sead {
 
-u32 FileHandle::read(u8* buf, u32 size)
-{
-    if (mDevice != nullptr)
-        return mDevice->read(this, buf, size);
-
-    //SEAD_ASSERT_MSG(false, "handle not opened");
-    return 0;
-}
-
-u32 FileHandle::write(const u8* buf, u32 size)
-{
-    if (mDevice != nullptr)
-        return mDevice->write(this, buf, size);
-
-    //SEAD_ASSERT_MSG(false, "handle not opened");
-    return 0;
-}
-
 FileDevice::~FileDevice()
 {
     if (FileDeviceMgr::instance() != nullptr)
@@ -637,6 +619,150 @@ FileDevice::getHandleBaseHandleBuffer_(
 ) const
 {
     return handle->mHandleBuffer;
+}
+
+bool FileHandle::close()
+{
+    if (mOriginalDevice != nullptr)
+        return mOriginalDevice->close(this);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return false;
+}
+
+bool FileHandle::tryClose()
+{
+    if (mOriginalDevice != nullptr)
+        return mOriginalDevice->tryClose(this);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return false;
+}
+
+u32 FileHandle::read(u8* buf, u32 size)
+{
+    if (mDevice != nullptr)
+        return mDevice->read(this, buf, size);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return 0;
+}
+
+bool FileHandle::tryRead(u32* read_size, u8* buf, u32 size)
+{
+    if (mDevice != nullptr)
+        return mDevice->tryRead(read_size, this, buf, size);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return false;
+}
+
+u32 FileHandle::write(const u8* buf, u32 size)
+{
+    if (mDevice != nullptr)
+        return mDevice->write(this, buf, size);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return 0;
+}
+
+bool FileHandle::tryWrite(u32* write_size, const u8* buf, u32 size)
+{
+    if (mDevice != nullptr)
+        return mDevice->tryWrite(write_size, this, buf, size);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return false;
+}
+
+bool FileHandle::seek(s32 offset, FileDevice::SeekOrigin origin)
+{
+    if (mDevice != nullptr)
+        return mDevice->seek(this, offset, origin);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return false;
+}
+
+bool FileHandle::trySeek(s32 offset, FileDevice::SeekOrigin origin)
+{
+    if (mDevice != nullptr)
+        return mDevice->trySeek(this, offset, origin);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return false;
+}
+
+u32 FileHandle::getCurrentSeekPos()
+{
+    if (mDevice != nullptr)
+        return mDevice->getCurrentSeekPos(this);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return 0;
+}
+
+bool FileHandle::tryGetCurrentSeekPos(u32* pos)
+{
+    if (mDevice != nullptr)
+        return mDevice->tryGetCurrentSeekPos(pos, this);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return false;
+}
+
+u32 FileHandle::getFileSize()
+{
+    if (mDevice != nullptr)
+        return mDevice->getFileSize(this);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return 0;
+}
+
+bool FileHandle::tryGetFileSize(u32* size)
+{
+    if (mDevice != nullptr)
+        return mDevice->tryGetFileSize(size, this);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return false;
+}
+
+bool DirectoryHandle::close()
+{
+    if (mOriginalDevice != nullptr)
+        return mOriginalDevice->closeDirectory(this);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return false;
+}
+
+bool DirectoryHandle::tryClose()
+{
+    if (mOriginalDevice != nullptr)
+        return mOriginalDevice->tryCloseDirectory(this);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return false;
+}
+
+u32 DirectoryHandle::read(DirectoryEntry* entry, u32 num)
+{
+    if (mDevice != nullptr)
+        return mDevice->readDirectory(this, entry, num);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return 0;
+}
+
+bool DirectoryHandle::tryRead(u32* read_num, DirectoryEntry* entry, u32 num)
+{
+    if (mDevice != nullptr)
+        return mDevice->tryReadDirectory(read_num, this, entry, num);
+
+    //SEAD_ASSERT_MSG(false, "handle not opened");
+    return false;
 }
 
 } // namespace sead
