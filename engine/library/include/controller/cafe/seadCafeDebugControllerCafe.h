@@ -11,7 +11,6 @@ class CafeDebugController : public Controller
 
 public:
     CafeDebugController(ControllerMgr* mgr, s32 channel);
-    virtual ~CafeDebugController() { }
 
     s32 getChannel() const { return mChannel; }
 
