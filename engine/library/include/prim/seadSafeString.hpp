@@ -60,6 +60,24 @@ SafeStringBase<CharType>::getPart(s32 at) const
 
 template <typename CharType>
 inline bool
+SafeStringBase<CharType>::include(const CharType& c) const
+{
+    assureTerminationImpl_();
+
+    for (s32 i = 0; i <= cMaximumLength; i++)
+    {
+        if (unsafeAt_(i) == 0)
+            return false;
+
+        if (unsafeAt_(i) == c)
+            return true;
+    }
+
+    return false;
+}
+
+template <typename CharType>
+inline bool
 SafeStringBase<CharType>::isEqual(const SafeStringBase<CharType>& rhs) const
 {
     assureTerminationImpl_();

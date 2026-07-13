@@ -169,7 +169,12 @@ public:
     }
 
     inline bool include(const CharType& c) const;
-    inline bool include(const SafeStringBase<CharType>& str) const;
+
+    inline bool include(const SafeStringBase<CharType>& str) const
+    {
+        return findIndex(str) != -1;
+    }
+
     inline bool isEqual(const SafeStringBase<CharType>& rhs) const;
 
     friend bool operator==(const SafeStringBase<CharType>& lhs, const SafeStringBase<CharType>& rhs)
