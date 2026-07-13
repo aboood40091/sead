@@ -147,6 +147,13 @@ void FileDeviceMgr::unmount(FileDevice* device)
         mDefaultFileDevice = nullptr;
 }
 
+void FileDeviceMgr::unmount(const SafeString& drive)
+{
+    FileDevice* device = findDevice(drive);
+    if (device != nullptr)
+        unmount(device);
+}
+
 FileDevice*
 FileDeviceMgr::findDeviceFromPath(
     const SafeString& path, BufferedSafeString* no_drive_path
@@ -228,6 +235,87 @@ void FileDeviceMgr::unload(u8* data)
 }
 
 #ifdef cafe
+
+RawErrorCode
+FileDeviceMgr::mountSDCard()
+{
+    if (mFSSDMountCount != 0)
+    {
+        mFSSDMountCount++;
+        return FS_STATUS_OK;
+    }
+    FSMountSource source;
+    FSCmdBlock block;
+    FSInitCmdBlock(&block);
+    FSStatus err = FSGetMountSource(&mFSClient, &block, FS_SOURCETYPE_EXTERNAL, &source, FS_RET_ALL_ERROR);
+    if (err == FS_STATUS_OK)
+    {
+        err = FSMount(&mFSClient, &block, &source, mFSSDMountPath, FS_MAX_MOUNTPATH_SIZE, FS_RET_ALL_ERROR);
+        if (err == FS_STATUS_OK)
+        {
+            mFSSDMountCount++;
+            err = FS_STATUS_OK;
+        }
+    }
+    return err;
+}
+
+RawErrorCode
+FileDeviceMgr::unmountSDCard()
+{
+    if (mFSSDMountCount == 0)
+    {
+        //SEAD_WARNING(false, "mountSD vs unmountSD mismatch\n");
+    }
+    else if (mFSSDMountCount == 1)
+    {
+        FSCmdBlock block;
+        FSInitCmdBlock(&block);
+        FSUnmount(&mFSClient, &block, mFSSDMountPath, FS_RET_NO_ERROR);
+        mFSSDMountCount = 0;
+    }
+    else
+    {
+        mFSSDMountCount--;
+    }
+    return FS_STATUS_OK;
+}
+
+bool
+FileDeviceMgr::mountHostFileIO()
+{
+    FSMountSource source;
+    FSCmdBlock block;
+    FSInitCmdBlock(&block);
+    FSStatus err = FSGetMountSource(&mFSClient, &block, FS_SOURCETYPE_HFIO, &source, FS_RET_ALL_ERROR);
+    if (err != FS_STATUS_OK)
+    {
+        //SEAD_WARNING(false, "FSGetMountSource failed[%d]\n", err);
+        return false;
+    }
+    err = FSMount(&mFSClient, &block, &source, mFSHFIOMountPath, FS_MAX_MOUNTPATH_SIZE, FS_RET_ALL_ERROR);
+    if (err != FS_STATUS_OK)
+    {
+        //SEAD_WARNING(false, "FSMount failed[%d]\n", err);
+        return false;
+    }
+    return true;
+}
+
+bool
+FileDeviceMgr::unmountHostFileIO()
+{
+    FSCmdBlock block;
+    FSInitCmdBlock(&block);
+    FSStatus err = FSUnmount(&mFSClient, &block, mFSHFIOMountPath, FS_RET_ALL_ERROR);
+    if (err != FS_STATUS_OK)
+    {
+        //SEAD_WARNING(false, "FSUnmount failed[%d]\n", err);
+        return false;
+    }
+    return true;
+}
+
 void
 FileDeviceMgr::stateChangeCallback_(
     FSClient* client, FSVolumeState state, void* context
@@ -236,6 +324,7 @@ FileDeviceMgr::stateChangeCallback_(
     FSError error = FSGetLastError(client);
     //SEAD_WARNING(false, "Volume state of client 0x%08x changed to %d, last error is %d\n", (uintptr_t)client, (s32)state, error);
 }
+
 #endif // cafe
 
 }

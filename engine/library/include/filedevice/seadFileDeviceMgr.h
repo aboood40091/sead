@@ -15,6 +15,10 @@ namespace sead {
 
 class FileDeviceMgr
 {
+#ifdef cafe
+    static void stateChangeCallback_(FSClient* client, FSVolumeState state, void* context);
+#endif // cafe
+
     SEAD_SINGLETON_DISPOSER(FileDeviceMgr)
 
 public:
@@ -94,17 +98,11 @@ protected:
 public:
     FSClient* getFSClient_() const { return const_cast<FSClient*>(&mFSClient); }
 
-    void setSDCardMountPath(const SafeString&);
-    void setHostFileIOMountPath(const SafeString&);
-
     RawErrorCode mountSDCard();
     RawErrorCode unmountSDCard();
 
-protected:
     bool mountHostFileIO();
     bool unmountHostFileIO();
-
-    static void stateChangeCallback_(FSClient* client, FSVolumeState state, void* context);
 
 protected:
     FSClient mFSClient;
