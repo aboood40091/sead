@@ -22,7 +22,7 @@ public:
         mCWDPath = SafeString(path).cstr();
     }
 
-    const char* getCWD()
+    const char* getCWD() const
     {
         return mCWDPath;
     }
@@ -50,7 +50,12 @@ protected:
     virtual bool doReadDirectory_(u32* read_num, DirectoryHandle* handle, DirectoryEntry* entry, u32 num);
     virtual bool doMakeDirectory_(const SafeString& path, u32 permission);
     virtual RawErrorCode doGetLastRawError_() const;
-    virtual void doResolvePath_(BufferedSafeString* out, const SafeString& path) const;
+
+    virtual void doResolvePath_(BufferedSafeString* out, const SafeString& path) const
+    {
+        formatPathForFSA_(out, path);
+    }
+
     virtual void formatPathForFSA_(BufferedSafeString* out, const SafeString& path) const;
 
     FSClient* getUsableFSClient_() const;
@@ -110,7 +115,7 @@ public:
 protected:
     virtual void formatPathForFSA_(BufferedSafeString* out, const SafeString& path) const;
 
-    void convertPathWinToFSA_(char*, u32, const char*) const;
+    u32 convertPathWinToFSA_(char* buffer, u32 buffer_size, const char* path) const;
 };
 
 class CafeFSNativePathFileDevice : public CafeFSAFileDevice

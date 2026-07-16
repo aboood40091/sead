@@ -1,4 +1,5 @@
 #include <cafe.h>
+#include <cafe/env.h>
 
 #include <filedevice/cafe/seadCafeFSAFileDeviceCafe.h>
 #include <filedevice/seadFileDevice.h>
@@ -425,14 +426,6 @@ RawErrorCode CafeFSAFileDevice::doGetLastRawError_() const
 }
 
 void
-CafeFSAFileDevice::doResolvePath_(
-    BufferedSafeString* out, const SafeString& path
-) const
-{
-    formatPathForFSA_(out, path);
-}
-
-void
 CafeFSAFileDevice::formatPathForFSA_(
     BufferedSafeString* out, const SafeString& path
 ) const
@@ -466,6 +459,86 @@ CafeFSAFileDevice::getDirHandleInner_(
 CafeContentFileDevice::CafeContentFileDevice()
     : CafeFSAFileDevice("content", FS_CONTENT_DIR)
 {
+}
+
+CafeSDFileDevice::CafeSDFileDevice()
+    : CafeFSAFileDevice("sd", FileDeviceMgr::instance()->getSDCardMountPath())
+{
+}
+
+CafeHostIOFileDevice::CafeHostIOFileDevice()
+    : CafeFSAFileDevice("hostio", FileDeviceMgr::instance()->getHostFileIOMountPath())
+{
+}
+
+void CafeHostIOFileDevice::formatPathForFSA_(BufferedSafeString* out, const SafeString& path) const
+{
+    FixedSafeString<MAX_ENV_VALUE_SIZE> env_key;
+
+    s32 idx_env_start = -1;
+    s32 idx_env_end = -1;
+
+    sead::SafeString::token_iterator itr = path.tokenBegin("%");
+    sead::SafeString::token_iterator itr_end = path.tokenEnd();
+    if (itr != itr_end && ++itr != itr_end)
+    {
+        idx_env_start = itr.getIndex() - 1;
+        itr.getAndForward(&env_key);
+        if (itr != itr_end)
+            idx_env_end = itr.getIndex();
+    }
+
+    if (env_key.isEmpty() || idx_env_end == -1)
+    {
+        s32 fmt_len = out->format("%s/", getCWD());
+        convertPathWinToFSA_(out->getBuffer() + fmt_len, out->getBufferSize() - fmt_len, path.cstr());
+    }
+    else
+    {
+        FixedSafeString<MAX_ENV_VALUE_SIZE> env_value;
+        if (ENVGetEnvironmentVariable(env_key.cstr(), env_value.getBuffer(), env_value.getBufferSize()) == 0)
+        {
+            s32 fmt_len = out->format("%s/", getCWD());
+            if (idx_env_start > 0)
+                fmt_len += BufferedSafeString(out, fmt_len).copy(path, idx_env_start);
+            fmt_len += convertPathWinToFSA_(out->getBuffer() + fmt_len, out->getBufferSize() - fmt_len, env_value.cstr());
+            convertPathWinToFSA_(out->getBuffer() + fmt_len, out->getBufferSize() - fmt_len, path.getPart(idx_env_end).cstr());
+        }
+        else
+        {
+            s32 fmt_len = out->format("%s/", getCWD());
+            convertPathWinToFSA_(out->getBuffer() + fmt_len, out->getBufferSize() - fmt_len, path.cstr());
+        }
+    }
+}
+
+u32 CafeHostIOFileDevice::convertPathWinToFSA_(char* buffer, u32 buffer_size, const char* path) const
+{
+    u32 i = 0;
+    u32 length = 0;
+    while (length + 1 < buffer_size)
+    {
+        if (path[i] == '\0')
+            break;
+
+        if (path[i] == ':')
+        {
+            buffer[length] = '/';
+            i++;
+        }
+        else if (path[i] == '\\')
+        {
+            buffer[length] = '/';
+        }
+        else
+        {
+            buffer[length] = path[i];
+        }
+        i++;
+        length++;
+    }
+    buffer[length] = '\0';
+    return length;
 }
 
 CafeFSNativePathFileDevice::CafeFSNativePathFileDevice()
