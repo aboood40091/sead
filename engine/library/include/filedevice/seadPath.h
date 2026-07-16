@@ -12,7 +12,6 @@ public:
     static bool getExt(BufferedSafeString* dst, const SafeString& src);
     static void getPathExceptDrive(BufferedSafeString* dst, const SafeString& src);
     static bool getFileName(BufferedSafeString* dst, const SafeString& src);
-    static bool getBaseFileName(BufferedSafeString* dst, const SafeString& src);
     static bool getDirectoryName(BufferedSafeString* dst, const SafeString& src);
     static bool getLangLocPath(BufferedSafeString* dst, const SafeString& src);
 };
