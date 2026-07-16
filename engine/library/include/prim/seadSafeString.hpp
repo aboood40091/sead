@@ -147,6 +147,23 @@ SafeStringBase<CharType>::findIndex(const SafeStringBase<CharType>& token) const
 }
 
 template <typename CharType>
+inline s32
+SafeStringBase<CharType>::rfindIndex(const SafeStringBase<CharType>& token) const
+{
+    s32 len = calcLength();
+    s32 token_len = token.calcLength();
+    len -= token_len;
+    if (len < 0)
+        return -1;
+
+    for (; len >= 0; len--)
+        if (SafeStringBase<CharType>(&mStringTop[len]).comparen(token, token_len) == 0)
+            break;
+
+    return len;
+}
+
+template <typename CharType>
 inline typename SafeStringBase<CharType>::token_iterator&
 SafeStringBase<CharType>::token_iterator::operator++()
 {
