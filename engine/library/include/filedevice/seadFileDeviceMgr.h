@@ -101,8 +101,12 @@ public:
     RawErrorCode mountSDCard();
     RawErrorCode unmountSDCard();
 
+    const char* getSDCardMountPath() const { return mFSSDMountPath; }
+
     bool mountHostFileIO();
     bool unmountHostFileIO();
+
+    const char* getHostFileIOMountPath() const { return mFSHFIOMountPath; }
 
 protected:
     FSClient mFSClient;
