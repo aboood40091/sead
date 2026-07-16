@@ -199,6 +199,36 @@ SafeStringBase<CharType>::token_iterator::get(BufferedSafeStringBase<CharType>* 
 
 template <typename CharType>
 inline s32
+SafeStringBase<CharType>::token_iterator::getAndForward(BufferedSafeStringBase<CharType>* out)
+{
+    s32 index = getIndex();
+    s32 length = mString->calcLength();
+    if (!(0 <= index && index <= length))
+    {
+        //SEAD_ASSERT_MSG(false, "index(%d) out of range [0, %d].\n", index, length);
+        return 0;
+    }
+    s32 i = 0;
+    CharType* raw_out = out->getBuffer();
+    for (;;)
+    {
+        //SEAD_ASSERT(0 <= index && index <= length);
+        const CharType& c = mString->unsafeAt_(index);
+        if (c == 0 || mDelimiter.include(c))
+        {
+            raw_out[i] = 0;
+            break;
+        }
+        raw_out[i] = c;
+        ++i;
+        ++index;
+    }
+    mIndex = index + 1;
+    return i;
+}
+
+template <typename CharType>
+inline s32
 BufferedSafeStringBase<CharType>::copy(const SafeStringBase<CharType>& rhs, s32 size)
 {
     CharType* mutable_string_top = getMutableStringTop_();
