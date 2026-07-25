@@ -27,6 +27,16 @@ public:
         return mCWDPath;
     }
 
+    void setFSClient(FSClient* client)
+    {
+        mFSClient = client;
+    }
+
+    FSClient* getFSClient() const
+    {
+        return mFSClient;
+    }
+
     static bool setCurrentDirectory(const SafeString& path);
 
 protected:
