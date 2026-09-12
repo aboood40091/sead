@@ -433,15 +433,17 @@ public:
     }
 
     explicit FixedSafeString(const SafeString& rhs)
-        : FixedSafeStringBase<char, N>(rhs)
+        : FixedSafeStringBase<char, N>()
     {
+        copy(rhs);
     }
 
     // Nintendo did not implement this
     //
     //FixedSafeString(const FixedSafeString<N>& rhs)
-    //    : FixedSafeStringBase<char, N>(rhs)
+    //    : FixedSafeStringBase<char, N>()
     //{
+    //    copy(rhs);
     //}
 
     FixedSafeString<N>& operator=(const FixedSafeString<N>& rhs)
@@ -467,15 +469,17 @@ public:
     }
 
     explicit WFixedSafeString(const WSafeString& rhs)
-        : FixedSafeStringBase<char16, N>(rhs)
+        : FixedSafeStringBase<char16, N>()
     {
+        copy(rhs);
     }
 
     // Nintendo did not implement this
     //
     //WFixedSafeString(const WFixedSafeString<N>& rhs)
-    //    : FixedSafeStringBase<char16, N>(rhs)
+    //    : FixedSafeStringBase<char16, N>()
     //{
+    //    copy(rhs);
     //}
 
     WFixedSafeString<N>& operator=(const WFixedSafeString<N>& rhs)
