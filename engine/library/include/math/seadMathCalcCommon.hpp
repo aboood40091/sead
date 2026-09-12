@@ -518,4 +518,41 @@ MathCalcCommon<T>::clamp2(T min_, T val, T max_)
     return val;
 }
 
+template <typename T>
+bool
+MathCalcCommon<T>::chase(T* value, T target, T step)
+{
+    const T current = *value;
+    T new_value;
+    if (current < target)
+    {
+        new_value = current + step;
+        if (target <= new_value || new_value < current)
+        {
+            *value = target;
+            return true;
+        }
+        else
+        {
+            *value = new_value;
+            return false;
+        }
+    }
+    if (current > target)
+    {
+        new_value = current - step;
+        if (new_value <= target || current < new_value)
+        {
+            *value = target;
+            return true;
+        }
+        else
+        {
+            *value = new_value;
+            return false;
+        }
+    }
+    return true;
+}
+
 } // namespace sead
