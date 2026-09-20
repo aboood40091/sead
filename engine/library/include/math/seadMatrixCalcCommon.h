@@ -89,6 +89,7 @@ public:
     static void transposeTo(Base& o, const Base& n);
 
     static void makeQ(Base& o, const Quat& q);
+    static void makeQT(Base& o, const Quat& q, const Vec3& t);
     static void makeR(Base& o, const Vec3& r);
     static void makeRIdx(Base& o, u32 xr, u32 yr, u32 zr);
     static void makeRT(Base& o, const Vec3& r, const Vec3& t);
@@ -96,6 +97,8 @@ public:
     static void makeRzxyIdx(Base& o, u32 xr, u32 yr, u32 zr);
     static void makeRzxyTIdx(Base& o, const Vector3<u32>& r, const Vec3& t);
     static void makeS(Base& o, const Vec3& s);
+    static void makeSQ(Base& o, const Vec3& s, const Quat& q);
+    static void makeSQT(Base& o, const Vec3& s, const Quat& q, const Vec3& t);
     static void makeSR(Base& o, const Vec3& s, const Vec3& r);
     static void makeSRIdx(Base& o, const Vec3& s, const Vector3<u32>& r);
     static void makeSRT(Base& o, const Vec3& s, const Vec3& r, const Vec3& t);
