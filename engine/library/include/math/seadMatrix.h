@@ -165,6 +165,7 @@ public:
 
     void fromQuat(const Quat& q) { makeQ(q); };
     void makeQ(const Quat& q);
+    void makeQ(T w, T x, T y, T z);
     void makeR(const Vec3& r);
     void makeRIdx(u32 xr, u32 yr, u32 zr);
     void makeRT(const Vec3& r, const Vec3& t);

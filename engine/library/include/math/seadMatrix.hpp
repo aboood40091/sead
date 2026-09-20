@@ -412,6 +412,14 @@ Matrix34<T>::makeQ(const Quat& q)
 
 template <typename T>
 inline void
+Matrix34<T>::makeQ(T w, T x, T y, T z)
+{
+    Quat q(w, x, y, z);
+    Matrix34CalcCommon<T>::makeQ(*this, q);
+}
+
+template <typename T>
+inline void
 Matrix34<T>::makeR(const Vec3& r)
 {
     Matrix34CalcCommon<T>::makeR(*this, r);
