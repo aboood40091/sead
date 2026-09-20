@@ -101,7 +101,8 @@ public:
     void setTranspose(const Self& n);
     void transpose();
 
-    void fromQuat(const Quat& q);
+    void fromQuat(const Quat& q) { makeQ(q); };
+    void makeQ(const Quat& q);
     void makeR(const Vec3& r);
     void makeRIdx(u32 xr, u32 yr, u32 zr);
     void makeRzxyIdx(u32 xr, u32 yr, u32 zr);
@@ -162,7 +163,8 @@ public:
     void setTranspose(const Self& n);
     void transpose();
 
-    void fromQuat(const Quat& q);
+    void fromQuat(const Quat& q) { makeQ(q); };
+    void makeQ(const Quat& q);
     void makeR(const Vec3& r);
     void makeRIdx(u32 xr, u32 yr, u32 zr);
     void makeRT(const Vec3& r, const Vec3& t);
@@ -267,7 +269,8 @@ public:
     void setTranspose(const Self& n);
     void transpose();
 
-    void fromQuat(const Quat& q);
+    void fromQuat(const Quat& q) { makeQ(q); };
+    void makeQ(const Quat& q);
     void makeR(const Vec3& r);
     void makeRIdx(u32 xr, u32 yr, u32 zr);
     void makeRzxyIdx(u32 xr, u32 yr, u32 zr);
