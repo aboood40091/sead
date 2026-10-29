@@ -34,11 +34,10 @@ public:
 
     void* get()
     {
-        if (mFree == nullptr)
-            return nullptr;
-
         void* ptr = mFree;
-        mFree = *static_cast<void**>(mFree);
+        if (ptr != nullptr)
+            mFree = *static_cast<void**>(ptr);
+
         return ptr;
     }
 
