@@ -459,8 +459,9 @@ public:
             mBuffer[i] = value;
     }
 
-    void heapSort(CompareCallback, s32, s32);
-    void heapSort(s32, s32);
+    void heapSort(CompareCallback cmp, s32 start, s32 end);
+    void heapSort(s32 start, s32 end) { heapSort(compareT, start, end); }
+
     s32 binarySearch(const T&) const;
 
 protected:
@@ -478,6 +479,56 @@ protected:
 #ifdef cafe
 static_assert(sizeof(Buffer<int>) == 8, "sead::Buffer<T> size mismatch");
 #endif // cafe
+
+template <typename T>
+void Buffer<T>::heapSort(CompareCallback cmp, s32 start, s32 end)
+{
+    if (!isRangeValid(start) || !isRangeValid(end))
+        return;
+
+    s32 count = end - start + 1;
+    if (count <= 1)
+        return;
+
+    T* buffer = mBuffer + start;
+    T x;
+    s32 parent;
+    s32 child;
+
+    for (s32 mid = count / 2; mid > 0; mid--)
+    {
+        x = buffer[mid - 1];
+        parent = mid;
+        while ((child = parent * 2) <= count)
+        {
+            if (child < count && (*cmp)(&buffer[child - 1], &buffer[child]) < 0)
+                child++;
+            if ((*cmp)(&x, &buffer[child - 1]) >= 0)
+                break;
+            buffer[parent - 1] = buffer[child - 1];
+            parent = child;
+        }
+        buffer[parent - 1] = x;
+    }
+
+    while (count > 1)
+    {
+        x = buffer[count - 1];
+        buffer[count - 1] = buffer[0];
+        count--;
+        parent = 1;
+        while ((child = parent * 2) <= count)
+        {
+            if (child < count && (*cmp)(&buffer[child - 1], &buffer[child]) < 0)
+                child++;
+            if ((*cmp)(&x, &buffer[child - 1]) >= 0)
+                break;
+            buffer[parent - 1] = buffer[child - 1];
+            parent = child;
+        }
+        buffer[parent - 1] = x;
+    }
+}
 
 } // namespace sead
 
