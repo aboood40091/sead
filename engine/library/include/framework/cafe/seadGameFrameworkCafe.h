@@ -61,6 +61,9 @@ public:
     virtual FrameBuffer* getMethodFrameBuffer(s32 method_type) const;
     virtual const LogicalFrameBuffer* getMethodLogicalFrameBuffer(s32 method_type) const;
 
+    void setFrameBuffer(FrameBuffer* frame_buffer) { mFrameBuffer = frame_buffer; }
+    void setFrameBufferDRC(FrameBuffer* frame_buffer) { mFrameBufferDRC = frame_buffer; }
+
 protected:
     virtual void initRun_(Heap*);
     virtual void runImpl_();
