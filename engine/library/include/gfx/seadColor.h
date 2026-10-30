@@ -23,6 +23,10 @@ struct Color4f
     {
     }
 
+    ~Color4f()
+    {
+    }
+
     void setf(f32 _r, f32 _g, f32 _b, f32 _a)
     {
         r = _r;
