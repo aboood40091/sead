@@ -22,9 +22,7 @@ public:
     {
     }
 
-    virtual ~Camera()
-    {
-    }
+    virtual ~Camera();
 
     virtual void doUpdateMatrix(Matrix34f* dst) const = 0;
 
