@@ -111,6 +111,8 @@ public:
     {
     }
 
+    virtual ~FrameBuffer();
+
     virtual void copyToDisplayBuffer(const DisplayBuffer* display_buffer) const
     {
     }
