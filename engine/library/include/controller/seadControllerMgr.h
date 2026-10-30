@@ -67,6 +67,8 @@ public:
 
     s32 findControllerPort(const Controller* controller) const;
 
+    Controller* getController(s32 port) const { return mControllers[port]; }
+
     Controller* getControllerByOrder(ControllerDefine::ControllerId id, s32 index) const;
     ControlDevice* getControlDevice(ControllerDefine::DeviceId id) const;
     ControllerAddon* getControllerAddon(s32 index, ControllerDefine::AddonId id) const;
