@@ -329,6 +329,28 @@ private:
 static_assert(sizeof(FrustumProjection) == 0xAC, "sead::FrustumProjection size mismatch");
 #endif // cafe
 
+class DirectProjection : public Projection
+{
+    SEAD_RTTI_OVERRIDE(DirectProjection, Projection)
+
+public:
+    DirectProjection();
+    DirectProjection(const Matrix44f& mtx, Graphics::DevicePosture posture);
+    virtual ~DirectProjection();
+
+    void setProjectionMatrix(const Matrix44f& mtx, Graphics::DevicePosture posture);
+
+    virtual Type getProjectionType() const { return Projection::cType_Undefined; }
+    virtual void doUpdateMatrix(Matrix44f* dst) const;
+    virtual void doScreenPosToCameraPosTo(Vector3f* dst, const Vector3f& screen_pos) const;
+
+private:
+    Matrix44f mDirectMatrix;
+};
+#ifdef cafe
+static_assert(sizeof(DirectProjection) == 0xD4, "sead::DirectProjection size mismatch");
+#endif // cafe
+
 } // namespace sead
 
 #endif // SEAD_PROJECTION_H_
