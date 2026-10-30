@@ -118,7 +118,8 @@ public:
 
     static bool equalsEpsilon(T a, T b, T eps = epsilon())
     {
-        return abs(a - b) <= eps;
+        a -= b;
+        return -eps <= a && a <= eps;
     }
 
     static T abs(T t)
