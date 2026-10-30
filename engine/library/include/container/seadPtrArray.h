@@ -38,9 +38,21 @@ public:
 
     void swap(s32 pos1, s32 pos2)
     {
-        void* tmp = mPtrs[pos1];
-        mPtrs[pos1] = mPtrs[pos2];
-        mPtrs[pos2] = tmp;
+        if (u32(pos1) >= u32(mPtrNum))
+        {
+            // SEAD_ASSERT_MSG(false, "index exceeded [%d/%d]", pos1, mPtrNum);
+            return;
+        }
+
+        if (u32(pos2) >= u32(mPtrNum))
+        {
+            // SEAD_ASSERT_MSG(false, "index exceeded [%d/%d]", pos2, mPtrNum);
+            return;
+        }
+
+        void* tmp = mPtrs[pos2];
+        mPtrs[pos2] = mPtrs[pos1];
+        mPtrs[pos1] = tmp;
     }
 
     void reverse();
