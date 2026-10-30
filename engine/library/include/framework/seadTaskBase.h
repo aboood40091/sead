@@ -14,6 +14,7 @@
 namespace sead {
 
 class FaderTaskBase;
+class Framework;
 class MethodTreeMgr;
 class MethodTreeNode;
 struct TaskConstructArg;
@@ -143,6 +144,8 @@ public:
     MethodTreeMgr* getMethodTreeMgr() const;
 
     void attachMethodWithCheck(s32 method_type, MethodTreeNode* node);
+
+    Framework* getFramework() const;
 
     template <typename T>
     T* getParameter() const
