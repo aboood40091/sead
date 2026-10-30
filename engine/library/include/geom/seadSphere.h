@@ -19,9 +19,9 @@ public:
     }
 
     Sphere(const VectorType& center, T radius)
+        : mCenter(center)
+        , mRadius(radius)
     {
-        mCenter.set(center);
-        mRadius = radius;
     }
 
     const VectorType& getCenter() const { return mCenter; }
