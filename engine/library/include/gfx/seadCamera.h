@@ -114,6 +114,15 @@ public:
     {
     }
 
+    explicit DirectCamera(const Matrix34f& mtx)
+        : Camera()
+        , mDirectMatrix(mtx)
+    {
+        updateViewMatrix();
+    }
+
+    virtual ~DirectCamera();
+
     void setMatrix(const Matrix34f& mtx)
     {
         mDirectMatrix = mtx;
