@@ -256,6 +256,44 @@ BoundBox3<T>::setMax(const Vector3& max)
 
 template <typename T>
 inline void
+BoundBox3<T>::expandWith(const Vector3& p)
+{
+    if (mMin.x > p.x)
+        mMin.x = p.x;
+    if (mMin.y > p.y)
+        mMin.y = p.y;
+    if (mMin.z > p.z)
+        mMin.z = p.z;
+
+    if (mMax.x < p.x)
+        mMax.x = p.x;
+    if (mMax.y < p.y)
+        mMax.y = p.y;
+    if (mMax.z < p.z)
+        mMax.z = p.z;
+}
+
+template <typename T>
+inline void
+BoundBox3<T>::expandWith(const BoundBox3& box)
+{
+    if (mMin.x > box.mMin.x)
+        mMin.x = box.mMin.x;
+    if (mMin.y > box.mMin.y)
+        mMin.y = box.mMin.y;
+    if (mMin.z > box.mMin.z)
+        mMin.z = box.mMin.z;
+
+    if (mMax.x < box.mMax.x)
+        mMax.x = box.mMax.x;
+    if (mMax.y < box.mMax.y)
+        mMax.y = box.mMax.y;
+    if (mMax.z < box.mMax.z)
+        mMax.z = box.mMax.z;
+}
+
+template <typename T>
+inline void
 BoundBox3<T>::offset(T dx, T dy, T dz)
 {
     mMin.x += dx;
