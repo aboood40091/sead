@@ -48,6 +48,24 @@ public:
         detachAll();
     }
 
+    template <typename T>
+    void bind(T* obj, typename Delegate<T>::MethodPtr method, const SafeString& name)
+    {
+        lock_();
+        new (&mDelegateHolder) Delegate<T>(obj, method);
+        unlock_();
+        setName(name);
+    }
+
+    void setPauseFlag(PauseFlag flag)
+    {
+        lock_();
+        if (mPauseEventDelegate != nullptr)
+            mPauseEventDelegate->invoke(this, flag);
+        mPauseFlag.setDirect(flag);
+        unlock_();
+    }
+
     MethodTreeNode* getChild() const
     {
         if (child() != nullptr)
