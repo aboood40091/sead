@@ -142,6 +142,8 @@ public:
 
     MethodTreeMgr* getMethodTreeMgr() const;
 
+    void attachMethodWithCheck(s32 method_type, MethodTreeNode* node);
+
     template <typename T>
     T* getParameter() const
     {
