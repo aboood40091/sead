@@ -43,6 +43,11 @@ public:
         mDistance = distance;
     }
 
+    T calcDistance(const VectorType& p) const
+    {
+        return mNormal.dot(p) - mDistance
+    }
+
 protected:
     VectorType mNormal;
     T mDistance;
