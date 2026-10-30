@@ -4,7 +4,7 @@
 #include <container/seadTreeNode.h>
 #include <heap/seadDisposer.h>
 #include <prim/seadBitFlag.h>
-//#include <prim/seadDelegate.h>
+#include <prim/seadDelegate.h>
 #include <prim/seadNamable.h>
 #include <prim/seadRuntimeTypeInfo.h>
 //#include <thread/seadCriticalSection.h>
@@ -30,18 +30,18 @@ public:
     };
 
 public:
-    MethodTreeNode(CriticalSection* cs); /*
-        : TTreeNode<MethodTreeNode*>()
-        , INamable()
+    MethodTreeNode(CriticalSection* cs)
+        : TTreeNode<MethodTreeNode*>(this)
+        , INamable("")
         , IDisposer()
         , mCriticalSection(cs)
         , mPauseFlag(0)
         , mPauseEventDelegate(nullptr)
         , mUserID(nullptr)
     {
-        new (mDelegateHolder) Delegate<aaaaaaaaaaa>();
-        mPauseFlag = BitFlag32(0);
-    } */
+        new (&mDelegateHolder) Delegate<MethodTreeNode>();
+        mPauseFlag.makeAllZero();
+    }
 
     virtual ~MethodTreeNode()
     {
