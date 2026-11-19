@@ -344,4 +344,20 @@ BoundBox3<T>::scaleZ(T sz)
     mMax.z = centerZ + sizeZ;
 }
 
+template <typename T>
+inline void
+BoundBox3<T>::calcVerts(Vector3* points) const
+{
+    const Vector3& min = getMin();
+    const Vector3& max = getMax();
+    points[0].set(min.x, min.y, min.z);
+    points[1].set(max.x, min.y, min.z);
+    points[2].set(max.x, min.y, max.z);
+    points[3].set(min.x, min.y, max.z);
+    points[4].set(min.x, max.y, min.z);
+    points[5].set(max.x, max.y, min.z);
+    points[6].set(max.x, max.y, max.z);
+    points[7].set(min.x, max.y, max.z);
+}
+
 }  // namespace sead

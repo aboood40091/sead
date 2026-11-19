@@ -181,6 +181,8 @@ public:
     void scaleY(T sy);
     void scaleZ(T sz);
 
+    void calcVerts(Vector3* points) const;
+
 private:
     Vector3 mMin;
     Vector3 mMax;
