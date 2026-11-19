@@ -519,6 +519,13 @@ MathCalcCommon<T>::clamp2(T min_, T val, T max_)
 }
 
 template <typename T>
+inline bool
+MathCalcCommon<T>::isNan(T t)
+{
+    return t != t;
+}
+
+template <typename T>
 bool
 MathCalcCommon<T>::chase(T* value, T target, T step)
 {
