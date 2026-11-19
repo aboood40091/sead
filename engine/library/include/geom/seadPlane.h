@@ -45,7 +45,7 @@ public:
 
     T calcDistance(const VectorType& p) const
     {
-        return mNormal.dot(p) - mDistance
+        return mNormal.dot(p) - mDistance;
     }
 
 protected:
